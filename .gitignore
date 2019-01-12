@@ -1,0 +1,17 @@
+# Idea files
+*.iml
+*.ipr
+.idea/
+
+# Gradle files
+gradle/
+.gradle
+
+# Class files
+build/
+
+# Others
+local.properties
+.DS_Store
+captures
+.externalNativeBuild
