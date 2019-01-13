@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt
+package shiverawe.github.com.receipt.ui
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -9,8 +9,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
+import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.data.Receipt
-import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.history.FragmentHistory
 
 private const val FRAGMENT_HISTORY_TAG = "fragment_history"

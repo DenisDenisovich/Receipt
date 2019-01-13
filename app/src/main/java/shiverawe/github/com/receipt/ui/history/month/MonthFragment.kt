@@ -11,8 +11,8 @@ import kotlinx.android.synthetic.main.fragment_month.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import shiverawe.github.com.receipt.App
-import shiverawe.github.com.receipt.MainActivity
+import shiverawe.github.com.receipt.ui.App
+import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.data.Product
 import shiverawe.github.com.receipt.data.Receipt
@@ -35,7 +35,7 @@ class MonthFragment: Fragment() {
         }
     }
     lateinit var navigation: Navigation
-    var receipts: ArrayList<Receipt?>? = null
+    var receipts: ArrayList<Receipt?> = ArrayList()
     val date = Date()
     val calendar = GregorianCalendar()
     var date_from: Int = 0
@@ -70,20 +70,19 @@ class MonthFragment: Fragment() {
 
             override fun onResponse(call: Call<ArrayList<ReceiptResponce>>, response: Response<ArrayList<ReceiptResponce>>) {
                 map(response)
-                if (receipts!!.size == 0) {
+                if (receipts.size == 0) {
                     receipts = ArrayList()
                     pb_month.visibility = View.GONE
-                    tv_month_error_message.text = "нет данных"
+                    tv_month_error_message.text = "Нет данных"
                     tv_month_error_message.visibility  =View.VISIBLE
                 } else {
                     rv_month.visibility = View.VISIBLE
                     pb_month.visibility = View.GONE
-                    adapter = RvAdapterMonth(receipts!!) { receipt -> navigation.openReceipt(receipt) }
+                    adapter = RvAdapterMonth(receipts) { receipt -> navigation.openReceipt(receipt) }
                     rv_month.adapter = adapter
                     rv_month.layoutManager = LinearLayoutManager(context)
                 }
             }
-
         })
     }
 

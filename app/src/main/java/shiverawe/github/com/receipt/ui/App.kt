@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt
+package shiverawe.github.com.receipt.ui
 
 import android.app.Application
 import retrofit2.Retrofit
@@ -14,7 +14,7 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
         val retrofit = Retrofit.Builder()
-                .baseUrl("http://receipts.shefer.space/")
+                .baseUrl("http://receipt.shefer.space/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         api = retrofit.create(Api::class.java)
