@@ -6,16 +6,15 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import shiverawe.github.com.receipt.ui.history.month.MonthFragment
 import java.util.*
 
-class FragmentPagerAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm) {
-    val dates: ArrayList<Long> = ArrayList(count)
+class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+    val dates: ArrayList<Long> = ArrayList(MutableList(count) { 0L })
+
     init {
-        val currentDate = Date(System.currentTimeMillis())
         val calendar = GregorianCalendar()
-        calendar.time = currentDate
-        calendar.add(Calendar.MONTH, - count / 2)
-        for (dateIndex in 0 until count) {
-            dates.add(calendar.timeInMillis)
-            calendar.add(Calendar.MONTH, 1)
+        calendar.time = Date(System.currentTimeMillis())
+        for (dateIndex in dates.size - 1 downTo 0) {
+            dates[dateIndex] = calendar.timeInMillis
+            calendar.add(Calendar.MONTH, -1)
         }
     }
 
@@ -24,6 +23,6 @@ class FragmentPagerAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm) {
         return fragment
     }
 
-    override fun getCount() = 100
+    override fun getCount() = 1200
 
 }

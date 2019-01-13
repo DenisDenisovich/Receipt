@@ -37,8 +37,8 @@ class FragmentHistory: Fragment(), View.OnClickListener {
         tv_history_toolbar_title.text = resources.getString(R.string.history_titile)
         monthAdapter = FragmentPagerAdapter(fragmentManager!!)
         vp_history.adapter = monthAdapter
-        vp_history.currentItem = monthAdapter.count / 2
-        changeTabPosition(monthAdapter.count / 2)
+        vp_history.currentItem = monthAdapter.count
+        changeTabPosition(monthAdapter.count - 1)
 
         vp_history.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
             override fun onPageScrollStateChanged(p0: Int) {}
