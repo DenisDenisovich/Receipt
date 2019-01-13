@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.data.network.entity.receipt
+package shiverawe.github.com.receipt.data.network.entity.get
 
 data class Item(
         val text: String,

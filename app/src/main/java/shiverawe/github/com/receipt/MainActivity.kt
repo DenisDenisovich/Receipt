@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
+import shiverawe.github.com.receipt.data.Receipt
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.history.FragmentHistory
 
@@ -56,5 +58,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun closeNavigationDrawable() {
         drawer_layout.closeDrawer(GravityCompat.START)
+    }
+
+    override fun openReceipt(receipt: Receipt) {
+        Log.d("LogReceipt", receipt.toString())
     }
 }

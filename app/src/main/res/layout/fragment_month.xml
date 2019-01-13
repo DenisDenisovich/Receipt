@@ -8,7 +8,25 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_month"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/item_month" />
+
+    <ProgressBar
+        android:id="@+id/pb_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/tv_month_error_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:textSize="20sp"
+        android:fontFamily="@font/roboto_medium"
+        android:textColor="#000000"/>
+
 </FrameLayout>

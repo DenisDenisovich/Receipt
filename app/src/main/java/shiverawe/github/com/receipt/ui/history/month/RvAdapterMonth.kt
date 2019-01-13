@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.month
+package shiverawe.github.com.receipt.ui.history.month
 
 import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_month.view.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.entity.Receipt
+import shiverawe.github.com.receipt.data.Receipt
 import java.text.SimpleDateFormat
 import java.util.*
 
-class RvAdapterMonth(val receipts: ArrayList<Receipt?>, val shopIsClicked: (id: Long) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RvAdapterMonth(val receipts: ArrayList<Receipt?>, val shopIsClicked: (receipt: Receipt) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val SHOP_VIEW_TYPE = 0
     private val SEPARATOR_VIEW_TYPE = 1
     private val dateFormatter = SimpleDateFormat("MMMMMMMM dd", Locale("ru"))
@@ -19,7 +19,7 @@ class RvAdapterMonth(val receipts: ArrayList<Receipt?>, val shopIsClicked: (id: 
         val holder: RecyclerView.ViewHolder
         if (viewType == SHOP_VIEW_TYPE) {
             holder = ShopViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_month, parent))
-            holder.itemView.setOnClickListener { shopIsClicked(holder.adapterPosition.toLong()) }
+            holder.itemView.setOnClickListener { shopIsClicked(receipts[holder.adapterPosition]!!) }
         } else
             holder = SeparatorViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.separator_month, parent))
         return holder
