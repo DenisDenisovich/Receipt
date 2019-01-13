@@ -1,6 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <FrameLayout
+        android:id="@+id/history_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="109dp"
+        android:background="@color/colorPrimary"
+        android:outlineProvider="bounds"
+        android:elevation="8dp">
 
-</android.support.constraint.ConstraintLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp">
+            <ImageView
+                android:id="@+id/btn_history_navigation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:src="@drawable/ic_menu"/>
+
+            <ImageView
+                android:id="@+id/btn_history_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="52dp"
+                android:padding="16dp"
+                android:paddingEnd="12dp"
+                android:layout_gravity="end"
+                android:src="@drawable/ic_search"/>
+
+            <ImageView
+                android:id="@+id/btn_history_calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:paddingStart="12dp"
+                android:layout_gravity="end"
+                android:src="@drawable/ic_calendar"/>
+
+            <TextView
+                android:id="@+id/tv_history_toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="72dp"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"/>
+        </FrameLayout>
+    </FrameLayout>
+
+</FrameLayout>

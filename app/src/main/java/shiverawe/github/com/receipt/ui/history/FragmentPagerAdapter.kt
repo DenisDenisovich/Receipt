@@ -10,8 +10,12 @@ class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) 
     val dates: ArrayList<Long> = ArrayList(MutableList(count) { 0L })
 
     init {
-        val calendar = GregorianCalendar()
+        val calendar = GregorianCalendar(TimeZone.getDefault())
         calendar.time = Date(System.currentTimeMillis())
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        calendar.clear(Calendar.HOUR)
+        calendar.clear(Calendar.MINUTE)
+        calendar.clear(Calendar.SECOND)
         for (dateIndex in dates.size - 1 downTo 0) {
             dates[dateIndex] = calendar.timeInMillis
             calendar.add(Calendar.MONTH, -1)
@@ -19,8 +23,7 @@ class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) 
     }
 
     override fun getItem(position: Int): Fragment {
-        val fragment = MonthFragment.getInstance((dates[position] / 1000).toInt())
-        return fragment
+        return MonthFragment.getInstance((dates[position] / 1000).toInt())
     }
 
     override fun getCount() = 1200

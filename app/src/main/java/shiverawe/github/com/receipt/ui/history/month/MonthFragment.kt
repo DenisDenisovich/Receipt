@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,10 +21,11 @@ import shiverawe.github.com.receipt.data.Shop
 import shiverawe.github.com.receipt.data.network.entity.get.ReceiptResponce
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.ui.Navigation
+import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MonthFragment: Fragment() {
+class MonthFragment : Fragment() {
     companion object {
         val DATE_KEY = "date"
         fun getInstance(date: Int): MonthFragment {
@@ -34,7 +36,9 @@ class MonthFragment: Fragment() {
             return fragment
         }
     }
+
     lateinit var navigation: Navigation
+    var call: Call<ArrayList<ReceiptResponce>>? = null
     var receipts: ArrayList<Receipt?> = ArrayList()
     val date = Date()
     val calendar = GregorianCalendar()
@@ -46,13 +50,13 @@ class MonthFragment: Fragment() {
         super.onAttach(context)
         navigation = context as MainActivity
     }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        sendRequest()
         return inflater.inflate(R.layout.fragment_month, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        sendRequest()
     }
 
     private fun sendRequest() {
@@ -61,11 +65,13 @@ class MonthFragment: Fragment() {
         calendar.time = date
         calendar.add(Calendar.MONTH, 1)
         date_to = (calendar.timeInMillis / 1000).toInt()
-        App.api.getReceiptForMonth(ReportRequest(date_from, date_to)).enqueue(object : Callback<ArrayList<ReceiptResponce>> {
+        call = App.api.getReceiptForMonth(ReportRequest(date_from, date_to))
+        call?.enqueue(object : Callback<ArrayList<ReceiptResponce>> {
             override fun onFailure(call: Call<ArrayList<ReceiptResponce>>, t: Throwable) {
+                if (call.isCanceled) return
                 pb_month.visibility = View.GONE
                 tv_month_error_message.text = "Произошла ошибка"
-                tv_month_error_message.visibility  =View.VISIBLE
+                tv_month_error_message.visibility = View.VISIBLE
             }
 
             override fun onResponse(call: Call<ArrayList<ReceiptResponce>>, response: Response<ArrayList<ReceiptResponce>>) {
@@ -74,7 +80,7 @@ class MonthFragment: Fragment() {
                     receipts = ArrayList()
                     pb_month.visibility = View.GONE
                     tv_month_error_message.text = "Нет данных"
-                    tv_month_error_message.visibility  =View.VISIBLE
+                    tv_month_error_message.visibility = View.VISIBLE
                 } else {
                     rv_month.visibility = View.VISIBLE
                     pb_month.visibility = View.GONE
@@ -98,12 +104,17 @@ class MonthFragment: Fragment() {
             date.time = body[bodyIndex].meta.date.toLong() * 1000
             calendar.time = date
             if (lastWeekNumber > calendar.get(Calendar.WEEK_OF_MONTH)) {
-                receipts?.add(null)
+                receipts.add(null)
                 lastWeekNumber = calendar.get(Calendar.WEEK_OF_MONTH)
             }
             val products: ArrayList<Product> = ArrayList()
-            body[bodyIndex].items.forEach { products.add(Product(it.text, it.price, it.amount))}
-            receipts?.add(Receipt(Shop(body[bodyIndex].meta.date.toInt(), body[bodyIndex].meta.place, body[bodyIndex].meta.sum), ArrayList(products)))
+            body[bodyIndex].items.forEach { products.add(Product(it.text, it.price, it.amount)) }
+            receipts.add(Receipt(Shop(body[bodyIndex].meta.date.toInt(), body[bodyIndex].meta.place, body[bodyIndex].meta.sum), ArrayList(products)))
         }
+    }
+
+    override fun onDestroyView() {
+        call?.cancel()
+        super.onDestroyView()
     }
 }
