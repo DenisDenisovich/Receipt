@@ -8,20 +8,21 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_month.view.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.data.Receipt
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
 class RvAdapterMonth(val receipts: ArrayList<Receipt?>, val shopIsClicked: (receipt: Receipt) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val SHOP_VIEW_TYPE = 0
     private val SEPARATOR_VIEW_TYPE = 1
-    private val dateFormatter = SimpleDateFormat("MMMMMMMM dd", Locale("ru"))
+    private val dateFormatter = DateFormat.getDateInstance(SimpleDateFormat.FULL, Locale("ru"))
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val holder: RecyclerView.ViewHolder
         if (viewType == SHOP_VIEW_TYPE) {
-            holder = ShopViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_month, parent))
+            holder = ShopViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_month, parent, false))
             holder.itemView.setOnClickListener { shopIsClicked(receipts[holder.adapterPosition]!!) }
         } else
-            holder = SeparatorViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.separator_month, parent))
+            holder = SeparatorViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.separator_month, parent, false))
         return holder
     }
 
@@ -30,11 +31,12 @@ class RvAdapterMonth(val receipts: ArrayList<Receipt?>, val shopIsClicked: (rece
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ShopViewHolder) {
-            val date = dateFormatter.format(Date((receipts[position]!!.shop.date as Long) * 1000)).split(" ")
-            holder.day.text = date[0].substring(0, if (7 <= date[0].length) 7 else date[0].length)
-            holder.dayDigit.text = date[1]
+            val date = dateFormatter.format(Date(receipts[position]!!.shop.date)).split(",")
+            val dayStrLength = if (7 <= date[0].length) 7 else date[0].length
+            holder.day.text = date[0].substring(0, dayStrLength)
+            holder.dayDigit.text = date[1].split(" ")[1]
             holder.name.text = receipts[position]!!.shop.place
-            holder.sum.text = receipts[position]!!.shop.sum + " p"
+            holder.sum.text = receipts[position]!!.shop.sum
         }
     }
 

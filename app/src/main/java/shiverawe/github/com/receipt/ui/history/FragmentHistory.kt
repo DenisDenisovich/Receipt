@@ -36,9 +36,9 @@ class FragmentHistory: Fragment(), View.OnClickListener {
         btn_history_search.setOnClickListener(this)
         btn_history_calendar.setOnClickListener(this)
         tv_history_toolbar_title.text = resources.getString(R.string.history_titile)
-        monthAdapter = FragmentPagerAdapter(fragmentManager!!)
+        monthAdapter = FragmentPagerAdapter(childFragmentManager)
         vp_history.adapter = monthAdapter
-        vp_history.currentItem = monthAdapter.count
+        vp_history.currentItem = monthAdapter.count - 1
         changeTabPosition(monthAdapter.count - 1)
 
         vp_history.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
@@ -76,5 +76,9 @@ class FragmentHistory: Fragment(), View.OnClickListener {
         val date = Date(monthAdapter.dates[position])
         val month = dateFormatter.format(date).split(" ")[1].capitalize()
         tab_layout_history.setMonth(month)
+    }
+
+    fun setMonthSum(sum: String) {
+        tab_layout_history.setSum(sum)
     }
 }

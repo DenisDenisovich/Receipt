@@ -12,6 +12,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.data.Receipt
 import shiverawe.github.com.receipt.ui.history.FragmentHistory
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 private const val FRAGMENT_HISTORY_TAG = "fragment_history"
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, Navigation {

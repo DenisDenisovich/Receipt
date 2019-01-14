@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,10 +17,15 @@ import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.data.Product
 import shiverawe.github.com.receipt.data.Receipt
 import shiverawe.github.com.receipt.data.Shop
-import shiverawe.github.com.receipt.data.network.entity.get.ReceiptResponce
+import shiverawe.github.com.receipt.data.network.entity.report.Report
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.ui.Navigation
+import shiverawe.github.com.receipt.ui.history.FragmentHistory
 import java.lang.Exception
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -38,8 +42,9 @@ class MonthFragment : Fragment() {
     }
 
     lateinit var navigation: Navigation
-    var call: Call<ArrayList<ReceiptResponce>>? = null
+    var call: Call<ArrayList<Report>>? = null
     var receipts: ArrayList<Receipt?> = ArrayList()
+    var totalSum = 0.0
     val date = Date()
     val calendar = GregorianCalendar()
     var date_from: Int = 0
@@ -51,12 +56,24 @@ class MonthFragment : Fragment() {
         navigation = context as MainActivity
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        userVisibleHint = false
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_month, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        sendRequest()
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            if (receipts.size == 0)
+                sendRequest()
+        }
     }
 
     private fun sendRequest() {
@@ -66,16 +83,20 @@ class MonthFragment : Fragment() {
         calendar.add(Calendar.MONTH, 1)
         date_to = (calendar.timeInMillis / 1000).toInt()
         call = App.api.getReceiptForMonth(ReportRequest(date_from, date_to))
-        call?.enqueue(object : Callback<ArrayList<ReceiptResponce>> {
-            override fun onFailure(call: Call<ArrayList<ReceiptResponce>>, t: Throwable) {
+        call?.enqueue(object : Callback<ArrayList<Report>> {
+            override fun onFailure(call: Call<ArrayList<Report>>, t: Throwable) {
                 if (call.isCanceled) return
                 pb_month.visibility = View.GONE
                 tv_month_error_message.text = "Произошла ошибка"
                 tv_month_error_message.visibility = View.VISIBLE
             }
 
-            override fun onResponse(call: Call<ArrayList<ReceiptResponce>>, response: Response<ArrayList<ReceiptResponce>>) {
-                map(response)
+            override fun onResponse(call: Call<ArrayList<Report>>, response: Response<ArrayList<Report>>) {
+                try {
+                    map(response)
+                } catch (e: Exception) {
+                    receipts = ArrayList()
+                }
                 if (receipts.size == 0) {
                     receipts = ArrayList()
                     pb_month.visibility = View.GONE
@@ -92,25 +113,47 @@ class MonthFragment : Fragment() {
         })
     }
 
-    private fun map(response: Response<ArrayList<ReceiptResponce>>) {
+    private fun map(response: Response<ArrayList<Report>>) {
         if (response.body() == null || response.body()!!.size == 0)
             return
-        val body = response.body()!!
+        var body = response.body()!!
+        body = ArrayList(body.filter { it.meta.date != null })
         body.sortByDescending { it.meta.date }
-        date.time = body[0].meta.date.toLong() * 1000
+        date.time = body[0].meta.date!!.toLong() * 1000
         calendar.time = date
-        var lastWeekNumber = calendar.get(Calendar.WEEK_OF_MONTH)
-        for (bodyIndex in 0 until body.size - 1) {
-            date.time = body[bodyIndex].meta.date.toLong() * 1000
-            calendar.time = date
-            if (lastWeekNumber > calendar.get(Calendar.WEEK_OF_MONTH)) {
-                receipts.add(null)
-                lastWeekNumber = calendar.get(Calendar.WEEK_OF_MONTH)
+        var currentWeekNumber = calendar.get(Calendar.WEEK_OF_MONTH)
+        if (body.size >= 2) {
+            for (bodyIndex in 0 until body.size - 1) {
+                val products: ArrayList<Product> = ArrayList()
+                body[bodyIndex].items.forEach {
+                    products.add(Product(it.text ?: "", it.price ?: 0.0, it.amount ?: 0.0))
+                }
+                val shopDate = body[bodyIndex].meta.date!!.toLong() * 1000
+                val shopProvider = body[bodyIndex].meta.provider ?: ""
+                val shopSum = BigDecimal(body[bodyIndex].meta.sum ?: 0.0 / 100).setScale(2, RoundingMode.DOWN).toDouble()
+                totalSum += shopSum
+                receipts.add(Receipt(Shop(shopDate, shopProvider, shopSum.toString() + " р"), ArrayList(products)))
+                date.time = body[bodyIndex + 1].meta.date!!.toLong() * 1000
+                calendar.time = date
+                if (currentWeekNumber > calendar.get(Calendar.WEEK_OF_MONTH)) {
+                    receipts.add(null)
+                    currentWeekNumber = calendar.get(Calendar.WEEK_OF_MONTH)
+                }
             }
+        } else {
             val products: ArrayList<Product> = ArrayList()
-            body[bodyIndex].items.forEach { products.add(Product(it.text, it.price, it.amount)) }
-            receipts.add(Receipt(Shop(body[bodyIndex].meta.date.toInt(), body[bodyIndex].meta.place, body[bodyIndex].meta.sum), ArrayList(products)))
+            body[0].items.forEach {
+                products.add(Product(it.text ?: "", it.price ?: 0.0, it.amount ?: 0.0))
+            }
+            val shopDate = body[0].meta.date!!.toLong() * 1000
+            val shopProvider = body[0].meta.provider ?: ""
+            val shopSum = BigDecimal(body[0].meta.sum ?: 0.0 / 100).setScale(2, RoundingMode.DOWN).toDouble()
+            totalSum = shopSum
+            receipts.add(Receipt(Shop(shopDate, shopProvider, shopSum.toString() + " р"), ArrayList(products)))
         }
+        totalSum = BigDecimal(totalSum).setScale(2, RoundingMode.DOWN).toDouble()
+        if (parentFragment != null)
+            (parentFragment as FragmentHistory).setMonthSum(totalSum.toString() + " р")
     }
 
     override fun onDestroyView() {

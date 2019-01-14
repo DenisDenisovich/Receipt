@@ -10,6 +10,7 @@ class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) 
     val dates: ArrayList<Long> = ArrayList(MutableList(count) { 0L })
 
     init {
+        // init dates
         val calendar = GregorianCalendar(TimeZone.getDefault())
         calendar.time = Date(System.currentTimeMillis())
         calendar.set(Calendar.DAY_OF_MONTH, 1)
