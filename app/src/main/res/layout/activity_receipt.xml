@@ -2,6 +2,7 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <FrameLayout
         android:id="@+id/history_toolbar"
         android:layout_width="match_parent"
@@ -14,33 +15,14 @@
             android:layout_width="match_parent"
             android:layout_height="56dp">
             <ImageView
-                android:id="@+id/btn_history_navigation"
+                android:id="@+id/btn_receipt_toolbar_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
-                android:src="@drawable/ic_menu"/>
-
-            <ImageView
-                android:id="@+id/btn_history_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="52dp"
-                android:padding="16dp"
-                android:paddingEnd="12dp"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_search"/>
-
-            <ImageView
-                android:id="@+id/btn_history_calendar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:paddingStart="12dp"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_calendar"/>
+                android:src="@drawable/ic_back"/>
 
             <TextView
-                android:id="@+id/tv_history_toolbar_title"
+                android:id="@+id/tv_receipt_toolbar_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -48,7 +30,62 @@
                 android:fontFamily="@font/roboto_regular"
                 android:textSize="20sp"
                 android:textColor="#FFFFFF"/>
+
+            <TextView
+                android:id="@+id/tv_receipt_toolbar_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="53dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="56dp"
+            android:background="@drawable/bcg_receipt_up">
+
+            <TextView
+                android:id="@+id/tv_receipt_shop_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:fontFamily="@font/courier_new_regular"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"/>
+
+            <TextView
+                android:id="@+id/tv_receipt_shop_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:fontFamily="@font/courier_new_regular"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="16dp"/>
+
         </FrameLayout>
     </FrameLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_receipt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="109dp"
+        android:layout_marginBottom="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/bcg_receipt_down"
+        android:outlineProvider="bounds"
+        android:elevation="8dp"/>
 
 </FrameLayout>

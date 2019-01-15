@@ -1,5 +1,6 @@
 package shiverawe.github.com.receipt.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -8,13 +9,13 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.data.Receipt
 import shiverawe.github.com.receipt.ui.history.FragmentHistory
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
+import shiverawe.github.com.receipt.ui.receipt.RECEIPT_TAG
+import shiverawe.github.com.receipt.ui.receipt.ReceiptActivity
 
 private const val FRAGMENT_HISTORY_TAG = "fragment_history"
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, Navigation {
@@ -65,5 +66,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun openReceipt(receipt: Receipt) {
         Log.d("LogReceipt", receipt.toString())
+        val intent = Intent(this, ReceiptActivity::class.java)
+
+        intent.putExtra(RECEIPT_TAG, Gson().toJson(receipt))
+        startActivity(intent)
     }
 }
