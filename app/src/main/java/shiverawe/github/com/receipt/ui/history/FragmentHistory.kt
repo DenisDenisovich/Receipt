@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +19,7 @@ import java.util.*
 class FragmentHistory: Fragment(), View.OnClickListener {
     lateinit var navigation: Navigation
     private val dateFormatter = DateFormat.getDateInstance(SimpleDateFormat.LONG, Locale("ru"))
+    private val dateFormatterMonth = SimpleDateFormat("LLLL", Locale("ru"))
     lateinit var monthAdapter: FragmentPagerAdapter
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -74,8 +74,9 @@ class FragmentHistory: Fragment(), View.OnClickListener {
 
     private fun changeTabPosition(position: Int) {
         val date = Date(monthAdapter.dates[position])
-        val month = dateFormatter.format(date).split(" ")[1].capitalize()
-        tab_layout_history.setMonth(month)
+        val year = dateFormatter.format(date).split(" ")[2]
+        val month = dateFormatterMonth.format(date).capitalize()
+        tab_layout_history.setMonth("$month $year")
     }
 
     fun setMonthSum(sum: String) {
