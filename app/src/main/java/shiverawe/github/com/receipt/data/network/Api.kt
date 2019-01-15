@@ -9,7 +9,7 @@ import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 
 interface Api {
     @GET("rest/get")
-    fun getReceipt(@Query("fn") fn: Int, @Query("fd") fd: Int, @Query("fp") fp: Int, @Query("date") date: Int, @Query("sum") sum: Int): Call<List<ReceiptResponce>>
+    fun getReceipt(@Query("fn") fn: Long, @Query("fd") fd: Long, @Query("fp") fp: Long, @Query("date") date: Long, @Query("sum") sum: Long): Call<ReceiptResponce>
     @PUT("rest/report")
     fun getReceiptForMonth(@Body reportRequest: ReportRequest): Call<ArrayList<Report>>
    /* @GET("rest/get")
