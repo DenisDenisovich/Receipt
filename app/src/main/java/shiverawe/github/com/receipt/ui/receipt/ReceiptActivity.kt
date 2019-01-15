@@ -53,7 +53,6 @@ class ReceiptActivity : AppCompatActivity() {
                 view?.background?.copyBounds(rect)
                 rect.top += resources.getDimensionPixelSize(R.dimen.outline_shadow_receipt_padding_bottom)
                 rect.bottom -= resources.getDimensionPixelSize(R.dimen.outline_shadow_receipt_padding_bottom)
-                //rect.offset(0, - resources.getDimensionPixelSize(R.dimen.outline_shadow_receipt_padding_bottom))
                 outline.setRect(rect)
             }
         }
