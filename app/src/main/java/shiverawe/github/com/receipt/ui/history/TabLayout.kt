@@ -33,6 +33,7 @@ class TabLayout: View {
     private var deltaTextSize = maxTextSize - minTextSize
     private var centerMonthY = 0
     private var edgeMonthY = 0
+    private var sumDisplayY = 0F
     private var deltaMonthY = 0
     private var animation: ValueAnimator? = null
 
@@ -58,6 +59,8 @@ class TabLayout: View {
         monthPaint.getTextBounds("Тест", 0, 4, rect)
         edgeMonthY = height / 2 + rect.height() / 2
         deltaMonthY = edgeMonthY - centerMonthY
+        sumDisplayY = height - context.resources.getDimensionPixelSize(R.dimen.tv_history_sum_margin_bottom).toFloat()
+
         setMeasuredDimension(width, height)
     }
 
@@ -96,10 +99,9 @@ class TabLayout: View {
             canvas?.drawText(monthArray[i], displayX, displayY, monthPaint)
         }
         if (offset == 0F) {
-            val sumDisplayY = height / 2 + deltaMonthY
             sumPaint.getTextBounds(currentSum, 0, currentSum.length, rect)
             val sumDisplayX = width / 2 - rect.width() / 2
-            canvas?.drawText(currentSum, sumDisplayX.toFloat(), sumDisplayY.toFloat(), sumPaint)
+            canvas?.drawText(currentSum, sumDisplayX.toFloat(), sumDisplayY, sumPaint)
         }
     }
 
