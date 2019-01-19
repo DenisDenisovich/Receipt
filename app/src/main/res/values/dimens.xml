@@ -9,5 +9,10 @@
     <dimen name="tv_history_month_size_min">14sp</dimen>
     <dimen name="tv_history_sum_size">14sp</dimen>
     <dimen name="tv_history_sum_margin_bottom">14dp</dimen>
-    <dimen name="outline_shadow_receipt_padding_bottom">10dp</dimen>
+    <dimen name="receipt_arc_radius">10dp</dimen>
+    <dimen name="receipt_zigzag_height">8dp</dimen>
+    <dimen name="receipt_top_corners">8dp</dimen>
+    <dimen name="receipt_top_line_width">2dp</dimen>
+    <dimen name="receipt_top_line_dash_size">10dp</dimen>
+    <dimen name="receipt_top_line_gap_size">5dp</dimen>
 </resources>

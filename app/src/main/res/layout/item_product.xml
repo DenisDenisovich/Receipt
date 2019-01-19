@@ -16,7 +16,7 @@
         android:textColor="#000000"
         android:textSize="16sp"
         android:fontFamily="@font/courier_new_regular"
-        tools:text="Батон Убойный цена нарез. 1сfg"/>
+        tools:text="Батон Убойный цена нарез. 1"/>
 
     <TextView
         android:id="@+id/tv_item_product_amount"
