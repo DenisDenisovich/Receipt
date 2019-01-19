@@ -13,11 +13,16 @@ import kotlinx.android.synthetic.main.fragment_history.*
 import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.Navigation
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 class FragmentHistory: Fragment(), View.OnClickListener {
     lateinit var navigation: Navigation
     lateinit var monthAdapter: FragmentPagerAdapter
+    private val dateFormatter = DateFormat.getDateInstance(SimpleDateFormat.LONG, Locale("ru"))
+    var currentMonth = ""
+    var calendar = GregorianCalendar()
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         navigation = context as MainActivity
@@ -32,12 +37,11 @@ class FragmentHistory: Fragment(), View.OnClickListener {
         btn_history_navigation.setOnClickListener(this)
         btn_history_search.setOnClickListener(this)
         btn_history_calendar.setOnClickListener(this)
-        tv_history_toolbar_title.text = resources.getString(R.string.history_titile)
         monthAdapter = FragmentPagerAdapter(childFragmentManager)
         vp_history.adapter = monthAdapter
         vp_history.currentItem = monthAdapter.count - 1
         tab_layout_history.setMonth(Date(monthAdapter.dates[monthAdapter.count - 1]))
-
+        setCurrentYear(monthAdapter.count - 1)
 
         vp_history.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
             var moveToRight = false
@@ -60,6 +64,7 @@ class FragmentHistory: Fragment(), View.OnClickListener {
             }
 
             override fun onPageSelected(position: Int) {
+                setCurrentYear(position)
                 pageIsSelected = true
                 val newOffset = if (moveToRight) 1F else -1F
                 tab_layout_history.startEndAnimation(offset, newOffset, moveToRight)
@@ -70,6 +75,11 @@ class FragmentHistory: Fragment(), View.OnClickListener {
         })
     }
 
+    private fun setCurrentYear(position: Int) {
+        calendar.time = Date(monthAdapter.dates[position])
+        currentMonth = dateFormatter.format(calendar.time).split(" ")[2]
+        tv_history_toolbar_title.text = resources.getString(R.string.history_titile) + " $currentMonth"
+    }
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.fab_history_qr -> {

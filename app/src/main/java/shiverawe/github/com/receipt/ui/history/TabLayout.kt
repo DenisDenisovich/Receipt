@@ -24,9 +24,7 @@ class TabLayout: View {
     private val calendar = GregorianCalendar()
     private val currentDate = GregorianCalendar()
     private val monthArray: ArrayList<String> = arrayListOf("", "", "", "", "")
-    private val yearArray: ArrayList<String> = arrayListOf("", "", "", "", "")
     private var currentSum = ""
-    private val dateFormatter = DateFormat.getDateInstance(SimpleDateFormat.LONG, Locale("ru"))
     private val dateFormatterMonth = SimpleDateFormat("LLLL", Locale("ru"))
     private var offset: Float = 0F
     private var monthStep = 0
@@ -96,11 +94,6 @@ class TabLayout: View {
             monthPaint.getTextBounds(monthArray[i], 0, monthArray[i].length, rect)
             displayX -= rect.width() / 2
             canvas?.drawText(monthArray[i], displayX, displayY, monthPaint)
-/*
-            if (displayX + rect.width() / 2 == monthStep * 1.5.toFloat()) {
-                canvas?.drawText(" ${yearArray[i]}", displayX + rect.width(), displayY, monthPaint)
-            }
-*/
         }
         if (offset == 0F) {
             val sumDisplayY = height / 2 + deltaMonthY
@@ -117,7 +110,6 @@ class TabLayout: View {
         calendar.add(Calendar.MONTH, -2)
         for (i in 0 until 5) {
             monthArray[i] = dateFormatterMonth.format(calendar.time).capitalize()
-            yearArray[i] = dateFormatter.format(calendar.time).split(" ")[2].substring(2, 4)
             calendar.add(Calendar.MONTH, 1)
         }
         currentSum = ""
@@ -150,7 +142,7 @@ class TabLayout: View {
                     super.onAnimationEnd(animation)
                 }
             })
-            duration = 150
+            duration = 200
             interpolator = DecelerateInterpolator()
             start()
         }

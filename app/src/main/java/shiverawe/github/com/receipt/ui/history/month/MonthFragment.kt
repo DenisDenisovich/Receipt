@@ -73,9 +73,8 @@ class MonthFragment : Fragment() {
         if (isVisibleToUser) {
             if (receipts.size == 0)
                 sendRequest()
-            else {
+            else
                 setTotalSum()
-            }
         }
     }
 
