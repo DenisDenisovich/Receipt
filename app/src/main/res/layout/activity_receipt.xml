@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tool="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <FrameLayout
         android:id="@+id/history_toolbar"
@@ -59,7 +61,8 @@
                 android:textColor="#000000"
                 android:fontFamily="@font/courier_new_regular"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="16dp"/>
+                android:layout_marginStart="16dp"
+                tools:text="Пятерочка"/>
 
             <TextView
                 android:id="@+id/tv_receipt_shop_price"
@@ -69,7 +72,8 @@
                 android:textColor="#000000"
                 android:fontFamily="@font/courier_new_regular"
                 android:layout_gravity="center_vertical|end"
-                android:layout_marginEnd="16dp"/>
+                android:layout_marginEnd="16dp"
+                tools:text="123.00 р"/>
 
         </FrameLayout>
 
@@ -80,14 +84,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="109dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/ic_receipt_down"
+        android:elevation="8dp"
+        android:outlineProvider="bounds"
+        android:overScrollMode="never"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:background="@drawable/ic_receipt_down"
-        android:overScrollMode="never"
-        android:outlineProvider="bounds"
-        android:elevation="8dp"/>
+        tools:listitem="@layout/item_product" />
 
 </FrameLayout>
