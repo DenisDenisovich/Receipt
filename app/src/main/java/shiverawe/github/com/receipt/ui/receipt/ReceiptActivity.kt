@@ -42,6 +42,7 @@ class ReceiptActivity : AppCompatActivity() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             changeDownShadow()
         }
+        fl_receipt_top_ticket.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     }
 
 

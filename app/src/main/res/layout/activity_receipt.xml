@@ -40,16 +40,16 @@
                 android:fontFamily="@font/roboto_regular"
                 android:textSize="20sp"
                 android:textColor="#FFFFFF"/>
-
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/fl_receipt_top_ticket"
             android:layout_width="match_parent"
             android:layout_height="53dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="56dp"
-            android:background="@drawable/bcg_receipt_up">
+            android:background="@drawable/ic_receipt_up_with_line">
 
             <TextView
                 android:id="@+id/tv_receipt_shop_name"
@@ -85,7 +85,7 @@
         android:layout_marginBottom="16dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:background="@drawable/bcg_receipt_down"
+        android:background="@drawable/ic_receipt_down"
         android:overScrollMode="never"
         android:outlineProvider="bounds"
         android:elevation="8dp"/>
