@@ -5,7 +5,8 @@
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="tv_history_month_size">18sp</dimen>
+    <dimen name="tv_history_month_size_max">18sp</dimen>
+    <dimen name="tv_history_month_size_min">14sp</dimen>
     <dimen name="tv_history_sum_size">12sp</dimen>
     <dimen name="tv_history_sum_margin_bottom">8dp</dimen>
     <dimen name="outline_shadow_receipt_padding_bottom">10dp</dimen>

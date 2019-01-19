@@ -73,6 +73,9 @@ class MonthFragment : Fragment() {
         if (isVisibleToUser) {
             if (receipts.size == 0)
                 sendRequest()
+            else {
+                setTotalSum()
+            }
         }
     }
 
@@ -151,6 +154,10 @@ class MonthFragment : Fragment() {
             totalSum = shopSum
             receipts.add(Receipt(Shop(shopDate, shopProvider, shopSum.toString() + " р"), ArrayList(products)))
         }
+        setTotalSum()
+    }
+
+    private fun setTotalSum() {
         totalSum = BigDecimal(totalSum).setScale(2, RoundingMode.DOWN).toDouble()
         if (parentFragment != null)
             (parentFragment as FragmentHistory).setMonthSum(totalSum.toString() + " р")
