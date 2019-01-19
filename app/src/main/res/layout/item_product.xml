@@ -8,12 +8,15 @@
         android:id="@+id/tv_item_product_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:textColor="#000000"
         android:textSize="16sp"
         android:fontFamily="@font/courier_new_regular"
-        tools:text="БАтон Убойный цена нарез. 1с"/>
+        tools:text="Батон Убойный цена нарез. 1сfg"/>
 
     <TextView
         android:id="@+id/tv_item_product_amount"
