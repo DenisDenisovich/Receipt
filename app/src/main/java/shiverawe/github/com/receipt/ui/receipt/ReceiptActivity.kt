@@ -231,7 +231,7 @@ class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
             val i = parameters.filter { it.contains("fp") }[0].split("=")[1]
             val s = parameters.filter { it.contains("s") }[0].split("=")[1]
             val t = parameters.filter { it.contains("t") }[0].split("=")[1]
-            qrDate = mapDate(t)
+            qrDate = mapDateForSave(t)
             val createRequest = CreateRequest(fn, fp, i, s, t)
             createCall = App.api.createReceipt(createRequest)
             createCall?.enqueue(object : Callback<CreateResponce> {
@@ -267,7 +267,7 @@ class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
         Toast.makeText(this, "Ошибка", Toast.LENGTH_LONG).show()
     }
 
-    private fun mapDate(dateStr: String): Long {
+    private fun mapDateForSave(dateStr: String): Long {
         val qrCalendar = GregorianCalendar(TimeZone.getDefault())
         val year = dateStr.substring(0, 4).toInt()
         val month = dateStr.substring(4, 6).toInt() - 1
