@@ -140,6 +140,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         val receipt = map(response)
                         openReceipt(receipt!!)
                     } catch (e: Exception) {
+                        container_qr_request.visibility = View.GONE
                         Toast.makeText(this@MainActivity, "Ошибка", Toast.LENGTH_LONG).show()
                     }
                 }

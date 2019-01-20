@@ -11,9 +11,13 @@ import shiverawe.github.com.receipt.data.Product
 import java.math.BigDecimal
 import java.math.RoundingMode
 
+
+
 class RvAdapterReceipt(val products: ArrayList<Product>): RecyclerView.Adapter<RvAdapterReceipt.ViewHolder>() {
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(p0.context).inflate(R.layout.item_product, p0, false))
+        val holder = ViewHolder(LayoutInflater.from(p0.context).inflate(R.layout.item_product, p0, false))
+        holder.name.setOnClickListener { it.isSelected = !it.isSelected }
+        return holder
     }
 
     override fun getItemCount() = products.size
@@ -23,7 +27,7 @@ class RvAdapterReceipt(val products: ArrayList<Product>): RecyclerView.Adapter<R
     }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        private val name = view.tv_item_product_name
+        val name = view.tv_item_product_name
         private val amount = view.tv_item_product_amount
         private val price = view.tv_item_product_price
 
