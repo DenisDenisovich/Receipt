@@ -200,33 +200,13 @@ class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
     private fun getShareString(): String {
         val url = StringBuilder()
         val date = getDateForShare(receipt!!.shop.date)
-        url.appendln("Посмотреть чек по ссылке:")
-        url.append("http://receipt.shefer.space/?")
-        url.appendln("fn=${receipt!!.shop.fnShare}&i=${receipt!!.shop.fdShare}&fp=${receipt!!.shop.fpShare}&s=${receipt!!.shop.sShare}&t=$date")
         url.appendln("Магазин: ${receipt!!.shop.place}")
         url.appendln("Дата:    $dateStr")
         url.appendln("Сумма:   ${receipt!!.shop.sum}")
+        url.appendln("Посмотреть чек по ссылке:")
+        url.append("http://receipt.shefer.space/?")
+        url.appendln("fn=${receipt!!.shop.fnShare}&i=${receipt!!.shop.fdShare}&fp=${receipt!!.shop.fpShare}&s=${receipt!!.shop.sShare}&t=$date")
         return url.toString()
-        /*val link = "http://receipt.shefer.space/?fn=8710000101660946&i=34762&fp=2967775507&s=302.89&t=20190116T2018"
-        val sb = StringBuilder()
-        sb.appendln("Скачать приложение по ссылке:")
-        sb.appendln(link)
-        sb.appendln("Магазин: ${receipt!!.shop.place}")
-        sb.appendln("Дата:    $dateStr")
-        sb.appendln("Сумма:   ${receipt!!.shop.sum}")
-        var price: String
-        var amountNumber: Double
-        var amountString: String
-        for (productIndex in 0 until receipt!!.items!!.size) {
-            sb.appendln("${productIndex + 1}. ${receipt!!.items!![productIndex].text}")
-            amountNumber = BigDecimal(receipt!!.items!![productIndex].amount).setScale(3, RoundingMode.DOWN).toDouble()
-            amountString = if (amountNumber == Math.floor(amountNumber)) amountNumber.toInt().toString()
-            else amountNumber.toString()
-            sb.appendln("Кол-во: $amountString")
-            price = BigDecimal(receipt!!.items!![productIndex].price).setScale(2, RoundingMode.DOWN).toString() + " p"
-            sb.appendln("Цена:   $price")
-        }
-        return sb.toString()*/
     }
 
     private fun saveReceipt() {
