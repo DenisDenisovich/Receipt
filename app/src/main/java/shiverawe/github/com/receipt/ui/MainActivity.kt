@@ -6,7 +6,6 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -25,14 +24,15 @@ import retrofit2.Response
 import shiverawe.github.com.receipt.data.Product
 import shiverawe.github.com.receipt.data.Shop
 import shiverawe.github.com.receipt.data.network.entity.get.ReceiptResponce
+import shiverawe.github.com.receipt.ui.receipt.RECEIPT_SAVE_META
 import java.lang.Exception
 import java.util.*
+import kotlin.collections.HashMap
 
 
 private const val FRAGMENT_HISTORY_TAG = "fragment_history"
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, Navigation {
     var qrCall: Call<ReceiptResponce>? = null
-    lateinit var menu: Menu
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -86,13 +86,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         startActivity(intent)
     }
 
+    override fun openNetworkReceipt(receipt: Receipt, saveMeta: String) {
+        val intent = Intent(this, ReceiptActivity::class.java)
+        intent.putExtra(RECEIPT_TAG, Gson().toJson(receipt))
+        intent.putExtra(RECEIPT_SAVE_META, saveMeta)
+        startActivity(intent)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
             if (result.contents == null) {
                 Toast.makeText(this, "Ошибка", Toast.LENGTH_LONG).show()
             } else {
-                findReceipt(ArrayList(result.contents.split("&")))
+                findReceipt(result.contents)
                 Log.d("LogTest", "${result.contents}")
             }
         } else {
@@ -100,42 +107,38 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    private fun findReceipt(str: ArrayList<String>) {
-        container.visibility = View.INVISIBLE
+    private fun findReceipt(qr_code: String) {
         container_qr_request.visibility = View.VISIBLE
         try {
-            val fn = str[2].split("=")[1].toLong()
-            val i = str[3].split("=")[1].toLong()
-            val fp = str[4].split("=")[1].toLong()
-            val t = mapDate(str[0].split("=")[1])
-            val s = if (str[1].split("=")[1].contains(".")) (str[1].split("=")[1].toDouble() * 100).toLong() else str[1].split("=")[1].toLong()
-            qrCall = App.api.getReceipt(fn, i, fp, t, s)
+            val parameters = qr_code.split("&")
+            val options = HashMap<String, String>()
+            parameters.forEach {
+                parameter ->
+                val key = parameter.substring(0, parameter.indexOf("="))
+                val value = parameter.substring(parameter.indexOf("=") + 1, parameter.length)
+                options[key] = value
+            }
+            qrCall = App.api.getReceipt(options)
             qrCall?.enqueue(object : Callback<ReceiptResponce> {
                 override fun onFailure(call: Call<ReceiptResponce>, t: Throwable) {
-                    container.visibility = View.VISIBLE
                     container_qr_request.visibility = View.GONE
                     Toast.makeText(this@MainActivity, "Ошибка", Toast.LENGTH_LONG).show()
                 }
 
                 override fun onResponse(call: Call<ReceiptResponce>, response: Response<ReceiptResponce>) {
-                    container.visibility = View.VISIBLE
                     container_qr_request.visibility = View.GONE
                     try {
                         val receipt = map(response)
                         openReceipt(receipt!!)
                     } catch (e: Exception) {
                         Toast.makeText(this@MainActivity, "Ошибка", Toast.LENGTH_LONG).show()
-                        Log.d("LogQr", "ReceiptParsing: ${e.message}")
-
                     }
                 }
 
             })
         }catch (e: Exception) {
-            container.visibility = View.VISIBLE
             container_qr_request.visibility = View.GONE
             Toast.makeText(this@MainActivity, "Ошибка", Toast.LENGTH_LONG).show()
-            Log.d("LogQr", "qrParsing: ${e.message}")
         }
 
     }
@@ -150,12 +153,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         val shop = Shop(body.meta!!.date?.toLong()?: 0L, body.meta!!.place?: "", body.meta!!.sum?: "")
         return Receipt(shop, products)
-    }
-
-    fun mapDate(date: String): Long {
-        val d = date.split("T")[0]
-        val time = date.split("T")[1]
-        val cal = GregorianCalendar(date.substring(0, 4).toInt(), date.substring(3, 6).toInt(), date.substring(6, d.length).toInt(), time.substring(0, 2).toInt(), time.substring(2, time.length).toInt())
-        return cal.timeInMillis / 1000
     }
 }

@@ -18,22 +18,37 @@ import java.util.*
 import android.view.View
 import android.view.ViewOutlineProvider
 import android.content.Intent
+import android.util.Log
+import android.widget.FrameLayout
+import retrofit2.Call
+import shiverawe.github.com.receipt.data.network.entity.create.CreateRequest
+import shiverawe.github.com.receipt.data.network.entity.create.CreateResponce
 import java.lang.StringBuilder
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 
 const val RECEIPT_TAG = "receipt"
+const val RECEIPT_SAVE_META = "receipt_save_meta"
 class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
     var receipt: Receipt? = null
+    var saveCall: Call<CreateResponce>? = null
     var dateStr = ""
+    var saveMeta = ""
     private val dateFormatterDigits = SimpleDateFormat("dd.MM_HH:mm", Locale("ru"))
     private val dateFormatterDay = DateFormat.getDateInstance(SimpleDateFormat.FULL, Locale("ru"))
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receipt)
         receipt = Gson().fromJson(intent.getStringExtra(RECEIPT_TAG), Receipt::class.java)
-
+        saveMeta = intent.getStringExtra(RECEIPT_SAVE_META)?: ""
+        val lp = rv_receipt.layoutParams as FrameLayout.LayoutParams
+        if (saveMeta.isNotBlank()) {
+            lp.bottomMargin = resources.getDimensionPixelSize(R.dimen.receipt_network_bottom_margin)
+        } else {
+            btn_receipt_save.visibility = View.GONE
+            lp.bottomMargin = resources.getDimensionPixelSize(R.dimen.receipt_offline_bottom_margin)
+        }
         val fullDate = dateFormatterDigits.format(Date(receipt!!.shop.date)).split("_")
         val day = dateFormatterDay.format(Date(receipt!!.shop.date)).split(",")[0].capitalize()
         val date = fullDate[0]
@@ -64,6 +79,9 @@ class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
                 sendIntent.putExtra(Intent.EXTRA_TEXT, getReceiptString())
                 sendIntent.type = "text/plain"
                 startActivity(Intent.createChooser(sendIntent, "Отправить чек"))
+            }
+            R.id.btn_receipt_save -> {
+                saveReceipt()
             }
         }
     }
@@ -192,5 +210,14 @@ class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
             sb.appendln("Цена:   $price")
         }
         return sb.toString()
+    }
+
+    private fun saveReceipt() {
+
+    }
+
+    override fun onDestroy() {
+        saveCall?.cancel()
+        super.onDestroy()
     }
 }

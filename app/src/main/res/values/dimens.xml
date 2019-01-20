@@ -15,4 +15,6 @@
     <dimen name="receipt_top_line_width">2dp</dimen>
     <dimen name="receipt_top_line_dash_size">10dp</dimen>
     <dimen name="receipt_top_line_gap_size">5dp</dimen>
+    <dimen name="receipt_network_bottom_margin">72dp</dimen>
+    <dimen name="receipt_offline_bottom_margin">16dp</dimen>
 </resources>
