@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
@@ -16,16 +17,14 @@ import shiverawe.github.com.receipt.data.Receipt
 import shiverawe.github.com.receipt.ui.history.FragmentHistory
 import shiverawe.github.com.receipt.ui.receipt.RECEIPT_TAG
 import shiverawe.github.com.receipt.ui.receipt.ReceiptActivity
-import android.R.attr.data
 import com.google.zxing.integration.android.IntentIntegrator
-import com.google.zxing.integration.android.IntentResult
+import kotlinx.android.synthetic.main.content_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import shiverawe.github.com.receipt.data.Product
 import shiverawe.github.com.receipt.data.Shop
 import shiverawe.github.com.receipt.data.network.entity.get.ReceiptResponce
-import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import java.lang.Exception
 import java.util.*
 
@@ -102,19 +101,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun findReceipt(str: ArrayList<String>) {
+        container.visibility = View.INVISIBLE
+        container_qr_request.visibility = View.VISIBLE
         try {
             val fn = str[2].split("=")[1].toLong()
-            val fd = str[3].split("=")[1].toLong()
+            val i = str[3].split("=")[1].toLong()
             val fp = str[4].split("=")[1].toLong()
-            val date = mapDate(str[0].split("=")[1])
-            val sum = if (str[1].split("=")[1].contains(".")) (str[1].split("=")[1].toDouble() * 100).toLong() else str[1].split("=")[1].toLong()
-            qrCall = App.api.getReceipt(fn, fd, fp, date, sum)
+            val t = mapDate(str[0].split("=")[1])
+            val s = if (str[1].split("=")[1].contains(".")) (str[1].split("=")[1].toDouble() * 100).toLong() else str[1].split("=")[1].toLong()
+            qrCall = App.api.getReceipt(fn, i, fp, t, s)
             qrCall?.enqueue(object : Callback<ReceiptResponce> {
                 override fun onFailure(call: Call<ReceiptResponce>, t: Throwable) {
+                    container.visibility = View.VISIBLE
+                    container_qr_request.visibility = View.GONE
                     Toast.makeText(this@MainActivity, "Ошибка", Toast.LENGTH_LONG).show()
                 }
 
                 override fun onResponse(call: Call<ReceiptResponce>, response: Response<ReceiptResponce>) {
+                    container.visibility = View.VISIBLE
+                    container_qr_request.visibility = View.GONE
                     try {
                         val receipt = map(response)
                         openReceipt(receipt!!)
@@ -127,6 +132,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             })
         }catch (e: Exception) {
+            container.visibility = View.VISIBLE
+            container_qr_request.visibility = View.GONE
             Toast.makeText(this@MainActivity, "Ошибка", Toast.LENGTH_LONG).show()
             Log.d("LogQr", "qrParsing: ${e.message}")
         }
