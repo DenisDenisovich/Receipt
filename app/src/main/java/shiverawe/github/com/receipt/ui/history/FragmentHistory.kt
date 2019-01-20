@@ -46,14 +46,28 @@ class FragmentHistory: Fragment(), View.OnClickListener {
 
         vp_history.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
             var moveToRight = false
-            var previewPosition = monthAdapter.count - 1
+            var previewPosition = vp_history.currentItem
             var offset = 0F
             var pageIsSelected = false
+            var previewState = 0
             override fun onPageScrollStateChanged(state: Int) {
+                Log.d("LogState", "$state")
+                if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+                    if (previewState != ViewPager.SCROLL_STATE_IDLE) {
+                        // when scroll is very fast
+                        // end of animation. Update month array in TabLayout
+                        val position = vp_history.currentItem
+                        tab_layout_history.setMonth(Date(monthAdapter.dates[position]))
+                        setCurrentYear(position)
+                        offset = 0F
+                    }
+                }
                 if (state == ViewPager.SCROLL_STATE_DRAGGING) pageIsSelected = false
+                previewState = state
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, p2: Int) {
+                Log.d("LogOffset", "$positionOffset")
                 if (!pageIsSelected) {
                     moveToRight = position < vp_history.currentItem
                     previewPosition = position
@@ -78,7 +92,7 @@ class FragmentHistory: Fragment(), View.OnClickListener {
                 if (offset == 0F) {
                     // if page selected by currentItem without swipe
                     moveToRight = previewPosition > position
-                    if (moveToRight) previewPosition-- else previewPosition++
+                    previewPosition = position
                 }
             }
         })
