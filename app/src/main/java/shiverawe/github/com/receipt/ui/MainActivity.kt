@@ -33,6 +33,7 @@ import kotlin.collections.HashMap
 private const val FRAGMENT_HISTORY_TAG = "fragment_history"
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, Navigation {
     var qrCall: Call<ReceiptResponce>? = null
+    var fromReceipt = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -60,6 +61,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
+    override fun onResume() {
+        if (fromReceipt) {
+            container_qr_request.visibility = View.GONE
+            fromReceipt = false
+        }
+        super.onResume()
+    }
 
     override fun openHistory() {
         supportFragmentManager.beginTransaction().replace(R.id.container, FragmentHistory(), FRAGMENT_HISTORY_TAG).commit()
@@ -81,12 +89,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun openReceipt(receipt: Receipt) {
+        fromReceipt = true
         val intent = Intent(this, ReceiptActivity::class.java)
         intent.putExtra(RECEIPT_TAG, Gson().toJson(receipt))
         startActivity(intent)
     }
 
     override fun openNetworkReceipt(receipt: Receipt, saveMeta: String) {
+        fromReceipt = true
         val intent = Intent(this, ReceiptActivity::class.java)
         intent.putExtra(RECEIPT_TAG, Gson().toJson(receipt))
         intent.putExtra(RECEIPT_SAVE_META, saveMeta)
@@ -126,7 +136,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
 
                 override fun onResponse(call: Call<ReceiptResponce>, response: Response<ReceiptResponce>) {
-                    container_qr_request.visibility = View.GONE
                     try {
                         val receipt = map(response)
                         openReceipt(receipt!!)
