@@ -25,7 +25,6 @@ import shiverawe.github.com.receipt.data.Shop
 import shiverawe.github.com.receipt.data.network.entity.get.ReceiptResponce
 import shiverawe.github.com.receipt.ui.receipt.RECEIPT_QR_CODE
 import java.lang.Exception
-import java.lang.StringBuilder
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -42,6 +41,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         nav_view.setNavigationItemSelectedListener(this)
         openHistory()
+        checkIntentFilter()
     }
 
     override fun onBackPressed() {
@@ -180,6 +180,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val t = body.meta.date!!.toString()
         val shop = Shop(body.meta.date.toLong()?: 0L, body.meta.place?: "", body.meta.sum?: "", t, fn,i, fp, body.meta.sum?: "")
         return Receipt(shop, products)
+    }
+
+    private fun checkIntentFilter() {
+        val data = intent.data ?: return
+        val path = data.query
+        qrCode = path
+        findReceipt()
     }
 
 
