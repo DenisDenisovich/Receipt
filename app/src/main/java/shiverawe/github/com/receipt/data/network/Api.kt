@@ -14,6 +14,6 @@ interface Api {
     fun getReceipt(@QueryMap options: Map<String, String>): Call<ReceiptResponce>
     @PUT("rest/report")
     fun getReceiptForMonth(@Body reportRequest: ReportRequest): Call<ArrayList<Report>>
-    @GET("rest/get")
+    @POST("rest/create")
     fun createReceipt(@Body reportRequest: CreateRequest): Call<CreateResponce>
 }

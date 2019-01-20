@@ -1,5 +1,6 @@
 package shiverawe.github.com.receipt.ui.receipt
 
+import android.app.Activity
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
@@ -18,32 +19,38 @@ import java.util.*
 import android.view.View
 import android.view.ViewOutlineProvider
 import android.content.Intent
-import android.util.Log
 import android.widget.FrameLayout
+import android.widget.Toast
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import shiverawe.github.com.receipt.data.network.entity.create.CreateRequest
 import shiverawe.github.com.receipt.data.network.entity.create.CreateResponce
+import shiverawe.github.com.receipt.ui.App
+import shiverawe.github.com.receipt.ui.EXTRA_DATE_RECEIPT
+import java.lang.Exception
 import java.lang.StringBuilder
 import java.math.BigDecimal
 import java.math.RoundingMode
 
 
 const val RECEIPT_TAG = "receipt"
-const val RECEIPT_SAVE_META = "receipt_save_meta"
+const val RECEIPT_QR_CODE = "receipt_qr_code"
 class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
     var receipt: Receipt? = null
-    var saveCall: Call<CreateResponce>? = null
+    var createCall: Call<CreateResponce>? = null
     var dateStr = ""
-    var saveMeta = ""
+    var qrCode = ""
+    var qrDate: Long = 0
     private val dateFormatterDigits = SimpleDateFormat("dd.MM_HH:mm", Locale("ru"))
     private val dateFormatterDay = DateFormat.getDateInstance(SimpleDateFormat.FULL, Locale("ru"))
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receipt)
         receipt = Gson().fromJson(intent.getStringExtra(RECEIPT_TAG), Receipt::class.java)
-        saveMeta = intent.getStringExtra(RECEIPT_SAVE_META)?: ""
+        qrCode = intent.getStringExtra(RECEIPT_QR_CODE)?: ""
         val lp = rv_receipt.layoutParams as FrameLayout.LayoutParams
-        if (saveMeta.isNotBlank()) {
+        if (qrCode.isNotBlank()) {
             lp.bottomMargin = resources.getDimensionPixelSize(R.dimen.receipt_network_bottom_margin)
         } else {
             btn_receipt_save.visibility = View.GONE
@@ -62,6 +69,7 @@ class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
         rv_receipt.layoutManager = LinearLayoutManager(this)
         btn_receipt_back.setOnClickListener(this)
         btn_receipt_share.setOnClickListener(this)
+        btn_receipt_save.setOnClickListener(this)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             changeDownShadow()
         }
@@ -213,11 +221,67 @@ class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun saveReceipt() {
+        container_receipt.visibility = View.INVISIBLE
+        container_save_request.visibility = View.VISIBLE
+        try {
+            val parameters = qrCode.split("&")
+            val fp = parameters.filter { it.contains("fp") }[0].split("=")[1]
+            val fn = parameters.filter { it.contains("fp") }[0].split("=")[1]
+            val i = parameters.filter { it.contains("fp") }[0].split("=")[1]
+            val s = parameters.filter { it.contains("s") }[0].split("=")[1]
+            val t = parameters.filter { it.contains("t") }[0].split("=")[1]
+            qrDate = mapDate(t)
+            val createRequest = CreateRequest(fn, fp, i, s, t)
+            createCall = App.api.createReceipt(createRequest)
+            createCall?.enqueue(object : Callback<CreateResponce> {
+                override fun onFailure(call: Call<CreateResponce>, t: Throwable) {
+                    showError()
+                }
 
+                override fun onResponse(call: Call<CreateResponce>, response: Response<CreateResponce>) {
+                    try {
+                        val body = response.body()
+                        if (body!!.status != "OK")
+                            showError()
+                        else {
+                            val intent = Intent()
+                            intent.putExtra(EXTRA_DATE_RECEIPT, qrDate)
+                            setResult(Activity.RESULT_OK, intent)
+                            finish()
+                        }
+                    } catch (e: Exception) {
+                        showError()
+                    }
+                }
+
+            })
+        } catch (e: Exception) {
+            showError()
+        }
+    }
+
+    fun showError() {
+        container_receipt.visibility = View.VISIBLE
+        container_save_request.visibility = View.GONE
+        Toast.makeText(this, "Ошибка", Toast.LENGTH_LONG).show()
+    }
+
+    private fun mapDate(dateStr: String): Long {
+        val qrCalendar = GregorianCalendar(TimeZone.getDefault())
+        val year = dateStr.substring(0, 4).toInt()
+        val month = dateStr.substring(4, 6).toInt() - 1
+        qrCalendar.set(Calendar.YEAR, year)
+        qrCalendar.set(Calendar.MONTH, month)
+        qrCalendar.set(Calendar.DAY_OF_MONTH, 1)
+        qrCalendar.set(Calendar.HOUR_OF_DAY, 0)
+        qrCalendar.set(Calendar.MINUTE, 0)
+        qrCalendar.set(Calendar.SECOND, 0)
+        qrCalendar.set(Calendar.MILLISECOND, 0)
+        return qrCalendar.timeInMillis
     }
 
     override fun onDestroy() {
-        saveCall?.cancel()
+        createCall?.cancel()
         super.onDestroy()
     }
 }

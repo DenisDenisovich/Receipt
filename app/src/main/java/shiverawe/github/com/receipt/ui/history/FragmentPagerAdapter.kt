@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import shiverawe.github.com.receipt.ui.history.month.MonthFragment
+import java.text.SimpleDateFormat
 import java.util.*
 
 class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
@@ -14,10 +15,10 @@ class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) 
         val calendar = GregorianCalendar(TimeZone.getDefault())
         calendar.time = Date(System.currentTimeMillis())
         calendar.set(Calendar.DAY_OF_MONTH, 1)
-        calendar.clear(Calendar.HOUR)
-        calendar.clear(Calendar.MINUTE)
-        calendar.clear(Calendar.SECOND)
-        calendar.clear(Calendar.MILLISECOND)
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
         for (dateIndex in dates.size - 1 downTo 0) {
             dates[dateIndex] = calendar.timeInMillis
             calendar.add(Calendar.MONTH, -1)
@@ -34,11 +35,10 @@ class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) 
         val calendar = GregorianCalendar(TimeZone.getDefault())
         calendar.time = date
         calendar.set(Calendar.DAY_OF_MONTH, 1)
-        calendar.clear(Calendar.HOUR)
-        calendar.clear(Calendar.MINUTE)
-        calendar.clear(Calendar.SECOND)
-        calendar.clear(Calendar.MILLISECOND)
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
         return dates.indexOf(calendar.timeInMillis)
     }
-
 }

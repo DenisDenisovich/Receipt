@@ -42,14 +42,14 @@ class MonthFragment : Fragment() {
     }
 
     lateinit var navigation: Navigation
-    var call: Call<ArrayList<Report>>? = null
-    var receipts: ArrayList<Receipt?> = ArrayList()
-    var totalSum = 0.0
-    val date = Date()
-    val calendar = GregorianCalendar()
-    var date_from: Int = 0
-    var date_to: Int = 0
-    lateinit var adapter: RvAdapterMonth
+    private var call: Call<ArrayList<Report>>? = null
+    private var receipts: ArrayList<Receipt?> = ArrayList()
+    private var totalSum = 0.0
+    private val date = Date()
+    private val calendar = GregorianCalendar()
+    private var date_from: Int = 0
+    private var date_to: Int = 0
+    private lateinit var adapter: RvAdapterMonth
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -78,7 +78,14 @@ class MonthFragment : Fragment() {
         }
     }
 
-    private fun sendRequest() {
+    fun update() {
+        pb_month.visibility = View.VISIBLE
+        rv_month.visibility = View.GONE
+        receipts.clear()
+        sendRequest()
+    }
+
+    fun sendRequest() {
         date_from = arguments!!.getInt(DATE_KEY)
         date.time = date_from.toLong() * 1000
         calendar.time = date

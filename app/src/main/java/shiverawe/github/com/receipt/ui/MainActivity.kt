@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -24,16 +23,19 @@ import retrofit2.Response
 import shiverawe.github.com.receipt.data.Product
 import shiverawe.github.com.receipt.data.Shop
 import shiverawe.github.com.receipt.data.network.entity.get.ReceiptResponce
-import shiverawe.github.com.receipt.ui.receipt.RECEIPT_SAVE_META
+import shiverawe.github.com.receipt.ui.receipt.RECEIPT_QR_CODE
 import java.lang.Exception
 import java.util.*
 import kotlin.collections.HashMap
 
 
 private const val FRAGMENT_HISTORY_TAG = "fragment_history"
+private const val REQUEST_CODE_CREATE_RECEIPT = 10236
+const val EXTRA_DATE_RECEIPT = "extra_date_receipt"
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, Navigation {
     var qrCall: Call<ReceiptResponce>? = null
     var fromReceipt = false
+    var qrCode = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -95,32 +97,42 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         startActivity(intent)
     }
 
-    override fun openNetworkReceipt(receipt: Receipt, saveMeta: String) {
+    override fun openNetworkReceipt(receipt: Receipt) {
         fromReceipt = true
         val intent = Intent(this, ReceiptActivity::class.java)
         intent.putExtra(RECEIPT_TAG, Gson().toJson(receipt))
-        intent.putExtra(RECEIPT_SAVE_META, saveMeta)
-        startActivity(intent)
+        intent.putExtra(RECEIPT_QR_CODE, qrCode)
+        startActivityForResult(intent, REQUEST_CODE_CREATE_RECEIPT)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null) {
-            if (result.contents == null) {
-                Toast.makeText(this, "Ошибка", Toast.LENGTH_LONG).show()
-            } else {
-                findReceipt(result.contents)
-                Log.d("LogTest", "${result.contents}")
+        when (requestCode) {
+            REQUEST_CODE_CREATE_RECEIPT -> {
+                val date = data?.getLongExtra(EXTRA_DATE_RECEIPT, 0L)?: 0L
+                val currentFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_HISTORY_TAG)
+                if(currentFragment is FragmentHistory) {
+                    currentFragment.updateMonth(date)
+                }
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
+            else -> {
+                val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+                if (result != null) {
+                    if (result.contents != null) {
+                        qrCode = result.contents
+                        findReceipt()
+                    }
+                } else {
+                    super.onActivityResult(requestCode, resultCode, data)
+                }
+            }
         }
+
     }
 
-    private fun findReceipt(qr_code: String) {
+    private fun findReceipt() {
         container_qr_request.visibility = View.VISIBLE
         try {
-            val parameters = qr_code.split("&")
+            val parameters = qrCode.split("&")
             val options = HashMap<String, String>()
             parameters.forEach {
                 parameter ->
@@ -138,7 +150,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 override fun onResponse(call: Call<ReceiptResponce>, response: Response<ReceiptResponce>) {
                     try {
                         val receipt = map(response)
-                        openReceipt(receipt!!)
+                        openNetworkReceipt(receipt!!)
                     } catch (e: Exception) {
                         container_qr_request.visibility = View.GONE
                         Toast.makeText(this@MainActivity, "Ошибка", Toast.LENGTH_LONG).show()

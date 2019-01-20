@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.fragment_history.*
 import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.Navigation
+import shiverawe.github.com.receipt.ui.history.month.MonthFragment
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -167,6 +168,23 @@ class FragmentHistory: Fragment(), View.OnClickListener {
         } else {
             changeDateByCalendar = true
             vp_history.currentItem = position
+        }
+    }
+
+    fun updateMonth(date: Long) {
+        val updatedPosition = monthAdapter.getPositionByDate(Date(date))
+        if (updatedPosition != -1 && Math.abs(updatedPosition - vp_history.currentItem) <= 1) {
+            val fragments = childFragmentManager.fragments
+            fragments.forEach {
+                fragment ->
+                if (fragment is MonthFragment) {
+                    if (fragment.arguments?.getInt(MonthFragment.DATE_KEY) == (date / 1000).toInt()) {
+                        fragment.update()
+                        return
+                    }
+                }
+
+            }
         }
     }
 }
