@@ -17,12 +17,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.view.View
 import android.view.ViewOutlineProvider
-
+import android.content.Intent
+import java.lang.StringBuilder
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 
 const val RECEIPT_TAG = "receipt"
-class ReceiptActivity : AppCompatActivity() {
+class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
     var receipt: Receipt? = null
+    var dateStr = ""
     private val dateFormatterDigits = SimpleDateFormat("dd.MM_HH:mm", Locale("ru"))
     private val dateFormatterDay = DateFormat.getDateInstance(SimpleDateFormat.FULL, Locale("ru"))
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,22 +34,39 @@ class ReceiptActivity : AppCompatActivity() {
         setContentView(R.layout.activity_receipt)
         receipt = Gson().fromJson(intent.getStringExtra(RECEIPT_TAG), Receipt::class.java)
 
-        val date = dateFormatterDigits.format(Date(receipt!!.shop.date)).split("_")
-        val day = dateFormatterDay.format(Date(receipt!!.shop.date)).split(",")
-        tv_receipt_toolbar_date.text = "${date[0]} ${day[0].capitalize()}"
-        tv_receipt_toolbar_time.text = date[1]
+        val fullDate = dateFormatterDigits.format(Date(receipt!!.shop.date)).split("_")
+        val day = dateFormatterDay.format(Date(receipt!!.shop.date)).split(",")[0].capitalize()
+        val date = fullDate[0]
+        val time = fullDate[1]
+        dateStr = "$date $day $time"
+        tv_receipt_date.text = dateStr
 
         tv_receipt_shop_name.text = receipt!!.shop.place
         tv_receipt_shop_price.text = receipt!!.shop.sum
         rv_receipt.adapter = RvAdapterReceipt(receipt!!.items!!)
         rv_receipt.layoutManager = LinearLayoutManager(this)
-        btn_receipt_toolbar_back.setOnClickListener { finish() }
+        btn_receipt_back.setOnClickListener(this)
+        btn_receipt_share.setOnClickListener(this)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             changeDownShadow()
         }
         fl_receipt_top_ticket.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     }
 
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.btn_receipt_back -> {
+                finish()
+            }
+            R.id.btn_receipt_share -> {
+                val sendIntent = Intent()
+                sendIntent.action = Intent.ACTION_SEND
+                sendIntent.putExtra(Intent.EXTRA_TEXT, getReceiptString())
+                sendIntent.type = "text/plain"
+                startActivity(Intent.createChooser(sendIntent, "Отправить чек"))
+            }
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun changeDownShadow() {
@@ -148,5 +169,28 @@ class ReceiptActivity : AppCompatActivity() {
         dashPaint.pathEffect = DashPathEffect(floatArrayOf(dashSize, gapSize), 0F)
         canvas.drawLine(bottomRadius, background.height(), background.width() - bottomRadius, background.height(), dashPaint)
         fl_receipt_top_ticket.background = BitmapDrawable(resources, b)
+    }
+
+    private fun getReceiptString(): String {
+        val link = "https://github.com/DenisDenisovich/Receipt"
+        val sb = StringBuilder()
+        sb.appendln("Скачать приложение по ссылке:")
+        sb.appendln(link)
+        sb.appendln("Магазин: ${receipt!!.shop.place}")
+        sb.appendln("Дата:    $dateStr")
+        sb.appendln("Сумма:   ${receipt!!.shop.sum}")
+        var price: String
+        var amountNumber: Double
+        var amountString: String
+        for (productIndex in 0 until receipt!!.items!!.size) {
+            sb.appendln("${productIndex + 1}. ${receipt!!.items!![productIndex].text}")
+            amountNumber = BigDecimal(receipt!!.items!![productIndex].amount).setScale(3, RoundingMode.DOWN).toDouble()
+            amountString = if (amountNumber == Math.floor(amountNumber)) amountNumber.toInt().toString()
+            else amountNumber.toString()
+            sb.appendln("Кол-во: $amountString")
+            price = BigDecimal(receipt!!.items!![productIndex].price).setScale(2, RoundingMode.DOWN).toString() + " p"
+            sb.appendln("Цена:   $price")
+        }
+        return sb.toString()
     }
 }
