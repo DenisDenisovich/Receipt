@@ -22,6 +22,7 @@ import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.history.FragmentHistory
 import java.lang.Exception
+import java.lang.StringBuilder
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DateFormat
@@ -141,7 +142,11 @@ class MonthFragment : Fragment() {
                 val shopProvider = body[bodyIndex].meta.provider ?: ""
                 val shopSum = BigDecimal(body[bodyIndex].meta.sum ?: 0.0 / 100).setScale(2, RoundingMode.DOWN).toDouble()
                 totalSum += shopSum
-                receipts.add(Receipt(Shop(shopDate, shopProvider, shopSum.toString() + " р"), ArrayList(products)))
+                val fn = body[0].meta.fn.toString()
+                val fp = body[0].meta.fp.toString()
+                val i = body[0].meta.fd.toString()
+                val t = body[0].meta.date!!.toString()
+                receipts.add(Receipt(Shop(shopDate, shopProvider, shopSum.toString() + " р", t, fn,i, fp,shopSum.toString()), ArrayList(products)))
                 date.time = body[bodyIndex + 1].meta.date!!.toLong() * 1000
                 calendar.time = date
                 if (currentWeekNumber > calendar.get(Calendar.WEEK_OF_MONTH)) {
@@ -158,7 +163,11 @@ class MonthFragment : Fragment() {
             val shopProvider = body[0].meta.provider ?: ""
             val shopSum = BigDecimal(body[0].meta.sum ?: 0.0 / 100).setScale(2, RoundingMode.DOWN).toDouble()
             totalSum = shopSum
-            receipts.add(Receipt(Shop(shopDate, shopProvider, shopSum.toString() + " р"), ArrayList(products)))
+            val fn = body[0].meta.fn.toString()
+            val fp = body[0].meta.fp.toString()
+            val i = body[0].meta.fd.toString()
+            val t = body[0].meta.date!!.toString()
+            receipts.add(Receipt(Shop(shopDate, shopProvider, shopSum.toString() + " р", t, fn,i, fp,shopSum.toString()), ArrayList(products)))
         }
         setTotalSum()
     }
@@ -168,6 +177,8 @@ class MonthFragment : Fragment() {
         if (parentFragment != null)
             (parentFragment as FragmentHistory).setMonthSum(totalSum.toString() + " р")
     }
+
+
 
     override fun onDestroyView() {
         call?.cancel()

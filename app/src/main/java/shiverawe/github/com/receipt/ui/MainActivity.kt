@@ -25,6 +25,7 @@ import shiverawe.github.com.receipt.data.Shop
 import shiverawe.github.com.receipt.data.network.entity.get.ReceiptResponce
 import shiverawe.github.com.receipt.ui.receipt.RECEIPT_QR_CODE
 import java.lang.Exception
+import java.lang.StringBuilder
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -173,7 +174,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         body.items!!.forEach {
             products.add(Product(it.text?: "", it.price?: 0.0, it.amount?: 0.0))
         }
-        val shop = Shop(body.meta!!.date?.toLong()?: 0L, body.meta!!.place?: "", body.meta!!.sum?: "")
+        val fn = body.meta!!.fn.toString()
+        val fp = body.meta.fp.toString()
+        val i = body.meta.fd.toString()
+        val t = body.meta.date!!.toString()
+        val shop = Shop(body.meta.date.toLong()?: 0L, body.meta.place?: "", body.meta.sum?: "", t, fn,i, fp, body.meta.sum?: "")
         return Receipt(shop, products)
     }
+
+
 }

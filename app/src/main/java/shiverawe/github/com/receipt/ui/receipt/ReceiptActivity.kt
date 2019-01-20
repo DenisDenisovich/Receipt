@@ -84,7 +84,7 @@ class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
             R.id.btn_receipt_share -> {
                 val sendIntent = Intent()
                 sendIntent.action = Intent.ACTION_SEND
-                sendIntent.putExtra(Intent.EXTRA_TEXT, getReceiptString())
+                sendIntent.putExtra(Intent.EXTRA_TEXT, getShareString())
                 sendIntent.type = "text/plain"
                 startActivity(Intent.createChooser(sendIntent, "Отправить чек"))
             }
@@ -197,8 +197,17 @@ class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
         fl_receipt_top_ticket.background = BitmapDrawable(resources, b)
     }
 
-    private fun getReceiptString(): String {
-        val link = "https://github.com/DenisDenisovich/Receipt"
+    private fun getShareString(): String {
+        val url = StringBuilder()
+        val date = getDateForShare(receipt!!.shop.date)
+        url.appendln("Посмотреть чек по ссылке:")
+        url.append("http://receipt.shefer.space/?")
+        url.appendln("fn=${receipt!!.shop.fnShare}&i=${receipt!!.shop.fdShare}&fp=${receipt!!.shop.fpShare}&s=${receipt!!.shop.sShare}&t=$date")
+        url.appendln("Магазин: ${receipt!!.shop.place}")
+        url.appendln("Дата:    $dateStr")
+        url.appendln("Сумма:   ${receipt!!.shop.sum}")
+        return url.toString()
+        /*val link = "http://receipt.shefer.space/?fn=8710000101660946&i=34762&fp=2967775507&s=302.89&t=20190116T2018"
         val sb = StringBuilder()
         sb.appendln("Скачать приложение по ссылке:")
         sb.appendln(link)
@@ -217,7 +226,7 @@ class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
             price = BigDecimal(receipt!!.items!![productIndex].price).setScale(2, RoundingMode.DOWN).toString() + " p"
             sb.appendln("Цена:   $price")
         }
-        return sb.toString()
+        return sb.toString()*/
     }
 
     private fun saveReceipt() {
@@ -278,6 +287,28 @@ class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
         qrCalendar.set(Calendar.SECOND, 0)
         qrCalendar.set(Calendar.MILLISECOND, 0)
         return qrCalendar.timeInMillis
+    }
+
+    private fun getDateForShare(date: Long): String {
+        val strDate = StringBuilder()
+        val shareCalendar = GregorianCalendar(TimeZone.getDefault())
+        shareCalendar.time = Date(date)
+        val year = shareCalendar.get(Calendar.YEAR)
+        var month = (shareCalendar.get(Calendar.MONTH) + 1).toString()
+        if (month.length == 1) month = "0$month"
+        var day = shareCalendar.get(Calendar.DAY_OF_MONTH).toString()
+        if (day.length == 1) day = "0$day"
+        var hour = shareCalendar.get(Calendar.HOUR_OF_DAY).toString()
+        if (hour.length == 1) hour = "0$hour"
+        var minutes = shareCalendar.get(Calendar.MINUTE).toString()
+        if (minutes.length == 1) minutes = "0$minutes"
+        strDate.append(year)
+        strDate.append(month)
+        strDate.append(day)
+        strDate.append("T")
+        strDate.append(hour)
+        strDate.append(minutes)
+        return strDate.toString()
     }
 
     override fun onDestroy() {
