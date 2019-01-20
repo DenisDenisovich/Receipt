@@ -24,8 +24,8 @@ class TabLayout: View {
     private val dateFormatterMonth = SimpleDateFormat("LLLL", Locale("ru"))
     private var offset: Float = 0F
     private var monthStep = 0
-    private var maxTextSize = context.resources.getDimension(R.dimen.tv_history_month_size_max).toFloat()
-    private var minTextSize = context.resources.getDimension(R.dimen.tv_history_month_size_min).toFloat()
+    private var maxTextSize = context.resources.getDimension(R.dimen.tv_history_month_size_max)
+    private var minTextSize = context.resources.getDimension(R.dimen.tv_history_month_size_min)
     private var deltaTextSize = maxTextSize - minTextSize
     private var centerMonthY = 0
     private var edgeMonthY = 0
