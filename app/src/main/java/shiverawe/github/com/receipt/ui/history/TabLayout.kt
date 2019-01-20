@@ -3,11 +3,13 @@ package shiverawe.github.com.receipt.ui.history
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.support.v4.content.res.ResourcesCompat
 import android.util.AttributeSet
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import shiverawe.github.com.receipt.R
@@ -33,9 +35,17 @@ class TabLayout: View {
     private var deltaTextSize = maxTextSize - minTextSize
     private var centerMonthY = 0
     private var edgeMonthY = 0
-    private var sumDisplayY = 0F
     private var deltaMonthY = 0
+    private var leftMonthWidth = 0
+    private var rightMonthWidth = 0
+    private var sumDisplayY = 0F
     private var animation: ValueAnimator? = null
+
+    interface MonthClickListener {
+        fun leftMonthIsClicked()
+        fun rightMonthIsClicked()
+    }
+    private var monthClickListener: MonthClickListener? = null
 
     constructor(context: Context): super(context)
     constructor(context: Context, attributeSet: AttributeSet): super(context, attributeSet) {
@@ -98,6 +108,7 @@ class TabLayout: View {
             displayX -= rect.width() / 2
             canvas?.drawText(monthArray[i], displayX, displayY, monthPaint)
         }
+
         if (offset == 0F) {
             sumPaint.getTextBounds(currentSum, 0, currentSum.length, rect)
             val sumDisplayX = width / 2 - rect.width() / 2
@@ -150,4 +161,28 @@ class TabLayout: View {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if(animation?.isRunning == true || offset != 0F) return true
+        // calculate current width of left and right month text
+        monthPaint.getTextBounds(monthArray[1], 0, monthArray[1].length, rect)
+        leftMonthWidth = rect.width()
+        monthPaint.getTextBounds(monthArray[3], 0, monthArray[3].length, rect)
+        rightMonthWidth = rect.width()
+
+        when (event?.action) {
+            MotionEvent.ACTION_DOWN -> {
+                if (event.x >= monthStep * 0.5 - leftMonthWidth / 2 && event.x <= monthStep * 0.5 + leftMonthWidth / 2) {
+                    monthClickListener?.leftMonthIsClicked()
+                } else if (event.x >= monthStep * 2.5 - leftMonthWidth / 2 && event.x <= monthStep * 2.5 + leftMonthWidth / 2) {
+                    monthClickListener?.rightMonthIsClicked()
+                }
+            }
+        }
+        return true
+    }
+
+    fun subscribeToClickListener(listener: MonthClickListener) {
+        monthClickListener = listener
+    }
 }

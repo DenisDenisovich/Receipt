@@ -45,7 +45,7 @@ class FragmentHistory: Fragment(), View.OnClickListener {
 
         vp_history.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
             var moveToRight = false
-            var previewPosition = -1
+            var previewPosition = monthAdapter.count - 1
             var offset = 0F
             var pageIsSelected = false
             override fun onPageScrollStateChanged(state: Int) {
@@ -64,13 +64,26 @@ class FragmentHistory: Fragment(), View.OnClickListener {
             }
 
             override fun onPageSelected(position: Int) {
-                setCurrentYear(position)
                 pageIsSelected = true
+                setCurrentYear(position)
+                if (offset == 0F) {
+                    // if page selected by currentItem without swipe
+                    moveToRight = previewPosition > position
+                    if (moveToRight) previewPosition-- else previewPosition++
+                }
                 val newOffset = if (moveToRight) 1F else -1F
                 tab_layout_history.startEndAnimation(offset, newOffset, moveToRight)
                 moveToRight = false
-                previewPosition = -1
                 offset = 0F
+            }
+        })
+
+        tab_layout_history.subscribeToClickListener(object: TabLayout.MonthClickListener {
+            override fun leftMonthIsClicked() {
+                vp_history.currentItem--
+            }
+            override fun rightMonthIsClicked() {
+                vp_history.currentItem++
             }
         })
     }
