@@ -130,7 +130,7 @@ class TabLayout: View {
     }
 
     fun startEndAnimation(offset: Float, endOffset: Float, moveToRight: Boolean) {
-        if (animation?.isRunning == true) return
+        if (animation?.isRunning == true) animation?.cancel()
         animation = ValueAnimator.ofFloat(offset, endOffset).apply {
             addUpdateListener {
                 this@TabLayout.offset = it.animatedValue as Float
