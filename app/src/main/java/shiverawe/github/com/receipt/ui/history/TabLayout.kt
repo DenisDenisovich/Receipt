@@ -39,7 +39,6 @@ class TabLayout: View {
     private var leftMonthWidth = 0
     private var rightMonthWidth = 0
     private var sumDisplayY = 0F
-    private var animation: ValueAnimator? = null
 
     interface MonthClickListener {
         fun leftMonthIsClicked()
@@ -117,7 +116,6 @@ class TabLayout: View {
     }
 
     fun setMonth(month: Date) {
-        if (animation?.isRunning == true) return
         currentDate.time = month
         calendar.time = month
         calendar.add(Calendar.MONTH, -2)
@@ -140,30 +138,9 @@ class TabLayout: View {
         invalidate()
     }
 
-    fun startEndAnimation(offset: Float, endOffset: Float, moveToRight: Boolean) {
-        if (animation?.isRunning == true) animation?.cancel()
-        animation = ValueAnimator.ofFloat(offset, endOffset).apply {
-            addUpdateListener {
-                this@TabLayout.offset = it.animatedValue as Float
-                invalidate()
-            }
-            addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    if (moveToRight) currentDate.add(Calendar.MONTH, -1)
-                    else currentDate.add(Calendar.MONTH, 1)
-                    setMonth(currentDate.time)
-                    super.onAnimationEnd(animation)
-                }
-            })
-            duration = 200
-            interpolator = DecelerateInterpolator()
-            start()
-        }
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if(animation?.isRunning == true || offset != 0F) return true
+        if(offset != 0F) return true
         // calculate current width of left and right month text
         monthPaint.getTextBounds(monthArray[1], 0, monthArray[1].length, rect)
         leftMonthWidth = rect.width()

@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,28 +54,32 @@ class FragmentHistory: Fragment(), View.OnClickListener {
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, p2: Int) {
-                if (pageIsSelected) return
-                previewPosition = position
-                moveToRight = position < vp_history.currentItem
-                offset = if (moveToRight)
-                    1 - positionOffset
-                else
-                    - positionOffset
-                tab_layout_history.moveMonth(offset)
+                if (!pageIsSelected) {
+                    moveToRight = position < vp_history.currentItem
+                    previewPosition = position
+                }
+                if (positionOffset != 0F) {
+                    // animation in progress. Move month text
+                    offset = if (moveToRight)
+                        1 - positionOffset
+                    else
+                        - positionOffset
+                    tab_layout_history.moveMonth(offset)
+                } else {
+                    // end of animation. Update month array in TabLayout
+                    tab_layout_history.setMonth(Date(monthAdapter.dates[position]))
+                    setCurrentYear(position)
+                    offset = 0F
+                }
             }
 
             override fun onPageSelected(position: Int) {
                 pageIsSelected = true
-                setCurrentYear(position)
                 if (offset == 0F) {
                     // if page selected by currentItem without swipe
                     moveToRight = previewPosition > position
                     if (moveToRight) previewPosition-- else previewPosition++
                 }
-                val newOffset = if (moveToRight) 1F else -1F
-                tab_layout_history.startEndAnimation(offset, newOffset, moveToRight)
-                moveToRight = false
-                offset = 0F
             }
         })
 
