@@ -200,12 +200,24 @@ class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
     private fun getShareString(): String {
         val url = StringBuilder()
         val date = getDateForShare(receipt!!.shop.date)
-        url.appendln("Магазин: ${receipt!!.shop.place}")
-        url.appendln("Дата:    $dateStr")
-        url.appendln("Сумма:   ${receipt!!.shop.sum}")
         url.appendln("Посмотреть чек по ссылке:")
         url.append("http://receipt.shefer.space/?")
         url.appendln("fn=${receipt!!.shop.fnShare}&i=${receipt!!.shop.fdShare}&fp=${receipt!!.shop.fpShare}&s=${receipt!!.shop.sShare}&t=$date")
+        url.appendln("Магазин: ${receipt!!.shop.place}")
+        url.appendln("Дата:    $dateStr")
+        url.appendln("Сумма:   ${receipt!!.shop.sum}")
+        var price: String
+        var amountNumber: Double
+        var amountString: String
+        for (productIndex in 0 until receipt!!.items!!.size) {
+            url.appendln("${productIndex + 1}. ${receipt!!.items!![productIndex].text}")
+            amountNumber = BigDecimal(receipt!!.items!![productIndex].amount).setScale(3, RoundingMode.DOWN).toDouble()
+            amountString = if (amountNumber == Math.floor(amountNumber)) amountNumber.toInt().toString()
+            else amountNumber.toString()
+            url.appendln("Кол-во: $amountString")
+            price = BigDecimal(receipt!!.items!![productIndex].price).setScale(2, RoundingMode.DOWN).toString() + " p"
+            url.appendln("Цена:   $price")
+        }
         return url.toString()
     }
 
