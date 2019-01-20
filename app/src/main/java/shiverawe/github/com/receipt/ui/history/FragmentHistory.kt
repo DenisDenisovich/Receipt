@@ -4,11 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewPropertyAnimator
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_history.*
 import shiverawe.github.com.receipt.ui.MainActivity
@@ -51,7 +49,6 @@ class FragmentHistory: Fragment(), View.OnClickListener {
             var pageIsSelected = false
             var previewState = 0
             override fun onPageScrollStateChanged(state: Int) {
-                Log.d("LogState", "$state")
                 if (state == ViewPager.SCROLL_STATE_DRAGGING) {
                     if (previewState != ViewPager.SCROLL_STATE_IDLE) {
                         // when scroll is very fast
@@ -67,7 +64,6 @@ class FragmentHistory: Fragment(), View.OnClickListener {
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, p2: Int) {
-                Log.d("LogOffset", "$positionOffset")
                 if (!pageIsSelected) {
                     moveToRight = position < vp_history.currentItem
                     previewPosition = position
