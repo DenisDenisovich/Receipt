@@ -1,9 +1,11 @@
 package shiverawe.github.com.receipt.ui.history
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +23,7 @@ class FragmentHistory: Fragment(), View.OnClickListener {
     lateinit var monthAdapter: FragmentPagerAdapter
     private val dateFormatter = DateFormat.getDateInstance(SimpleDateFormat.LONG, Locale("ru"))
     var currentMonth = ""
+    var changeDateByCalendar = false
     var calendar = GregorianCalendar()
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -49,21 +52,28 @@ class FragmentHistory: Fragment(), View.OnClickListener {
             var pageIsSelected = false
             var previewState = 0
             override fun onPageScrollStateChanged(state: Int) {
-                if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+                Log.d("LogState", state.toString())
+                if (changeDateByCalendar) {
+                    if (state == ViewPager.SCROLL_STATE_SETTLING) {
+                        setMonth()
+                        offset = 0F
+                    } else if (state == ViewPager.SCROLL_STATE_IDLE) {
+                        changeDateByCalendar = false
+                    }
+                } else if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+                    pageIsSelected = false
                     if (previewState != ViewPager.SCROLL_STATE_IDLE) {
                         // when scroll is very fast
                         // end of animation. Update month array in TabLayout
-                        val position = vp_history.currentItem
-                        tab_layout_history.setMonth(Date(monthAdapter.dates[position]))
-                        setCurrentYear(position)
+                        setMonth()
                         offset = 0F
                     }
                 }
-                if (state == ViewPager.SCROLL_STATE_DRAGGING) pageIsSelected = false
                 previewState = state
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, p2: Int) {
+                if (changeDateByCalendar) return
                 if (!pageIsSelected) {
                     moveToRight = position < vp_history.currentItem
                     previewPosition = position
@@ -77,13 +87,13 @@ class FragmentHistory: Fragment(), View.OnClickListener {
                     tab_layout_history.moveMonth(offset)
                 } else {
                     // end of animation. Update month array in TabLayout
-                    tab_layout_history.setMonth(Date(monthAdapter.dates[position]))
-                    setCurrentYear(position)
+                    setMonth()
                     offset = 0F
                 }
             }
 
             override fun onPageSelected(position: Int) {
+                if (changeDateByCalendar) return
                 pageIsSelected = true
                 if (offset == 0F) {
                     // if page selected by currentItem without swipe
@@ -123,12 +133,40 @@ class FragmentHistory: Fragment(), View.OnClickListener {
             }
 
             R.id.btn_history_calendar -> {
-                Toast.makeText(context, "Calendar", Toast.LENGTH_SHORT).show()
+                openDateDialog()
             }
         }
     }
 
     fun setMonthSum(sum: String) {
         tab_layout_history.setSum(sum)
+    }
+
+    fun setMonth() {
+        val position = vp_history.currentItem
+        tab_layout_history.setMonth(Date(monthAdapter.dates[position]))
+        setCurrentYear(position)
+    }
+    private fun openDateDialog() {
+        val currentDate = GregorianCalendar()
+        currentDate.time = Date(System.currentTimeMillis())
+        val dateDialog = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+            val selectedDate = GregorianCalendar(TimeZone.getDefault())
+            selectedDate.set(Calendar.YEAR, year)
+            selectedDate.set(Calendar.MONTH, month)
+            selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            setNewDate(selectedDate.time)
+        }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH),  currentDate.get(Calendar.DAY_OF_MONTH))
+        dateDialog.show()
+    }
+
+    private fun setNewDate(date: Date) {
+        val position = monthAdapter.getPositionByDate(date)
+        if(position == -1)  {
+            Toast.makeText(context, "Невозможно отобразить данный месяц", Toast.LENGTH_SHORT).show()
+        } else {
+            changeDateByCalendar = true
+            vp_history.currentItem = position
+        }
     }
 }
