@@ -30,7 +30,7 @@ import kotlin.collections.HashMap
 
 
 private const val FRAGMENT_HISTORY_TAG = "fragment_history"
-private const val REQUEST_CODE_CREATE_RECEIPT = 10236
+const val REQUEST_CODE_CREATE_RECEIPT = 10236
 const val EXTRA_DATE_RECEIPT = "extra_date_receipt"
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, Navigation {
     var qrCall: Call<ReceiptResponce>? = null
@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         nav_view.setNavigationItemSelectedListener(this)
         openHistory()
-        checkIntentFilter()
     }
 
     override fun onBackPressed() {
@@ -144,6 +143,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             qrCall = App.api.getReceipt(options)
             qrCall?.enqueue(object : Callback<ReceiptResponce> {
                 override fun onFailure(call: Call<ReceiptResponce>, t: Throwable) {
+                    if (call.isCanceled) return
                     container_qr_request.visibility = View.GONE
                     Toast.makeText(this@MainActivity, "Ошибка", Toast.LENGTH_LONG).show()
                 }
@@ -182,12 +182,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return Receipt(shop, products)
     }
 
-    private fun checkIntentFilter() {
-        val data = intent.data ?: return
-        val path = data.query
-        qrCode = path
-        findReceipt()
+    override fun onDestroy() {
+        qrCall?.cancel()
+        super.onDestroy()
     }
-
-
 }
