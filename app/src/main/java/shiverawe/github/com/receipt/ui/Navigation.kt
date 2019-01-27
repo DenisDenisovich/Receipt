@@ -8,5 +8,4 @@ interface Navigation {
     fun openHistory()
     fun openQr()
     fun openReceipt(receipt: Receipt)
-    fun openNetworkReceipt(receipt: Receipt)
 }

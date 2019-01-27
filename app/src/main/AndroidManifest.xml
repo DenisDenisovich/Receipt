@@ -22,8 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.receipt.ReceiptActivity"/>
-        <activity android:name=".ui.OpenLinkActivity">
+        <activity android:name=".ui.receipt.local.ReceiptActivity"/>
+        <activity android:name=".ui.receipt.network.NetworkReceiptActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />

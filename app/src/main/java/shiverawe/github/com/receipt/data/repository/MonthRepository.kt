@@ -1,7 +1,6 @@
 package shiverawe.github.com.receipt.data.repository
 
 import io.reactivex.Single
-import retrofit2.Response
 import shiverawe.github.com.receipt.data.network.entity.report.Report
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.entity.Meta
@@ -34,16 +33,16 @@ class MonthRepository {
         }
         var report = response
         // filer response
-        report = ArrayList(report.filter { it.meta.date != null })
-        report.sortByDescending { it.meta.date }
-        date.time = report[0].meta.date!!.toLong() * 1000
+        report = ArrayList(report.filter { it.status != "FAILED" })
+        report.sortByDescending { it.date }
+        date.time = report[0].date!!.toLong() * 1000
         calendar.time = date
         var currentWeekNumber = calendar.get(Calendar.WEEK_OF_MONTH)
 
         if (report.size >= 2) {
             for (bodyIndex in 0 until report.size - 1) {
                 mapReceipt(report[bodyIndex])
-                date.time = report[bodyIndex + 1].meta.date!!.toLong() * 1000
+                date.time = report[bodyIndex + 1].date!!.toLong() * 1000
                 calendar.time = date
                 // if receipt with new week. Add separator to list
                 if (currentWeekNumber > calendar.get(Calendar.WEEK_OF_MONTH)) {
@@ -63,14 +62,14 @@ class MonthRepository {
             products.add(Product(it.text ?: "", it.price
                     ?: 0.0, it.amount ?: 0.0))
         }
-        val shopDate = report.meta.date!!.toLong() * 1000
-        val shopProvider = report.meta.provider ?: ""
-        val shopSum = BigDecimal(report.meta.sum ?: 0.0 / 100).setScale(2, RoundingMode.DOWN).toDouble()
-        val fn = report.meta.fn.toString()
-        val fp = report.meta.fp.toString()
-        val i = report.meta.fd.toString()
-        val t = report.meta.date.toString()
+        val shopDate = report.date!!.toLong() * 1000
+        val shopPlace = report.place ?: ""
+        val shopSum = BigDecimal(report.sum ?: 0.0 / 100).setScale(2, RoundingMode.DOWN).toDouble()
+        val fn = report.fn.toString()
+        val fp = report.fp.toString()
+        val i = report.fd.toString()
+        val t = shopDate.toString()
         val meta = Meta( t, fn, i, fp, shopSum)
-        receipts.add(Receipt(Shop(shopDate, shopProvider, shopSum.toString() + " р"), meta, ArrayList(products)))
+        receipts.add(Receipt(Shop(shopDate, shopPlace, shopSum.toString() + " р"), meta, ArrayList(products)))
     }
 }

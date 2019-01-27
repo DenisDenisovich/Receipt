@@ -1,146 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:tool="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <FrameLayout
-        android:id="@+id/container_receipt"
+        android:id="@+id/history_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="109dp"
+        android:background="@color/colorPrimary"
+        android:elevation="8dp"
+        android:outlineProvider="bounds">
+
         <FrameLayout
-            android:id="@+id/history_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="109dp"
-            android:background="@color/colorPrimary"
-            android:outlineProvider="bounds"
-            android:elevation="8dp">
+            android:layout_height="56dp">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="56dp">
-                <ImageView
-                    android:id="@+id/btn_receipt_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:src="@drawable/ic_back"/>
+            <ImageView
+                android:id="@+id/btn_receipt_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:src="@drawable/ic_back" />
 
-                <TextView
-                    android:id="@+id/tv_receipt_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="72dp"
-                    android:fontFamily="@font/roboto_regular"
-                    android:textSize="20sp"
-                    android:textColor="#FFFFFF"/>
+            <TextView
+                android:id="@+id/tv_receipt_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="72dp"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
 
-                <ImageView
-                    android:id="@+id/btn_receipt_share"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:padding="16dp"
-                    android:src="@drawable/ic_share"/>
-
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/fl_receipt_top_ticket"
-                android:layout_width="match_parent"
-                android:layout_height="53dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="56dp"
-                android:elevation="8dp"
-                android:outlineProvider="bounds"
-                android:background="@drawable/ic_receipt_up_with_line">
-
-                <TextView
-                    android:id="@+id/tv_receipt_shop_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textColor="#000000"
-                    android:fontFamily="@font/courier_new_regular"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="16dp"
-                    tools:text="Пятерочка"/>
-
-                <TextView
-                    android:id="@+id/tv_receipt_shop_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textColor="#000000"
-                    android:fontFamily="@font/courier_new_regular"
-                    android:layout_gravity="center_vertical|end"
-                    android:layout_marginEnd="16dp"
-                    tools:text="123.00 р"/>
-
-            </FrameLayout>
+            <ImageView
+                android:id="@+id/btn_receipt_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:padding="16dp"
+                android:src="@drawable/ic_share" />
 
         </FrameLayout>
 
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_receipt"
+        <FrameLayout
+            android:id="@+id/fl_receipt_top_ticket"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="53dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="109dp"
+            android:layout_marginTop="56dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="72dp"
-            android:background="@drawable/ic_receipt_down"
+            android:background="@drawable/ic_receipt_up_with_line"
             android:elevation="8dp"
-            android:outlineProvider="bounds"
-            android:overScrollMode="never"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            tools:listitem="@layout/item_product" />
+            android:outlineProvider="bounds">
 
-        <Button
-            android:id="@+id/btn_receipt_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="16dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:text="Сохранить"
-            android:textColor="#FFFFFF"
-            android:elevation="8dp"
-            android:background="@drawable/btn_receipt_save"/>
-    </FrameLayout>
-
-
-    <FrameLayout
-        android:id="@+id/container_save_request"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        android:background="#EEF4F8">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center">
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
             <TextView
+                android:id="@+id/tv_receipt_shop_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/courier_new_regular"
                 android:textColor="#000000"
                 android:textSize="18sp"
-                android:text="Подождите"/>
-        </LinearLayout>
+                tools:text="Пятерочка" />
+
+            <TextView
+                android:id="@+id/tv_receipt_shop_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/courier_new_regular"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                tools:text="123.00 р" />
+
+        </FrameLayout>
 
     </FrameLayout>
 
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_receipt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="109dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/ic_receipt_down"
+        android:elevation="8dp"
+        android:outlineProvider="bounds"
+        android:overScrollMode="never"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        tools:listitem="@layout/item_product" />
 
 </FrameLayout>

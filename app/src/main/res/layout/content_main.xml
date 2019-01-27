@@ -12,31 +12,4 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-    <FrameLayout
-        android:id="@+id/container_qr_request"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        android:background="#EEF4F8">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center">
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:text="Подождите"/>
-        </LinearLayout>
-
-    </FrameLayout>
-
 </FrameLayout>
