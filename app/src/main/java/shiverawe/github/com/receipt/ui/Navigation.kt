@@ -1,6 +1,6 @@
 package shiverawe.github.com.receipt.ui
 
-import shiverawe.github.com.receipt.data.Receipt
+import shiverawe.github.com.receipt.entity.Receipt
 
 interface Navigation {
     fun openNavigationDrawable()

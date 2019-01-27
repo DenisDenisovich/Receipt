@@ -12,7 +12,7 @@ import android.support.v7.widget.LinearLayoutManager
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_receipt.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.data.Receipt
+import shiverawe.github.com.receipt.entity.Receipt
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*

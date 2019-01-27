@@ -11,7 +11,7 @@ import android.widget.Toast
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.data.Receipt
+import shiverawe.github.com.receipt.entity.Receipt
 import shiverawe.github.com.receipt.ui.history.FragmentHistory
 import shiverawe.github.com.receipt.ui.receipt.RECEIPT_TAG
 import shiverawe.github.com.receipt.ui.receipt.ReceiptActivity
@@ -20,8 +20,8 @@ import kotlinx.android.synthetic.main.content_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import shiverawe.github.com.receipt.data.Product
-import shiverawe.github.com.receipt.data.Shop
+import shiverawe.github.com.receipt.entity.Product
+import shiverawe.github.com.receipt.entity.Shop
 import shiverawe.github.com.receipt.data.network.entity.get.ReceiptResponce
 import shiverawe.github.com.receipt.ui.receipt.RECEIPT_QR_CODE
 import java.lang.Exception
@@ -172,13 +172,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val body = response.body()!!
         val products = ArrayList<Product>()
         body.items!!.forEach {
-            products.add(Product(it.text?: "", it.price?: 0.0, it.amount?: 0.0))
+            products.add(Product(it.text ?: "", it.price
+                    ?: 0.0, it.amount ?: 0.0))
         }
         val fn = body.meta!!.fn.toString()
         val fp = body.meta.fp.toString()
         val i = body.meta.fd.toString()
         val t = body.meta.date!!.toString()
-        val shop = Shop(body.meta.date.toLong()?: 0L, body.meta.place?: "", body.meta.sum?: "", t, fn,i, fp, body.meta.sum?: "")
+        val shop = Shop(body.meta.date.toLong()
+                ?: 0L, body.meta.place ?: "", body.meta.sum ?: "", t, fn, i, fp, body.meta.sum
+                ?: "")
         return Receipt(shop, products)
     }
 

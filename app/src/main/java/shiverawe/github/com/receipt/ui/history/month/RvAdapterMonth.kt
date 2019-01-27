@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_month.view.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.data.Receipt
+import shiverawe.github.com.receipt.entity.Receipt
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*

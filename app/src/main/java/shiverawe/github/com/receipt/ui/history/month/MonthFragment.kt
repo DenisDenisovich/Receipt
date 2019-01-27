@@ -14,19 +14,16 @@ import retrofit2.Response
 import shiverawe.github.com.receipt.ui.App
 import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.data.Product
-import shiverawe.github.com.receipt.data.Receipt
-import shiverawe.github.com.receipt.data.Shop
+import shiverawe.github.com.receipt.entity.Product
+import shiverawe.github.com.receipt.entity.Receipt
+import shiverawe.github.com.receipt.entity.Shop
 import shiverawe.github.com.receipt.data.network.entity.report.Report
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.history.FragmentHistory
 import java.lang.Exception
-import java.lang.StringBuilder
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -136,7 +133,8 @@ class MonthFragment : Fragment() {
             for (bodyIndex in 0 until body.size - 1) {
                 val products: ArrayList<Product> = ArrayList()
                 body[bodyIndex].items.forEach {
-                    products.add(Product(it.text ?: "", it.price ?: 0.0, it.amount ?: 0.0))
+                    products.add(Product(it.text ?: "", it.price
+                            ?: 0.0, it.amount ?: 0.0))
                 }
                 val shopDate = body[bodyIndex].meta.date!!.toLong() * 1000
                 val shopProvider = body[bodyIndex].meta.provider ?: ""
@@ -146,7 +144,7 @@ class MonthFragment : Fragment() {
                 val fp = body[0].meta.fp.toString()
                 val i = body[0].meta.fd.toString()
                 val t = body[0].meta.date!!.toString()
-                receipts.add(Receipt(Shop(shopDate, shopProvider, shopSum.toString() + " р", t, fn,i, fp,shopSum.toString()), ArrayList(products)))
+                receipts.add(Receipt(Shop(shopDate, shopProvider, shopSum.toString() + " р", t, fn, i, fp, shopSum.toString()), ArrayList(products)))
                 date.time = body[bodyIndex + 1].meta.date!!.toLong() * 1000
                 calendar.time = date
                 if (currentWeekNumber > calendar.get(Calendar.WEEK_OF_MONTH)) {
@@ -157,7 +155,8 @@ class MonthFragment : Fragment() {
         } else {
             val products: ArrayList<Product> = ArrayList()
             body[0].items.forEach {
-                products.add(Product(it.text ?: "", it.price ?: 0.0, it.amount ?: 0.0))
+                products.add(Product(it.text ?: "", it.price
+                        ?: 0.0, it.amount ?: 0.0))
             }
             val shopDate = body[0].meta.date!!.toLong() * 1000
             val shopProvider = body[0].meta.provider ?: ""
@@ -167,7 +166,7 @@ class MonthFragment : Fragment() {
             val fp = body[0].meta.fp.toString()
             val i = body[0].meta.fd.toString()
             val t = body[0].meta.date!!.toString()
-            receipts.add(Receipt(Shop(shopDate, shopProvider, shopSum.toString() + " р", t, fn,i, fp,shopSum.toString()), ArrayList(products)))
+            receipts.add(Receipt(Shop(shopDate, shopProvider, shopSum.toString() + " р", t, fn, i, fp, shopSum.toString()), ArrayList(products)))
         }
         setTotalSum()
     }
