@@ -8,6 +8,7 @@ import shiverawe.github.com.receipt.entity.Product
 import shiverawe.github.com.receipt.entity.Receipt
 import shiverawe.github.com.receipt.entity.Shop
 import shiverawe.github.com.receipt.ui.App
+import java.lang.Exception
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
@@ -35,6 +36,10 @@ class MonthRepository {
         // filer response
         report = ArrayList(report.filter { it.status != "FAILED" })
         report.sortByDescending { it.date }
+        if (report.size == 0){
+            receipts.clear()
+            return receipts
+        }
         date.time = report[0].date!!.toLong() * 1000
         calendar.time = date
         var currentWeekNumber = calendar.get(Calendar.WEEK_OF_MONTH)
@@ -57,6 +62,7 @@ class MonthRepository {
     }
 
     private fun mapReceipt(report: Report) {
+        try {
         val products: ArrayList<Product> = ArrayList()
         report.items.forEach {
             products.add(Product(it.text ?: "", it.price
@@ -71,5 +77,6 @@ class MonthRepository {
         val t = shopDate.toString()
         val meta = Meta( t, fn, i, fp, shopSum)
         receipts.add(Receipt(Shop(shopDate, shopPlace, shopSum.toString() + " р"), meta, ArrayList(products)))
+        } catch (e: Exception) {}
     }
 }
