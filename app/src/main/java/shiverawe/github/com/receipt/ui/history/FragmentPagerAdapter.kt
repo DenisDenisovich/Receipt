@@ -14,13 +14,10 @@ class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) 
         // init dates
         val calendar = GregorianCalendar(TimeZone.getDefault())
         calendar.time = Date(System.currentTimeMillis())
-        calendar.set(Calendar.DAY_OF_MONTH, 1)
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
         for (dateIndex in dates.size - 1 downTo 0) {
+            setBeginOfMonth(calendar)
             dates[dateIndex] = calendar.timeInMillis
+            calendar.set(Calendar.DAY_OF_MONTH, 15)
             calendar.add(Calendar.MONTH, -1)
         }
     }
@@ -34,11 +31,15 @@ class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) 
     fun getPositionByDate(date: Date): Int {
         val calendar = GregorianCalendar(TimeZone.getDefault())
         calendar.time = date
+        setBeginOfMonth(calendar)
+        return dates.indexOf(calendar.timeInMillis)
+    }
+
+    private fun setBeginOfMonth(calendar: GregorianCalendar) {
         calendar.set(Calendar.DAY_OF_MONTH, 1)
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
-        return dates.indexOf(calendar.timeInMillis)
     }
 }
