@@ -20,7 +20,7 @@ class App: Application() {
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .build()
         val retrofit = Retrofit.Builder()
-                .baseUrl("http://receipt.shefer.space/")
+                .baseUrl("http://3.16.244.144/")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
