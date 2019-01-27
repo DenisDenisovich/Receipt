@@ -202,7 +202,7 @@ class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
         val date = getDateForShare(receipt!!.shop.date)
         url.appendln("Посмотреть чек по ссылке:")
         url.append("http://receipt.shefer.space/?")
-        url.appendln("fn=${receipt!!.shop.fnShare}&i=${receipt!!.shop.fdShare}&fp=${receipt!!.shop.fpShare}&s=${receipt!!.shop.sShare}&t=$date")
+        url.appendln("fn=${receipt!!.meta.fn}&i=${receipt!!.meta.fd}&fp=${receipt!!.meta.fp}&s=${receipt!!.meta.s}&t=$date")
         url.appendln("Магазин: ${receipt!!.shop.place}")
         url.appendln("Дата:    $dateStr")
         url.appendln("Сумма:   ${receipt!!.shop.sum}")
@@ -222,6 +222,7 @@ class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun saveReceipt() {
+/*
         container_receipt.visibility = View.INVISIBLE
         container_save_request.visibility = View.VISIBLE
         try {
@@ -259,6 +260,7 @@ class ReceiptActivity : AppCompatActivity(), View.OnClickListener {
         } catch (e: Exception) {
             showError()
         }
+*/
     }
 
     fun showError() {

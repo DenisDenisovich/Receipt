@@ -13,6 +13,7 @@ import shiverawe.github.com.receipt.entity.Product
 import shiverawe.github.com.receipt.entity.Receipt
 import shiverawe.github.com.receipt.entity.Shop
 import shiverawe.github.com.receipt.data.network.entity.get.ReceiptResponce
+import shiverawe.github.com.receipt.entity.Meta
 import shiverawe.github.com.receipt.ui.receipt.RECEIPT_QR_CODE
 import shiverawe.github.com.receipt.ui.receipt.RECEIPT_TAG
 import shiverawe.github.com.receipt.ui.receipt.ReceiptActivity
@@ -41,6 +42,7 @@ class OpenLinkActivity: AppCompatActivity() {
     }
 
     private fun findReceipt() {
+/*
         try {
             val parameters = qrCode.split("&")
             val options = HashMap<String, String>()
@@ -73,6 +75,7 @@ class OpenLinkActivity: AppCompatActivity() {
             Toast.makeText(this@OpenLinkActivity, "Ошибка", Toast.LENGTH_LONG).show()
             close()
         }
+*/
 
     }
 
@@ -89,10 +92,10 @@ class OpenLinkActivity: AppCompatActivity() {
         val fp = body.meta.fp.toString()
         val i = body.meta.fd.toString()
         val t = body.meta.date!!.toString()
+        val meta = Meta( t, fn, i, fp, body.meta.sum?.toDouble()?: 0.0)
         val shop = Shop(body.meta.date.toLong()
-                ?: 0L, body.meta.place ?: "", body.meta.sum ?: "", t, fn, i, fp, body.meta.sum
-                ?: "")
-        return Receipt(shop, products)
+                ?: 0L, body.meta.place ?: "", body.meta.sum ?: "")
+        return Receipt(shop, meta, products)
     }
 
     private fun checkIntentFilter() {

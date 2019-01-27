@@ -23,6 +23,7 @@ import retrofit2.Response
 import shiverawe.github.com.receipt.entity.Product
 import shiverawe.github.com.receipt.entity.Shop
 import shiverawe.github.com.receipt.data.network.entity.get.ReceiptResponce
+import shiverawe.github.com.receipt.entity.Meta
 import shiverawe.github.com.receipt.ui.receipt.RECEIPT_QR_CODE
 import java.lang.Exception
 import java.util.*
@@ -130,6 +131,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun findReceipt() {
+/*
         container_qr_request.visibility = View.VISIBLE
         try {
             val parameters = qrCode.split("&")
@@ -163,6 +165,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             container_qr_request.visibility = View.GONE
             Toast.makeText(this@MainActivity, "Ошибка", Toast.LENGTH_LONG).show()
         }
+*/
 
     }
 
@@ -179,10 +182,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val fp = body.meta.fp.toString()
         val i = body.meta.fd.toString()
         val t = body.meta.date!!.toString()
+        val meta = Meta( t, fn, i, fp, body.meta.sum?.toDouble()?: 0.0)
         val shop = Shop(body.meta.date.toLong()
-                ?: 0L, body.meta.place ?: "", body.meta.sum ?: "", t, fn, i, fp, body.meta.sum
-                ?: "")
-        return Receipt(shop, products)
+                ?: 0L, body.meta.place ?: "", body.meta.sum ?: "")
+        return Receipt(shop, meta, products)
     }
 
     override fun onDestroy() {
