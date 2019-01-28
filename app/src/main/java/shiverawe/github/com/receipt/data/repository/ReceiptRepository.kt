@@ -9,6 +9,7 @@ import shiverawe.github.com.receipt.entity.Product
 import shiverawe.github.com.receipt.entity.Receipt
 import shiverawe.github.com.receipt.entity.Shop
 import shiverawe.github.com.receipt.ui.App
+import java.lang.Exception
 import java.util.ArrayList
 
 class ReceiptRepository {
@@ -37,8 +38,20 @@ class ReceiptRepository {
         val i = response.meta.fd.toString()
         val t = (response.meta.date!!.toLong() * 1000).toString()
         val meta = Meta( t, fn, i, fp, response.meta.sum?.toDouble()?: 0.0)
-        val shop = Shop(response.meta.date.toLong() * 1000, response.meta.place ?: "", response.meta.sum ?: "")
+        val shopPlace = mapShopTitle(response.meta.place ?: "")
+        val shop = Shop(response.meta.date.toLong() * 1000, shopPlace, response.meta.sum ?: "")
         return Receipt(shop, meta, products)
+    }
+
+    private fun mapShopTitle(title: String): String {
+        try {
+            if (title.contains('\"')) {
+                return title.substring(title.indexOf('\"', 0) + 1, title.lastIndexOf('\"', title.length))
+            } else if (title.contains("ООО")){
+                return title.split("ООО")[1].trim()
+            }
+        } catch (e: Exception) { }
+        return title
     }
 
 
