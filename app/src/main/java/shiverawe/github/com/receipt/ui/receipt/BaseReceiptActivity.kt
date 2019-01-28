@@ -126,6 +126,7 @@ open class BaseReceiptActivity: AppCompatActivity() {
         dashPaint.pathEffect = DashPathEffect(floatArrayOf(dashSize, gapSize), 0F)
         canvas.drawLine(bottomRadius, background.height(), background.width() - bottomRadius, background.height(), dashPaint)
         fl_receipt_top_ticket.background = BitmapDrawable(resources, b)
+        tv_receipt_shop_name.setOnClickListener { it.isSelected = !it.isSelected }
     }
 
     fun getShareString(): String {

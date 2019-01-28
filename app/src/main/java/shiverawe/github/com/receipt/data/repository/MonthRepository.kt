@@ -69,7 +69,7 @@ class MonthRepository {
                     ?: 0.0, it.amount ?: 0.0))
         }
         val shopDate = report.date!!.toLong() * 1000
-        val shopPlace = report.place ?: ""
+        val shopPlace = mapShopTitle(report.place ?: "")
         val shopSum = BigDecimal(report.sum ?: 0.0 / 100).setScale(2, RoundingMode.DOWN).toDouble()
         val fn = report.fn.toString()
         val fp = report.fp.toString()
@@ -78,5 +78,16 @@ class MonthRepository {
         val meta = Meta( t, fn, i, fp, shopSum)
         receipts.add(Receipt(Shop(shopDate, shopPlace, shopSum.toString() + " р"), meta, ArrayList(products)))
         } catch (e: Exception) {}
+    }
+
+    private fun mapShopTitle(title: String): String {
+        try {
+            if (title.contains('\"')) {
+                return title.substring(title.indexOf('\"', 0) + 1, title.lastIndexOf('\"', title.length))
+            } else if (title.contains("ООО")){
+                return title.split("ООО")[1].trim()
+            }
+        } catch (e: Exception) { }
+        return title
     }
 }
