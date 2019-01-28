@@ -6,6 +6,7 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.view.ViewOutlineProvider
 import kotlinx.android.synthetic.main.activity_receipt.*
@@ -24,6 +25,25 @@ open class BaseReceiptActivity: AppCompatActivity() {
     val dateFormatterDigits = SimpleDateFormat("dd.MM_HH:mm", Locale("ru"))
     val dateFormatterDay = DateFormat.getDateInstance(SimpleDateFormat.FULL, Locale("ru"))
     var dateStr = ""
+
+
+    fun setReceipt() {
+        val fullDate = dateFormatterDigits.format(Date(receipt!!.shop.date)).split("_")
+        val day = dateFormatterDay.format(Date(receipt!!.shop.date)).split(",")[0].capitalize()
+        val date = fullDate[0]
+        val time = fullDate[1]
+        dateStr = "$date $day $time"
+        tv_receipt_date.text = dateStr
+        tv_receipt_shop_name.text = receipt!!.shop.place
+        tv_receipt_shop_price.text = receipt!!.shop.sum
+        tv_receipt_shop_name.setOnClickListener { it.isSelected = !it.isSelected }
+        rv_receipt.adapter = RvAdapterReceipt(receipt!!.items!!)
+        rv_receipt.layoutManager = LinearLayoutManager(this)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            setShadow()
+        }
+        fl_receipt_top_ticket.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+    }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun setShadow() {
@@ -126,7 +146,6 @@ open class BaseReceiptActivity: AppCompatActivity() {
         dashPaint.pathEffect = DashPathEffect(floatArrayOf(dashSize, gapSize), 0F)
         canvas.drawLine(bottomRadius, background.height(), background.width() - bottomRadius, background.height(), dashPaint)
         fl_receipt_top_ticket.background = BitmapDrawable(resources, b)
-        tv_receipt_shop_name.setOnClickListener { it.isSelected = !it.isSelected }
     }
 
     fun getShareString(): String {

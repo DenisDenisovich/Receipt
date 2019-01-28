@@ -19,60 +19,46 @@ import java.util.*
 const val EXTRA_DATE_RECEIPT = "extra_date_receipt"
 
 class NetworkReceiptActivity : BaseReceiptActivity(), ReceiptNetworkContract.View, View.OnClickListener {
-    private lateinit var presenter: ReceiptNetworkContract.Presenter
+    private var presenter: ReceiptNetworkContract.Presenter? = null
     var receiptIsSaved = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (savedInstanceState == null) {
-            setContentView(R.layout.activity_network_receipt)
-            container_wait.visibility = View.VISIBLE
-            presenter = ReceiptNetworkPresenter()
+        setContentView(R.layout.activity_network_receipt)
+        container_wait.visibility = View.VISIBLE
+        btn_receipt_back.setOnClickListener(this)
+        btn_receipt_share.setOnClickListener(this)
+        btn_receipt_save.setOnClickListener(this)
 
-            if (fromIntentFilter()) {
-                presenter.setQrData(qrData)
-                presenter.getReceipt()
-            } else {
-                val integrator = IntentIntegrator(this)
-                integrator.setBeepEnabled(false)
-                integrator.setPrompt("Наведите камеру на qr code")
-                integrator.initiateScan()
-            }
+        presenter = ReceiptNetworkPresenter()
+
+        if (fromIntentFilter()) {
+            presenter?.setQrData(qrData)
+            presenter?.getReceipt()
+        } else {
+            val integrator = IntentIntegrator(this)
+            integrator.setBeepEnabled(false)
+            integrator.setPrompt("Наведите камеру на qr code")
+            integrator.initiateScan()
         }
     }
 
     override fun onStart() {
-        presenter.attach(this)
+        presenter?.attach(this)
         super.onStart()
     }
 
     override fun onStop() {
-        presenter.detach()
+        presenter?.detach()
         super.onStop()
     }
 
     override fun showReceipt(receipt: Receipt) {
         this.receipt = receipt
-        val fullDate = dateFormatterDigits.format(Date(receipt.shop.date)).split("_")
-        val day = dateFormatterDay.format(Date(receipt.shop.date)).split(",")[0].capitalize()
-        val date = fullDate[0]
-        val time = fullDate[1]
-        dateStr = "$date $day $time"
-        tv_receipt_date.text = dateStr
-        tv_receipt_shop_name.text = receipt.shop.place
-        tv_receipt_shop_price.text = receipt.shop.sum
-        rv_receipt.adapter = RvAdapterReceipt(receipt.items!!)
-        rv_receipt.layoutManager = LinearLayoutManager(this)
-        btn_receipt_back.setOnClickListener(this)
-        btn_receipt_share.setOnClickListener(this)
         container_wait.visibility = View.GONE
         container_error.visibility = View.GONE
         view_receipt.visibility = View.VISIBLE
         btn_receipt_save.visibility = View.VISIBLE
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            setShadow()
-        }
-        fl_receipt_top_ticket.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-        btn_receipt_save.setOnClickListener(this)
+        setReceipt()
     }
 
     override fun onClick(v: View?) {
@@ -88,7 +74,7 @@ class NetworkReceiptActivity : BaseReceiptActivity(), ReceiptNetworkContract.Vie
                 startActivity(Intent.createChooser(sendIntent, "Отправить чек"))
             }
             R.id.btn_receipt_save -> {
-                presenter.save()
+                presenter?.save()
             }
         }
     }
@@ -116,6 +102,7 @@ class NetworkReceiptActivity : BaseReceiptActivity(), ReceiptNetworkContract.Vie
     }
 
     override fun receiptIsSaved() {
+        receiptIsSaved = true
         onBackPressed()
     }
 
@@ -146,15 +133,15 @@ class NetworkReceiptActivity : BaseReceiptActivity(), ReceiptNetworkContract.Vie
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result?.contents != null) {
             qrData = result.contents
-            presenter.setQrData(qrData)
-            presenter.getReceipt()
+            presenter?.setQrData(qrData)
+            presenter?.getReceipt()
             return
         }
         finish()
     }
 
     override fun onDestroy() {
-        presenter.destroy()
+        presenter?.destroy()
         super.onDestroy()
     }
 

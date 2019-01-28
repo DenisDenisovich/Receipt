@@ -23,12 +23,8 @@ class ReceiptActivity : BaseReceiptActivity(), View.OnClickListener {
         receipt = Gson().fromJson(intent.getStringExtra(RECEIPT_TAG), Receipt::class.java)
         btn_receipt_back.setOnClickListener(this)
         btn_receipt_share.setOnClickListener(this)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            setShadow()
-        }
-        fl_receipt_top_ticket.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         try {
-            showReceipt()
+            setReceipt()
         }catch (e: Exception) {
             showError()
         }
@@ -47,19 +43,6 @@ class ReceiptActivity : BaseReceiptActivity(), View.OnClickListener {
                 startActivity(Intent.createChooser(sendIntent, "Отправить чек"))
             }
         }
-    }
-
-    private fun showReceipt() {
-        val fullDate = dateFormatterDigits.format(Date(receipt!!.shop.date)).split("_")
-        val day = dateFormatterDay.format(Date(receipt!!.shop.date)).split(",")[0].capitalize()
-        val date = fullDate[0]
-        val time = fullDate[1]
-        dateStr = "$date $day $time"
-        tv_receipt_date.text = dateStr
-        tv_receipt_shop_name.text = receipt!!.shop.place
-        tv_receipt_shop_price.text = receipt!!.shop.sum
-        rv_receipt.adapter = RvAdapterReceipt(receipt!!.items!!)
-        rv_receipt.layoutManager = LinearLayoutManager(this)
     }
 
     private fun showError() {

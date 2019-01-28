@@ -23,7 +23,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.receipt.local.ReceiptActivity"/>
-        <activity android:name=".ui.receipt.network.NetworkReceiptActivity">
+        <activity android:name=".ui.receipt.network.NetworkReceiptActivity"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
