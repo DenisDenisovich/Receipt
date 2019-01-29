@@ -8,6 +8,7 @@ interface ReceiptNetworkContract {
         fun showError(message: String)
         fun showProgress()
         fun receiptIsSaved()
+        fun receiptIsAlreadyExist()
         fun receiptIsNotSaved()
     }
 

@@ -29,8 +29,11 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
         }
         if (showSaveAfterAttach) {
             showSaveAfterAttach = false
-            if (saveResponse?.status == "ОК") view.receiptIsSaved()
-            else view.receiptIsNotSaved()
+            when {
+                saveResponse?.status == "OK" -> view.receiptIsSaved()
+                saveResponse?.status == "Receipt already exist" -> view.receiptIsAlreadyExist()
+                else -> view.receiptIsNotSaved()
+            }
         }
 
     }
@@ -75,22 +78,16 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
                     override fun onSuccess(responce: CreateResponce) {
                         saveResponse = responce
                         showSaveAfterAttach = view == null
-                        if (responce.status == "OK")
-                            view?.receiptIsSaved()
-                        else
-                            view?.receiptIsNotSaved()
+                        when {
+                            responce.status == "OK" -> view?.receiptIsSaved()
+                            responce.status == "Receipt already exist" -> view?.receiptIsAlreadyExist()
+                            else -> view?.receiptIsNotSaved()
+                        }
                     }
 
                     override fun onError(e: Throwable) {
                         showSaveAfterAttach = view == null
-                        if (e.message.equals("HTTP 400 BAD REQUEST")) {
-                            saveResponse = CreateResponce(-1, "OK")
-                            if (saveResponse!!.status == "OK")
-                                view?.receiptIsSaved()
-                            else
-                                view?.receiptIsNotSaved()
-                        } else
-                            view?.receiptIsNotSaved()
+                        view?.receiptIsNotSaved()
                     }
                 })
     }
