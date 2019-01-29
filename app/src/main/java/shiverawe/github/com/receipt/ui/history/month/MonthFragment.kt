@@ -104,8 +104,7 @@ class MonthFragment : Fragment(), MonthContract.View {
     }
 
     fun update() {
-        pb_month.visibility = View.VISIBLE
-        rv_month.visibility = View.GONE
+        showProgressbar()
         receipts.clear()
         totalSum = ""
         presenter?.update()

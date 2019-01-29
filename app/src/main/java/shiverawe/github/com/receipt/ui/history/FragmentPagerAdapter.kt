@@ -35,7 +35,7 @@ class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) 
         return dates.indexOf(calendar.timeInMillis)
     }
 
-    private fun setBeginOfMonth(calendar: GregorianCalendar) {
+    fun setBeginOfMonth(calendar: GregorianCalendar) {
         calendar.set(Calendar.DAY_OF_MONTH, 1)
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)

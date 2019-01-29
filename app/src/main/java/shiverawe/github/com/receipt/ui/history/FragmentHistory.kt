@@ -178,7 +178,9 @@ class FragmentHistory: Fragment(), View.OnClickListener {
             fragments.forEach {
                 fragment ->
                 if (fragment is MonthFragment) {
-                    if (fragment.arguments?.getInt(MonthFragment.DATE_KEY) == (date / 1000).toInt()) {
+                    calendar.timeInMillis = date
+                    monthAdapter.setBeginOfMonth(calendar)
+                    if (fragment.arguments?.getInt(MonthFragment.DATE_KEY) == (calendar.timeInMillis / 1000).toInt()) {
                         fragment.update()
                         return
                     }

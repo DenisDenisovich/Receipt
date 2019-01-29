@@ -3,8 +3,6 @@ package shiverawe.github.com.receipt.ui.receipt.network
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.google.zxing.integration.android.IntentIntegrator
@@ -14,13 +12,11 @@ import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.entity.Receipt
 import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.ui.receipt.*
-import java.util.*
 
 const val EXTRA_DATE_RECEIPT = "extra_date_receipt"
 
 class NetworkReceiptActivity : BaseReceiptActivity(), ReceiptNetworkContract.View, View.OnClickListener {
     private var presenter: ReceiptNetworkContract.Presenter? = null
-    var receiptIsSaved = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_network_receipt)
@@ -102,8 +98,11 @@ class NetworkReceiptActivity : BaseReceiptActivity(), ReceiptNetworkContract.Vie
     }
 
     override fun receiptIsSaved() {
-        receiptIsSaved = true
-        onBackPressed()
+        val intent = Intent()
+        val updateDate = receipt?.meta?.t?.toLong()?:0L * 1000
+        intent.putExtra(EXTRA_DATE_RECEIPT, updateDate)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 
     override fun receiptIsNotSaved() {
@@ -118,14 +117,7 @@ class NetworkReceiptActivity : BaseReceiptActivity(), ReceiptNetworkContract.Vie
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         } else {
-            // if activity opened from application
-            if (receiptIsSaved) {
-                val intent = Intent()
-                intent.putExtra(EXTRA_DATE_RECEIPT, receipt?.meta?.t)
-                setResult(Activity.RESULT_OK, intent)
-            } else {
-                setResult(Activity.RESULT_CANCELED)
-            }
+            setResult(Activity.RESULT_CANCELED)
         }
         super.onBackPressed()
     }

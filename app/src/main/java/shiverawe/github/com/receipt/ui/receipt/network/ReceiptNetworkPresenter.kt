@@ -83,7 +83,14 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
 
                     override fun onError(e: Throwable) {
                         showSaveAfterAttach = view == null
-                        view?.receiptIsNotSaved()
+                        if (e.message.equals("HTTP 400 BAD REQUEST")) {
+                            saveResponse = CreateResponce(-1, "OK")
+                            if (saveResponse!!.status == "OK")
+                                view?.receiptIsSaved()
+                            else
+                                view?.receiptIsNotSaved()
+                        } else
+                            view?.receiptIsNotSaved()
                     }
                 })
     }

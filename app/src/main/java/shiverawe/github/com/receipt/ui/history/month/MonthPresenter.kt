@@ -39,12 +39,10 @@ class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
     }
 
     override fun update() {
-        view?.showProgressbar()
         receipts = null
         totalSum = ""
         isError = false
         receiptDisposable?.dispose()
-        view?.showProgressbar()
         getReceiptsData()
     }
 
