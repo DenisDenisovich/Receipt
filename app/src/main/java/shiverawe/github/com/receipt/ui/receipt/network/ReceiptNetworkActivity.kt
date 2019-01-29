@@ -107,6 +107,7 @@ class NetworkReceiptActivity : BaseReceiptActivity(), ReceiptNetworkContract.Vie
     }
 
     override fun receiptIsNotSaved() {
+        showReceipt(receipt!!)
         Toast.makeText(this, "Произошла ошибка при сохранении", Toast.LENGTH_LONG).show()
     }
 

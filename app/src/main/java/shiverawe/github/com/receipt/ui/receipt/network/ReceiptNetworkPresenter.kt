@@ -1,6 +1,5 @@
 package shiverawe.github.com.receipt.ui.receipt.network
 
-import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -14,8 +13,8 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
     private val receiptRepository = ReceiptRepository()
     private var receipt: Receipt? = null
     private var saveResponse: CreateResponce? = null
-    private var getTaskIsCompleted = false
-    private var saveTaskIsCompleted = false
+    private var showReceiptAfterAttach = false
+    private var showSaveAfterAttach = false
     private var view: ReceiptNetworkContract.View? = null
     private var getDisposable: Disposable? = null
     private var saveDisposable: Disposable? = null
@@ -23,11 +22,13 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
 
     override fun attach(view: ReceiptNetworkContract.View) {
         this.view = view
-        if (getTaskIsCompleted) {
+        if (showReceiptAfterAttach) {
+            showReceiptAfterAttach = false
             if (receipt != null) view.showReceipt(receipt!!)
             else view.showError("Произошла ошибка")
         }
-        if (saveTaskIsCompleted) {
+        if (showSaveAfterAttach) {
+            showSaveAfterAttach = false
             if (saveResponse?.status == "ОК") view.receiptIsSaved()
             else view.receiptIsNotSaved()
         }
@@ -55,13 +56,13 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
         getDisposable = receiptRepository.getReceipt(options).observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<Receipt?>() {
                     override fun onSuccess(receipt: Receipt) {
-                        getTaskIsCompleted = true
+                        showReceiptAfterAttach = view == null
                         this@ReceiptNetworkPresenter.receipt = receipt
                         view?.showReceipt(receipt)
                     }
 
                     override fun onError(e: Throwable) {
-                        getTaskIsCompleted = true
+                        showReceiptAfterAttach = view == null
                         view?.showError("Произошла ошибка")
                     }
                 })
@@ -73,7 +74,7 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
                 .subscribeWith(object : DisposableSingleObserver<CreateResponce>() {
                     override fun onSuccess(responce: CreateResponce) {
                         saveResponse = responce
-                        saveTaskIsCompleted = true
+                        showSaveAfterAttach = view == null
                         if (responce.status == "OK")
                             view?.receiptIsSaved()
                         else
@@ -81,7 +82,7 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
                     }
 
                     override fun onError(e: Throwable) {
-                        saveTaskIsCompleted = true
+                        showSaveAfterAttach = view == null
                         view?.receiptIsNotSaved()
                     }
                 })
