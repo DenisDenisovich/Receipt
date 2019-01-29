@@ -1,5 +1,7 @@
 package shiverawe.github.com.receipt.ui.receipt
 
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
@@ -93,10 +95,14 @@ open class BaseReceiptActivity: AppCompatActivity() {
         // right line
         path.lineTo(background.width().toFloat(), background.height().toFloat())
         // bottom zigzag
-        val zigzagCount = 10
+
+        val zigzagCount = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+            10
+        else
+            20
         val zigzagWidth = background.width().toFloat() / zigzagCount / 2
         val zigzagHeight = resources.getDimensionPixelSize(R.dimen.receipt_zigzag_height).toFloat()
-        for (i in 1 .. 20) {
+        for (i in 1 .. zigzagCount * 2) {
             val lineY: Float = if (i % 2 == 0) background.height().toFloat()
             else background.height() - zigzagHeight
             path.lineTo(background.width() - zigzagWidth * i, lineY)
@@ -194,4 +200,12 @@ open class BaseReceiptActivity: AppCompatActivity() {
         return strDate.toString()
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        if (receipt != null) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                setShadow()
+            }
+        }
+    }
 }
