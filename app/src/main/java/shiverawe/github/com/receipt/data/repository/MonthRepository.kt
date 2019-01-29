@@ -34,9 +34,9 @@ class MonthRepository {
         }
         var report = response
         // filer response
-        report = ArrayList(report.filter { it.status != "FAILED" })
+        report = ArrayList(report.filter { it.status != null && it.status != "FAILED" && it.place!= null && it.sum != null && it.date != null})
         report.sortByDescending { it.date }
-        if (report.size == 0){
+        if (report.size == 0) {
             receipts.clear()
             return receipts
         }
