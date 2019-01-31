@@ -37,11 +37,11 @@ class NetworkReceiptActivity : AppCompatActivity(), ReceiptNetwork {
     }
 
     override fun openQrReader() {
-        supportFragmentManager.beginTransaction().replace(R.id.container_network_receipt, QrReaderFragment(), FRAGMENT_QR_READER_TAG).commit()
+        supportFragmentManager.beginTransaction().add(R.id.container_network_receipt, QrReaderFragment(), FRAGMENT_QR_READER_TAG).commit()
     }
 
     override fun openManualInput() {
-        supportFragmentManager.beginTransaction().replace(R.id.container_network_receipt, ManualInputFragment(), FRAGMENT_MANUAL_INPUT_TAG).commit()
+        supportFragmentManager.beginTransaction().add(R.id.container_network_receipt, ManualInputFragment(), FRAGMENT_MANUAL_INPUT_TAG).commit()
     }
 
     override fun moveBackToManual() {

@@ -21,4 +21,13 @@
         app:frameThickness="2dp"
         android:visibility="visible"
         app:maskColor="#77000000"/>
+
+    <Button
+        android:id="@+id/btn_qr_reader_manual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Ручной ввод"/>
 </FrameLayout>

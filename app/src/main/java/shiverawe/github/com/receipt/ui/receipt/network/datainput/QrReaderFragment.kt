@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
@@ -19,7 +20,7 @@ import shiverawe.github.com.receipt.ui.receipt.network.ReceiptNetwork
 
 private const val MY_CAMERA_REQUEST_CODE = 100
 class QrReaderFragment: Fragment() {
-    private lateinit var codeScanner: CodeScanner
+    private var codeScanner: CodeScanner? = null
     private lateinit var receiptNetwork: ReceiptNetwork
     override fun onAttach(context: Context?) {
         receiptNetwork = context as ReceiptNetwork
@@ -32,33 +33,39 @@ class QrReaderFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         requestOpenCamera()
+        btn_qr_reader_manual.setOnClickListener {
+            receiptNetwork.openManualInput()
+            codeScanner?.releaseResources()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        codeScanner.startPreview()
+        codeScanner?.startPreview()
     }
 
     fun startScanCamera() {
         val scannerView = scanner_view
         val activity = requireActivity()
         codeScanner = CodeScanner(activity, scannerView)
-        codeScanner.decodeCallback = DecodeCallback {
+        codeScanner?.decodeCallback = DecodeCallback {
             activity.runOnUiThread {
                 receiptNetwork.openReceiptFragment(it.text, false)
             }
         }
-        codeScanner.errorCallback = ErrorCallback {
+        codeScanner?.errorCallback = ErrorCallback {
             activity.runOnUiThread {
+                Toast.makeText(context, "Произошла ошибка", Toast.LENGTH_LONG).show()
                 receiptNetwork.openManualInput()
+                codeScanner?.releaseResources()
             }
         }
-        codeScanner.startPreview()
+        codeScanner?.startPreview()
     }
 
 
     override fun onPause() {
-        codeScanner.releaseResources()
+        codeScanner?.releaseResources()
         super.onPause()
     }
 
