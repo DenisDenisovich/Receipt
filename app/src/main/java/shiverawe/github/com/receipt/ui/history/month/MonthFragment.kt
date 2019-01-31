@@ -113,7 +113,7 @@ class MonthFragment : Fragment(), MonthContract.View {
     override fun setTotalSum(totalSum: String) {
         this.totalSum = totalSum
         if (parentFragment != null)
-            (parentFragment as FragmentHistory).setMonthSum(totalSum)
+            (parentFragment as FragmentHistory).setMonthSum(arguments!!.getInt(DATE_KEY), totalSum)
     }
 
     fun getTotalSum() = totalSum

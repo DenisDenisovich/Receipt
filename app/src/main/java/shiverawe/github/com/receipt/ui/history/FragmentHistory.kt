@@ -139,8 +139,10 @@ class FragmentHistory : Fragment(), View.OnClickListener {
         }
     }
 
-    fun setMonthSum(sum: String) {
-        tab_layout_history.setSum(sum)
+    fun setMonthSum(date: Int, sum: String) {
+        val sumPosition = monthAdapter.getPositionByDate(Date(date.toLong() * 1000))
+        if (sumPosition == vp_history.currentItem)
+            tab_layout_history.setSum(sum)
     }
 
     fun setMonth() {
@@ -160,7 +162,7 @@ class FragmentHistory : Fragment(), View.OnClickListener {
                 if (fragment.arguments!!.getInt(MonthFragment.DATE_KEY) == (date / 1000).toInt()) {
                     totalSum = fragment.getTotalSum()
                     if (totalSum.isNotBlank()) {
-                        setMonthSum(totalSum)
+                        setMonthSum((date / 1000).toInt(), totalSum)
                         return@forEach
                     }
                 }
