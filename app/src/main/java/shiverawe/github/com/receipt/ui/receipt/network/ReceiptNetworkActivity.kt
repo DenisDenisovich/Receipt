@@ -3,85 +3,31 @@ package shiverawe.github.com.receipt.ui.receipt.network
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
-import com.google.zxing.integration.android.IntentIntegrator
-import kotlinx.android.synthetic.main.activity_network_receipt.*
-import kotlinx.android.synthetic.main.activity_receipt.*
+import android.support.v4.app.FragmentTransaction
+import android.support.v7.app.AppCompatActivity
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.entity.Receipt
 import shiverawe.github.com.receipt.ui.MainActivity
-import shiverawe.github.com.receipt.ui.receipt.*
+import shiverawe.github.com.receipt.ui.receipt.network.receipt.ReceiptNetworkFragment
+import shiverawe.github.com.receipt.ui.receipt.network.datainput.ManualInputFragment
+import shiverawe.github.com.receipt.ui.receipt.network.datainput.QrReaderFragment
 
 const val EXTRA_DATE_RECEIPT = "extra_date_receipt"
-
-class NetworkReceiptActivity : BaseReceiptActivity(), ReceiptNetworkContract.View, View.OnClickListener {
-    private var presenter: ReceiptNetworkContract.Presenter? = null
+private const val FRAGMENT_RECEIPT_TAG = "receipt"
+private const val FRAGMENT_QR_READER_TAG = "qr_reader"
+private const val FRAGMENT_MANUAL_INPUT_TAG = "manual_input"
+class NetworkReceiptActivity : AppCompatActivity(), ReceiptNetwork {
+    private var qrData = ""
+    var savedReceiptDate: Long = 0L
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_network_receipt)
-        container_wait.visibility = View.VISIBLE
-        btn_receipt_back.setOnClickListener(this)
-        btn_receipt_share.setOnClickListener(this)
-        btn_receipt_save.setOnClickListener(this)
-
-        presenter = ReceiptNetworkPresenter()
-
         if (fromIntentFilter()) {
-            presenter?.setQrData(qrData)
-            presenter?.getReceipt()
+            openReceiptFragment(qrData, false)
         } else {
-            val integrator = IntentIntegrator(this)
-            integrator.setBeepEnabled(false)
-            integrator.setPrompt("Наведите камеру на qr code")
-            integrator.initiateScan()
+            openQrReader()
         }
     }
 
-    override fun onStart() {
-        presenter?.attach(this)
-        super.onStart()
-    }
-
-    override fun onStop() {
-        presenter?.detach()
-        super.onStop()
-    }
-
-    override fun showReceipt(receipt: Receipt) {
-        this.receipt = receipt
-        container_wait.visibility = View.GONE
-        container_error.visibility = View.GONE
-        view_receipt.visibility = View.VISIBLE
-        btn_receipt_save.visibility = View.VISIBLE
-        setReceipt()
-    }
-
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            R.id.btn_receipt_back -> {
-                onBackPressed()
-            }
-            R.id.btn_receipt_share -> {
-                val sendIntent = Intent()
-                sendIntent.action = Intent.ACTION_SEND
-                sendIntent.putExtra(Intent.EXTRA_TEXT, getShareString())
-                sendIntent.type = "text/plain"
-                startActivity(Intent.createChooser(sendIntent, "Отправить чек"))
-            }
-            R.id.btn_receipt_save -> {
-                presenter?.save()
-            }
-        }
-    }
-
-    override fun showError(message: String) {
-        container_wait.visibility = View.GONE
-        view_receipt.visibility = View.GONE
-        btn_receipt_save.visibility = View.GONE
-        container_error.visibility = View.VISIBLE
-        tv_message_error.text = message
-    }
 
     private fun fromIntentFilter(): Boolean {
         val data = intent.data ?: return false
@@ -90,28 +36,31 @@ class NetworkReceiptActivity : BaseReceiptActivity(), ReceiptNetworkContract.Vie
         return true
     }
 
-    override fun showProgress() {
-        container_wait.visibility = View.VISIBLE
-        view_receipt.visibility = View.GONE
-        btn_receipt_save.visibility = View.GONE
-        container_error.visibility = View.GONE
+    override fun openQrReader() {
+        supportFragmentManager.beginTransaction().add(R.id.container_network_receipt, QrReaderFragment(), FRAGMENT_QR_READER_TAG).commit()
     }
 
-    override fun receiptIsSaved() {
-        val intent = Intent()
-        val updateDate = receipt?.meta?.t?.toLong()?:0L * 1000
-        intent.putExtra(EXTRA_DATE_RECEIPT, updateDate)
-        setResult(Activity.RESULT_OK, intent)
-        finish()
+    override fun openManualInput() {
+        supportFragmentManager.beginTransaction().add(R.id.container_network_receipt, ManualInputFragment(), FRAGMENT_MANUAL_INPUT_TAG).commit()
     }
 
-    override fun receiptIsAlreadyExist() {
-        onBackPressed()
+    override fun moveBackToManual() {
+        supportFragmentManager.popBackStack()
     }
 
-    override fun receiptIsNotSaved() {
-        showReceipt(receipt!!)
-        Toast.makeText(this, "Произошла ошибка при сохранении", Toast.LENGTH_LONG).show()
+    override fun openReceiptFragment(qrData: String, isManualInput: Boolean) {
+        val transaction = supportFragmentManager.beginTransaction()
+        val fragment = ReceiptNetworkFragment.getNewInstance(qrData, isManualInput)
+        if (isManualInput)
+            transaction.add(R.id.container_network_receipt, fragment, FRAGMENT_RECEIPT_TAG).addToBackStack(null)
+        else
+            transaction.replace(R.id.container_network_receipt, fragment, FRAGMENT_RECEIPT_TAG)
+
+        transaction.commit()
+    }
+
+    override fun receiptIsSaved(date: Long) {
+        savedReceiptDate = date
     }
 
     override fun onBackPressed() {
@@ -121,25 +70,14 @@ class NetworkReceiptActivity : BaseReceiptActivity(), ReceiptNetworkContract.Vie
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
         } else {
-            setResult(Activity.RESULT_CANCELED)
-        }
-        super.onBackPressed()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result?.contents != null) {
-            qrData = result.contents
-            presenter?.setQrData(qrData)
-            presenter?.getReceipt()
-            return
+            if (savedReceiptDate != 0L) {
+                val intent = Intent()
+                intent.putExtra(EXTRA_DATE_RECEIPT, savedReceiptDate)
+                setResult(Activity.RESULT_OK, intent)
+            } else {
+                setResult(Activity.RESULT_CANCELED)
+            }
         }
         finish()
     }
-
-    override fun onDestroy() {
-        presenter?.destroy()
-        super.onDestroy()
-    }
-
 }

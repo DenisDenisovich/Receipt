@@ -1,11 +1,12 @@
-package shiverawe.github.com.receipt.ui.receipt.network
+package shiverawe.github.com.receipt.ui.receipt.network.receipt
 
 import shiverawe.github.com.receipt.entity.Receipt
 
 interface ReceiptNetworkContract {
     interface View {
         fun showReceipt(receipt: Receipt)
-        fun showError(message: String)
+        fun showGetReceiptError()
+        fun error()
         fun showProgress()
         fun receiptIsSaved()
         fun receiptIsAlreadyExist()

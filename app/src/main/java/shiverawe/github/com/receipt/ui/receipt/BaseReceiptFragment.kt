@@ -1,17 +1,16 @@
 package shiverawe.github.com.receipt.ui.receipt
 
-import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.support.annotation.RequiresApi
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.view.ViewOutlineProvider
-import kotlinx.android.synthetic.main.activity_receipt.*
+import kotlinx.android.synthetic.main.fragment_receipt.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.entity.Receipt
 import java.lang.StringBuilder
@@ -21,7 +20,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-open class BaseReceiptActivity: AppCompatActivity() {
+open class BaseReceiptFragment: Fragment() {
     var receipt: Receipt? = null
     var qrData = ""
     val dateFormatterDigits = SimpleDateFormat("dd.MM_HH:mm", Locale("ru"))
@@ -40,7 +39,7 @@ open class BaseReceiptActivity: AppCompatActivity() {
         tv_receipt_shop_price.text = receipt!!.shop.sum
         tv_receipt_shop_name.setOnClickListener { it.isSelected = !it.isSelected }
         rv_receipt.adapter = RvAdapterReceipt(receipt!!.items!!)
-        rv_receipt.layoutManager = LinearLayoutManager(this)
+        rv_receipt.layoutManager = LinearLayoutManager(context)
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             setShadow()
         }
@@ -117,7 +116,7 @@ open class BaseReceiptActivity: AppCompatActivity() {
         paint.isAntiAlias = true
         paint.style = Paint.Style.STROKE
         canvas.clipPath(path)
-        canvas.drawColor(ContextCompat.getColor(this, R.color.receiptColor))
+        canvas.drawColor(ContextCompat.getColor(context!!, R.color.receiptColor))
         rv_receipt.background = BitmapDrawable(resources, b)
     }
 
@@ -131,14 +130,14 @@ open class BaseReceiptActivity: AppCompatActivity() {
         paint.strokeWidth = 1F
         paint.isAntiAlias = true
         paint.style = Paint.Style.FILL_AND_STROKE
-        paint.color = ContextCompat.getColor(this, R.color.receiptColor)
+        paint.color = ContextCompat.getColor(context!!, R.color.receiptColor)
         canvas.drawRoundRect(background, topRadius, topRadius, paint)
         // draw inner corners
         val circlePaint = Paint()
         circlePaint.strokeWidth = 1F
         circlePaint.isAntiAlias = true
         circlePaint.style = Paint.Style.FILL_AND_STROKE
-        circlePaint.color = ContextCompat.getColor(this, R.color.colorPrimary)
+        circlePaint.color = ContextCompat.getColor(context!!, R.color.colorPrimary)
         val circle = RectF(-bottomRadius, background.height() - bottomRadius, bottomRadius, background.height() + bottomRadius)
         canvas.drawArc(circle, 270F, 90F, true, circlePaint)
         circle.set(background.width() - bottomRadius, background.height() - bottomRadius, background.width() + bottomRadius, background.height() + bottomRadius)

@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.receipt.network
+package shiverawe.github.com.receipt.ui.receipt.network.receipt
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -25,7 +25,7 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
         if (showReceiptAfterAttach) {
             showReceiptAfterAttach = false
             if (receipt != null) view.showReceipt(receipt!!)
-            else view.showError("Произошла ошибка")
+            else view.showGetReceiptError()
         }
         if (showSaveAfterAttach) {
             showSaveAfterAttach = false
@@ -50,12 +50,14 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
                 val value = parameter.substring(parameter.indexOf("=") + 1, parameter.length)
                 options[key] = value
             }
+            getReceipt()
         } catch (e: Exception) {
-            view?.showError("Произошла ошибка")
+            view?.error()
         }
     }
 
     override fun getReceipt() {
+        view?.showProgress()
         getDisposable = receiptRepository.getReceipt(options).observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<Receipt?>() {
                     override fun onSuccess(receipt: Receipt) {
@@ -66,13 +68,12 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
 
                     override fun onError(e: Throwable) {
                         showReceiptAfterAttach = view == null
-                        view?.showError("Произошла ошибка")
+                        view?.showGetReceiptError()
                     }
                 })
     }
 
     override fun save() {
-        view?.showProgress()
         saveDisposable = receiptRepository.saveReceipt().observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<CreateResponce>() {
                     override fun onSuccess(responce: CreateResponce) {
