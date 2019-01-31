@@ -33,6 +33,7 @@ class RvAdapterReceipt(val products: ArrayList<Product>): RecyclerView.Adapter<R
 
         @SuppressLint("SetTextI18n")
         fun bind(product: Product) {
+            name.isSelected = false
             name.text = product.text
             val amountNumber = BigDecimal(product.amount).setScale(3, RoundingMode.DOWN).toDouble()
             val amountString = if (amountNumber == Math.floor(amountNumber)) amountNumber.toInt().toString()
