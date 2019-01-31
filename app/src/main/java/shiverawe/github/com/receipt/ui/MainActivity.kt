@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
@@ -12,13 +13,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.entity.Receipt
 import shiverawe.github.com.receipt.ui.history.FragmentHistory
-import shiverawe.github.com.receipt.ui.receipt.local.RECEIPT_TAG
-import shiverawe.github.com.receipt.ui.receipt.local.ReceiptActivity
+import shiverawe.github.com.receipt.ui.receipt.local.ReceiptLocalFragment
 import shiverawe.github.com.receipt.ui.receipt.network.EXTRA_DATE_RECEIPT
 import shiverawe.github.com.receipt.ui.receipt.network.NetworkReceiptActivity
 
 
 private const val FRAGMENT_HISTORY_TAG = "fragment_history"
+private const val FRAGMENT_LOCAL_RECEIPT_TAG = "fragment_local_receipt"
 const val REQUEST_CODE_CREATE_RECEIPT = 10236
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, Navigation {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +33,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            if (findFragmentByTag(FRAGMENT_LOCAL_RECEIPT_TAG) != null) {
+                supportFragmentManager.popBackStack()
+            } else {
+                super.onBackPressed()
+            }
         }
     }
 
@@ -66,9 +71,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun openReceipt(receipt: Receipt) {
-        val intent = Intent(this, ReceiptActivity::class.java)
-        intent.putExtra(RECEIPT_TAG, Gson().toJson(receipt))
-        startActivity(intent)
+        supportFragmentManager.beginTransaction().add(R.id.container, ReceiptLocalFragment.getNewInstance(Gson().toJson(receipt)), FRAGMENT_LOCAL_RECEIPT_TAG).addToBackStack(null).commit()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -82,5 +85,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
         }
+    }
+
+    private fun findFragmentByTag(tag: String) : Fragment? {
+        val fragment = supportFragmentManager.findFragmentByTag(tag)
+        return if (fragment?.isVisible == true) fragment else null
     }
 }
