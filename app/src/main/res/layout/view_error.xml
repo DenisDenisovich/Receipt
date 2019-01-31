@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center|bottom"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="10dp">
 
         <Button
             android:id="@+id/btn_error_change_data"
@@ -31,8 +31,8 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/btn_receipt_save"
             android:elevation="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:text="Изменить данные"
             android:textColor="#FFFFFF" />
 
@@ -43,8 +43,9 @@
             android:layout_gravity="bottom|center_horizontal"
             android:background="@drawable/btn_receipt_save"
             android:elevation="8dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginBottom="6dp"
             android:text="Повторить еще раз"
             android:textColor="#FFFFFF" />
     </LinearLayout>

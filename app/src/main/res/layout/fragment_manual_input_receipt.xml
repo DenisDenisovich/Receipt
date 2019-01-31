@@ -149,6 +149,8 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/btn_receipt_save"
         android:textColor="#FFFFFF"
-        android:text="Готово"/>
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="Найти чек"/>
 
 </FrameLayout>

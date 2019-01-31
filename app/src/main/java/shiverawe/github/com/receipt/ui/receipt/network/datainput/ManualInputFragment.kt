@@ -28,11 +28,11 @@ class ManualInputFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_manual_input.setOnClickListener {
-            fd = et_manual_input_fd.text.toString()
-            fn = et_manual_input_fn.text.toString()
-            fp = et_manual_input_fp.text.toString()
-            s = et_manual_input_sum.text.toString()
-            t = et_manual_input_date.text.toString()
+            fd = et_manual_input_fd.text.toString().trim()
+            fn = et_manual_input_fn.text.toString().trim()
+            fp = et_manual_input_fp.text.toString().trim()
+            s = et_manual_input_sum.text.toString().trim()
+            t = et_manual_input_date.text.toString().trim()
             val receiptData = StringBuilder()
             receiptData.append("t=$t&s=$s&fn=$fn&i=$fd&fp=$fp")
             receiptNetwork.openReceiptFragment(receiptData.toString(), true)

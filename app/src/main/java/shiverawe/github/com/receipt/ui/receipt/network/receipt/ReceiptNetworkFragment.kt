@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_network_receipt.*
 import kotlinx.android.synthetic.main.fragment_receipt.*
@@ -13,7 +14,6 @@ import kotlinx.android.synthetic.main.view_error.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.entity.Receipt
 import shiverawe.github.com.receipt.ui.receipt.BaseReceiptFragment
-import shiverawe.github.com.receipt.ui.receipt.offline.ReceiptOfflineFragment
 import shiverawe.github.com.receipt.ui.receipt.network.ReceiptNetwork
 
 class ReceiptNetworkFragment: BaseReceiptFragment(),  View.OnClickListener , ReceiptNetworkContract.View {
@@ -29,7 +29,10 @@ class ReceiptNetworkFragment: BaseReceiptFragment(),  View.OnClickListener , Rec
             return fragment
         }
     }
-
+    var isErrorStateInManual: Boolean = false
+    get() {
+        return container_error?.visibility == View.VISIBLE && arguments?.getBoolean(RECEIPT_MANUAL_INPUT_EXTRA) ?: false
+    }
     private val presenter: ReceiptNetworkContract.Presenter = ReceiptNetworkPresenter()
     private lateinit var receiptNetwork: ReceiptNetwork
 
@@ -116,6 +119,7 @@ class ReceiptNetworkFragment: BaseReceiptFragment(),  View.OnClickListener , Rec
     override fun receiptIsSaved() {
         Toast.makeText(context, "Чек сохранен", Toast.LENGTH_LONG).show()
         container_receipt_save.visibility = View.GONE
+        (container_receipt_save.layoutParams as FrameLayout.LayoutParams).setMargins(0,0,0,0)
         receiptNetwork.receiptIsSaved(receipt?.meta?.t?.toLong()?:0L * 1000)
     }
 

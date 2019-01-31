@@ -3,6 +3,7 @@ package shiverawe.github.com.receipt.ui.receipt.network
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import shiverawe.github.com.receipt.R
@@ -15,6 +16,7 @@ const val EXTRA_DATE_RECEIPT = "extra_date_receipt"
 private const val FRAGMENT_RECEIPT_TAG = "receipt"
 private const val FRAGMENT_QR_READER_TAG = "qr_reader"
 private const val FRAGMENT_MANUAL_INPUT_TAG = "manual_input"
+
 class NetworkReceiptActivity : AppCompatActivity(), ReceiptNetwork {
     private var qrData = ""
     var savedReceiptDate: Long = 0L
@@ -41,7 +43,7 @@ class NetworkReceiptActivity : AppCompatActivity(), ReceiptNetwork {
     }
 
     override fun openManualInput() {
-        supportFragmentManager.beginTransaction().add(R.id.container_network_receipt, ManualInputFragment(), FRAGMENT_MANUAL_INPUT_TAG).commit()
+        supportFragmentManager.beginTransaction().add(R.id.container_network_receipt, ManualInputFragment(), FRAGMENT_MANUAL_INPUT_TAG).addToBackStack(null).commit()
     }
 
     override fun moveBackToManual() {
@@ -49,13 +51,16 @@ class NetworkReceiptActivity : AppCompatActivity(), ReceiptNetwork {
     }
 
     override fun openReceiptFragment(qrData: String, isManualInput: Boolean) {
+        val qrReader = findFragmentByTag(FRAGMENT_QR_READER_TAG)
+        if (qrReader != null)
+            supportFragmentManager.beginTransaction().remove(qrReader).commit()
+
         val transaction = supportFragmentManager.beginTransaction()
         val fragment = ReceiptNetworkFragment.getNewInstance(qrData, isManualInput)
-        if (isManualInput)
+        if (isManualInput) {
             transaction.add(R.id.container_network_receipt, fragment, FRAGMENT_RECEIPT_TAG).addToBackStack(null)
-        else
+        } else
             transaction.replace(R.id.container_network_receipt, fragment, FRAGMENT_RECEIPT_TAG)
-
         transaction.commit()
     }
 
@@ -64,20 +69,32 @@ class NetworkReceiptActivity : AppCompatActivity(), ReceiptNetwork {
     }
 
     override fun onBackPressed() {
-        if (fromIntentFilter()) {
+        if (findFragmentByTag(FRAGMENT_RECEIPT_TAG) != null && (findFragmentByTag(FRAGMENT_RECEIPT_TAG) as ReceiptNetworkFragment).isErrorStateInManual) {
+            // if we in ReceiptFragment in error state and preview fragment was ManualInputFragment
+            moveBackToManual()
+        } else if (findFragmentByTag(FRAGMENT_MANUAL_INPUT_TAG) != null && findFragmentByTag(FRAGMENT_QR_READER_TAG) != null) {
+            // if we in ManualInputFragment and need go back to QrReader
+            supportFragmentManager.popBackStack()
+            findFragmentByTag(FRAGMENT_QR_READER_TAG)!!.onResume()
+        } else if (fromIntentFilter()) {
             // if activity opened from link
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
+            finish()
         } else {
             if (savedReceiptDate != 0L) {
                 val intent = Intent()
                 intent.putExtra(EXTRA_DATE_RECEIPT, savedReceiptDate)
                 setResult(Activity.RESULT_OK, intent)
+                finish()
             } else {
                 setResult(Activity.RESULT_CANCELED)
+                finish()
             }
         }
-        finish()
     }
+
+    private fun findFragmentByTag(tag: String): Fragment? {
+        val fragment = supportFragmentManager.findFragmentByTag(tag)
+        return if (fragment?.isVisible == true) fragment else null
+    }
+
 }
