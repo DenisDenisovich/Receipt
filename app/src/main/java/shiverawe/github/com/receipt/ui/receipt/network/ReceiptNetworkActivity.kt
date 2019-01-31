@@ -1,13 +1,15 @@
 package shiverawe.github.com.receipt.ui.receipt.network
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.ui.receipt.network.receipt.ReceiptNetworkFragment
 import shiverawe.github.com.receipt.ui.receipt.network.datainput.ManualInputFragment
 import shiverawe.github.com.receipt.ui.receipt.network.datainput.QrReaderFragment
@@ -16,7 +18,7 @@ const val EXTRA_DATE_RECEIPT = "extra_date_receipt"
 private const val FRAGMENT_RECEIPT_TAG = "receipt"
 private const val FRAGMENT_QR_READER_TAG = "qr_reader"
 private const val FRAGMENT_MANUAL_INPUT_TAG = "manual_input"
-
+private const val MY_CAMERA_REQUEST_CODE = 100
 class NetworkReceiptActivity : AppCompatActivity(), ReceiptNetwork {
     private var qrData = ""
     var savedReceiptDate: Long = 0L
@@ -26,7 +28,7 @@ class NetworkReceiptActivity : AppCompatActivity(), ReceiptNetwork {
         if (fromIntentFilter()) {
             openReceiptFragment(qrData, false)
         } else {
-            openQrReader()
+            requestOpenCamera()
         }
     }
 
@@ -95,6 +97,27 @@ class NetworkReceiptActivity : AppCompatActivity(), ReceiptNetwork {
     private fun findFragmentByTag(tag: String): Fragment? {
         val fragment = supportFragmentManager.findFragmentByTag(tag)
         return if (fragment?.isVisible == true) fragment else null
+    }
+
+    private fun requestOpenCamera() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), MY_CAMERA_REQUEST_CODE)
+            } else {
+                openQrReader()
+            }
+        } else {
+            openQrReader()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            openQrReader()
+        } else {
+            openManualInput()
+        }
     }
 
 }
