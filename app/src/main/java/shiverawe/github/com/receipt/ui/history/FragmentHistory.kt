@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FragmentHistory: Fragment(), View.OnClickListener {
+class FragmentHistory : Fragment(), View.OnClickListener {
     lateinit var navigation: Navigation
     lateinit var monthAdapter: FragmentPagerAdapter
     private val dateFormatter = DateFormat.getDateInstance(SimpleDateFormat.LONG, Locale("ru"))
@@ -46,14 +45,13 @@ class FragmentHistory: Fragment(), View.OnClickListener {
         tab_layout_history.setMonth(Date(monthAdapter.dates[monthAdapter.count - 1]))
         setCurrentYear(monthAdapter.count - 1)
 
-        vp_history.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+        vp_history.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             var moveToRight = false
             var previewPosition = vp_history.currentItem
             var offset = 0F
             var pageIsSelected = false
             var previewState = 0
             override fun onPageScrollStateChanged(state: Int) {
-                Log.d("LogState", state.toString())
                 if (changeDateByCalendar) {
                     if (state == ViewPager.SCROLL_STATE_SETTLING) {
                         setMonth()
@@ -84,12 +82,12 @@ class FragmentHistory: Fragment(), View.OnClickListener {
                     offset = if (moveToRight)
                         1 - positionOffset
                     else
-                        - positionOffset
+                        -positionOffset
                     tab_layout_history.moveMonth(offset)
                 } else {
                     // end of animation. Update month array in TabLayout
-                    setMonth()
                     offset = 0F
+                    setMonth()
                 }
             }
 
@@ -104,10 +102,11 @@ class FragmentHistory: Fragment(), View.OnClickListener {
             }
         })
 
-        tab_layout_history.subscribeToClickListener(object: TabLayout.MonthClickListener {
+        tab_layout_history.subscribeToClickListener(object : TabLayout.MonthClickListener {
             override fun leftMonthIsClicked() {
                 vp_history.currentItem--
             }
+
             override fun rightMonthIsClicked() {
                 vp_history.currentItem++
             }
@@ -119,6 +118,7 @@ class FragmentHistory: Fragment(), View.OnClickListener {
         currentMonth = dateFormatter.format(calendar.time).split(" ")[2]
         tv_history_toolbar_title.text = resources.getString(R.string.history_titile) + " $currentMonth"
     }
+
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.fab_history_qr -> {
@@ -145,9 +145,29 @@ class FragmentHistory: Fragment(), View.OnClickListener {
 
     fun setMonth() {
         val position = vp_history.currentItem
-        tab_layout_history.setMonth(Date(monthAdapter.dates[position]))
+        val date = monthAdapter.dates[position]
+        tab_layout_history.setMonth(Date(date))
         setCurrentYear(position)
+        if (position == monthAdapter.count - 1) {
+            checkFirstMonthSum(date)
+        }
     }
+
+    private fun checkFirstMonthSum(date: Long) {
+        var totalSum: String
+        childFragmentManager.fragments.forEach { fragment ->
+            if (fragment is MonthFragment) {
+                if (fragment.arguments!!.getInt(MonthFragment.DATE_KEY) == (date / 1000).toInt()) {
+                    totalSum = fragment.getTotalSum()
+                    if (totalSum.isNotBlank()) {
+                        setMonthSum(totalSum)
+                        return@forEach
+                    }
+                }
+            }
+        }
+    }
+
     private fun openDateDialog() {
         val currentDate = GregorianCalendar()
         currentDate.time = Date(System.currentTimeMillis())
@@ -157,13 +177,13 @@ class FragmentHistory: Fragment(), View.OnClickListener {
             selectedDate.set(Calendar.MONTH, month)
             selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             setNewDate(selectedDate.time)
-        }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH),  currentDate.get(Calendar.DAY_OF_MONTH))
+        }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH))
         dateDialog.show()
     }
 
     private fun setNewDate(date: Date) {
         val position = monthAdapter.getPositionByDate(date)
-        if(position == -1)  {
+        if (position == -1) {
             Toast.makeText(context, "Невозможно отобразить данный месяц", Toast.LENGTH_SHORT).show()
         } else {
             changeDateByCalendar = true
@@ -175,8 +195,7 @@ class FragmentHistory: Fragment(), View.OnClickListener {
         val updatedPosition = monthAdapter.getPositionByDate(Date(date))
         if (updatedPosition != -1 && Math.abs(updatedPosition - vp_history.currentItem) <= 1) {
             val fragments = childFragmentManager.fragments
-            fragments.forEach {
-                fragment ->
+            fragments.forEach { fragment ->
                 if (fragment is MonthFragment) {
                     calendar.timeInMillis = date
                     monthAdapter.setBeginOfMonth(calendar)
