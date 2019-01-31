@@ -3,6 +3,7 @@ package shiverawe.github.com.receipt.ui.receipt.network
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.MainActivity
@@ -21,7 +22,7 @@ class NetworkReceiptActivity : AppCompatActivity(), ReceiptNetwork {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_network_receipt)
         if (fromIntentFilter()) {
-            openReceiptFragment(qrData)
+            openReceiptFragment(qrData, false)
         } else {
             openQrReader()
         }
@@ -43,8 +44,19 @@ class NetworkReceiptActivity : AppCompatActivity(), ReceiptNetwork {
         supportFragmentManager.beginTransaction().replace(R.id.container_network_receipt, ManualInputFragment(), FRAGMENT_MANUAL_INPUT_TAG).commit()
     }
 
-    override fun openReceiptFragment(qrData: String) {
-        supportFragmentManager.beginTransaction().replace(R.id.container_network_receipt, ReceiptNetworkFragment.getNewInstance(qrData), FRAGMENT_RECEIPT_TAG).commit()
+    override fun moveBackToManual() {
+        supportFragmentManager.popBackStack()
+    }
+
+    override fun openReceiptFragment(qrData: String, isManualInput: Boolean) {
+        val transaction = supportFragmentManager.beginTransaction()
+        val fragment = ReceiptNetworkFragment.getNewInstance(qrData, isManualInput)
+        if (isManualInput)
+            transaction.add(R.id.container_network_receipt, fragment, FRAGMENT_RECEIPT_TAG).addToBackStack(null)
+        else
+            transaction.replace(R.id.container_network_receipt, fragment, FRAGMENT_RECEIPT_TAG)
+
+        transaction.commit()
     }
 
     override fun receiptIsSaved(date: Long) {

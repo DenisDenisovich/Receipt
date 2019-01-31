@@ -3,6 +3,7 @@ package shiverawe.github.com.receipt.ui.receipt.network
 interface ReceiptNetwork {
     fun openQrReader()
     fun openManualInput()
-    fun openReceiptFragment(qrData: String)
+    fun moveBackToManual()
+    fun openReceiptFragment(qrData: String, isManualInput: Boolean)
     fun receiptIsSaved(date: Long)
 }

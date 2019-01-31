@@ -16,17 +16,38 @@
         android:text="Произошла ошибка"
         android:textSize="18sp" />
 
-    <Button
-        android:id="@+id/btn_error"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/btn_receipt_save"
-        android:elevation="8dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:text="Повторить еще раз"
-        android:textColor="#FFFFFF" />
+        android:orientation="vertical"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/btn_error_change_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/btn_receipt_save"
+            android:elevation="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="Изменить данные"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/btn_error_repeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@drawable/btn_receipt_save"
+            android:elevation="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="Повторить еще раз"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
 
 </FrameLayout>

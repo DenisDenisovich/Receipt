@@ -18,11 +18,13 @@ import shiverawe.github.com.receipt.ui.receipt.network.ReceiptNetwork
 
 class ReceiptNetworkFragment: BaseReceiptFragment(),  View.OnClickListener , ReceiptNetworkContract.View {
     companion object {
-        const val RECEIPT_DATA_TAG = "receipt"
-        fun getNewInstance(qrData: String): ReceiptNetworkFragment {
+        const val RECEIPT_DATA_EXTRA = "receipt"
+        const val RECEIPT_MANUAL_INPUT_EXTRA = "manual_input"
+        fun getNewInstance(qrData: String, isManualInput: Boolean): ReceiptNetworkFragment {
             val fragment = ReceiptNetworkFragment()
             val bundle = Bundle()
-            bundle.putString(RECEIPT_DATA_TAG, qrData)
+            bundle.putString(RECEIPT_DATA_EXTRA, qrData)
+            bundle.putBoolean(RECEIPT_MANUAL_INPUT_EXTRA, isManualInput)
             fragment.arguments = bundle
             return fragment
         }
@@ -42,11 +44,18 @@ class ReceiptNetworkFragment: BaseReceiptFragment(),  View.OnClickListener , Rec
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        presenter.setQrData(arguments?.getString(ReceiptOfflineFragment.RECEIPT_TAG)!!)
+        presenter.setQrData(arguments?.getString(RECEIPT_DATA_EXTRA)!!)
+        val isManualInput = arguments?.getBoolean(RECEIPT_MANUAL_INPUT_EXTRA)!!
+        if (isManualInput) {
+            btn_error_change_data.setOnClickListener(this)
+            btn_error_change_data.visibility = View.VISIBLE
+        } else {
+            btn_error_change_data.visibility = View.GONE
+        }
         btn_receipt_back.setOnClickListener(this)
         btn_receipt_share.setOnClickListener(this)
         btn_receipt_save.setOnClickListener(this)
-        btn_error.setOnClickListener(this)
+        btn_error_repeat.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -66,8 +75,11 @@ class ReceiptNetworkFragment: BaseReceiptFragment(),  View.OnClickListener , Rec
                 pb_receipt_save.visibility = View.VISIBLE
                 presenter.save()
             }
-            R.id.btn_error -> {
+            R.id.btn_error_repeat -> {
                 presenter.getReceipt()
+            }
+            R.id.btn_error_change_data -> {
+                receiptNetwork.moveBackToManual()
             }
         }
     }

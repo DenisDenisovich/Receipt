@@ -45,7 +45,7 @@ class QrReaderFragment: Fragment() {
         codeScanner = CodeScanner(activity, scannerView)
         codeScanner.decodeCallback = DecodeCallback {
             activity.runOnUiThread {
-                receiptNetwork.openReceiptFragment(it.text)
+                receiptNetwork.openReceiptFragment(it.text, false)
             }
         }
         codeScanner.errorCallback = ErrorCallback {
