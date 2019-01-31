@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.entity.Receipt
 import shiverawe.github.com.receipt.ui.history.FragmentHistory
-import shiverawe.github.com.receipt.ui.receipt.local.ReceiptLocalFragment
+import shiverawe.github.com.receipt.ui.receipt.offline.ReceiptOfflineFragment
 import shiverawe.github.com.receipt.ui.receipt.network.EXTRA_DATE_RECEIPT
 import shiverawe.github.com.receipt.ui.receipt.network.NetworkReceiptActivity
 
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun openReceipt(receipt: Receipt) {
-        supportFragmentManager.beginTransaction().add(R.id.container, ReceiptLocalFragment.getNewInstance(Gson().toJson(receipt)), FRAGMENT_LOCAL_RECEIPT_TAG).addToBackStack(null).commit()
+        supportFragmentManager.beginTransaction().add(R.id.container, ReceiptOfflineFragment.getNewInstance(Gson().toJson(receipt)), FRAGMENT_LOCAL_RECEIPT_TAG).addToBackStack(null).commit()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

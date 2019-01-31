@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.view_error.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.entity.Receipt
 import shiverawe.github.com.receipt.ui.receipt.BaseReceiptFragment
-import shiverawe.github.com.receipt.ui.receipt.local.ReceiptLocalFragment
+import shiverawe.github.com.receipt.ui.receipt.offline.ReceiptOfflineFragment
 import shiverawe.github.com.receipt.ui.receipt.network.ReceiptNetwork
 
 class ReceiptNetworkFragment: BaseReceiptFragment(),  View.OnClickListener , ReceiptNetworkContract.View {
@@ -42,7 +42,7 @@ class ReceiptNetworkFragment: BaseReceiptFragment(),  View.OnClickListener , Rec
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        presenter.setQrData(arguments?.getString(ReceiptLocalFragment.RECEIPT_TAG)!!)
+        presenter.setQrData(arguments?.getString(ReceiptOfflineFragment.RECEIPT_TAG)!!)
         btn_receipt_back.setOnClickListener(this)
         btn_receipt_share.setOnClickListener(this)
         btn_receipt_save.setOnClickListener(this)
@@ -102,11 +102,13 @@ class ReceiptNetworkFragment: BaseReceiptFragment(),  View.OnClickListener , Rec
     }
 
     override fun receiptIsSaved() {
+        Toast.makeText(context, "Чек сохранен", Toast.LENGTH_LONG).show()
         container_receipt_save.visibility = View.GONE
         receiptNetwork.receiptIsSaved(receipt?.meta?.t?.toLong()?:0L * 1000)
     }
 
     override fun receiptIsAlreadyExist() {
+        Toast.makeText(context, "Чек уже существует", Toast.LENGTH_LONG).show()
         container_receipt_save.visibility = View.GONE
     }
 

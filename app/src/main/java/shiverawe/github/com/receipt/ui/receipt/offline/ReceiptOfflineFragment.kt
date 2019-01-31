@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.receipt.local
+package shiverawe.github.com.receipt.ui.receipt.offline
 
 import android.os.Bundle
 import com.google.gson.Gson
@@ -14,12 +14,12 @@ import shiverawe.github.com.receipt.ui.receipt.BaseReceiptFragment
 import java.lang.Exception
 
 
-class ReceiptLocalFragment : BaseReceiptFragment(), View.OnClickListener {
+class ReceiptOfflineFragment : BaseReceiptFragment(), View.OnClickListener {
 
     companion object {
         const val RECEIPT_TAG = "receipt"
-        fun getNewInstance(receipt: String): ReceiptLocalFragment {
-            val fragment = ReceiptLocalFragment()
+        fun getNewInstance(receipt: String): ReceiptOfflineFragment {
+            val fragment = ReceiptOfflineFragment()
             val bundle = Bundle()
             bundle.putString(RECEIPT_TAG, receipt)
             fragment.arguments = bundle
