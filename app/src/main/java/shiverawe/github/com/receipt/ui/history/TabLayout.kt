@@ -17,8 +17,8 @@ class TabLayout: View {
     private val monthPaint = Paint()
     private val sumPaint = Paint()
     private val rect = Rect()
-    private val calendar = GregorianCalendar()
-    private val currentDate = GregorianCalendar()
+    private val calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
+    private val currentDate = GregorianCalendar(TimeZone.getTimeZone("UTC"))
     private val monthArray: ArrayList<String> = arrayListOf("", "", "", "", "")
     private var currentSum = ""
     private val dateFormatterMonth = SimpleDateFormat("LLLL", Locale("ru"))
@@ -40,6 +40,7 @@ class TabLayout: View {
 
     constructor(context: Context): super(context)
     constructor(context: Context, attributeSet: AttributeSet): super(context, attributeSet) {
+        dateFormatterMonth.timeZone = TimeZone.getTimeZone("UTC")
         monthPaint.color = Color.WHITE
         monthPaint.isAntiAlias = true
         monthPaint.typeface = ResourcesCompat.getFont(context, R.font.roboto_regular)
