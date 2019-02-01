@@ -25,12 +25,24 @@ class FragmentHistory : Fragment(), View.OnClickListener {
     var currentMonth = ""
     var changeDateByCalendar = false
     var calendar = GregorianCalendar()
+    lateinit var dateDialog: DatePickerDialog
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         navigation = context as MainActivity
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        // init date dialog
+        val currentDate = GregorianCalendar()
+        currentDate.time = Date(System.currentTimeMillis())
+        dateDialog = DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+            val selectedDate = GregorianCalendar(TimeZone.getTimeZone("UTC"))
+            selectedDate.set(Calendar.YEAR, year)
+            selectedDate.set(Calendar.MONTH, month)
+            selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            setNewDate(selectedDate.time)
+        }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH))
+
         return inflater.inflate(R.layout.fragment_history, container, false)
     }
 
@@ -171,15 +183,6 @@ class FragmentHistory : Fragment(), View.OnClickListener {
     }
 
     private fun openDateDialog() {
-        val currentDate = GregorianCalendar()
-        currentDate.time = Date(System.currentTimeMillis())
-        val dateDialog = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-            val selectedDate = GregorianCalendar(TimeZone.getDefault())
-            selectedDate.set(Calendar.YEAR, year)
-            selectedDate.set(Calendar.MONTH, month)
-            selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            setNewDate(selectedDate.time)
-        }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH))
         dateDialog.show()
     }
 

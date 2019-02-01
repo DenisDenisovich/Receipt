@@ -23,12 +23,14 @@ import java.util.*
 open class BaseReceiptFragment: Fragment() {
     var receipt: Receipt? = null
     var qrData = ""
-    val dateFormatterDigits = SimpleDateFormat("dd.MM_HH:mm", Locale("ru"))
-    val dateFormatterDay = DateFormat.getDateInstance(SimpleDateFormat.FULL, Locale("ru"))
+    private val dateFormatterDigits = SimpleDateFormat("dd.MM_HH:mm", Locale("ru"))
+    private val dateFormatterDay = DateFormat.getDateInstance(SimpleDateFormat.FULL, Locale("ru"))
     var dateStr = ""
 
 
     fun setReceipt() {
+        dateFormatterDigits.timeZone = TimeZone.getTimeZone("UTC")
+        dateFormatterDay.timeZone = TimeZone.getTimeZone("UTC")
         val fullDate = dateFormatterDigits.format(Date(receipt!!.shop.date)).split("_")
         val day = dateFormatterDay.format(Date(receipt!!.shop.date)).split(",")[0].capitalize()
         val date = fullDate[0]

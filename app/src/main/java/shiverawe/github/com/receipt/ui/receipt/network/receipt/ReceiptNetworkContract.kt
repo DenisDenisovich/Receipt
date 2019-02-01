@@ -19,6 +19,5 @@ interface ReceiptNetworkContract {
         fun setQrData(qrData: String)
         fun getReceipt()
         fun save()
-        fun destroy()
     }
 }

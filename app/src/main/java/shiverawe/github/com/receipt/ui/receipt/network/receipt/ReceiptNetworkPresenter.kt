@@ -11,10 +11,7 @@ import java.util.*
 
 class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
     private val receiptRepository = ReceiptRepository()
-    private var receipt: Receipt? = null
     private var saveResponse: CreateResponce? = null
-    private var showReceiptAfterAttach = false
-    private var showSaveAfterAttach = false
     private var view: ReceiptNetworkContract.View? = null
     private var getDisposable: Disposable? = null
     private var saveDisposable: Disposable? = null
@@ -22,24 +19,12 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
 
     override fun attach(view: ReceiptNetworkContract.View) {
         this.view = view
-        if (showReceiptAfterAttach) {
-            showReceiptAfterAttach = false
-            if (receipt != null) view.showReceipt(receipt!!)
-            else view.showGetReceiptError()
-        }
-        if (showSaveAfterAttach) {
-            showSaveAfterAttach = false
-            when {
-                saveResponse?.status == "OK" -> view.receiptIsSaved()
-                saveResponse?.status == "Receipt already exist" -> view.receiptIsAlreadyExist()
-                else -> view.receiptIsNotSaved()
-            }
-        }
-
     }
 
     override fun detach() {
         view = null
+        getDisposable?.dispose()
+        saveDisposable?.dispose()
     }
 
     override fun setQrData(qrData: String) {
@@ -61,13 +46,10 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
         getDisposable = receiptRepository.getReceipt(options).observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<Receipt?>() {
                     override fun onSuccess(receipt: Receipt) {
-                        showReceiptAfterAttach = view == null
-                        this@ReceiptNetworkPresenter.receipt = receipt
                         view?.showReceipt(receipt)
                     }
 
                     override fun onError(e: Throwable) {
-                        showReceiptAfterAttach = view == null
                         view?.showGetReceiptError()
                     }
                 })
@@ -78,7 +60,6 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
                 .subscribeWith(object : DisposableSingleObserver<CreateResponce>() {
                     override fun onSuccess(responce: CreateResponce) {
                         saveResponse = responce
-                        showSaveAfterAttach = view == null
                         when {
                             responce.status == "OK" -> view?.receiptIsSaved()
                             responce.status == "Receipt already exist" -> view?.receiptIsAlreadyExist()
@@ -87,14 +68,8 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
                     }
 
                     override fun onError(e: Throwable) {
-                        showSaveAfterAttach = view == null
                         view?.receiptIsNotSaved()
                     }
                 })
-    }
-
-    override fun destroy() {
-        getDisposable?.dispose()
-        saveDisposable?.dispose()
     }
 }

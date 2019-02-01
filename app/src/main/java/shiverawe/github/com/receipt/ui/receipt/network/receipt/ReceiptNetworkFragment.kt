@@ -3,6 +3,7 @@ package shiverawe.github.com.receipt.ui.receipt.network.receipt
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +16,9 @@ import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.entity.Receipt
 import shiverawe.github.com.receipt.ui.receipt.BaseReceiptFragment
 import shiverawe.github.com.receipt.ui.receipt.network.ReceiptNetwork
+import java.lang.Exception
 
-class ReceiptNetworkFragment: BaseReceiptFragment(),  View.OnClickListener , ReceiptNetworkContract.View {
+class ReceiptNetworkFragment : BaseReceiptFragment(), View.OnClickListener, ReceiptNetworkContract.View {
     companion object {
         const val RECEIPT_DATA_EXTRA = "receipt"
         const val RECEIPT_MANUAL_INPUT_EXTRA = "manual_input"
@@ -29,21 +31,23 @@ class ReceiptNetworkFragment: BaseReceiptFragment(),  View.OnClickListener , Rec
             return fragment
         }
     }
+
     var isErrorStateInManual: Boolean = false
-    get() {
-        return container_error?.visibility == View.VISIBLE && arguments?.getBoolean(RECEIPT_MANUAL_INPUT_EXTRA) ?: false
-    }
+        get() {
+            return container_error?.visibility == View.VISIBLE && arguments?.getBoolean(RECEIPT_MANUAL_INPUT_EXTRA) ?: false
+        }
+
     private val presenter: ReceiptNetworkContract.Presenter = ReceiptNetworkPresenter()
     private lateinit var receiptNetwork: ReceiptNetwork
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_network_receipt, container, false)
-    }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         receiptNetwork = context as ReceiptNetwork
         presenter.attach(this)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_network_receipt, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,8 +94,12 @@ class ReceiptNetworkFragment: BaseReceiptFragment(),  View.OnClickListener , Rec
 
     override fun showReceipt(receipt: Receipt) {
         this.receipt = receipt
+        // disable save button
+        container_receipt_save.visibility = View.GONE
+        (container_receipt_save.layoutParams as ConstraintLayout.LayoutParams).setMargins(0, 0, 0, 0)
+        receiptNetwork.receiptIsSaved(this.receipt?.meta?.t?.toLong() ?: 0L * 1000)
+        // set receipt view
         view_receipt.visibility = View.VISIBLE
-        container_receipt_save.visibility = View.VISIBLE
         container_wait.visibility = View.GONE
         container_error.visibility = View.GONE
         setReceipt()
@@ -119,8 +127,8 @@ class ReceiptNetworkFragment: BaseReceiptFragment(),  View.OnClickListener , Rec
     override fun receiptIsSaved() {
         Toast.makeText(context, "Чек сохранен", Toast.LENGTH_LONG).show()
         container_receipt_save.visibility = View.GONE
-        (container_receipt_save.layoutParams as FrameLayout.LayoutParams).setMargins(0,0,0,0)
-        receiptNetwork.receiptIsSaved(receipt?.meta?.t?.toLong()?:0L * 1000)
+        (container_receipt_save.layoutParams as FrameLayout.LayoutParams).setMargins(0, 0, 0, 0)
+        receiptNetwork.receiptIsSaved(receipt?.meta?.t?.toLong() ?: 0L * 1000)
     }
 
     override fun receiptIsAlreadyExist() {
@@ -134,13 +142,8 @@ class ReceiptNetworkFragment: BaseReceiptFragment(),  View.OnClickListener , Rec
         Toast.makeText(context, "Произошла ошибка", Toast.LENGTH_LONG).show()
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        presenter.detach()
-    }
-
     override fun onDestroy() {
-        presenter.destroy()
+        presenter.detach()
         super.onDestroy()
     }
 }
