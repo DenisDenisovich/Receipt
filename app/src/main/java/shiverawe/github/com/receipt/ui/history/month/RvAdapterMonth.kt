@@ -16,6 +16,9 @@ class RvAdapterMonth(val receipts: ArrayList<Receipt?>, val shopIsClicked: (rece
     private val SHOP_VIEW_TYPE = 0
     private val SEPARATOR_VIEW_TYPE = 1
     private val dateFormatter = DateFormat.getDateInstance(SimpleDateFormat.FULL, Locale("ru"))
+    init {
+        dateFormatter.timeZone = TimeZone.getTimeZone("UTC")
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val holder: RecyclerView.ViewHolder
         if (viewType == SHOP_VIEW_TYPE) {
