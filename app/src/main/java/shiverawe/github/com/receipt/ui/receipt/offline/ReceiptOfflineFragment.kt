@@ -10,6 +10,10 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import shiverawe.github.com.receipt.data.repository.ReceiptRepository
 import shiverawe.github.com.receipt.ui.receipt.BaseReceiptFragment
 import java.lang.Exception
 
@@ -17,28 +21,39 @@ import java.lang.Exception
 class ReceiptOfflineFragment : BaseReceiptFragment(), View.OnClickListener {
 
     companion object {
-        const val RECEIPT_TAG = "receipt"
-        fun getNewInstance(receipt: String): ReceiptOfflineFragment {
+        const val RECEIPT_ID_TAG = "receiptId"
+        fun getNewInstance(receiptId: Long): ReceiptOfflineFragment {
             val fragment = ReceiptOfflineFragment()
             val bundle = Bundle()
-            bundle.putString(RECEIPT_TAG, receipt)
+            bundle.putLong(RECEIPT_ID_TAG, receiptId)
             fragment.arguments = bundle
             return fragment
         }
     }
+
+    private val repository = ReceiptRepository()
+    private var disposable: Disposable? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        disposable = repository.getReceiptById(arguments?.getLong(RECEIPT_ID_TAG)?:0L)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    receipt ->
+                    showReceipt(receipt)
+                },{
+                    _ ->
+                    showError()
+                })
         return inflater.inflate(R.layout.fragment_receipt, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        receipt = Gson().fromJson(arguments?.getString(RECEIPT_TAG), Receipt::class.java)
         btn_receipt_back.setOnClickListener(this)
         btn_receipt_share.setOnClickListener(this)
-        try {
-            setReceipt()
-        }catch (e: Exception) {
-            showError()
-        }
+    }
+
+    private fun showReceipt(receipt: Receipt) {
+        this.receipt = receipt
+        setReceipt()
     }
 
     override fun onClick(v: View?) {
@@ -57,6 +72,12 @@ class ReceiptOfflineFragment : BaseReceiptFragment(), View.OnClickListener {
     }
 
     private fun showError() {
-        Toast.makeText(context, "Ошибка", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, "Произошла ошибка", Toast.LENGTH_LONG).show()
+        activity?.onBackPressed()
+    }
+
+    override fun onDestroyView() {
+        disposable?.dispose()
+        super.onDestroyView()
     }
 }
