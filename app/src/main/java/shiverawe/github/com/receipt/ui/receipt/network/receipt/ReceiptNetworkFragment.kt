@@ -97,7 +97,7 @@ class ReceiptNetworkFragment : BaseReceiptFragment(), View.OnClickListener, Rece
         // disable save button
         container_receipt_save.visibility = View.GONE
         (container_receipt_save.layoutParams as ConstraintLayout.LayoutParams).setMargins(0, 0, 0, 0)
-        receiptNetwork.receiptIsSaved(this.receipt?.meta?.t?.toLong() ?: 0L * 1000)
+        receiptNetwork.receiptIsSaved(this.receipt?.meta?.t?.toLong()?: 0L)
         // set receipt view
         view_receipt.visibility = View.VISIBLE
         container_wait.visibility = View.GONE

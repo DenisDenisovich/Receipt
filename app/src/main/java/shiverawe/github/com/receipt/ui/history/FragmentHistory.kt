@@ -24,7 +24,7 @@ class FragmentHistory : Fragment(), View.OnClickListener {
     private val dateFormatter = DateFormat.getDateInstance(SimpleDateFormat.LONG, Locale("ru"))
     var currentMonth = ""
     var changeDateByCalendar = false
-    var calendar = GregorianCalendar()
+    var calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
     lateinit var dateDialog: DatePickerDialog
     override fun onAttach(context: Context?) {
         super.onAttach(context)
