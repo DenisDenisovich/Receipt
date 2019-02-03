@@ -70,8 +70,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer_layout.closeDrawer(GravityCompat.START)
     }
 
-    override fun openReceipt(receipt: Receipt) {
-        supportFragmentManager.beginTransaction().add(R.id.container, ReceiptOfflineFragment.getNewInstance(Gson().toJson(receipt)), FRAGMENT_LOCAL_RECEIPT_TAG).addToBackStack(null).commit()
+    override fun openReceipt(receiptId: Long) {
+        supportFragmentManager.beginTransaction().add(R.id.container, ReceiptOfflineFragment.getNewInstance(receiptId), FRAGMENT_LOCAL_RECEIPT_TAG).addToBackStack(null).commit()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

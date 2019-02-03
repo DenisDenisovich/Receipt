@@ -66,7 +66,7 @@ class MonthFragment : Fragment(), MonthContract.View {
         this.receipts = receipts
         rv_month.visibility = View.VISIBLE
         pb_month.visibility = View.GONE
-        adapter = RvAdapterMonth(receipts) { receipt -> navigation.openReceipt(receipt) }
+        adapter = RvAdapterMonth(receipts) { receipt -> navigation.openReceipt(receipt.receiptId) }
         rv_month.adapter = adapter
         rv_month.layoutManager = LinearLayoutManager(context)
         rv_month.visibility = View.VISIBLE

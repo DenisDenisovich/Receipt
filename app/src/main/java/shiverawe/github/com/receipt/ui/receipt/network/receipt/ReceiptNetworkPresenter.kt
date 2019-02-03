@@ -10,9 +10,9 @@ import java.lang.Exception
 import java.util.*
 
 class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
-    private val receiptRepository = ReceiptRepository()
-    private var saveResponse: CreateResponce? = null
     private var view: ReceiptNetworkContract.View? = null
+    private val repository = ReceiptRepository()
+    private var saveResponse: CreateResponce? = null
     private var getDisposable: Disposable? = null
     private var saveDisposable: Disposable? = null
     private val options = HashMap<String, String>()
@@ -43,7 +43,7 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
 
     override fun getReceipt() {
         view?.showProgress()
-        getDisposable = receiptRepository.getReceipt(options).observeOn(AndroidSchedulers.mainThread())
+        getDisposable = repository.getReceipt(options).observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<Receipt?>() {
                     override fun onSuccess(receipt: Receipt) {
                         view?.showReceipt(receipt)
@@ -56,7 +56,7 @@ class ReceiptNetworkPresenter : ReceiptNetworkContract.Presenter {
     }
 
     override fun save() {
-        saveDisposable = receiptRepository.saveReceipt().observeOn(AndroidSchedulers.mainThread())
+        saveDisposable = repository.saveReceipt().observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<CreateResponce>() {
                     override fun onSuccess(responce: CreateResponce) {
                         saveResponse = responce

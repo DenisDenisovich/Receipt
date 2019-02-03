@@ -7,5 +7,5 @@ interface Navigation {
     fun closeNavigationDrawable()
     fun openHistory()
     fun openQr()
-    fun openReceipt(receipt: Receipt)
+    fun openReceipt(receiptId: Long)
 }
