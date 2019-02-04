@@ -34,20 +34,12 @@ class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
         this.view = view
     }
 
-    override fun detach() {
-        view = null
-    }
-
     override fun update() {
         receipts = null
         totalSum = ""
         isError = false
         receiptDisposable?.dispose()
         getReceiptsData()
-    }
-
-    override fun destroy() {
-        receiptDisposable?.dispose()
     }
 
     override fun getReceiptsData() {
@@ -86,5 +78,10 @@ class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
                 view?.setTotalSum(totalSum)
             }
         }
+    }
+
+    override fun detach() {
+        view = null
+        receiptDisposable?.dispose()
     }
 }

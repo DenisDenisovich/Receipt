@@ -44,10 +44,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_history -> {
-                openHistory()
-            }
-
+            R.id.nav_history -> openHistory()
         }
         drawer_layout.closeDrawer(GravityCompat.START)
         return true

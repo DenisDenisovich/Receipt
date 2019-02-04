@@ -53,5 +53,4 @@ class ReceiptDatabase {
             emitter.onSuccess(receipts)
         }
     }
-
 }

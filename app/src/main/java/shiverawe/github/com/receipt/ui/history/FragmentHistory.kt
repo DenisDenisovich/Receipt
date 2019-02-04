@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,13 +18,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class FragmentHistory : Fragment(), View.OnClickListener {
-    lateinit var navigation: Navigation
-    lateinit var monthAdapter: FragmentPagerAdapter
+    private lateinit var navigation: Navigation
+    private lateinit var monthAdapter: FragmentPagerAdapter
+    private val pageListener = PageChangeListener()
     private val dateFormatter = DateFormat.getDateInstance(SimpleDateFormat.LONG, Locale("ru"))
-    var currentMonth = ""
-    var changeDateByCalendar = false
-    var calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
-    lateinit var dateDialog: DatePickerDialog
+    private var calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
+    private lateinit var dateDialog: DatePickerDialog
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         navigation = context as MainActivity
@@ -37,10 +36,12 @@ class FragmentHistory : Fragment(), View.OnClickListener {
         currentDate.time = Date(System.currentTimeMillis())
         dateDialog = DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
             val selectedDate = GregorianCalendar(TimeZone.getTimeZone("UTC"))
-            selectedDate.set(Calendar.YEAR, year)
-            selectedDate.set(Calendar.MONTH, month)
-            selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            setNewDate(selectedDate.time)
+            selectedDate.apply {
+                set(Calendar.YEAR, year)
+                set(Calendar.MONTH, month)
+                set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            }
+            setDateFromCalendarDialog(selectedDate.time)
         }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH))
 
         return inflater.inflate(R.layout.fragment_history, container, false)
@@ -51,70 +52,23 @@ class FragmentHistory : Fragment(), View.OnClickListener {
         btn_history_navigation.setOnClickListener(this)
         btn_history_search.setOnClickListener(this)
         btn_history_calendar.setOnClickListener(this)
+
         monthAdapter = FragmentPagerAdapter(childFragmentManager)
         vp_history.adapter = monthAdapter
         vp_history.currentItem = monthAdapter.count - 1
         tab_layout_history.setMonth(Date(monthAdapter.dates[monthAdapter.count - 1]))
         setCurrentYear(monthAdapter.count - 1)
 
-        vp_history.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            var moveToRight = false
-            var previewPosition = vp_history.currentItem
-            var offset = 0F
-            var pageIsSelected = false
-            var previewState = 0
-            override fun onPageScrollStateChanged(state: Int) {
-                if (changeDateByCalendar) {
-                    if (state == ViewPager.SCROLL_STATE_SETTLING) {
-                        setMonth()
-                        offset = 0F
-                    } else if (state == ViewPager.SCROLL_STATE_IDLE) {
-                        changeDateByCalendar = false
-                    }
-                } else if (state == ViewPager.SCROLL_STATE_DRAGGING) {
-                    pageIsSelected = false
-                    if (previewState != ViewPager.SCROLL_STATE_IDLE) {
-                        // when scroll is very fast
-                        // end of animation. Update month array in TabLayout
-                        setMonth()
-                        offset = 0F
-                    }
-                }
-                previewState = state
+        pageListener.addPageListener(vp_history, object: PageChangeListener.PageListener {
+            override fun monthIsSelected() {
+                setMonth()
             }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, p2: Int) {
-                if (changeDateByCalendar) return
-                if (!pageIsSelected) {
-                    moveToRight = position < vp_history.currentItem
-                    previewPosition = position
-                }
-                if (positionOffset != 0F) {
-                    // animation in progress. Move month text
-                    offset = if (moveToRight)
-                        1 - positionOffset
-                    else
-                        -positionOffset
-                    tab_layout_history.moveMonth(offset)
-                } else {
-                    // end of animation. Update month array in TabLayout
-                    offset = 0F
-                    setMonth()
-                }
-            }
-
-            override fun onPageSelected(position: Int) {
-                if (changeDateByCalendar) return
-                pageIsSelected = true
-                if (offset == 0F) {
-                    // if page selected by currentItem without swipe
-                    moveToRight = previewPosition > position
-                    previewPosition = position
-                }
+            override fun monthIsMoved(offset: Float) {
+                tab_layout_history.moveMonth(offset)
             }
         })
 
-        tab_layout_history.subscribeToClickListener(object : TabLayout.MonthClickListener {
+        tab_layout_history.addMonthClickListener(object : TabLayout.MonthClickListener {
             override fun leftMonthIsClicked() {
                 vp_history.currentItem--
             }
@@ -125,30 +79,19 @@ class FragmentHistory : Fragment(), View.OnClickListener {
         })
     }
 
-    private fun setCurrentYear(position: Int) {
-        calendar.time = Date(monthAdapter.dates[position])
-        currentMonth = dateFormatter.format(calendar.time).split(" ")[2]
-        tv_history_toolbar_title.text = resources.getString(R.string.history_titile) + " $currentMonth"
-    }
-
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.fab_history_qr -> {
-                navigation.openQr()
-            }
-
-            R.id.btn_history_navigation -> {
-                navigation.openNavigationDrawable()
-            }
-
-            R.id.btn_history_search -> {
-                Toast.makeText(context, "search", Toast.LENGTH_SHORT).show()
-            }
-
-            R.id.btn_history_calendar -> {
-                openDateDialog()
-            }
+            R.id.fab_history_qr -> navigation.openQr()
+            R.id.btn_history_navigation -> navigation.openNavigationDrawable()
+            R.id.btn_history_search -> Toast.makeText(context, "search", Toast.LENGTH_SHORT).show()
+            R.id.btn_history_calendar -> dateDialog.show()
         }
+    }
+
+    private fun setCurrentYear(position: Int) {
+        calendar.time = Date(monthAdapter.dates[position])
+        val currentMonth = dateFormatter.format(calendar.time).split(" ")[2]
+        tv_history_toolbar_title.text = resources.getString(R.string.history_titile) + " $currentMonth"
     }
 
     fun setMonthSum(date: Int, sum: String) {
@@ -157,7 +100,7 @@ class FragmentHistory : Fragment(), View.OnClickListener {
             tab_layout_history.setSum(sum)
     }
 
-    fun setMonth() {
+    private fun setMonth() {
         val position = vp_history.currentItem
         val date = monthAdapter.dates[position]
         tab_layout_history.setMonth(Date(date))
@@ -182,16 +125,12 @@ class FragmentHistory : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun openDateDialog() {
-        dateDialog.show()
-    }
-
-    private fun setNewDate(date: Date) {
+    private fun setDateFromCalendarDialog(date: Date) {
         val position = monthAdapter.getPositionByDate(date)
         if (position == -1) {
             Toast.makeText(context, "Невозможно отобразить данный месяц", Toast.LENGTH_SHORT).show()
         } else {
-            changeDateByCalendar = true
+            pageListener.dateChangedByCalendar()
             vp_history.currentItem = position
         }
     }
@@ -209,10 +148,7 @@ class FragmentHistory : Fragment(), View.OnClickListener {
                         return
                     }
                 }
-
             }
         }
     }
-
-
 }

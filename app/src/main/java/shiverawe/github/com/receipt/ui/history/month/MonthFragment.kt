@@ -29,7 +29,7 @@ import kotlin.collections.ArrayList
 
 class MonthFragment : Fragment(), MonthContract.View {
     companion object {
-        val DATE_KEY = "date"
+        const val DATE_KEY = "date"
         fun getInstance(date: Int): MonthFragment {
             val fragment = MonthFragment()
             val bundle = Bundle()
@@ -40,10 +40,10 @@ class MonthFragment : Fragment(), MonthContract.View {
     }
 
     lateinit var navigation: Navigation
+    private var presenter: MonthContract.Presenter? = null
+    private lateinit var adapter: RvAdapterMonth
     private var receipts: ArrayList<Receipt?> = ArrayList()
     private var totalSum = ""
-    private lateinit var adapter: RvAdapterMonth
-    private var presenter: MonthContract.Presenter? = null
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         navigation = context as MainActivity
@@ -54,6 +54,7 @@ class MonthFragment : Fragment(), MonthContract.View {
         super.onCreate(savedInstanceState)
         val dateFrom = arguments!!.getInt(DATE_KEY)
         presenter = MonthPresenter(dateFrom)
+        presenter?.attach(this)
         if (userVisibleHint)
             presenter?.getReceiptsData()
     }
@@ -62,16 +63,18 @@ class MonthFragment : Fragment(), MonthContract.View {
         return inflater.inflate(R.layout.fragment_month, container, false)
     }
 
-    override fun setReceipts(receipts: ArrayList<Receipt?>) {
-        this.receipts = receipts
-        rv_month.visibility = View.VISIBLE
-        pb_month.visibility = View.GONE
-        adapter = RvAdapterMonth(receipts) { receipt -> navigation.openReceipt(receipt.receiptId) }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        adapter = RvAdapterMonth { receipt -> navigation.openReceipt(receipt.receiptId) }
         rv_month.adapter = adapter
         rv_month.layoutManager = LinearLayoutManager(context)
-        rv_month.visibility = View.VISIBLE
-        tv_month_error_message.visibility = View.GONE
+    }
+
+    override fun setReceipts(items: ArrayList<Receipt?>) {
+        receipts = items
+        adapter.setItems(receipts)
         pb_month.visibility = View.GONE
+        tv_month_error_message.visibility = View.GONE
+        rv_month.visibility = View.VISIBLE
     }
 
     override fun showProgressbar() {
@@ -118,18 +121,8 @@ class MonthFragment : Fragment(), MonthContract.View {
 
     fun getTotalSum() = totalSum
 
-    override fun onStart() {
-        presenter?.attach(this)
-        super.onStart()
-    }
-
-    override fun onStop() {
-        presenter?.detach()
-        super.onStop()
-    }
-
     override fun onDestroyView() {
-        presenter?.destroy()
+        presenter?.detach()
         super.onDestroyView()
     }
 }

@@ -60,7 +60,7 @@ class MapperNetwork {
         return Receipt(0, shop, meta, products)
     }
 
-    fun mapShopTitle(title: String): String {
+    private fun mapShopTitle(title: String): String {
         try {
             if (title.contains('\"')) {
                 return title.substring(title.indexOf('\"', 0) + 1, title.lastIndexOf('\"', title.length))

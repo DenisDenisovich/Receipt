@@ -145,7 +145,7 @@ class TabLayout: View {
         return true
     }
 
-    fun subscribeToClickListener(listener: MonthClickListener) {
+    fun addMonthClickListener(listener: MonthClickListener) {
         monthClickListener = listener
     }
 }
