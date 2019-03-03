@@ -50,25 +50,25 @@ class FragmentHistory : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         fab_history_qr.setOnClickListener(this)
         btn_history_navigation.setOnClickListener(this)
-        btn_history_search.setOnClickListener(this)
+        //btn_history_search.setOnClickListener(this)
         btn_history_calendar.setOnClickListener(this)
 
         monthAdapter = FragmentPagerAdapter(childFragmentManager)
         vp_history.adapter = monthAdapter
         vp_history.currentItem = monthAdapter.count - 1
-        tab_layout_history.setMonth(Date(monthAdapter.dates[monthAdapter.count - 1]))
+        //tab_layout_history.setMonth(Date(monthAdapter.dates[monthAdapter.count - 1]))
         setCurrentYear(monthAdapter.count - 1)
 
         pageListener.addPageListener(vp_history, object: PageChangeListener.PageListener {
             override fun monthIsSelected() {
-                setMonth()
+                //setMonth()
             }
             override fun monthIsMoved(offset: Float) {
-                tab_layout_history.moveMonth(offset)
+                //tab_layout_history.moveMonth(offset)
             }
         })
 
-        tab_layout_history.addMonthClickListener(object : TabLayout.MonthClickListener {
+       /* tab_layout_history.addMonthClickListener(object : TabLayout.MonthClickListener {
             override fun leftMonthIsClicked() {
                 vp_history.currentItem--
             }
@@ -76,14 +76,14 @@ class FragmentHistory : Fragment(), View.OnClickListener {
             override fun rightMonthIsClicked() {
                 vp_history.currentItem++
             }
-        })
+        })*/
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.fab_history_qr -> navigation.openQr()
             R.id.btn_history_navigation -> navigation.openNavigationDrawable()
-            R.id.btn_history_search -> Toast.makeText(context, "search", Toast.LENGTH_SHORT).show()
+            //R.id.btn_history_search -> Toast.makeText(context, "search", Toast.LENGTH_SHORT).show()
             R.id.btn_history_calendar -> dateDialog.show()
         }
     }
@@ -94,23 +94,25 @@ class FragmentHistory : Fragment(), View.OnClickListener {
         tv_history_toolbar_title.text = resources.getString(R.string.history_titile) + " $currentMonth"
     }
 
+/*
     fun setMonthSum(date: Int, sum: String) {
         val sumPosition = monthAdapter.getPositionByDate(Date(date.toLong() * 1000))
-        if (sumPosition == vp_history.currentItem)
-            tab_layout_history.setSum(sum)
+        if (sumPosition == vp_history.currentItem) ""
+           // tab_layout_history.setSum(sum)
     }
-
+*/
+/*
     private fun setMonth() {
         val position = vp_history.currentItem
         val date = monthAdapter.dates[position]
-        tab_layout_history.setMonth(Date(date))
+        //tab_layout_history.setMonth(Date(date))
         setCurrentYear(position)
         if (position == monthAdapter.count - 1) {
             checkFirstMonthSum(date)
         }
-    }
+    }*/
 
-    private fun checkFirstMonthSum(date: Long) {
+/*    private fun checkFirstMonthSum(date: Long) {
         var totalSum: String
         childFragmentManager.fragments.forEach { fragment ->
             if (fragment is MonthFragment) {
@@ -123,7 +125,7 @@ class FragmentHistory : Fragment(), View.OnClickListener {
                 }
             }
         }
-    }
+    }*/
 
     private fun setDateFromCalendarDialog(date: Date) {
         val position = monthAdapter.getPositionByDate(date)

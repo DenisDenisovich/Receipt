@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_month.view.*
+import kotlinx.android.synthetic.main.item_sum.view.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.entity.Receipt
 import java.text.DateFormat
@@ -13,7 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class RvAdapterMonth(val shopIsClicked: (receipt: Receipt) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MonthAdapter(val shopIsClicked: (receipt: Receipt) -> Unit): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val receipts: ArrayList<Receipt?> = ArrayList()
     private val SHOP_VIEW_TYPE = 0
     private val SEPARATOR_VIEW_TYPE = 1
@@ -63,6 +64,13 @@ class RvAdapterMonth(val shopIsClicked: (receipt: Receipt) -> Unit): RecyclerVie
             dayDigit.text = date[1].split(" ")[1]
             name.text = receipt.shop.place
             sum.text = receipt.shop.sum
+        }
+    }
+
+    inner class SumViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        private val sum = itemView.tv_item_sum
+        fun bind(sum: String) {
+
         }
     }
 

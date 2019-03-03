@@ -5,7 +5,7 @@ import shiverawe.github.com.receipt.entity.Receipt
 interface MonthContract {
     interface View {
         fun setReceipts(items: ArrayList<Receipt?>)
-        fun setTotalSum(totalSum: String)
+        //fun setTotalSum(totalSum: String)
         fun showProgressbar()
         fun showError()
         fun showEmptyDataMessage()

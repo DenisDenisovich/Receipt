@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:clipToPadding="false">
 
     <LinearLayout
         android:id="@+id/history_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="109dp"
+        android:layout_height="56dp"
         android:orientation="vertical"
         android:background="@color/colorPrimary"
         android:outlineProvider="bounds"
@@ -24,6 +25,7 @@
                 android:padding="16dp"
                 android:src="@drawable/ic_menu"/>
 
+<!--
             <ImageView
                 android:id="@+id/btn_history_search"
                 android:layout_width="wrap_content"
@@ -34,11 +36,12 @@
                 android:layout_gravity="end"
                 android:visibility="gone"
                 android:src="@drawable/ic_search"/>
+-->
 
             <ImageView
                 android:id="@+id/btn_history_calendar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
                 android:padding="16dp"
                 android:paddingStart="12dp"
                 android:layout_gravity="end"
@@ -48,18 +51,30 @@
                 android:id="@+id/tv_history_toolbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="72dp"
+                android:layout_gravity="center"
                 android:fontFamily="@font/roboto_regular"
                 android:textSize="20sp"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#FFFFFF"
+                tools:text="Май"/>
+
+            <TextView
+                android:id="@+id/tv_history_toolbar_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="56dp"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                tools:text="2019"/>
+
         </FrameLayout>
 
-        <shiverawe.github.com.receipt.ui.history.TabLayout
+<!--        <shiverawe.github.com.receipt.ui.history.TabLayout
             android:id="@+id/tab_layout_history"
             android:layout_width="match_parent"
             android:layout_height="53dp"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="bottom" />-->
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -76,6 +91,6 @@
         android:id="@+id/vp_history"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="109dp"/>
+        android:layout_marginTop="56dp"/>
 
 </FrameLayout>
