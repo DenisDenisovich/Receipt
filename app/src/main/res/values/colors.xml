@@ -7,4 +7,5 @@
     <color name="receiptColor">#FFFCE5</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
+    <color name="monthSeparator">#33000000</color>
 </resources>
