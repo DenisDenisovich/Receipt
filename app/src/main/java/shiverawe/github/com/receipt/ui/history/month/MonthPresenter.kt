@@ -16,7 +16,6 @@ class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
     var receiptDisposable: Disposable? = null
     var view: MonthContract.View? = null
     private var receipts: ArrayList<ReceiptMonth?>? = null
-    private var totalSum = ""
     private var isError = false
 
     init {
@@ -35,7 +34,6 @@ class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
 
     override fun update() {
         receipts = null
-        totalSum = ""
         isError = false
         receiptDisposable?.dispose()
         getReceiptsData()
@@ -51,11 +49,6 @@ class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
                     receipts = response
-                    var sum = 0.0
-                    receipts!!.forEach { receipt ->
-                        sum += receipt?.meta?.s?:0.0
-                    }
-                    totalSum = BigDecimal(sum).setScale(2, RoundingMode.DOWN).toString() + " р"
                     setReceiptsData()
                 },{
                     isError = true

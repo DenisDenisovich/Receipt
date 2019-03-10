@@ -2,9 +2,11 @@ package shiverawe.github.com.receipt.ui.history.month.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.entity.receipt.base.Meta
 import shiverawe.github.com.receipt.entity.receipt.base.Shop
 import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth
+import shiverawe.github.com.receipt.ui.App
 import shiverawe.github.com.receipt.ui.base.adapter.AdapterDelegatesManager
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -117,7 +119,7 @@ class MonthAdapter(val shopIsClicked: (receipt: ReceiptMonth) -> Unit) : Recycle
         receipts.forEach { receipt ->
             sum += receipt?.meta?.s ?: 0.0
         }
-        totalSum = BigDecimal(sum).setScale(2, RoundingMode.DOWN).toString() + " р"
+        totalSum = BigDecimal(sum).setScale(2, RoundingMode.DOWN).toString() + " " + App.appContext.resources.getString(R.string.rubleSymbolJava)
         receipts.add(0, ReceiptMonth(0, Shop(0L, "", totalSum), Meta("", "", "", "", 0.0), SUM_VIEW_TYPE, true))
         receipts.add(1, null)
     }

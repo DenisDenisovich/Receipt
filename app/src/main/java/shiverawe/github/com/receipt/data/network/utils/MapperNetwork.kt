@@ -1,11 +1,13 @@
 package shiverawe.github.com.receipt.data.network.utils
 
+import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.data.network.entity.get.ReceiptResponce
 import shiverawe.github.com.receipt.data.network.entity.report.Report
 import shiverawe.github.com.receipt.entity.receipt.base.Meta
 import shiverawe.github.com.receipt.entity.receipt.base.Product
 import shiverawe.github.com.receipt.entity.receipt.base.Receipt
 import shiverawe.github.com.receipt.entity.receipt.base.Shop
+import shiverawe.github.com.receipt.ui.App
 import java.lang.Exception
 import java.lang.NullPointerException
 import java.math.BigDecimal
@@ -36,7 +38,7 @@ class MapperNetwork {
             val i = report.meta.fd.toString()
             val t = date.toString()
             val meta = Meta(t, fn, i, fp, sum)
-            val shop = Shop(date, place, sum.toString() + " р")
+            val shop = Shop(date, place, sum.toString() + " " + App.appContext.resources.getString(R.string.rubleSymbolJava))
             return Receipt(report.meta.id!!.toLong(), shop, meta, ArrayList(products))
         } catch (e: NullPointerException) {
             return null
