@@ -1,10 +1,9 @@
 package shiverawe.github.com.receipt.ui.receipt.offline
 
 import android.os.Bundle
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_receipt.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.entity.Receipt
+import shiverawe.github.com.receipt.entity.receipt.base.Receipt
 import android.view.View
 import android.content.Intent
 import android.view.LayoutInflater
@@ -12,10 +11,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import shiverawe.github.com.receipt.data.repository.ReceiptRepository
 import shiverawe.github.com.receipt.ui.receipt.BaseReceiptFragment
-import java.lang.Exception
 
 
 class ReceiptOfflineFragment : BaseReceiptFragment(), View.OnClickListener {

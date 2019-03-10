@@ -17,4 +17,23 @@
     <dimen name="receipt_top_line_gap_size">5dp</dimen>
     <dimen name="receipt_network_bottom_margin">72dp</dimen>
     <dimen name="receipt_offline_bottom_margin">16dp</dimen>
+
+    <dimen name="item_month_api19_height_single_type">72dp</dimen>
+    <dimen name="item_month_api19_height_top_type">56dp</dimen>
+    <dimen name="item_month_api19_height_bottom_type">56dp</dimen>
+    <dimen name="item_month_api19_height_middle_type">48dp</dimen>
+    <dimen name="item_month_api19_margin_start_date_container">16dp</dimen>
+    <dimen name="item_month_api19_margin_start_title">72dp</dimen>
+    <dimen name="item_month_api19_margin_end_sum">16dp</dimen>
+    <dimen name="item_month_api19_margin_bottom_separator">8dp</dimen>
+
+    <dimen name="item_sum_api19_height">72dp</dimen>
+    <dimen name="item_sum_api19_margin_start_title">16dp</dimen>
+    <dimen name="item_sum_api19_margin_end_sum">16dp</dimen>
+
+    <dimen name="item_month_radius">4dp</dimen>
+    <dimen name="item_month_margin">8dp</dimen>
+    <dimen name="item_month_elevation">4dp</dimen>
+
+
 </resources>

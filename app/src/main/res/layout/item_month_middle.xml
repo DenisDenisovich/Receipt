@@ -3,8 +3,12 @@
     android:id="@+id/root_item_month"
     android:layout_width="match_parent"
     android:layout_height="56dp"
+    android:elevation="@dimen/item_month_elevation"
+    android:outlineProvider="background"
+    android:layout_marginStart="@dimen/item_month_margin"
+    android:layout_marginEnd="@dimen/item_month_margin"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:background="#FFFFFF">
+    android:background="@drawable/bg_month_middle">
     <LinearLayout
         android:id="@+id/date_item_month"
         android:layout_width="48dp"

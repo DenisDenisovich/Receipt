@@ -1,6 +1,6 @@
 package shiverawe.github.com.receipt.ui.receipt.network.receipt
 
-import shiverawe.github.com.receipt.entity.Receipt
+import shiverawe.github.com.receipt.entity.receipt.base.Receipt
 
 interface ReceiptNetworkContract {
     interface View {

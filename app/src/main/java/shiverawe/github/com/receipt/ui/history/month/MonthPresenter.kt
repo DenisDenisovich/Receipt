@@ -2,10 +2,9 @@ package shiverawe.github.com.receipt.ui.history.month
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.observers.DisposableSingleObserver
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.data.repository.MonthRepository
-import shiverawe.github.com.receipt.entity.Receipt
+import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
@@ -16,7 +15,7 @@ class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
     private var reportRequest: ReportRequest
     var receiptDisposable: Disposable? = null
     var view: MonthContract.View? = null
-    private var receipts: ArrayList<Receipt?>? = null
+    private var receipts: ArrayList<ReceiptMonth?>? = null
     private var totalSum = ""
     private var isError = false
 
@@ -50,20 +49,17 @@ class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
         receiptDisposable?.dispose()
         receiptDisposable = repository.getMonthReceipt(reportRequest)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ArrayList<Receipt?>>() {
-                    override fun onSuccess(t: ArrayList<Receipt?>) {
-                        receipts = t
-                        var sum = 0.0
-                        receipts!!.forEach { receipt ->
-                            sum += receipt?.meta?.s?:0.0
-                        }
-                        totalSum = BigDecimal(sum).setScale(2, RoundingMode.DOWN).toString() + " р"
-                        setReceiptsData()
+                .subscribe({ response ->
+                    receipts = response
+                    var sum = 0.0
+                    receipts!!.forEach { receipt ->
+                        sum += receipt?.meta?.s?:0.0
                     }
-                    override fun onError(e: Throwable) {
-                        isError = true
-                        view?.showError()
-                    }
+                    totalSum = BigDecimal(sum).setScale(2, RoundingMode.DOWN).toString() + " р"
+                    setReceiptsData()
+                },{
+                    isError = true
+                    view?.showError()
                 })
     }
 
@@ -75,7 +71,7 @@ class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
                 view?.showEmptyDataMessage()
             } else {
                 view?.setReceipts(receipts!!)
-                view?.setTotalSum(totalSum)
+                //view?.setTotalSum(totalSum)
             }
         }
     }

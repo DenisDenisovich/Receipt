@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.entity
+package shiverawe.github.com.receipt.entity.receipt.base
 
 data class Receipt(
         var receiptId: Long,

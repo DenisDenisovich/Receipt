@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,10 +22,14 @@ class FragmentHistory : Fragment(), View.OnClickListener {
     private lateinit var navigation: Navigation
     private lateinit var monthAdapter: FragmentPagerAdapter
     private val pageListener = PageChangeListener()
-    private val dateFormatter = DateFormat.getDateInstance(SimpleDateFormat.LONG, Locale("ru"))
+    private val dateFormatterYaer = DateFormat.getDateInstance(SimpleDateFormat.LONG, Locale("ru"))
+    private val dateFormatterMonth = SimpleDateFormat("LLLL", Locale("ru"))
     private var calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
     private lateinit var dateDialog: DatePickerDialog
 
+    init {
+        dateFormatterMonth.timeZone = TimeZone.getTimeZone("UTC")
+    }
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         navigation = context as MainActivity
@@ -50,82 +55,33 @@ class FragmentHistory : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         fab_history_qr.setOnClickListener(this)
         btn_history_navigation.setOnClickListener(this)
-        //btn_history_search.setOnClickListener(this)
         btn_history_calendar.setOnClickListener(this)
 
         monthAdapter = FragmentPagerAdapter(childFragmentManager)
         vp_history.adapter = monthAdapter
         vp_history.currentItem = monthAdapter.count - 1
-        //tab_layout_history.setMonth(Date(monthAdapter.dates[monthAdapter.count - 1]))
-        setCurrentYear(monthAdapter.count - 1)
+        setCurrentMonth(monthAdapter.count - 1)
 
-        pageListener.addPageListener(vp_history, object: PageChangeListener.PageListener {
-            override fun monthIsSelected() {
-                //setMonth()
-            }
-            override fun monthIsMoved(offset: Float) {
-                //tab_layout_history.moveMonth(offset)
+        vp_history.addOnPageChangeListener(object: ViewPager.SimpleOnPageChangeListener(){
+            override fun onPageSelected(position: Int) {
+                setCurrentMonth(position)
             }
         })
-
-       /* tab_layout_history.addMonthClickListener(object : TabLayout.MonthClickListener {
-            override fun leftMonthIsClicked() {
-                vp_history.currentItem--
-            }
-
-            override fun rightMonthIsClicked() {
-                vp_history.currentItem++
-            }
-        })*/
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.fab_history_qr -> navigation.openQr()
             R.id.btn_history_navigation -> navigation.openNavigationDrawable()
-            //R.id.btn_history_search -> Toast.makeText(context, "search", Toast.LENGTH_SHORT).show()
             R.id.btn_history_calendar -> dateDialog.show()
         }
     }
 
-    private fun setCurrentYear(position: Int) {
+    private fun setCurrentMonth(position: Int) {
         calendar.time = Date(monthAdapter.dates[position])
-        val currentMonth = dateFormatter.format(calendar.time).split(" ")[2]
-        tv_history_toolbar_title.text = resources.getString(R.string.history_titile) + " $currentMonth"
+        tv_history_toolbar_year.text = dateFormatterYaer.format(calendar.time).split(" ")[2]
+        tv_history_toolbar_month.text = dateFormatterMonth.format(calendar.time).capitalize()
     }
-
-/*
-    fun setMonthSum(date: Int, sum: String) {
-        val sumPosition = monthAdapter.getPositionByDate(Date(date.toLong() * 1000))
-        if (sumPosition == vp_history.currentItem) ""
-           // tab_layout_history.setSum(sum)
-    }
-*/
-/*
-    private fun setMonth() {
-        val position = vp_history.currentItem
-        val date = monthAdapter.dates[position]
-        //tab_layout_history.setMonth(Date(date))
-        setCurrentYear(position)
-        if (position == monthAdapter.count - 1) {
-            checkFirstMonthSum(date)
-        }
-    }*/
-
-/*    private fun checkFirstMonthSum(date: Long) {
-        var totalSum: String
-        childFragmentManager.fragments.forEach { fragment ->
-            if (fragment is MonthFragment) {
-                if (fragment.arguments!!.getInt(MonthFragment.DATE_KEY) == (date / 1000).toInt()) {
-                    totalSum = fragment.getTotalSum()
-                    if (totalSum.isNotBlank()) {
-                        setMonthSum((date / 1000).toInt(), totalSum)
-                        return@forEach
-                    }
-                }
-            }
-        }
-    }*/
 
     private fun setDateFromCalendarDialog(date: Date) {
         val position = monthAdapter.getPositionByDate(date)

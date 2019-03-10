@@ -5,7 +5,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableSingleObserver
 import shiverawe.github.com.receipt.data.network.entity.create.CreateResponce
 import shiverawe.github.com.receipt.data.repository.ReceiptRepository
-import shiverawe.github.com.receipt.entity.Receipt
+import shiverawe.github.com.receipt.entity.receipt.base.Receipt
 import java.lang.Exception
 import java.util.*
 

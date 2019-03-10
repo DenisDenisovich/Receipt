@@ -8,10 +8,8 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.entity.Receipt
 import shiverawe.github.com.receipt.ui.history.FragmentHistory
 import shiverawe.github.com.receipt.ui.receipt.offline.ReceiptOfflineFragment
 import shiverawe.github.com.receipt.ui.receipt.network.EXTRA_DATE_RECEIPT

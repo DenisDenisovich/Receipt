@@ -4,7 +4,7 @@ import android.arch.persistence.room.Transaction
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import shiverawe.github.com.receipt.data.bd.utils.CacheDiffUtility
-import shiverawe.github.com.receipt.entity.Receipt
+import shiverawe.github.com.receipt.entity.receipt.base.Receipt
 
 class ReceiptDatabase {
     private val db = ReceiptRoom.getDb()

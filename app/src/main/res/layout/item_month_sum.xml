@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bg_item_month"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    tools:background="#FFFFFF">
+    android:elevation="@dimen/item_month_elevation"
+    android:outlineProvider="background"
+    android:layout_margin="@dimen/item_month_margin"
+    android:background="@drawable/bg_month_sum">
 
     <TextView
+        android:id="@+id/tv_item_sum_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -18,19 +20,19 @@
         android:textSize="16sp"
         android:layout_marginEnd="150dp"
         android:fontFamily="@font/roboto_regular"
-        android:textColor="#000000"
+        android:textColor="@color/colorBlack"
         android:text="@string/tv_item_sum"/>
 
     <TextView
-        android:id="@+id/tv_item_sum"
+        android:id="@+id/tv_item_sum_total_sum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|end"
         android:layout_marginEnd="8dp"
         android:textSize="16sp"
         android:fontFamily="@font/roboto_regular"
-        android:textColor="#000000"
+        android:textColor="@color/colorBlack"
+        tools:textColor="@color/colorBlack"
         tools:text="1 236.23 р"/>
-
 
 </FrameLayout>

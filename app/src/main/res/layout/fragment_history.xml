@@ -25,19 +25,6 @@
                 android:padding="16dp"
                 android:src="@drawable/ic_menu"/>
 
-<!--
-            <ImageView
-                android:id="@+id/btn_history_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="52dp"
-                android:padding="16dp"
-                android:paddingEnd="12dp"
-                android:layout_gravity="end"
-                android:visibility="gone"
-                android:src="@drawable/ic_search"/>
--->
-
             <ImageView
                 android:id="@+id/btn_history_calendar"
                 android:layout_width="56dp"
@@ -48,7 +35,7 @@
                 android:src="@drawable/ic_calendar"/>
 
             <TextView
-                android:id="@+id/tv_history_toolbar_title"
+                android:id="@+id/tv_history_toolbar_month"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -69,12 +56,6 @@
                 tools:text="2019"/>
 
         </FrameLayout>
-
-<!--        <shiverawe.github.com.receipt.ui.history.TabLayout
-            android:id="@+id/tab_layout_history"
-            android:layout_width="match_parent"
-            android:layout_height="53dp"
-            android:layout_gravity="bottom" />-->
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

@@ -2,10 +2,10 @@ package shiverawe.github.com.receipt.data.network.utils
 
 import shiverawe.github.com.receipt.data.network.entity.get.ReceiptResponce
 import shiverawe.github.com.receipt.data.network.entity.report.Report
-import shiverawe.github.com.receipt.entity.Meta
-import shiverawe.github.com.receipt.entity.Product
-import shiverawe.github.com.receipt.entity.Receipt
-import shiverawe.github.com.receipt.entity.Shop
+import shiverawe.github.com.receipt.entity.receipt.base.Meta
+import shiverawe.github.com.receipt.entity.receipt.base.Product
+import shiverawe.github.com.receipt.entity.receipt.base.Receipt
+import shiverawe.github.com.receipt.entity.receipt.base.Shop
 import java.lang.Exception
 import java.lang.NullPointerException
 import java.math.BigDecimal
@@ -47,7 +47,8 @@ class MapperNetwork {
         if (response?.meta == null || response.items == null) return null
         val products = java.util.ArrayList<Product>()
         response.items.forEach {
-            products.add(Product(it.text ?: "", it.price ?: 0.0, it.amount ?: 0.0))
+            products.add(Product(it.text
+                    ?: "", it.price ?: 0.0, it.amount ?: 0.0))
         }
         val fn = response.meta.fn.toString()
         val fp = response.meta.fp.toString()

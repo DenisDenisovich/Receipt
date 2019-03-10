@@ -13,10 +13,9 @@ import kotlinx.android.synthetic.main.fragment_network_receipt.*
 import kotlinx.android.synthetic.main.fragment_receipt.*
 import kotlinx.android.synthetic.main.view_error.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.entity.Receipt
+import shiverawe.github.com.receipt.entity.receipt.base.Receipt
 import shiverawe.github.com.receipt.ui.receipt.BaseReceiptFragment
 import shiverawe.github.com.receipt.ui.receipt.network.ReceiptNetwork
-import java.lang.Exception
 
 class ReceiptNetworkFragment : BaseReceiptFragment(), View.OnClickListener, ReceiptNetworkContract.View {
     companion object {

@@ -12,7 +12,7 @@ import android.view.View
 import android.view.ViewOutlineProvider
 import kotlinx.android.synthetic.main.fragment_receipt.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.entity.Receipt
+import shiverawe.github.com.receipt.entity.receipt.base.Receipt
 import java.lang.StringBuilder
 import java.math.BigDecimal
 import java.math.RoundingMode

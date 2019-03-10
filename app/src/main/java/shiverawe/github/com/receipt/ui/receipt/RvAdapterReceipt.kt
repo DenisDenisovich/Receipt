@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_product.view.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.entity.Product
+import shiverawe.github.com.receipt.entity.receipt.base.Product
 import java.math.BigDecimal
 import java.math.RoundingMode
 
