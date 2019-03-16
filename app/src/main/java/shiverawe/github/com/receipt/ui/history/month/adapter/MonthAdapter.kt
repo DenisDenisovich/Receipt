@@ -21,25 +21,19 @@ private const val SHOP_BOTTOM_VIEW_TYPE = 4
 private const val BOTTOM_SEPARATOR_VIEW_TYPE = 5
 
 class MonthAdapter(val shopIsClicked: (receipt: ReceiptMonth) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val delegateManager = AdapterDelegatesManager<ReceiptMonth>()
     private val items: ArrayList<ReceiptMonth> = ArrayList()
-    private var calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
 
+    private var calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
     private var totalSum = ""
-    val delegateManager = AdapterDelegatesManager<ReceiptMonth>()
 
     init {
-        val sumDelegate = SumMonthAdapterDelegate(SUM_VIEW_TYPE)
-        val singleDelegate = SingleMonthAdapterDelegate(SHOP_SINGLE_VIEW_TYPE)
-        val topDelegate = TopMonthAdapterDelegate(SHOP_TOP_VIEW_TYPE)
-        val middleDelegate = MiddleMonthAdapterDelegate(SHOP_MIDDLE_VIEW_TYPE)
-        val bottomDelegate = BottomMonthAdapterDelegate(SHOP_BOTTOM_VIEW_TYPE)
-        val bottomSeparatorDelegate = BottomSeparatorMonthAdapterDelegate(BOTTOM_SEPARATOR_VIEW_TYPE)
-        delegateManager.addDelegate(sumDelegate)
-        delegateManager.addDelegate(singleDelegate)
-        delegateManager.addDelegate(topDelegate)
-        delegateManager.addDelegate(middleDelegate)
-        delegateManager.addDelegate(bottomDelegate)
-        delegateManager.addDelegate(bottomSeparatorDelegate)
+        delegateManager.addDelegate(SumMonthAdapterDelegate(SUM_VIEW_TYPE))
+        delegateManager.addDelegate(SingleMonthAdapterDelegate(SHOP_SINGLE_VIEW_TYPE))
+        delegateManager.addDelegate(TopMonthAdapterDelegate(SHOP_TOP_VIEW_TYPE))
+        delegateManager.addDelegate(MiddleMonthAdapterDelegate(SHOP_MIDDLE_VIEW_TYPE))
+        delegateManager.addDelegate(BottomMonthAdapterDelegate(SHOP_BOTTOM_VIEW_TYPE))
+        delegateManager.addDelegate(BottomSeparatorMonthAdapterDelegate(BOTTOM_SEPARATOR_VIEW_TYPE))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

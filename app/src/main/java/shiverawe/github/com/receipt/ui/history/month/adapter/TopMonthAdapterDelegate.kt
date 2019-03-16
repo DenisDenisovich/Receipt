@@ -6,6 +6,7 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.os.Build
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
@@ -46,10 +47,9 @@ class TopMonthAdapterDelegate(override var viewType: Int) : AdapterDelegate<Rece
         private val separator = itemView.separator
 
         fun bind(receipt: ReceiptMonth) {
-            val date = dateFormatter.format(Date(receipt.shop.date)).split(",")
-            val dayStrLength = if (7 <= date[0].length) 7 else date[0].length
-            day.text = date[0].substring(0, dayStrLength)
-            dayDigit.text = date[1].split(" ")[1]
+            val date = dateFormatter.format(Date(receipt.shop.date)).split(", ")
+            day.text = if (date[0].length > 7) date[0].substring(0, 7) else date[0]
+            dayDigit.text = date[1].substring(0, date[1].indexOf(' '))
             name.text = receipt.shop.place
             sum.text = receipt.shop.sum
             if (receipt.separatorIsVisible) separator.visibility = View.VISIBLE

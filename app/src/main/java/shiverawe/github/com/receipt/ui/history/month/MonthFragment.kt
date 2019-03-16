@@ -18,7 +18,7 @@ import kotlin.collections.ArrayList
 class MonthFragment : Fragment(), MonthContract.View {
     companion object {
         const val DATE_KEY = "date"
-        fun getInstance(date: Int): MonthFragment {
+        fun getNewInstance(date: Int): MonthFragment {
             val fragment = MonthFragment()
             val bundle = Bundle()
             bundle.putInt(DATE_KEY, date)
@@ -96,14 +96,6 @@ class MonthFragment : Fragment(), MonthContract.View {
         totalSum = ""
         presenter?.update()
     }
-
-/*    override fun setTotalSum(totalSum: String) {
-        this.totalSum = totalSum
-        if (parentFragment != null)
-            (parentFragment as FragmentHistory).setMonthSum(arguments!!.getInt(DATE_KEY), totalSum)
-    }*/
-
-    fun getTotalSum() = totalSum
 
     override fun onDestroyView() {
         presenter?.detach()

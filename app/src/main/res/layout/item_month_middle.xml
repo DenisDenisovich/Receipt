@@ -9,6 +9,7 @@
     android:layout_marginEnd="@dimen/item_month_margin"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/bg_month_middle">
+
     <LinearLayout
         android:id="@+id/date_item_month"
         android:layout_width="48dp"
