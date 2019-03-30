@@ -69,7 +69,9 @@ class MonthFragment_v2 : Fragment(), MonthContract_v2.View {
 
     override fun setTotalSum(totalSum: String) {
         this.totalSum = totalSum
-        (parentFragment as FragmentHistory_v2).setCurrentSum(totalSum)
+        parentFragment?.let {
+            (it as FragmentHistory_v2).setCurrentSum(totalSum)
+        }
     }
 
     override fun showProgressbar() {
@@ -94,7 +96,7 @@ class MonthFragment_v2 : Fragment(), MonthContract_v2.View {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
             if (receipts.size == 0) presenter?.getReceiptsData()
-            else setTotalSum(totalSum)
+            setTotalSum(totalSum)
         }
     }
 

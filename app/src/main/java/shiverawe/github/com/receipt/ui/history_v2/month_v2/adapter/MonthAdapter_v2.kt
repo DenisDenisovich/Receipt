@@ -50,9 +50,9 @@ class MonthAdapter(val shopIsClicked: (receipt: ReceiptMonth_v2) -> Unit) : Recy
 
     private fun setTypes(oldList: ArrayList<ReceiptMonth_v2>): ArrayList<ReceiptMonth_v2> {
         val receipts = ArrayList<ReceiptMonth_v2>()
-        if (oldList.size > 1) {
+        if (oldList.size >= 1) {
             receipts.add(getDateItem(oldList.first().shop.date))
-            receipts.add(oldList[1])
+            receipts.add(oldList[0])
             for (index in 1 until oldList.size) {
                 if (!isEqualDays(oldList[index - 1].shop.date, oldList[index].shop.date)) {
                     receipts.add(getDateItem(oldList[index].shop.date))

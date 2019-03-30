@@ -67,6 +67,7 @@ class MonthPresenter_v2(dateFrom: Int) : MonthContract_v2.Presenter {
             view?.showError()
         } else {
             if (receipts.size == 0) {
+                view?.setTotalSum("0 ${App.appContext.resources.getString(R.string.rubleSymbolJava)}")
                 view?.showEmptyDataMessage()
             } else {
 

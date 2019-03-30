@@ -74,7 +74,7 @@ class FragmentHistory_v2 : Fragment(), View.OnClickListener {
                 if (previewItem != position) {
                     previewItem = position
                     setCurrentMonth(position)
-                    tv_sum_history.text = "Общая сумма: ..."
+                    setCurrentSum("")
                 }
             }
         })
@@ -108,7 +108,10 @@ class FragmentHistory_v2 : Fragment(), View.OnClickListener {
 
     @SuppressLint("SetTextI18n")
     fun setCurrentSum(sum: String) {
-        tv_sum_history.text = "Общая сумма: $sum"
+        if (sum.isNotEmpty())
+            tv_sum_history.text = "Общая сумма: $sum"
+        else
+            tv_sum_history.text = "Общая сумма: ..."
     }
 
     private fun setDateFromCalendarDialog(date: Date) {
