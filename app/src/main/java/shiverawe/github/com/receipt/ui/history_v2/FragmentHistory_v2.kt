@@ -1,5 +1,6 @@
-package shiverawe.github.com.receipt.ui.history
+package shiverawe.github.com.receipt.ui.history_v2
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
@@ -9,7 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_history.*
+import kotlinx.android.synthetic.main.fragment_history_v2.*
+import kotlinx.android.synthetic.main.fragment_month_v2.*
 import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.Navigation
@@ -18,10 +20,11 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FragmentHistory : Fragment(), View.OnClickListener {
+class FragmentHistory_v2 : Fragment(), View.OnClickListener {
     private lateinit var navigation: Navigation
-    private lateinit var monthAdapter: FragmentPagerAdapter
-    private val pageListener = PageChangeListener()
+    private lateinit var monthAdapter: FragmentPagerAdapter_v2
+    //private val pageListener = PageChangeListener()
+    private var previewItem = 0
     private val dateFormatterYaer = DateFormat.getDateInstance(SimpleDateFormat.LONG, Locale("ru"))
     private val dateFormatterMonth = SimpleDateFormat("LLLL", Locale("ru"))
     private var calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
@@ -30,6 +33,7 @@ class FragmentHistory : Fragment(), View.OnClickListener {
     init {
         dateFormatterMonth.timeZone = TimeZone.getTimeZone("UTC")
     }
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         navigation = context as MainActivity
@@ -49,22 +53,29 @@ class FragmentHistory : Fragment(), View.OnClickListener {
             setDateFromCalendarDialog(selectedDate.time)
         }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH))
 
-        return inflater.inflate(R.layout.fragment_history, container, false)
+        return inflater.inflate(R.layout.fragment_history_v2, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         fab_history_qr.setOnClickListener(this)
-        btn_history_navigation.setOnClickListener(this)
-        btn_history_calendar.setOnClickListener(this)
+        btn_menu_history.setOnClickListener(this)
+        btn_calendar_history.setOnClickListener(this)
+        btn_next_history.setOnClickListener(this)
+        btn_preview_history.setOnClickListener(this)
 
-        monthAdapter = FragmentPagerAdapter(childFragmentManager)
+        monthAdapter = FragmentPagerAdapter_v2(childFragmentManager)
         vp_history.adapter = monthAdapter
         vp_history.currentItem = monthAdapter.count - 1
+        previewItem = vp_history.currentItem
         setCurrentMonth(monthAdapter.count - 1)
 
-        vp_history.addOnPageChangeListener(object: ViewPager.SimpleOnPageChangeListener(){
+        vp_history.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
-                setCurrentMonth(position)
+                if (previewItem != position) {
+                    previewItem = position
+                    setCurrentMonth(position)
+                    tv_sum_history.text = "Общая сумма: ..."
+                }
             }
         })
     }
@@ -72,15 +83,32 @@ class FragmentHistory : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.fab_history_qr -> navigation.openQr()
-            R.id.btn_history_navigation -> navigation.openNavigationDrawable()
-            R.id.btn_history_calendar -> dateDialog.show()
+            R.id.btn_menu_history -> navigation.openNavigationDrawable()
+            R.id.btn_calendar_history -> dateDialog.show()
+            R.id.btn_next_history -> {
+                if (vp_history.currentItem != monthAdapter.count - 1) {
+                    vp_history.currentItem++
+                    setCurrentMonth(vp_history.currentItem)
+                }
+            }
+            R.id.btn_preview_history -> {
+                if (vp_history.currentItem != 0) {
+                    vp_history.currentItem--
+                    setCurrentMonth(vp_history.currentItem)
+                }
+            }
         }
     }
 
     private fun setCurrentMonth(position: Int) {
         calendar.time = Date(monthAdapter.dates[position])
-        tv_history_toolbar_year.text = dateFormatterYaer.format(calendar.time).split(" ")[2]
-        tv_history_toolbar_month.text = dateFormatterMonth.format(calendar.time).capitalize()
+        val month = dateFormatterMonth.format(calendar.time).capitalize() + " " + dateFormatterYaer.format(calendar.time).split(" ")[2]
+        tv_month_current_history.text = month
+    }
+
+    @SuppressLint("SetTextI18n")
+    fun setCurrentSum(sum: String) {
+        tv_sum_history.text = "Общая сумма: $sum"
     }
 
     private fun setDateFromCalendarDialog(date: Date) {
@@ -88,7 +116,7 @@ class FragmentHistory : Fragment(), View.OnClickListener {
         if (position == -1) {
             Toast.makeText(context, "Невозможно отобразить данный месяц", Toast.LENGTH_SHORT).show()
         } else {
-            pageListener.dateChangedByCalendar()
+            //pageListener.dateChangedByCalendar()
             vp_history.currentItem = position
         }
     }

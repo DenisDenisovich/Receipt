@@ -39,6 +39,7 @@ class MonthRepository {
     }
 
     private fun addWeekSeparators(receipts: ArrayList<Receipt>): ArrayList<Receipt?> {
+/*
         if (receipts.size == 0) return ArrayList()
         val receiptsWithWeek = ArrayList<Receipt?>()
         val date = Date()
@@ -62,6 +63,8 @@ class MonthRepository {
             receiptsWithWeek.add(receipts[0])
         }
         return receiptsWithWeek
+*/
+        return ArrayList<Receipt?>(receipts)
     }
 
     private fun mapToMonthReceipt(receipts: ArrayList<Receipt?>): ArrayList<ReceiptMonth?> {

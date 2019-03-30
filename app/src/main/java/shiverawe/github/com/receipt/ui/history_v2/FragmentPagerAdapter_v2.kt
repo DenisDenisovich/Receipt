@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.history
+package shiverawe.github.com.receipt.ui.history_v2
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import shiverawe.github.com.receipt.ui.history_v2.month_v2.MonthFragment_v2
 import java.util.*
 
-class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+class FragmentPagerAdapter_v2(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
     val dates: ArrayList<Long> = ArrayList(MutableList(count) { 0L })
 
     init {
