@@ -10,7 +10,7 @@ import shiverawe.github.com.receipt.entity.receipt.base.Shop
 class MapperDb {
 
     fun dbToReceipt(receipt: ReceiptEntity, products: List<ProductEntity>): Receipt {
-        val shop = Shop(receipt.date, receipt.place, receipt.sum.toString() + " р")
+        val shop = Shop(receipt.date, receipt.place, receipt.sum.toString())
         val meta = Meta(receipt.date.toString(), receipt.fn, receipt.fd, receipt.fp, receipt.sum)
         val items = ArrayList<Product>()
         products.forEach {

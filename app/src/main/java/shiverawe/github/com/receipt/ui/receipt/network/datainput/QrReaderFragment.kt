@@ -43,6 +43,7 @@ class QrReaderFragment: Fragment() {
         val scannerView = scanner_view
         val activity = requireActivity()
         codeScanner = CodeScanner(activity, scannerView)
+        codeScanner?.isFlashEnabled
         codeScanner?.decodeCallback = DecodeCallback {
             activity.runOnUiThread {
                 receiptNetwork.openReceiptFragment(it.text, false)

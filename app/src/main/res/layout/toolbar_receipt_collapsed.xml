@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:elevation="4dp"
+    android:outlineProvider="background"
+    android:background="@color/colorPrimary"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/btn_toolbar_receipt_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_back_v2" />
+
+    <ImageView
+        android:id="@+id/btn_toolbar_receipt_share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_share_v2"/>
+
+    <TextView
+        android:id="@+id/tv_toolbar_receipt_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/colorBlack"
+        android:textSize="14sp"
+        android:fontFamily="@font/roboto_regular"
+        tools:text="Пятерочка"/>
+
+    <TextView
+        android:id="@+id/tv_toolbar_receipt_sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_toolbar_receipt_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
+        android:fontFamily="@font/roboto_medium"
+        tools:text="2218,45 ₽"/>
+
+
+    <TextView
+        android:id="@+id/tv_toolbar_receipt_date_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:alpha="0"
+        android:textColor="@color/colorGray"
+        android:textSize="14sp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/tv_toolbar_receipt_date"/>
+
+    <TextView
+        android:id="@+id/tv_toolbar_receipt_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_toolbar_receipt_date_top"
+        app:layout_constraintStart_toStartOf="parent"
+        android:alpha="0"
+        android:textColor="@color/colorBlack"
+        android:textSize="16sp"
+        android:fontFamily="@font/roboto_regular"
+        tools:text="Суббота, 23.03.19"/>
+
+
+    <TextView
+        android:id="@+id/tv_toolbar_receipt_time_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:alpha="0"
+        android:textColor="@color/colorGray"
+        android:textSize="14sp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/tv_toolbar_receipt_time"/>
+
+    <TextView
+        android:id="@+id/tv_toolbar_receipt_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_toolbar_receipt_time_top"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:alpha="0"
+        android:textColor="@color/colorBlack"
+        android:textSize="16sp"
+        android:fontFamily="@font/roboto_regular"
+        tools:text="20:08"/>
+
+
+
+</android.support.constraint.ConstraintLayout>

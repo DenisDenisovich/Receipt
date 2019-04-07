@@ -38,7 +38,7 @@ class MapperNetwork {
             val i = report.meta.fd.toString()
             val t = date.toString()
             val meta = Meta(t, fn, i, fp, sum)
-            val shop = Shop(date, place, sum.toString() + " " + App.appContext.resources.getString(R.string.rubleSymbolJava))
+            val shop = Shop(date, place, sum.toString())
             return Receipt(report.meta.id!!.toLong(), shop, meta, ArrayList(products))
         } catch (e: NullPointerException) {
             return null

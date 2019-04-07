@@ -14,6 +14,7 @@ import shiverawe.github.com.receipt.ui.history_v2.FragmentHistory_v2
 import shiverawe.github.com.receipt.ui.receipt.offline.ReceiptOfflineFragment
 import shiverawe.github.com.receipt.ui.receipt.network.EXTRA_DATE_RECEIPT
 import shiverawe.github.com.receipt.ui.receipt.network.NetworkReceiptActivity
+import shiverawe.github.com.receipt.ui.receipt_v2.ReceiptFragment
 
 
 private const val FRAGMENT_HISTORY_TAG = "fragment_history"
@@ -66,7 +67,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun openReceipt(receiptId: Long) {
-        supportFragmentManager.beginTransaction().add(R.id.container, ReceiptOfflineFragment.getNewInstance(receiptId), FRAGMENT_LOCAL_RECEIPT_TAG).addToBackStack(null).commit()
+        //supportFragmentManager.beginTransaction().add(R.id.container, ReceiptOfflineFragment.getNewInstance(receiptId), FRAGMENT_LOCAL_RECEIPT_TAG).addToBackStack(null).commit()
+        supportFragmentManager.beginTransaction().add(R.id.container, ReceiptFragment.getNewInstance(receiptId), FRAGMENT_LOCAL_RECEIPT_TAG).addToBackStack(null).commit()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

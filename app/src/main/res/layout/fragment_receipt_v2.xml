@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorPrimary">
+
+
+    <FrameLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:outlineProvider="background"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/btn_toolbar_receipt_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:src="@drawable/ic_back_v2" />
+
+        <ImageView
+            android:id="@+id/btn_toolbar_receipt_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:padding="16dp"
+            android:src="@drawable/ic_share_v2"/>
+
+        <TextView
+            android:id="@+id/tv_toolbar_receipt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/toolbar_title_expanded_margin_top"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/toolbar_title_expanded_text_size"
+            android:fontFamily="@font/roboto_regular"
+            tools:text="Пятерочка"/>
+
+        <TextView
+            android:id="@+id/tv_toolbar_receipt_sum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/toolbar_sum_expanded_margin_top"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/toolbar_sum_expanded_text_size"
+            android:fontFamily="@font/roboto_medium"
+            tools:text="2218,45 ₽"/>
+
+        <FrameLayout
+            android:id="@+id/date_container_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_date_container_height"
+            android:layout_marginTop="@dimen/toolbar_date_container_expanded_margin_top">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textSize="14sp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/tv_toolbar_receipt_date"/>
+
+            <TextView
+                android:id="@+id/tv_toolbar_receipt_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginStart="16dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
+                android:fontFamily="@font/roboto_regular"
+                tools:text="Суббота, 23.03.19"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="16dp"
+                android:textSize="14sp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/tv_toolbar_receipt_time"/>
+
+            <TextView
+                android:id="@+id/tv_toolbar_receipt_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
+                android:fontFamily="@font/roboto_regular"
+                tools:text="20:08"/>
+        </FrameLayout>
+    </FrameLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_receipt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:orientation="vertical"/>
+</LinearLayout>

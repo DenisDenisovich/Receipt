@@ -8,4 +8,5 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
     <color name="monthSeparator">#33000000</color>
+    <color name="colorGray">#A0A0A0</color>
 </resources>
