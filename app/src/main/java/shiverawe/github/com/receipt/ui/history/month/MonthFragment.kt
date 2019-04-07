@@ -10,8 +10,9 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_month.*
 import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth
+import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth_v2
 import shiverawe.github.com.receipt.ui.Navigation
+import shiverawe.github.com.receipt.ui.history.FragmentHistory
 import shiverawe.github.com.receipt.ui.history.month.adapter.MonthAdapter
 import kotlin.collections.ArrayList
 
@@ -30,7 +31,7 @@ class MonthFragment : Fragment(), MonthContract.View {
     lateinit var navigation: Navigation
     private var presenter: MonthContract.Presenter? = null
     private lateinit var adapter: MonthAdapter
-    private var receipts: ArrayList<ReceiptMonth?> = ArrayList()
+    private var receipts: ArrayList<ReceiptMonth_v2> = ArrayList()
     private var totalSum = ""
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -57,12 +58,19 @@ class MonthFragment : Fragment(), MonthContract.View {
         rv_month.layoutManager = LinearLayoutManager(context)
     }
 
-    override fun setReceipts(items: ArrayList<ReceiptMonth?>) {
+    override fun setReceipts(items: ArrayList<ReceiptMonth_v2>) {
         receipts = items
         adapter.setItems(receipts)
         pb_month.visibility = View.GONE
         tv_month_error_message.visibility = View.GONE
         rv_month.visibility = View.VISIBLE
+    }
+
+    override fun setTotalSum(totalSum: String) {
+        this.totalSum = totalSum
+        parentFragment?.let {
+            (it as FragmentHistory).setCurrentSum(totalSum)
+        }
     }
 
     override fun showProgressbar() {
@@ -85,9 +93,10 @@ class MonthFragment : Fragment(), MonthContract.View {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser)
-            if (receipts.size == 0)
-                presenter?.getReceiptsData()
+        if (isVisibleToUser) {
+            if (receipts.size == 0) presenter?.getReceiptsData()
+            setTotalSum(totalSum)
+        }
     }
 
     fun update() {

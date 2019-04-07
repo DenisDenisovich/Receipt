@@ -1,10 +1,10 @@
-package shiverawe.github.com.receipt.ui.history_v2.month_v2.adapter
+package shiverawe.github.com.receipt.ui.history.month.adapter
 
 import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.item_receipt_v2.view.*
+import kotlinx.android.synthetic.main.item_receipt.view.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth_v2
 import shiverawe.github.com.receipt.ui.App
@@ -24,7 +24,7 @@ class ItemReceiptAdapterDelegate(override var viewType: Int) : AdapterDelegate<R
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return ItemReceiptViewHolder(getLayout(parent, R.layout.item_receipt_v2))
+        return ItemReceiptViewHolder(getLayout(parent, R.layout.item_receipt))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, items: ArrayList<ReceiptMonth_v2>, position: Int) {

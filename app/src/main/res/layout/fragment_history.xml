@@ -1,62 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:clipToPadding="false">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:id="@+id/history_toolbar"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_history"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:orientation="vertical"
-        android:background="@color/colorPrimary"
-        android:outlineProvider="bounds"
-        android:elevation="8dp">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <FrameLayout
+            android:id="@+id/top_menu_history"
             android:layout_width="match_parent"
-            android:layout_height="56dp">
-            <ImageView
-                android:id="@+id/btn_history_navigation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:src="@drawable/ic_menu"/>
+            android:layout_height="56dp"
+            app:layout_scrollFlags="scroll|enterAlways">
 
             <ImageView
-                android:id="@+id/btn_history_calendar"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:padding="16dp"
-                android:paddingStart="12dp"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_calendar"/>
-
-            <TextView
-                android:id="@+id/tv_history_toolbar_month"
+                android:id="@+id/btn_menu_history"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/roboto_regular"
-                android:textSize="20sp"
-                android:textColor="#FFFFFF"
-                tools:text="Май"/>
+                android:layout_gravity="center_vertical"
+                android:padding="16dp"
+                android:src="@drawable/ic_menu__v2"/>
 
-            <TextView
-                android:id="@+id/tv_history_toolbar_year"
+            <ImageView
+                android:id="@+id/btn_calendar_history"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
-                android:layout_marginEnd="56dp"
-                android:fontFamily="@font/roboto_regular"
-                android:textSize="20sp"
-                android:textColor="#FFFFFF"
-                tools:text="2019"/>
-
+                android:padding="16dp"
+                android:src="@drawable/ic_calendar_v2"/>
         </FrameLayout>
-    </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/bottom_menu_history"
+            android:layout_width="match_parent"
+            android:layout_height="72dp">
+
+            <TextView
+                android:id="@+id/tv_month_current_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/roboto_medium"
+                android:textSize="20sp"
+                android:textColor="@color/colorBlack"
+                tools:text="Март 2019"/>
+
+            <TextView
+                android:id="@+id/tv_sum_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/roboto_regular"
+                android:textSize="14sp"
+                android:textColor="@color/colorAccent"
+                tools:text="Общая сумма: 2218,45 ₽"/>
+
+            <ImageView
+                android:id="@+id/btn_next_history"
+                android:layout_width="52dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:paddingEnd="24dp"
+                android:paddingStart="20dp"
+                android:src="@drawable/ic_next_month"/>
+            <ImageView
+                android:id="@+id/btn_preview_history"
+                android:layout_width="52dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="52dp"
+                android:layout_gravity="end"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp"
+                android:paddingEnd="24dp"
+                android:paddingStart="20dp"
+                android:src="@drawable/ic_preview_month"/>
+        </FrameLayout>
+
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_history_qr"
@@ -64,7 +95,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_qr_code"
+        android:src="@drawable/ic_qr_code_v2"
         app:fabSize="normal"/>
 
 
@@ -72,6 +103,6 @@
         android:id="@+id/vp_history"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="56dp"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

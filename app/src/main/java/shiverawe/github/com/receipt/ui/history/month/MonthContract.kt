@@ -1,11 +1,11 @@
 package shiverawe.github.com.receipt.ui.history.month
 
-import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth
+import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth_v2
 
 interface MonthContract {
     interface View {
-        fun setReceipts(items: ArrayList<ReceiptMonth?>)
-        //fun setTotalSum(totalSum: String)
+        fun setReceipts(items: ArrayList<ReceiptMonth_v2>)
+        fun setTotalSum(totalSum: String)
         fun showProgressbar()
         fun showError()
         fun showEmptyDataMessage()
