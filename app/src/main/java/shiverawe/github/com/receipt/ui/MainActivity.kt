@@ -15,6 +15,7 @@ import shiverawe.github.com.receipt.ui.receipt.ReceiptFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, Navigation {
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         nav_view.setNavigationItemSelectedListener(this)
