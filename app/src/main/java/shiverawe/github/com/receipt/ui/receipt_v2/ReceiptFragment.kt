@@ -13,12 +13,10 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import android.widget.TextView
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_receipt_v2.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.data.repository.ReceiptRepository
 import shiverawe.github.com.receipt.entity.receipt.base.Receipt
+import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptView
 import java.lang.StringBuilder
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -26,21 +24,36 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ReceiptFragment : Fragment(), View.OnClickListener {
+class ReceiptFragment : Fragment(), ReceiptView, View.OnClickListener {
 
     companion object {
-        const val RECEIPT_ID_TAG = "receiptId"
+        const val RECEIPT_TAG = "receipt_fragment"
+        const val RECEIPT_ID_EXTRA = "receiptId"
+        const val RECEIPT_OPTIONS_EXTRA = "receiptOptions"
         fun getNewInstance(receiptId: Long): ReceiptFragment {
             val fragment = ReceiptFragment()
             val bundle = Bundle()
-            bundle.putLong(RECEIPT_ID_TAG, receiptId)
+            bundle.putLong(RECEIPT_ID_EXTRA, receiptId)
+            fragment.arguments = bundle
+            return fragment
+        }
+
+        fun getNewInstance(receiptOptions: String): ReceiptFragment {
+            val fragment = ReceiptFragment()
+            val bundle = Bundle()
+            bundle.putString(RECEIPT_OPTIONS_EXTRA, receiptOptions)
             fragment.arguments = bundle
             return fragment
         }
     }
 
-    private val repository = ReceiptRepository()
-    private var disposable: Disposable? = null
+    private val containerFragment: NewReceiptView?
+        get() {
+            return if (parentFragment is NewReceiptView) (parentFragment as NewReceiptView)
+            else null
+        }
+
+    var presenter = ReceiptPresenter()
     private var adapter = ProductAdapter()
     private lateinit var touchListener: RvRatingProductTouchListener
     private val dateFormatterDate = SimpleDateFormat("dd.MM.YY_HH:mm", Locale("ru"))
@@ -48,23 +61,18 @@ class ReceiptFragment : Fragment(), View.OnClickListener {
     private var receipt: Receipt? = null
     private var animator = AnimatorSet()
     private lateinit var layoutListener: ViewTreeObserver.OnGlobalLayoutListener
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        presenter.attach(this)
         dateFormatterDate.timeZone = TimeZone.getTimeZone("UTC")
         dateFormatterDay.timeZone = TimeZone.getTimeZone("UTC")
-        disposable = repository.getReceiptById(arguments?.getLong(RECEIPT_ID_TAG) ?: 0L)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ receipt ->
-                    showReceipt(receipt)
-                }, { _ ->
-                    showError()
-                })
-
         return inflater.inflate(R.layout.fragment_receipt_v2, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_toolbar_receipt_back.setOnClickListener(this)
         btn_toolbar_receipt_share.setOnClickListener(this)
+        sendRequest()
     }
 
     override fun onClick(v: View?) {
@@ -81,7 +89,8 @@ class ReceiptFragment : Fragment(), View.OnClickListener {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun showReceipt(receipt: Receipt) {
+    override fun showReceipt(receipt: Receipt) {
+        containerFragment?.hideProgress()
         this.receipt = receipt
         tv_toolbar_receipt_title.text = receipt.shop.place
         tv_toolbar_receipt_sum.text = receipt.shop.sum + " " + resources.getString(R.string.rubleSymbolJava)
@@ -109,12 +118,27 @@ class ReceiptFragment : Fragment(), View.OnClickListener {
         rv_receipt.viewTreeObserver.addOnGlobalLayoutListener(layoutListener)
     }
 
-    private fun showError() {
-
+    override fun showError(message: String) {
+        containerFragment?.onError()
     }
 
+    override fun showProgress() {
+        containerFragment?.showProgress()
+    }
+
+    fun sendRequest() {
+        val receiptId = arguments?.getLong(RECEIPT_ID_EXTRA)?: 0L
+        val receiptOptions = arguments?.getString(RECEIPT_OPTIONS_EXTRA)
+        if (receiptId != 0L)
+            presenter.getReceiptById(receiptId)
+        else
+            presenter.getReceiptByMeta(receiptOptions!!)
+    }
+
+    fun getTime() = receipt?.shop?.date
+
     override fun onDestroy() {
-        disposable?.dispose()
+        presenter.detach()
         super.onDestroy()
     }
 

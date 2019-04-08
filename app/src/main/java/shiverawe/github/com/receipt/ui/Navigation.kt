@@ -6,4 +6,5 @@ interface Navigation {
     fun openHistory()
     fun openQr()
     fun openReceipt(receiptId: Long)
+    fun updateHistory(date: Long)
 }

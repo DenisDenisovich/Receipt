@@ -10,14 +10,13 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.ui.history.FragmentHistory
+import shiverawe.github.com.receipt.ui.history.HistoryFragment
+import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptFragment
 import shiverawe.github.com.receipt.ui.receipt.network.EXTRA_DATE_RECEIPT
 import shiverawe.github.com.receipt.ui.receipt.network.NetworkReceiptActivity
 import shiverawe.github.com.receipt.ui.receipt_v2.ReceiptFragment
 
 
-private const val FRAGMENT_HISTORY_TAG = "fragment_history"
-private const val FRAGMENT_LOCAL_RECEIPT_TAG = "fragment_local_receipt"
 const val REQUEST_CODE_CREATE_RECEIPT = 10236
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, Navigation {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +30,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
-            if (findFragmentByTag(FRAGMENT_LOCAL_RECEIPT_TAG) != null) {
+            val fragment = getTopFragment()
+            if (fragment is ReceiptFragment) {
                 supportFragmentManager.popBackStack()
+            } else if (fragment is NewReceiptFragment){
+                if(!fragment.onBackPressed()) supportFragmentManager.popBackStackImmediate()
             } else {
                 super.onBackPressed()
             }
@@ -49,12 +51,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun openHistory() {
-        supportFragmentManager.beginTransaction().replace(R.id.container, FragmentHistory(), FRAGMENT_HISTORY_TAG).commit()
+        getTransaction().replace(R.id.container, HistoryFragment(), HistoryFragment.HISTORY_TAG).commit()
+    }
+
+    override fun updateHistory(date: Long) {
+        supportFragmentManager.popBackStackImmediate()
+        val currentFragment = findFragmentByTag(HistoryFragment.HISTORY_TAG)
+        if(currentFragment is HistoryFragment) {
+            currentFragment.updateMonth(date)
+        }
     }
 
     override fun openQr() {
-        val intent = Intent(this, NetworkReceiptActivity::class.java)
-        startActivityForResult(intent, REQUEST_CODE_CREATE_RECEIPT)
+        getTransaction().replace(R.id.container, NewReceiptFragment()).addToBackStack(null).commit()
+/*        val intent = Intent(this, NetworkReceiptActivity::class.java)
+        startActivityForResult(intent, REQUEST_CODE_CREATE_RECEIPT)*/
     }
 
     override fun openNavigationDrawable() {
@@ -66,8 +77,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun openReceipt(receiptId: Long) {
-        //supportFragmentManager.beginTransaction().add(R.id.container, ReceiptOfflineFragment.getNewInstance(receiptId), FRAGMENT_LOCAL_RECEIPT_TAG).addToBackStack(null).commit()
-        supportFragmentManager.beginTransaction().add(R.id.container, ReceiptFragment.getNewInstance(receiptId), FRAGMENT_LOCAL_RECEIPT_TAG).addToBackStack(null).commit()
+        getTransaction().add(R.id.container, ReceiptFragment.getNewInstance(receiptId), ReceiptFragment.RECEIPT_TAG).addToBackStack(null).commit()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -75,8 +85,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             REQUEST_CODE_CREATE_RECEIPT -> {
                 if (resultCode != Activity.RESULT_OK) return
                 val date = data?.getLongExtra(EXTRA_DATE_RECEIPT, 0L)?: 0L
-                val currentFragment = supportFragmentManager.findFragmentByTag(FRAGMENT_HISTORY_TAG)
-                if(currentFragment is FragmentHistory) {
+                val currentFragment = findFragmentByTag(HistoryFragment.HISTORY_TAG)
+                if(currentFragment is HistoryFragment) {
                     currentFragment.updateMonth(date)
                 }
             }
@@ -87,4 +97,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val fragment = supportFragmentManager.findFragmentByTag(tag)
         return if (fragment?.isVisible == true) fragment else null
     }
+
+    private fun getTopFragment() = supportFragmentManager.findFragmentById(R.id.container)
+    private fun getTransaction() = supportFragmentManager.beginTransaction()
 }

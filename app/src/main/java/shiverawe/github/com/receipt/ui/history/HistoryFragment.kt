@@ -19,10 +19,14 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FragmentHistory : Fragment(), View.OnClickListener {
+class HistoryFragment : Fragment(), View.OnClickListener {
+
+    companion object {
+        const val HISTORY_TAG = "receipt_fragment"
+    }
+
     private lateinit var navigation: Navigation
     private lateinit var monthAdapter: FragmentPagerAdapter
-    //private val pageListener = PageChangeListener()
     private var previewItem = 0
     private val dateFormatterYaer = DateFormat.getDateInstance(SimpleDateFormat.LONG, Locale("ru"))
     private val dateFormatterMonth = SimpleDateFormat("LLLL", Locale("ru"))
@@ -107,10 +111,12 @@ class FragmentHistory : Fragment(), View.OnClickListener {
 
     @SuppressLint("SetTextI18n")
     fun setCurrentSum(sum: String) {
-        if (sum.isNotEmpty())
-            tv_sum_history.text = "Общая сумма: $sum"
-        else
-            tv_sum_history.text = "Общая сумма: ..."
+        tv_sum_history.post {
+            if (sum.isNotEmpty()) {
+                tv_sum_history.text = "Общая сумма: $sum"
+            } else
+                tv_sum_history.text = "Общая сумма: ..."
+        }
     }
 
     private fun setDateFromCalendarDialog(date: Date) {

@@ -12,7 +12,7 @@ import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth_v2
 import shiverawe.github.com.receipt.ui.Navigation
-import shiverawe.github.com.receipt.ui.history.FragmentHistory
+import shiverawe.github.com.receipt.ui.history.HistoryFragment
 import shiverawe.github.com.receipt.ui.history.month.adapter.MonthAdapter
 import kotlin.collections.ArrayList
 
@@ -38,24 +38,25 @@ class MonthFragment : Fragment(), MonthContract.View {
         navigation = context as MainActivity
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val dateFrom = arguments!!.getInt(DATE_KEY)
         presenter = MonthPresenter(dateFrom)
-        presenter?.attach(this)
-        if (userVisibleHint)
-            presenter?.getReceiptsData()
+        adapter = MonthAdapter { receipt -> navigation.openReceipt(receipt.receiptId) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        presenter?.attach(this)
         return inflater.inflate(R.layout.fragment_month, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        adapter = MonthAdapter { receipt -> navigation.openReceipt(receipt.receiptId) }
         rv_month.adapter = adapter
         rv_month.layoutManager = LinearLayoutManager(context)
+        if (userVisibleHint) {
+            if (receipts.size == 0) presenter?.getReceiptsData()
+            else setReceipts(receipts)
+        }
     }
 
     override fun setReceipts(items: ArrayList<ReceiptMonth_v2>) {
@@ -69,7 +70,7 @@ class MonthFragment : Fragment(), MonthContract.View {
     override fun setTotalSum(totalSum: String) {
         this.totalSum = totalSum
         parentFragment?.let {
-            (it as FragmentHistory).setCurrentSum(totalSum)
+            (it as HistoryFragment).setCurrentSum(totalSum)
         }
     }
 
