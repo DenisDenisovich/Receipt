@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.receipt_v2
+package shiverawe.github.com.receipt.ui.receipt
 
 import shiverawe.github.com.receipt.entity.receipt.base.Receipt
 

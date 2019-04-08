@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.receipt_v2
+package shiverawe.github.com.receipt.ui.receipt
 
 import android.animation.*
 import android.annotation.SuppressLint
@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import android.widget.TextView
-import kotlinx.android.synthetic.main.fragment_receipt_v2.*
+import kotlinx.android.synthetic.main.fragment_receipt.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.entity.receipt.base.Receipt
 import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptView
@@ -47,10 +47,13 @@ class ReceiptFragment : Fragment(), ReceiptView, View.OnClickListener {
         }
     }
 
-    private val containerFragment: NewReceiptView?
+    private val containerParent: NewReceiptView?
         get() {
-            return if (parentFragment is NewReceiptView) (parentFragment as NewReceiptView)
-            else null
+            return when {
+                parentFragment is NewReceiptView -> parentFragment as NewReceiptView
+                activity is NewReceiptView -> activity as NewReceiptView
+                else -> null
+            }
         }
 
     var presenter = ReceiptPresenter()
@@ -66,7 +69,7 @@ class ReceiptFragment : Fragment(), ReceiptView, View.OnClickListener {
         presenter.attach(this)
         dateFormatterDate.timeZone = TimeZone.getTimeZone("UTC")
         dateFormatterDay.timeZone = TimeZone.getTimeZone("UTC")
-        return inflater.inflate(R.layout.fragment_receipt_v2, container, false)
+        return inflater.inflate(R.layout.fragment_receipt, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,7 +93,7 @@ class ReceiptFragment : Fragment(), ReceiptView, View.OnClickListener {
 
     @SuppressLint("SetTextI18n")
     override fun showReceipt(receipt: Receipt) {
-        containerFragment?.hideProgress()
+        containerParent?.hideProgress()
         this.receipt = receipt
         tv_toolbar_receipt_title.text = receipt.shop.place
         tv_toolbar_receipt_sum.text = receipt.shop.sum + " " + resources.getString(R.string.rubleSymbolJava)
@@ -119,11 +122,11 @@ class ReceiptFragment : Fragment(), ReceiptView, View.OnClickListener {
     }
 
     override fun showError(message: String) {
-        containerFragment?.onError()
+        containerParent?.onError()
     }
 
     override fun showProgress() {
-        containerFragment?.showProgress()
+        containerParent?.showProgress()
     }
 
     fun sendRequest() {

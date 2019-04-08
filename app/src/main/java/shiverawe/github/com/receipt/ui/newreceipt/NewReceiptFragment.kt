@@ -12,8 +12,7 @@ import kotlinx.android.synthetic.main.fragment_new_receipt.*
 import kotlinx.android.synthetic.main.view_error.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.MainActivity
-import shiverawe.github.com.receipt.ui.receipt.network.datainput.ManualFragment
-import shiverawe.github.com.receipt.ui.receipt_v2.ReceiptFragment
+import shiverawe.github.com.receipt.ui.receipt.ReceiptFragment
 
 class NewReceiptFragment : Fragment(), NewReceiptView, View.OnClickListener {
 
@@ -88,7 +87,7 @@ class NewReceiptFragment : Fragment(), NewReceiptView, View.OnClickListener {
         }
     }
 
-    override fun onBackPressed(): Boolean {
+    override fun onBackPressedIsHandled(): Boolean {
         val fragment = getTopFragment()
         return if (childFragmentManager.backStackEntryCount == 0) {
             permissionDisposable?.dispose()

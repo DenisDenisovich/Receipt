@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.receipt_v2
+package shiverawe.github.com.receipt.ui.receipt
 
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView

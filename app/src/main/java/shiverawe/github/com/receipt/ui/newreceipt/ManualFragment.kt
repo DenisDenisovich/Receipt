@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.receipt.network.datainput
+package shiverawe.github.com.receipt.ui.newreceipt
 
 import android.os.Bundle
 import android.support.v4.app.Fragment

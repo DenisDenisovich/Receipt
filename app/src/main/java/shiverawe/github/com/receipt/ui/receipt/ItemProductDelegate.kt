@@ -1,10 +1,10 @@
-package shiverawe.github.com.receipt.ui.receipt_v2
+package shiverawe.github.com.receipt.ui.receipt
 
 import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.item_product_v2.view.*
+import kotlinx.android.synthetic.main.item_product.view.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.entity.receipt.base.Product
 import shiverawe.github.com.receipt.ui.App
@@ -18,7 +18,7 @@ class ItemProductDelegate(override var viewType: Int) : AdapterDelegate<Product>
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return ProductViewHolder(getLayout(parent, R.layout.item_product_v2))
+        return ProductViewHolder(getLayout(parent, R.layout.item_product))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, items: ArrayList<Product>, position: Int) {

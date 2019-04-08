@@ -1,7 +1,5 @@
 package shiverawe.github.com.receipt.ui
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
@@ -12,12 +10,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
 import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptFragment
-import shiverawe.github.com.receipt.ui.receipt.network.EXTRA_DATE_RECEIPT
-import shiverawe.github.com.receipt.ui.receipt.network.NetworkReceiptActivity
-import shiverawe.github.com.receipt.ui.receipt_v2.ReceiptFragment
+import shiverawe.github.com.receipt.ui.receipt.ReceiptFragment
 
 
-const val REQUEST_CODE_CREATE_RECEIPT = 10236
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, Navigation {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +29,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (fragment is ReceiptFragment) {
                 supportFragmentManager.popBackStack()
             } else if (fragment is NewReceiptFragment){
-                if(!fragment.onBackPressed()) supportFragmentManager.popBackStackImmediate()
+                if(!fragment.onBackPressedIsHandled()) supportFragmentManager.popBackStackImmediate()
             } else {
                 super.onBackPressed()
             }
@@ -64,7 +59,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun openQr() {
         getTransaction().replace(R.id.container, NewReceiptFragment()).addToBackStack(null).commit()
-/*        val intent = Intent(this, NetworkReceiptActivity::class.java)
+/*        val intent = Intent(this, ReceiptLinkActivity::class.java)
         startActivityForResult(intent, REQUEST_CODE_CREATE_RECEIPT)*/
     }
 
@@ -78,19 +73,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun openReceipt(receiptId: Long) {
         getTransaction().add(R.id.container, ReceiptFragment.getNewInstance(receiptId), ReceiptFragment.RECEIPT_TAG).addToBackStack(null).commit()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            REQUEST_CODE_CREATE_RECEIPT -> {
-                if (resultCode != Activity.RESULT_OK) return
-                val date = data?.getLongExtra(EXTRA_DATE_RECEIPT, 0L)?: 0L
-                val currentFragment = findFragmentByTag(HistoryFragment.HISTORY_TAG)
-                if(currentFragment is HistoryFragment) {
-                    currentFragment.updateMonth(date)
-                }
-            }
-        }
     }
 
     private fun findFragmentByTag(tag: String) : Fragment? {

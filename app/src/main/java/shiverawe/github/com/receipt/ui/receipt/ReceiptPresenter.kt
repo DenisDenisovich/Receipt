@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.receipt_v2
+package shiverawe.github.com.receipt.ui.receipt
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

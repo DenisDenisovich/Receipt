@@ -1,105 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tool="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorPrimary">
+
 
     <FrameLayout
-        android:id="@+id/history_toolbar"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="109dp"
-        android:background="@color/colorPrimary"
-        android:elevation="8dp"
-        android:outlineProvider="bounds">
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:outlineProvider="background"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/btn_toolbar_receipt_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:src="@drawable/ic_back_v2" />
+
+        <ImageView
+            android:id="@+id/btn_toolbar_receipt_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:padding="16dp"
+            android:src="@drawable/ic_share_v2"/>
+
+        <TextView
+            android:id="@+id/tv_toolbar_receipt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/toolbar_title_expanded_margin_top"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/toolbar_title_expanded_text_size"
+            android:fontFamily="@font/roboto_regular"
+            tools:text="Пятерочка"/>
+
+        <TextView
+            android:id="@+id/tv_toolbar_receipt_sum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/toolbar_sum_expanded_margin_top"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/toolbar_sum_expanded_text_size"
+            android:fontFamily="@font/roboto_medium"
+            tools:text="2218,45 ₽"/>
 
         <FrameLayout
+            android:id="@+id/date_container_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="56dp">
-
-            <ImageView
-                android:id="@+id/btn_receipt_back"
+            android:layout_height="@dimen/toolbar_date_container_height"
+            android:layout_marginTop="@dimen/toolbar_date_container_expanded_margin_top">
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:src="@drawable/ic_back" />
+                android:layout_marginStart="16dp"
+                android:textSize="14sp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/tv_toolbar_receipt_date"/>
 
             <TextView
-                android:id="@+id/tv_receipt_date"
+                android:id="@+id/tv_toolbar_receipt_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="72dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginStart="16dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
                 android:fontFamily="@font/roboto_regular"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp" />
+                tools:text="Суббота, 23.03.19"/>
 
-            <ImageView
-                android:id="@+id/btn_receipt_share"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:padding="16dp"
-                android:src="@drawable/ic_share" />
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/fl_receipt_top_ticket"
-            android:layout_width="match_parent"
-            android:layout_height="53dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="56dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/ic_receipt_up_with_line"
-            android:elevation="8dp"
-            android:outlineProvider="bounds">
-
-            <TextView
-                android:id="@+id/tv_receipt_shop_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:singleLine="true"
-                android:ellipsize="marquee"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="150dp"
-                android:fontFamily="@font/courier_new_regular"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                tools:text="Пятерочка" />
-
-            <TextView
-                android:id="@+id/tv_receipt_shop_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"
                 android:layout_marginEnd="16dp"
-                android:fontFamily="@font/courier_new_regular"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                tools:text="123.00 р" />
+                android:textSize="14sp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/tv_toolbar_receipt_time"/>
 
+            <TextView
+                android:id="@+id/tv_toolbar_receipt_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
+                android:fontFamily="@font/roboto_regular"
+                tools:text="20:08"/>
         </FrameLayout>
-
     </FrameLayout>
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_receipt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="109dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/ic_receipt_down"
-        android:elevation="8dp"
-        android:outlineProvider="bounds"
-        android:overScrollMode="never"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        tools:listitem="@layout/item_product" />
-
-</FrameLayout>
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        android:orientation="vertical"/>
+</LinearLayout>
