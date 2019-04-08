@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:padding="16dp"
-                android:src="@drawable/ic_menu__v2"/>
+                android:src="@drawable/ic_menu"/>
 
             <ImageView
                 android:id="@+id/btn_calendar_history"
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
                 android:padding="16dp"
-                android:src="@drawable/ic_calendar_v2"/>
+                android:src="@drawable/ic_calendar"/>
         </FrameLayout>
 
         <FrameLayout
@@ -95,7 +95,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_qr_code_v2"
+        android:src="@drawable/ic_qr_code"
         app:fabSize="normal"/>
 
 

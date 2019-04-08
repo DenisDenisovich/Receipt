@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:src="@drawable/ic_back_v2" />
+            android:src="@drawable/ic_back" />
 
         <ImageView
             android:id="@+id/btn_toolbar_receipt_share"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:padding="16dp"
-            android:src="@drawable/ic_share_v2"/>
+            android:src="@drawable/ic_share"/>
 
         <TextView
             android:id="@+id/tv_toolbar_receipt_title"
