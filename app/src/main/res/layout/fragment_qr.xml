@@ -8,10 +8,8 @@
         android:id="@+id/scanner_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:autoFocusButtonColor="@android:color/white"
-        app:autoFocusButtonVisible="true"
-        app:flashButtonColor="@android:color/white"
-        app:flashButtonVisible="true"
+        app:autoFocusButtonVisible="false"
+        app:flashButtonVisible="false"
         app:frameColor="@android:color/white"
         app:frameCornersSize="50dp"
         app:frameCornersRadius="0dp"
@@ -22,15 +20,43 @@
         android:visibility="visible"
         app:maskColor="#77000000"/>
 
+    <ImageView
+        android:id="@+id/btn_qr_back"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:padding="16dp"
+        android:src="@drawable/ic_back_qr"/>
+
+    <ImageView
+        android:id="@+id/btn_qr_autofocus"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:padding="20dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/ic_autofocus_disable"/>
+
+    <ImageView
+        android:id="@+id/btn_qr_flash"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:padding="20dp"
+        android:layout_marginTop="60dp"
+        android:layout_gravity="end"
+        android:src="@drawable/ic_flash_disable"/>
+
+
+
     <Button
         android:id="@+id/btn_qr_reader_manual"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
         android:layout_gravity="bottom|center"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/btn_receipt_save"
+        android:background="@color/colorAccent"
         android:textColor="#FFFFFF"
-        android:text="Ручной ввод"/>
+        android:text="@string/btn_qr_manual"/>
 </FrameLayout>

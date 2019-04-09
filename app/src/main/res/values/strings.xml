@@ -21,6 +21,7 @@
     <string name="sum_manual">Сумма чека</string>
     <string name="date_manual">Дата</string>
     <string name="time_manual">Время</string>
+    <string name="btn_qr_manual">Ввести вручную</string>
 
 
 </resources>

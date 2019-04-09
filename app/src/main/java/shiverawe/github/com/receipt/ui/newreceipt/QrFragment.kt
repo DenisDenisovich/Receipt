@@ -1,5 +1,6 @@
 package shiverawe.github.com.receipt.ui.newreceipt
 
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -12,7 +13,7 @@ import com.budiyev.android.codescanner.ErrorCallback
 import kotlinx.android.synthetic.main.fragment_qr.*
 import shiverawe.github.com.receipt.R
 
-class QrFragment: Fragment() {
+class QrFragment : Fragment(), View.OnClickListener {
     private var codeScanner: CodeScanner? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -25,6 +26,9 @@ class QrFragment: Fragment() {
             (parentFragment as NewReceiptView).openManual()
             codeScanner?.releaseResources()
         }
+        btn_qr_back.setOnClickListener(this)
+        btn_qr_autofocus.setOnClickListener(this)
+        btn_qr_flash.setOnClickListener(this)
     }
 
     override fun onResume() {
@@ -51,10 +55,29 @@ class QrFragment: Fragment() {
             }
         }
         codeScanner?.startPreview()
+        codeScanner?.isAutoFocusEnabled = true
+        btn_qr_autofocus.setImageResource(R.drawable.ic_autofocus_enable)
     }
 
     override fun onPause() {
         codeScanner?.releaseResources()
         super.onPause()
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.btn_qr_back -> activity?.onBackPressed()
+            R.id.btn_qr_autofocus -> {
+                codeScanner?.isAutoFocusEnabled = !(codeScanner?.isAutoFocusEnabled ?: false)
+                if (codeScanner?.isAutoFocusEnabled == true) btn_qr_autofocus.setImageResource(R.drawable.ic_autofocus_enable)
+                else btn_qr_autofocus.setImageResource(R.drawable.ic_autofocus_disable)
+            }
+            R.id.btn_qr_flash -> {
+                codeScanner?.isFlashEnabled = !(codeScanner?.isFlashEnabled ?: false)
+                if (codeScanner?.isFlashEnabled == true) btn_qr_flash.setImageResource(R.drawable.ic_flash_enable)
+                else btn_qr_flash.setImageResource(R.drawable.ic_flash_disable)
+
+            }
+        }
     }
 }
