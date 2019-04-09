@@ -19,6 +19,7 @@ import java.lang.StringBuilder
 class ManualFragment : Fragment(), View.OnFocusChangeListener {
     private var receiptMeta = ""
     private var textIsValid = false
+    private var errorMessage = "нет данных"
     private var textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
             changeBtnBackground()
@@ -39,7 +40,7 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
             if (textIsValid)
                 (parentFragment as NewReceiptView).openReceipt(receiptMeta)
             else
-                Toast.makeText(context!!, "Не верные данные", Toast.LENGTH_LONG).show()
+                Toast.makeText(context!!, "Ошибка: $errorMessage", Toast.LENGTH_LONG).show()
         }
 
         btn_manual_back.setOnClickListener {
@@ -51,11 +52,13 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
         et_manual_fp.onFocusChangeListener = this
         et_manual_sum.onFocusChangeListener = this
         et_manual_date.onFocusChangeListener = this
+        et_manual_time.onFocusChangeListener = this
         et_manual_fd.addTextChangedListener(textWatcher)
         et_manual_fn.addTextChangedListener(textWatcher)
         et_manual_fp.addTextChangedListener(textWatcher)
         et_manual_sum.addTextChangedListener(textWatcher)
         et_manual_date.addTextChangedListener(textWatcher)
+        et_manual_time.addTextChangedListener(textWatcher)
     }
 
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
@@ -89,56 +92,117 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
         val s = et_manual_sum.text.toString().trim()
         val date = et_manual_date.text.toString().trim()
         val time = et_manual_time.text.toString().trim()
-        if (checkDate(date) && checkTime(time) &&
-                fd.isNotEmpty() && TextUtils.isDigitsOnly(fd) &&
-                fn.isNotEmpty() && TextUtils.isDigitsOnly(fn) &&
-                fp.isNotEmpty() && TextUtils.isDigitsOnly(fp) &&
-                s.isNotEmpty()) {
-            val dateValues = date.split(".")
-            val timeValues = time.split(":")
-            val year = "20${dateValues.last()}"
-            val month = if (dateValues[1].length == 1) "0${dateValues[1]}" else dateValues[1]
-            val day = if (dateValues[0].length == 1) "0${dateValues[0]}" else dateValues[0]
-            val hour = if (timeValues[0].length == 1) "0${timeValues[0]}" else timeValues[0]
-            val minute = if (timeValues[1].length == 1) "0${timeValues[1]}" else timeValues[1]
-            val t = StringBuilder()
-            t.append(year)
-            t.append(month)
-            t.append(day)
-            t.append(hour)
-            t.append(minute)
-            // 20170605T2101
+        if (checkFd(fd) &&
+                checkFn(fn) &&
+                checkFp(fp) &&
+                checkSum(s) &&
+                checkDate(date) &&
+                checkTime(time)) {
+            val t = getDateString(date, time)
             val receiptData = StringBuilder()
             receiptData.append("t=$t&s=$s&fn=$fn&i=$fd&fp=$fp")
             receiptMeta = receiptData.toString()
             textIsValid = true
-        } else
+        } else {
             textIsValid = false
+        }
         return textIsValid
     }
 
+
+    // Template: YYYYMMDDTHHMM
+    // Example:  20170605T2101
+    private fun getDateString(date: String, time: String): String {
+        val dateValues = date.split(".")
+        val timeValues = time.split(":")
+        val year = "20${dateValues.last()}"
+        val month = if (dateValues[1].length == 1) "0${dateValues[1]}" else dateValues[1]
+        val day = if (dateValues[0].length == 1) "0${dateValues[0]}" else dateValues[0]
+        val hour = if (timeValues[0].length == 1) "0${timeValues[0]}" else timeValues[0]
+        val minute = if (timeValues[1].length == 1) "0${timeValues[1]}" else timeValues[1]
+        val t = StringBuilder()
+        t.append(year)
+        t.append(month)
+        t.append(day)
+        t.append("T")
+        t.append(hour)
+        t.append(minute)
+        return t.toString()
+    }
+
+    private fun checkFd(fd: String): Boolean {
+        val isCorrect = fd.isNotEmpty()
+        if (!isCorrect) errorMessage = "формат ФД неверный"
+        return isCorrect
+    }
+
+    private fun checkFn(fn: String): Boolean {
+        val isCorrect = fn.isNotEmpty()
+        if (!isCorrect) errorMessage = "формат ФН неверный"
+        return isCorrect
+    }
+
+    private fun checkFp(fp: String): Boolean {
+        val isCorrect = fp.isNotEmpty()
+        if (!isCorrect) errorMessage = "формат ФП неверный"
+        return isCorrect
+    }
+
+
     private fun checkDate(date: String): Boolean {
+        var isCorrect = false
         val values = date.split(".")
-        if (values.size != 3) return false
-        try {
-            val day = values[0].toInt()
-            val month = values[1].toInt()
-            val year = values[2].toInt()
-            return month in 0..12 && day in 0..31 && year in 0..99
-        } catch (e: Exception) {
-            return false
+        if (values.size == 3) {
+            try {
+                val day = values[0].toInt()
+                val month = values[1].toInt()
+                val year = values[2].toInt()
+                isCorrect = month in 0..12 && day in 0..31 && year in 0..99
+            } catch (e: Exception) {
+                isCorrect = false
+            }
         }
+        if (!isCorrect) errorMessage = "формат даты неверный"
+        return isCorrect
     }
 
     private fun checkTime(time: String): Boolean {
+        var isCorrect = false
         val values = time.split(":")
-        if (values.size != 2) return false
-        try {
-            val hour = values[0].toInt()
-            val minute = values[1].toInt()
-            return hour in 0..23 && minute in 0..59
-        } catch (e: Exception) {
-            return false
+        if (values.size == 2) {
+            try {
+                val hour = values[0].toInt()
+                val minute = values[1].toInt()
+                isCorrect = hour in 0..23 && minute in 0..59
+            } catch (e: Exception) {
+                isCorrect = false
+            }
         }
+        if (!isCorrect) errorMessage = "формат времени неверный"
+        return isCorrect
     }
+
+    private fun checkSum(sum: String): Boolean {
+        var isCorrect = false
+        if (sum.isNotEmpty()) {
+            if (sum.contains(".")) {
+                // if sum contains not only digits and dots
+                if (TextUtils.isDigitsOnly(sum.filter { it != '.' })) {
+                    val numberParts = sum.split(".")
+                    // if sum contains only one dot
+                    if (numberParts.size == 2) {
+                        // if double parts contains 2 digits
+                        if (numberParts[1].length == 2) {
+                            isCorrect = true
+                        }
+                    }
+                }
+            } else {
+                isCorrect = TextUtils.isDigitsOnly(sum)
+            }
+        }
+        if (!isCorrect) errorMessage = "формат суммы неверный"
+        return isCorrect
+    }
+
 }

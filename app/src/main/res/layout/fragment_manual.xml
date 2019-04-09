@@ -70,7 +70,7 @@
                 android:inputType="number"
                 android:textColor="#333333"
                 android:textColorHint="#A0A0A0"
-                android:hint="27183"
+                android:hint="9282000100036317"
                 android:background="@drawable/et_manual" />
 
             <LinearLayout
@@ -106,7 +106,7 @@
                 android:inputType="number"
                 android:textColor="#333333"
                 android:textColorHint="#A0A0A0"
-                android:hint="27183"
+                android:hint="175917"
                 android:background="@drawable/et_manual" />
 
             <LinearLayout
@@ -142,7 +142,7 @@
                 android:inputType="number"
                 android:textColor="#333333"
                 android:textColorHint="#A0A0A0"
-                android:hint="27183"
+                android:hint="2527314583"
                 android:background="@drawable/et_manual" />
 
             <LinearLayout
@@ -175,10 +175,10 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="8dp"
                 android:lines="1"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:textColor="#333333"
                 android:textColorHint="#A0A0A0"
-                android:hint="27183"
+                android:hint="125.00"
                 android:background="@drawable/et_manual" />
 
             <LinearLayout
