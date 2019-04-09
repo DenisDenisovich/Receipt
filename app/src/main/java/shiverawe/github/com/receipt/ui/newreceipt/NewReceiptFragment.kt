@@ -18,6 +18,7 @@ class NewReceiptFragment : Fragment(), NewReceiptView, View.OnClickListener {
 
     var permissionDisposable: Disposable? = null
     private lateinit var options: String
+    private var forgetQrFragment = false
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_new_receipt, container, false)
     }
@@ -46,6 +47,7 @@ class NewReceiptFragment : Fragment(), NewReceiptView, View.OnClickListener {
         this.options = options
         if (childFragmentManager.backStackEntryCount != 0 || getTopFragment() is ManualFragment) {
             getTransaction().replace(R.id.new_receipt_container, ReceiptFragment.getNewInstance(options)).addToBackStack(null).commit()
+            forgetQrFragment = true
         } else {
             getTransaction().replace(R.id.new_receipt_container, ReceiptFragment.getNewInstance(options)).commit()
         }
@@ -96,14 +98,21 @@ class NewReceiptFragment : Fragment(), NewReceiptView, View.OnClickListener {
             false
         } else {
             when {
-                fragment is ReceiptFragment && container_error.visibility == View.VISIBLE -> goBackOnBackPressed()
+                fragment is ReceiptFragment && container_error.visibility == View.VISIBLE ->  {
+                    childFragmentManager.popBackStack()
+                    container_error.visibility = View.GONE
+                    return true
+                }
+
                 fragment is ReceiptFragment && container_error.visibility == View.GONE -> {
                     (activity as MainActivity).updateHistory(fragment.getTime() ?: 0)
                     true
                 }
+
                 fragment is ManualFragment -> {
                     if (childFragmentManager.backStackEntryCount == 0) return false
-                    goBackOnBackPressed()
+                    childFragmentManager.popBackStack()
+                    return !forgetQrFragment
                 }
                 else -> {
                     permissionDisposable?.dispose()
@@ -116,11 +125,6 @@ class NewReceiptFragment : Fragment(), NewReceiptView, View.OnClickListener {
     override fun onDestroy() {
         permissionDisposable?.dispose()
         super.onDestroy()
-    }
-
-    private fun goBackOnBackPressed(): Boolean {
-        childFragmentManager.popBackStack()
-        return true
     }
 
     private fun getTopFragment() = childFragmentManager.findFragmentById(R.id.new_receipt_container)
