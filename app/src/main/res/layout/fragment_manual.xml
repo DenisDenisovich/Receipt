@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+        <ImageView
+            android:id="@+id/btn_manual_back"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:padding="16dp"
+            android:src="@drawable/ic_back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="72dp"
+            android:textColor="@color/colorBlack"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/tv_manual_title" />
+    </FrameLayout>
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="80dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#000000"
+                    android:text="@string/fn_manual" />
+
+                <ImageView
+                    android:id="@+id/btn_help_fn"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:padding="9dp"
+                    android:src="@drawable/ic_help_manual"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_manual_fn"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp"
+                android:lines="1"
+                android:inputType="number"
+                android:textColor="#333333"
+                android:textColorHint="#A0A0A0"
+                android:hint="27183"
+                android:background="@drawable/et_manual" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#000000"
+                    android:text="@string/fd_manual" />
+
+                <ImageView
+                    android:id="@+id/btn_help_fd"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:padding="9dp"
+                    android:src="@drawable/ic_help_manual"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_manual_fd"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp"
+                android:lines="1"
+                android:inputType="number"
+                android:textColor="#333333"
+                android:textColorHint="#A0A0A0"
+                android:hint="27183"
+                android:background="@drawable/et_manual" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#000000"
+                    android:text="@string/fp_manual" />
+
+                <ImageView
+                    android:id="@+id/btn_help_fp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:padding="9dp"
+                    android:src="@drawable/ic_help_manual"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_manual_fp"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp"
+                android:lines="1"
+                android:inputType="number"
+                android:textColor="#333333"
+                android:textColorHint="#A0A0A0"
+                android:hint="27183"
+                android:background="@drawable/et_manual" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#000000"
+                    android:text="@string/sum_manual" />
+
+                <ImageView
+                    android:id="@+id/btn_help_sum"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:padding="9dp"
+                    android:src="@drawable/ic_help_manual"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_manual_sum"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp"
+                android:lines="1"
+                android:inputType="number"
+                android:textColor="#333333"
+                android:textColorHint="#A0A0A0"
+                android:hint="27183"
+                android:background="@drawable/et_manual" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="horizontal">
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="#000000"
+                            android:text="@string/date_manual" />
+
+                        <ImageView
+                            android:id="@+id/btn_help_date"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:padding="9dp"
+                            android:src="@drawable/ic_help_manual"/>
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/et_manual_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="33dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="8dp"
+                        android:lines="1"
+                        android:inputType="number"
+                        android:textColor="#333333"
+                        android:textColorHint="#A0A0A0"
+                        android:hint="27183"
+                        android:background="@drawable/et_manual" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="#000000"
+                            android:text="@string/time_manual" />
+
+                        <ImageView
+                            android:id="@+id/btn_help_time"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:padding="9dp"
+                            android:src="@drawable/ic_help_manual"/>
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/et_manual_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="33dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="8dp"
+                        android:lines="1"
+                        android:inputType="number"
+                        android:textColor="#333333"
+                        android:textColorHint="#A0A0A0"
+                        android:hint="27183"
+                        android:background="@drawable/et_manual" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_manual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:layout_margin="16dp"
+                android:background="@color/colorAccent"
+                android:textColor="#FFFFFF"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/tv_manual_find_btn"/>
+        </LinearLayout>
+
+    </ScrollView>
+</FrameLayout>

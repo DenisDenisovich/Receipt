@@ -13,6 +13,14 @@
     <string name="rubleSymbolJava">\u20BD</string>
     <string name="tv_toolbar_receipt_date">ДАТА</string>
     <string name="tv_toolbar_receipt_time">ВРЕМЯ</string>
+    <string name="tv_manual_title">Данные чека</string>
+    <string name="tv_manual_find_btn">Найти чек</string>
+    <string name="fn_manual">ФН - фискальный номер</string>
+    <string name="fd_manual">ФД - фискальный документ</string>
+    <string name="fp_manual">ФП - фискальный признак</string>
+    <string name="sum_manual">Сумма чека</string>
+    <string name="date_manual">Дата</string>
+    <string name="time_manual">Время</string>
 
 
 </resources>

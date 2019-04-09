@@ -9,14 +9,14 @@ import android.widget.Toast
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
-import kotlinx.android.synthetic.main.fragment_qr_reader.*
+import kotlinx.android.synthetic.main.fragment_qr.*
 import shiverawe.github.com.receipt.R
 
 class QrFragment: Fragment() {
     private var codeScanner: CodeScanner? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_qr_reader, container, false)
+        return inflater.inflate(R.layout.fragment_qr, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

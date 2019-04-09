@@ -52,9 +52,11 @@ class NewReceiptFragment : Fragment(), NewReceiptView, View.OnClickListener {
     }
 
     override fun openManual() {
-        getTransaction().replace(R.id.new_receipt_container, ManualFragment()).addToBackStack(null).commit()
+        if (getTopFragment() is QrFragment)
+            getTransaction().replace(R.id.new_receipt_container, ManualFragment()).addToBackStack(null).commit()
+        else
+            getTransaction().replace(R.id.new_receipt_container, ManualFragment()).commit()
     }
-
     override fun openQr() {
         permissionDisposable = RxPermissions(this)
                 .request(Manifest.permission.CAMERA)
@@ -99,7 +101,10 @@ class NewReceiptFragment : Fragment(), NewReceiptView, View.OnClickListener {
                     (activity as MainActivity).updateHistory(fragment.getTime() ?: 0)
                     true
                 }
-                fragment is ManualFragment -> goBackOnBackPressed()
+                fragment is ManualFragment -> {
+                    if (childFragmentManager.backStackEntryCount == 0) return false
+                    goBackOnBackPressed()
+                }
                 else -> {
                     permissionDisposable?.dispose()
                     false
