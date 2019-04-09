@@ -42,7 +42,7 @@ class HeaderDateDelegate(override var viewType: Int) : AdapterDelegate<ReceiptMo
                 isEqualDays(receipt.shop.date, System.currentTimeMillis()) -> tvDate.text = "СЕГОДНЯ"
                 isPreviewDay(receipt.shop.date) -> tvDate.text = "ВЧЕРА"
                 else -> {
-                    val day = dateFormatterDay.format(Date(receipt.shop.date)).split(",")[0].capitalize()
+                    val day = dateFormatterDay.format(Date(receipt.shop.date)).split(",")[0].toUpperCase()
                     val digit = dateFormatterDate.format(Date(receipt.shop.date)).split("_")[0].split(".")[0]
                     tvDate.text = "$digit $day"
                 }
