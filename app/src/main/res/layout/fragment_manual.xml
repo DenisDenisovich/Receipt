@@ -220,10 +220,10 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="8dp"
                         android:lines="1"
-                        android:inputType="number"
+                        android:inputType="date"
                         android:textColor="#333333"
                         android:textColorHint="#A0A0A0"
-                        android:hint="27183"
+                        android:hint="26.03.19"
                         android:background="@drawable/et_manual" />
                 </FrameLayout>
 
@@ -260,10 +260,10 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="8dp"
                         android:lines="1"
-                        android:inputType="number"
+                        android:inputType="time"
                         android:textColor="#333333"
                         android:textColorHint="#A0A0A0"
-                        android:hint="27183"
+                        android:hint="20:00"
                         android:background="@drawable/et_manual" />
                 </FrameLayout>
 
