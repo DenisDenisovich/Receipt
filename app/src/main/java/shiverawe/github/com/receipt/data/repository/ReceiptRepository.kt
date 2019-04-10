@@ -1,15 +1,10 @@
 package shiverawe.github.com.receipt.data.repository
 
 import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
 import shiverawe.github.com.receipt.data.bd.ReceiptDatabase
-import shiverawe.github.com.receipt.data.bd.utils.MapperDb
 import shiverawe.github.com.receipt.data.network.ReceiptNetwork
-import shiverawe.github.com.receipt.data.network.utils.MapperNetwork
-import shiverawe.github.com.receipt.data.network.entity.create.CreateRequest
 import shiverawe.github.com.receipt.data.network.entity.create.CreateResponce
-import shiverawe.github.com.receipt.entity.Receipt
-import shiverawe.github.com.receipt.ui.App
+import shiverawe.github.com.receipt.entity.receipt.base.Receipt
 
 class ReceiptRepository {
     private val db = ReceiptDatabase()

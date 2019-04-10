@@ -17,4 +17,42 @@
     <dimen name="receipt_top_line_gap_size">5dp</dimen>
     <dimen name="receipt_network_bottom_margin">72dp</dimen>
     <dimen name="receipt_offline_bottom_margin">16dp</dimen>
+
+    <dimen name="item_month_api19_height_single_type">72dp</dimen>
+    <dimen name="item_month_api19_height_top_type">56dp</dimen>
+    <dimen name="item_month_api19_height_bottom_type">56dp</dimen>
+    <dimen name="item_month_api19_height_middle_type">48dp</dimen>
+    <dimen name="item_month_api19_margin_start_date_container">16dp</dimen>
+    <dimen name="item_month_api19_margin_start_title">72dp</dimen>
+    <dimen name="item_month_api19_margin_end_sum">16dp</dimen>
+    <dimen name="item_month_api19_margin_bottom_separator">8dp</dimen>
+
+    <dimen name="item_sum_api19_height">72dp</dimen>
+    <dimen name="item_sum_api19_margin_start_title">16dp</dimen>
+    <dimen name="item_sum_api19_margin_end_sum">16dp</dimen>
+
+    <dimen name="item_month_radius">4dp</dimen>
+    <dimen name="item_month_margin">8dp</dimen>
+    <dimen name="item_month_elevation">4dp</dimen>
+
+
+
+    <dimen name="open_toolbar_product_min_swipe">56dp</dimen>
+
+    <dimen name="toolbar_title_expanded_margin_top">72dp</dimen>
+    <dimen name="toolbar_title_collapsed_margin_top">4dp</dimen>
+    <dimen name="toolbar_title_expanded_text_size">16sp</dimen>
+    <dimen name="toolbar_title_collapsed_text_size">14sp</dimen>
+
+    <dimen name="toolbar_sum_expanded_margin_top">112dp</dimen>
+    <dimen name="toolbar_sum_expanded_text_size">32sp</dimen>
+    <dimen name="toolbar_sum_collapsed_margin_top">28dp</dimen>
+    <dimen name="toolbar_sum_collapsed_text_size">20sp</dimen>
+
+    <dimen name="toolbar_date_container_expanded_margin_top">168dp</dimen>
+    <dimen name="toolbar_date_container_collapsed_margin_top">0dp</dimen>
+    <dimen name="toolbar_date_container_height">65dp</dimen>
+    <dimen name="toolbar_collapsed_height">56dp</dimen>
+    <dimen name="toolbar_expanded_height">233dp</dimen>
+
 </resources>

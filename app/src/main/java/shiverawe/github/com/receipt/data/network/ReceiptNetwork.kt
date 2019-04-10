@@ -4,7 +4,7 @@ import io.reactivex.Single
 import shiverawe.github.com.receipt.data.network.entity.create.CreateRequest
 import shiverawe.github.com.receipt.data.network.entity.create.CreateResponce
 import shiverawe.github.com.receipt.data.network.utils.MapperNetwork
-import shiverawe.github.com.receipt.entity.Receipt
+import shiverawe.github.com.receipt.entity.receipt.base.Receipt
 import shiverawe.github.com.receipt.ui.App
 
 class ReceiptNetwork {

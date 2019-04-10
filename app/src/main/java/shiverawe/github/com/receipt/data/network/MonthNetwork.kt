@@ -4,7 +4,7 @@ import io.reactivex.Single
 import shiverawe.github.com.receipt.data.network.entity.report.Report
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.data.network.utils.MapperNetwork
-import shiverawe.github.com.receipt.entity.Receipt
+import shiverawe.github.com.receipt.entity.receipt.base.Receipt
 import shiverawe.github.com.receipt.ui.App
 import kotlin.collections.ArrayList
 

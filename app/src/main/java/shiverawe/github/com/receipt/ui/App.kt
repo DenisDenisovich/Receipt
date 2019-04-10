@@ -20,8 +20,8 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
         val okHttpClient = OkHttpClient.Builder()
-                .readTimeout(20, TimeUnit.SECONDS)
-                .connectTimeout(20, TimeUnit.SECONDS)
+                .readTimeout(180, TimeUnit.SECONDS)
+                .connectTimeout(180, TimeUnit.SECONDS)
                 .build()
         val retrofit = Retrofit.Builder()
                 .baseUrl("http://3.16.244.144/")

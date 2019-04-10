@@ -1,7 +1,7 @@
 package shiverawe.github.com.receipt.data.bd.utils
 
 import com.google.gson.Gson
-import shiverawe.github.com.receipt.entity.Receipt
+import shiverawe.github.com.receipt.entity.receipt.base.Receipt
 
 class CacheDiffUtility {
     fun findDiffReceipts(localReceipts: ArrayList<Receipt>, networkReceipts: ArrayList<Receipt>): Pair<List<Long>,ArrayList<Receipt>> {

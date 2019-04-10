@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_item_month"
+    android:layout_width="match_parent"
+    android:layout_height="76dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:background="#FFFFFF">
+
+    <TextView
+        android:id="@+id/tv_item_month_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
+        android:fontFamily="@font/roboto_regular"
+        android:background="@drawable/ic_receipt_shop"
+        android:textSize="24sp"
+        android:textColor="@color/colorWhite"
+        tools:text="П" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="150dp">
+        <TextView
+            android:id="@+id/tv_item_month_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="#000000"
+            tools:text="Пятерочка"/>
+
+        <TextView
+            android:id="@+id/tv_item_month_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:textSize="14sp"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="#808080"
+            tools:text="20:08"/>
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/tv_item_month_sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginEnd="16sp"
+        android:textSize="16sp"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="#000000"
+        tools:text="1 000 236.23 р"/>
+</FrameLayout>

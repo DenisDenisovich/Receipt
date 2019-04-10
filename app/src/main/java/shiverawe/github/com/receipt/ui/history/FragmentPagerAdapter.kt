@@ -4,7 +4,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import shiverawe.github.com.receipt.ui.history.month.MonthFragment
-import java.text.SimpleDateFormat
 import java.util.*
 
 class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
@@ -23,7 +22,7 @@ class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) 
     }
 
     override fun getItem(position: Int): Fragment {
-        return MonthFragment.getInstance((dates[position] / 1000).toInt())
+        return MonthFragment.getNewInstance((dates[position] / 1000).toInt())
     }
 
     override fun getCount() = 1200

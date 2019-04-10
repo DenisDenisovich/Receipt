@@ -2,15 +2,15 @@ package shiverawe.github.com.receipt.data.bd.utils
 
 import shiverawe.github.com.receipt.data.bd.product.ProductEntity
 import shiverawe.github.com.receipt.data.bd.receipt.ReceiptEntity
-import shiverawe.github.com.receipt.entity.Meta
-import shiverawe.github.com.receipt.entity.Product
-import shiverawe.github.com.receipt.entity.Receipt
-import shiverawe.github.com.receipt.entity.Shop
+import shiverawe.github.com.receipt.entity.receipt.base.Meta
+import shiverawe.github.com.receipt.entity.receipt.base.Product
+import shiverawe.github.com.receipt.entity.receipt.base.Receipt
+import shiverawe.github.com.receipt.entity.receipt.base.Shop
 
 class MapperDb {
 
     fun dbToReceipt(receipt: ReceiptEntity, products: List<ProductEntity>): Receipt {
-        val shop = Shop(receipt.date, receipt.place, receipt.sum.toString() + " р")
+        val shop = Shop(receipt.date, receipt.place, receipt.sum.toString())
         val meta = Meta(receipt.date.toString(), receipt.fn, receipt.fd, receipt.fp, receipt.sum)
         val items = ArrayList<Product>()
         products.forEach {

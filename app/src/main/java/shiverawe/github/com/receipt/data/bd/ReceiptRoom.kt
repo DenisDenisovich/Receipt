@@ -4,13 +4,12 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.Transaction
-import android.util.Log
 import shiverawe.github.com.receipt.data.bd.product.ProductDao
 import shiverawe.github.com.receipt.data.bd.product.ProductEntity
 import shiverawe.github.com.receipt.data.bd.receipt.ReceiptDao
 import shiverawe.github.com.receipt.data.bd.receipt.ReceiptEntity
 import shiverawe.github.com.receipt.data.bd.utils.MapperDb
-import shiverawe.github.com.receipt.entity.Receipt
+import shiverawe.github.com.receipt.entity.receipt.base.Receipt
 import shiverawe.github.com.receipt.ui.App
 import kotlin.collections.ArrayList
 
