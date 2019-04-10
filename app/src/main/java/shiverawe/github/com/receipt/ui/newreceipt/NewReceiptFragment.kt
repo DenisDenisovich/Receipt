@@ -49,6 +49,7 @@ class NewReceiptFragment : Fragment(), NewReceiptView, View.OnClickListener {
             getTransaction().replace(R.id.new_receipt_container, ReceiptFragment.getNewInstance(options)).addToBackStack(null).commit()
             forgetQrFragment = true
         } else {
+            btn_error_change_data.visibility = View.GONE
             getTransaction().replace(R.id.new_receipt_container, ReceiptFragment.getNewInstance(options)).commit()
         }
     }
