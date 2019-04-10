@@ -33,9 +33,7 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        btn_manual.isClickable = false
-        btn_manual.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorGray))
-
+        changeBtnBackground()
         btn_manual.setOnClickListener {
             if (textIsValid)
                 (parentFragment as NewReceiptView).openReceipt(receiptMeta)
@@ -79,9 +77,9 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
 
     private fun changeBtnBackground() {
         if (checkData()) {
-            btn_manual.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorAccent))
+            btn_manual.setBackgroundResource(R.drawable.btn_blue)
         } else {
-            btn_manual.setBackgroundColor(ContextCompat.getColor(context!!, R.color.colorGray))
+            btn_manual.setBackgroundResource(R.drawable.btn_gray)
         }
     }
 

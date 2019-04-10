@@ -25,11 +25,11 @@
 
         <Button
             android:id="@+id/btn_error_change_data"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="16dp"
-            android:background="@color/colorAccent"
+            android:background="@drawable/btn_blue"
             android:elevation="8dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
@@ -38,10 +38,10 @@
 
         <Button
             android:id="@+id/btn_error_repeat"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:background="@color/colorAccent"
+            android:background="@drawable/btn_blue"
             android:elevation="8dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
