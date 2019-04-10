@@ -29,80 +29,32 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
     }
 
     private var dateTextWatcher = object : TextWatcher {
-        val newText = StringBuilder()
         override fun afterTextChanged(s: Editable?) {
             changeBtnBackground()
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            s?.let {
-                if (s.length > 8) {
-                    // max count of symbols is 8
-                    et_manual_date.setText(s.substring(0, s.length - 1))
-                    et_manual_date.setSelection(et_manual_date.text.length)
-                } else {
-                    val dotStr = s.filterIndexed { index, c -> (index + 1) % 3 == 0 }
-                    var stringIsCorrect = true
-                    for (symbol in dotStr.iterator()) {
-                        if (symbol != '.') {
-                            stringIsCorrect = false
-                            break
-                        }
-                    }
-                    if (!stringIsCorrect) {
-                        val textWithoutDots = s.filter { it != '.' }
-                        newText.clear()
-                        if (count != 0) {
-                            for (index in 0 until textWithoutDots.length) {
-                                if (index != 0 && index % 2 == 0) newText.append(".")
-                                newText.append(textWithoutDots[index])
-                            }
-                            et_manual_date.setText(newText.toString())
-                            et_manual_date.setSelection(newText.length)
-                        }
-                    }
-                }
+            val newText = changeDateTimeText(s, '.', 8, count)
+            newText?.let {
+                et_manual_date.setText(newText)
+                et_manual_date.setSelection(newText.length)
             }
         }
     }
 
 
     private var timeTextWatcher = object : TextWatcher {
-        val newText = StringBuilder()
         override fun afterTextChanged(s: Editable?) {
             changeBtnBackground()
         }
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            s?.let {
-                if (s.length > 5) {
-                    // max count of symbols is 8
-                    et_manual_time.setText(s.substring(0, s.length - 1))
-                    et_manual_time.setSelection(et_manual_time.text.length)
-                } else {
-                    val colonStr = s.filterIndexed { index, c -> (index + 1) % 3 == 0 }
-                    var stringIsCorrect = true
-                    for (symbol in colonStr.iterator()) {
-                        if (symbol != ':') {
-                            stringIsCorrect = false
-                            break
-                        }
-                    }
-                    if (!stringIsCorrect) {
-                        val textWithoutDots = s.filter { it != ':' }
-                        newText.clear()
-                        if (count != 0) {
-                            for (index in 0 until textWithoutDots.length) {
-                                if (index != 0 && index % 2 == 0) newText.append(":")
-                                newText.append(textWithoutDots[index])
-                            }
-                            et_manual_time.setText(newText.toString())
-                            et_manual_time.setSelection(newText.length)
-                        }
-                    }
-                }
+            val newText = changeDateTimeText(s, ':', 5, count)
+            newText?.let {
+                et_manual_time.setText(newText)
+                et_manual_time.setSelection(newText.length)
             }
         }
     }
@@ -145,6 +97,7 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
         changeEtBackground(et_manual_fp)
         changeEtBackground(et_manual_sum)
         changeEtBackground(et_manual_date)
+        changeEtBackground(et_manual_time)
         changeBtnBackground()
     }
 
@@ -281,5 +234,37 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
         }
         if (!isCorrect) errorMessage = "формат суммы неверный"
         return isCorrect
+    }
+
+    private fun changeDateTimeText(s: CharSequence?, separator: Char, maxLength: Int, changeCount: Int): String? {
+        val changedText = StringBuilder()
+        if (s == null) return null
+        if (s.length > maxLength) {
+            // max count of symbols is maxLength
+            changedText.clear()
+            changedText.append(s.substring(0, s.length - 1)).toString()
+        } else {
+            val separatorStr = s.filterIndexed { index, c -> (index + 1) % 3 == 0 }
+            var stringIsCorrect = true
+            for (symbol in separatorStr.iterator()) {
+                if (symbol != separator) {
+                    stringIsCorrect = false
+                    break
+                }
+            }
+            if (!stringIsCorrect) {
+                if (changeCount != 0) {
+                    val textWithoutSeparator = s.filter { it != separator }
+                    changedText.clear()
+                    for (index in 0 until textWithoutSeparator.length) {
+                        if (index != 0 && index % 2 == 0) changedText.append(separator)
+                        changedText.append(textWithoutSeparator[index])
+                    }
+                } else return null
+            } else {
+                return null
+            }
+        }
+        return changedText.toString()
     }
 }
