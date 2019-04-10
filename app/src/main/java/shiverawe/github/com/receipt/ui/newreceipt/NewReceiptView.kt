@@ -7,5 +7,6 @@ interface NewReceiptView {
     fun showProgress()
     fun hideProgress()
     fun onError()
+    fun onError(message: String)
     fun onBackPressedIsHandled(): Boolean
 }

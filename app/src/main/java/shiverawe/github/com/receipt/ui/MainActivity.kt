@@ -11,6 +11,7 @@ import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
 import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptFragment
 import shiverawe.github.com.receipt.ui.receipt.ReceiptFragment
+import shiverawe.github.com.receipt.ui.settings.SettingsFragment
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, Navigation {
@@ -41,13 +42,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_history -> openHistory()
+            R.id.nav_settings -> openSettings()
         }
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
 
     override fun openHistory() {
+        cleanBackStack()
         getTransaction().replace(R.id.container, HistoryFragment(), HistoryFragment.HISTORY_TAG).commit()
+    }
+
+    override fun openSettings() {
+        cleanBackStack()
+        getTransaction().replace(R.id.container, SettingsFragment(), SettingsFragment.SETTINGS_TAG).commit()
     }
 
     override fun updateHistory(date: Long) {
@@ -82,5 +90,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun getTopFragment() = supportFragmentManager.findFragmentById(R.id.container)
+
     private fun getTransaction() = supportFragmentManager.beginTransaction()
+
+    private fun cleanBackStack() {
+        for (i in 0 until supportFragmentManager.backStackEntryCount ) {
+            supportFragmentManager.popBackStack()
+        }
+    }
 }

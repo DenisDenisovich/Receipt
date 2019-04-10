@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
     android:background="@color/colorWhite"
     android:visibility="visible">
@@ -11,10 +11,23 @@
         android:id="@+id/tv_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/error_title_is_developer_margin_top"
         android:textColor="#000000"
         android:text="Произошла ошибка"
         android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_error_description"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginBottom="250dp"
+        android:textColor="#000000"
+        android:textSize="18sp" />
+
 
     <LinearLayout
         android:layout_width="wrap_content"

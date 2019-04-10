@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_manual.*
+import kotlinx.android.synthetic.main.fragment_manual.view.*
 import shiverawe.github.com.receipt.R
 import java.lang.Exception
 import java.lang.StringBuilder
@@ -37,8 +37,8 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             val newText = changeDateTimeText(s, '.', 8, count)
             newText?.let {
-                et_manual_date.setText(newText)
-                et_manual_date.setSelection(newText.length)
+                view!!.et_manual_date.setText(newText)
+                view!!.et_manual_date.setSelection(newText.length)
             }
         }
     }
@@ -53,8 +53,8 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             val newText = changeDateTimeText(s, ':', 5, count)
             newText?.let {
-                et_manual_time.setText(newText)
-                et_manual_time.setSelection(newText.length)
+                view!!.et_manual_time.setText(newText)
+                view!!.et_manual_time.setSelection(newText.length)
             }
         }
     }
@@ -66,38 +66,38 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         changeBtnBackground()
-        btn_manual.setOnClickListener {
+        view.btn_manual.setOnClickListener {
             if (textIsValid)
                 (parentFragment as NewReceiptView).openReceipt(receiptMeta)
             else
                 Toast.makeText(context!!, "Ошибка: $errorMessage", Toast.LENGTH_LONG).show()
         }
 
-        btn_manual_back.setOnClickListener {
+        view.btn_manual_back.setOnClickListener {
             activity?.onBackPressed()
         }
 
-        et_manual_fd.onFocusChangeListener = this
-        et_manual_fn.onFocusChangeListener = this
-        et_manual_fp.onFocusChangeListener = this
-        et_manual_sum.onFocusChangeListener = this
-        et_manual_date.onFocusChangeListener = this
-        et_manual_time.onFocusChangeListener = this
-        et_manual_fd.addTextChangedListener(textWatcher)
-        et_manual_fn.addTextChangedListener(textWatcher)
-        et_manual_fp.addTextChangedListener(textWatcher)
-        et_manual_sum.addTextChangedListener(textWatcher)
-        et_manual_date.addTextChangedListener(dateTextWatcher)
-        et_manual_time.addTextChangedListener(timeTextWatcher)
+        view.et_manual_fd.onFocusChangeListener = this
+        view.et_manual_fn.onFocusChangeListener = this
+        view.et_manual_fp.onFocusChangeListener = this
+        view.et_manual_sum.onFocusChangeListener = this
+        view.et_manual_date.onFocusChangeListener = this
+        view.et_manual_time.onFocusChangeListener = this
+        view.et_manual_fd.addTextChangedListener(textWatcher)
+        view.et_manual_fn.addTextChangedListener(textWatcher)
+        view.et_manual_fp.addTextChangedListener(textWatcher)
+        view.et_manual_sum.addTextChangedListener(textWatcher)
+        view.et_manual_date.addTextChangedListener(dateTextWatcher)
+        view.et_manual_time.addTextChangedListener(timeTextWatcher)
     }
 
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
-        changeEtBackground(et_manual_fd)
-        changeEtBackground(et_manual_fn)
-        changeEtBackground(et_manual_fp)
-        changeEtBackground(et_manual_sum)
-        changeEtBackground(et_manual_date)
-        changeEtBackground(et_manual_time)
+        changeEtBackground(view!!.et_manual_fd)
+        changeEtBackground(view!!.et_manual_fn)
+        changeEtBackground(view!!.et_manual_fp)
+        changeEtBackground(view!!.et_manual_sum)
+        changeEtBackground(view!!.et_manual_date)
+        changeEtBackground(view!!.et_manual_time)
         changeBtnBackground()
     }
 
@@ -110,19 +110,19 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
 
     private fun changeBtnBackground() {
         if (checkData()) {
-            btn_manual.setBackgroundResource(R.drawable.btn_blue)
+            view!!.btn_manual.setBackgroundResource(R.drawable.btn_blue)
         } else {
-            btn_manual.setBackgroundResource(R.drawable.btn_gray)
+            view!!.btn_manual.setBackgroundResource(R.drawable.btn_gray)
         }
     }
 
     private fun checkData(): Boolean {
-        val fd = et_manual_fd.text.toString().trim()
-        val fn = et_manual_fn.text.toString().trim()
-        val fp = et_manual_fp.text.toString().trim()
-        val s = et_manual_sum.text.toString().trim()
-        val date = et_manual_date.text.toString().trim()
-        val time = et_manual_time.text.toString().trim()
+        val fd = view!!.et_manual_fd.text.toString().trim()
+        val fn = view!!.et_manual_fn.text.toString().trim()
+        val fp = view!!.et_manual_fp.text.toString().trim()
+        val s = view!!.et_manual_sum.text.toString().trim()
+        val date = view!!.et_manual_date.text.toString().trim()
+        val time = view!!.et_manual_time.text.toString().trim()
         if (checkFd(fd) &&
                 checkFn(fn) &&
                 checkFp(fp) &&

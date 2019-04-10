@@ -3,9 +3,11 @@ package shiverawe.github.com.receipt.ui.newreceipt
 import android.Manifest
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_new_receipt.*
@@ -35,7 +37,7 @@ class NewReceiptFragment : Fragment(), NewReceiptView, View.OnClickListener {
         when (v?.id) {
             R.id.btn_error_change_data -> {
                 container_error.visibility = View.GONE
-                childFragmentManager.popBackStackImmediate()
+                childFragmentManager.popBackStack()
             }
             R.id.btn_error_repeat -> {
                 (getTopFragment() as ReceiptFragment).sendRequest()
@@ -89,7 +91,18 @@ class NewReceiptFragment : Fragment(), NewReceiptView, View.OnClickListener {
             getTransaction().replace(R.id.new_receipt_container, ManualFragment()).commit()
         else if (fragment is ReceiptFragment) {
             container_error.visibility = View.VISIBLE
+            (tv_error.layoutParams as FrameLayout.LayoutParams).gravity = Gravity.CENTER
         }
+    }
+
+    override fun onError(message: String) {
+        onError()
+        (tv_error.layoutParams as FrameLayout.LayoutParams).apply {
+            setMargins(0, resources.getDimensionPixelSize(R.dimen.error_title_is_developer_margin_top), 0, 0)
+            gravity = Gravity.CENTER_HORIZONTAL
+        }
+        tv_error_description.visibility = View.VISIBLE
+        tv_error_description.text = message
     }
 
     override fun onBackPressedIsHandled(): Boolean {

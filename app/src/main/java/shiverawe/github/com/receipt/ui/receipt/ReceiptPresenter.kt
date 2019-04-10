@@ -25,7 +25,7 @@ class ReceiptPresenter {
                 .subscribe({receipt ->
                     view?.showReceipt(receipt)
                 }, {
-                    view?.showError("error")
+                    view?.showError(Throwable("receipt = null"))
                 })
     }
 
@@ -35,10 +35,10 @@ class ReceiptPresenter {
             disposable = repository.getReceipt(meta)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({receipt ->
-                        if (receipt == null) view?.showError("error")
+                        if (receipt == null) view?.showError(Throwable("receipt = null"))
                         else view?.showReceipt(receipt)
                     }, {
-                        view?.showError("error")
+                        view?.showError(it)
                     })
         }
     }
@@ -54,7 +54,7 @@ class ReceiptPresenter {
             }
             return meta
         } catch (e: Exception) {
-            view?.showError("error")
+            view?.showError(Throwable("receipt = null"))
             return null
         }
     }

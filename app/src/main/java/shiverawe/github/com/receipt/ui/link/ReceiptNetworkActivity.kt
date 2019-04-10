@@ -2,7 +2,9 @@ package shiverawe.github.com.receipt.ui.link
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Gravity
 import android.view.View
+import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.activity_receipt_link.*
 import kotlinx.android.synthetic.main.view_error.*
 import shiverawe.github.com.receipt.R
@@ -46,6 +48,16 @@ class ReceiptLinkActivity: NewReceiptView, AppCompatActivity() {
     override fun onError() {
         hideProgress()
         container_error.visibility = View.VISIBLE
+    }
+
+    override fun onError(message: String) {
+        onError()
+        (tv_error.layoutParams as FrameLayout.LayoutParams).apply {
+            setMargins(0, resources.getDimensionPixelSize(R.dimen.error_title_is_developer_margin_top), 0, 0)
+            gravity = Gravity.CENTER_HORIZONTAL
+        }
+        tv_error_description.visibility = View.VISIBLE
+        tv_error_description.text = message
     }
 
     override fun onBackPressedIsHandled() = false

@@ -14,9 +14,13 @@ import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_receipt.*
+import retrofit2.HttpException
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.entity.receipt.base.Receipt
+import shiverawe.github.com.receipt.ui.App
 import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptView
+import shiverawe.github.com.receipt.utils.Settings
+import java.lang.Exception
 import java.lang.StringBuilder
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -121,8 +125,15 @@ class ReceiptFragment : Fragment(), ReceiptView, View.OnClickListener {
         rv_receipt.viewTreeObserver.addOnGlobalLayoutListener(layoutListener)
     }
 
-    override fun showError(message: String) {
-        containerParent?.onError()
+    override fun showError(error: Throwable) {
+        if (Settings.getDevelopMod(context!!)) {
+            val message = try {
+                resources.getString(R.string.BASE_URL) + "rest/get?" + arguments?.getString(RECEIPT_OPTIONS_EXTRA) + "\n" + (error as HttpException).response().errorBody()?.string()
+            } catch (e: Exception) { error.message?: "error" }
+            containerParent?.onError(message)
+        } else {
+            containerParent?.onError()
+        }
     }
 
     override fun showProgress() {
