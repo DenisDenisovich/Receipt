@@ -2,7 +2,6 @@ package shiverawe.github.com.receipt.ui.newreceipt
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -24,9 +23,90 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
         override fun afterTextChanged(s: Editable?) {
             changeBtnBackground()
         }
+
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
     }
+
+    private var dateTextWatcher = object : TextWatcher {
+        val newText = StringBuilder()
+        override fun afterTextChanged(s: Editable?) {
+            changeBtnBackground()
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            s?.let {
+                if (s.length > 8) {
+                    // max count of symbols is 8
+                    et_manual_date.setText(s.substring(0, s.length - 1))
+                    et_manual_date.setSelection(et_manual_date.text.length)
+                } else {
+                    val dotStr = s.filterIndexed { index, c -> (index + 1) % 3 == 0 }
+                    var stringIsCorrect = true
+                    for (symbol in dotStr.iterator()) {
+                        if (symbol != '.') {
+                            stringIsCorrect = false
+                            break
+                        }
+                    }
+                    if (!stringIsCorrect) {
+                        val textWithoutDots = s.filter { it != '.' }
+                        newText.clear()
+                        if (count != 0) {
+                            for (index in 0 until textWithoutDots.length) {
+                                if (index != 0 && index % 2 == 0) newText.append(".")
+                                newText.append(textWithoutDots[index])
+                            }
+                            et_manual_date.setText(newText.toString())
+                            et_manual_date.setSelection(newText.length)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    private var timeTextWatcher = object : TextWatcher {
+        val newText = StringBuilder()
+        override fun afterTextChanged(s: Editable?) {
+            changeBtnBackground()
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            s?.let {
+                if (s.length > 5) {
+                    // max count of symbols is 8
+                    et_manual_time.setText(s.substring(0, s.length - 1))
+                    et_manual_time.setSelection(et_manual_time.text.length)
+                } else {
+                    val colonStr = s.filterIndexed { index, c -> (index + 1) % 3 == 0 }
+                    var stringIsCorrect = true
+                    for (symbol in colonStr.iterator()) {
+                        if (symbol != ':') {
+                            stringIsCorrect = false
+                            break
+                        }
+                    }
+                    if (!stringIsCorrect) {
+                        val textWithoutDots = s.filter { it != ':' }
+                        newText.clear()
+                        if (count != 0) {
+                            for (index in 0 until textWithoutDots.length) {
+                                if (index != 0 && index % 2 == 0) newText.append(":")
+                                newText.append(textWithoutDots[index])
+                            }
+                            et_manual_time.setText(newText.toString())
+                            et_manual_time.setSelection(newText.length)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_manual, container, false)
@@ -55,8 +135,8 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
         et_manual_fn.addTextChangedListener(textWatcher)
         et_manual_fp.addTextChangedListener(textWatcher)
         et_manual_sum.addTextChangedListener(textWatcher)
-        et_manual_date.addTextChangedListener(textWatcher)
-        et_manual_time.addTextChangedListener(textWatcher)
+        et_manual_date.addTextChangedListener(dateTextWatcher)
+        et_manual_time.addTextChangedListener(timeTextWatcher)
     }
 
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
@@ -202,5 +282,4 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
         if (!isCorrect) errorMessage = "формат суммы неверный"
         return isCorrect
     }
-
 }
