@@ -46,7 +46,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
         // init date dialog
         val currentDate = GregorianCalendar()
         currentDate.time = Date(System.currentTimeMillis())
-        dateDialog = DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+        dateDialog = DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             val selectedDate = GregorianCalendar(TimeZone.getTimeZone("UTC"))
             selectedDate.apply {
                 set(Calendar.YEAR, year)

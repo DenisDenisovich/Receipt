@@ -1,6 +1,5 @@
 package shiverawe.github.com.receipt.ui.newreceipt
 
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -51,7 +50,6 @@ class QrFragment : Fragment(), View.OnClickListener {
             activity.runOnUiThread {
                 Toast.makeText(context, "Произошла ошибка", Toast.LENGTH_LONG).show()
                 (parentFragment as NewReceiptView).onError()
-                codeScanner?.releaseResources()
             }
         }
         codeScanner?.startPreview()
