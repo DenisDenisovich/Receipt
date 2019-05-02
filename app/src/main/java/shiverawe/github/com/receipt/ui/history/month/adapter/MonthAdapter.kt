@@ -1,6 +1,6 @@
 package shiverawe.github.com.receipt.ui.history.month.adapter
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 import shiverawe.github.com.receipt.entity.receipt.base.Meta
 import shiverawe.github.com.receipt.entity.receipt.base.Shop

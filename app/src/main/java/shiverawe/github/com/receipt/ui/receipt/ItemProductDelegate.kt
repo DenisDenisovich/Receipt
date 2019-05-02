@@ -1,7 +1,7 @@
 package shiverawe.github.com.receipt.ui.receipt
 
 import android.annotation.SuppressLint
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_product.view.*

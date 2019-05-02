@@ -1,6 +1,6 @@
 package shiverawe.github.com.receipt.ui.receipt
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 import shiverawe.github.com.receipt.entity.receipt.base.Product
 import shiverawe.github.com.receipt.ui.base.adapter.AdapterDelegatesManager

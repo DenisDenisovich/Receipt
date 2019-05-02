@@ -1,6 +1,6 @@
 package shiverawe.github.com.receipt.data.bd.receipt
 
-import android.arch.persistence.room.*
+import androidx.room.*
 
 @Dao
 interface ReceiptDao {

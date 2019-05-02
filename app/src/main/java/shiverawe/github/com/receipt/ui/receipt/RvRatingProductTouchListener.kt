@@ -1,7 +1,7 @@
 package shiverawe.github.com.receipt.ui.receipt
 
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.MotionEvent
 import android.view.View
 import shiverawe.github.com.receipt.R

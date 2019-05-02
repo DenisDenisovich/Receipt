@@ -1,6 +1,6 @@
 package shiverawe.github.com.receipt.data.bd
 
-import android.arch.persistence.room.Transaction
+import androidx.room.Transaction
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import shiverawe.github.com.receipt.data.bd.utils.CacheDiffUtility
