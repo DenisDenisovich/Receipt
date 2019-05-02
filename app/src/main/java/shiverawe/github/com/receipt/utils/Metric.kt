@@ -11,8 +11,8 @@ object Metric {
         YandexMetrica.reportError(NEW_RECEIPT_ERROR, Throwable("time: $time seconds,\n$meta", t))
     }
 
-    fun sendHistoryError(t: Throwable) {
-        YandexMetrica.reportError(HISTORY_ERROR, t)
+    fun sendHistoryError(time: Int, t: Throwable) {
+        YandexMetrica.reportError(HISTORY_ERROR, Throwable("time: $time seconds", t))
     }
 
     fun sendSuccessNewReceipt(meta: String, time: Int) {

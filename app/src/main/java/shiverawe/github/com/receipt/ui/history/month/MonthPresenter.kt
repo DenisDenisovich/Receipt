@@ -7,6 +7,7 @@ import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.data.repository.MonthRepository
 import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth_v2
 import shiverawe.github.com.receipt.ui.App
+import shiverawe.github.com.receipt.utils.Metric
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
@@ -43,6 +44,8 @@ class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
     }
 
     override fun getReceiptsData() {
+        val startTime = System.currentTimeMillis()
+        var totalTime: Int
         receiptDisposable?.dispose()
         receiptDisposable = repository.getMonthReceipt(reportRequest)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -57,6 +60,8 @@ class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
                 }, {
                     isError = true
                     view?.showError()
+                    totalTime = ((System.currentTimeMillis() - startTime) / 1000).toInt()
+                    Metric.sendHistoryError(totalTime, it)
                 })
     }
 
