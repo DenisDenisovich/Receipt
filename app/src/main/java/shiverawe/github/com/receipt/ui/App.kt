@@ -9,7 +9,12 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.data.network.Api
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
+import com.yandex.metrica.YandexMetrica
+import com.yandex.metrica.YandexMetricaConfig
+
+
 
 
 class App: Application() {
@@ -32,5 +37,15 @@ class App: Application() {
                 .build()
         api = retrofit.create(Api::class.java)
         appContext = applicationContext
+        initYandexMetric()
+    }
+
+    private fun initYandexMetric() {
+        try {
+            val config = YandexMetricaConfig.newConfigBuilder(getString(R.string.yandex_key)).build()
+            YandexMetrica.activate(applicationContext, config)
+            YandexMetrica.enableActivityAutoTracking(this)
+        } catch (e: Exception) {
+        }
     }
 }
