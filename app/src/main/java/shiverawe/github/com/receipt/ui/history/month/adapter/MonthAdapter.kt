@@ -4,14 +4,14 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 import shiverawe.github.com.receipt.entity.receipt.base.Meta
 import shiverawe.github.com.receipt.entity.receipt.base.Shop
-import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth_v2
+import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth
 import shiverawe.github.com.receipt.ui.base.adapter.AdapterDelegatesManager
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MonthAdapter(val shopIsClicked: (receipt: ReceiptMonth_v2) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val delegateManager = AdapterDelegatesManager<ReceiptMonth_v2>()
-    private val items: ArrayList<ReceiptMonth_v2> = ArrayList()
+class MonthAdapter(val shopIsClicked: (receipt: ReceiptMonth) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val delegateManager = AdapterDelegatesManager<ReceiptMonth>()
+    private val items: ArrayList<ReceiptMonth> = ArrayList()
     private var calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
 
     init {
@@ -38,15 +38,15 @@ class MonthAdapter(val shopIsClicked: (receipt: ReceiptMonth_v2) -> Unit) : Recy
         return delegateManager.getViewType(items, position) ?: 1488
     }
 
-    fun setItems(receipts: ArrayList<ReceiptMonth_v2>) {
+    fun setItems(receipts: ArrayList<ReceiptMonth>) {
         setTypes(receipts)
         items.clear()
         items.addAll(setTypes(receipts))
         notifyDataSetChanged()
     }
 
-    private fun setTypes(oldList: ArrayList<ReceiptMonth_v2>): ArrayList<ReceiptMonth_v2> {
-        val receipts = ArrayList<ReceiptMonth_v2>()
+    private fun setTypes(oldList: ArrayList<ReceiptMonth>): ArrayList<ReceiptMonth> {
+        val receipts = ArrayList<ReceiptMonth>()
         if (oldList.size >= 1) {
             receipts.add(getDateItem(oldList.first().shop.date))
             receipts.add(oldList[0])
@@ -77,7 +77,7 @@ class MonthAdapter(val shopIsClicked: (receipt: ReceiptMonth_v2) -> Unit) : Recy
         calendar.set(Calendar.MILLISECOND, 0)
     }
 
-    private fun getDateItem(date: Long): ReceiptMonth_v2 {
-        return ReceiptMonth_v2(-1L, Shop(date, "", ""), Meta("", "", "", "", 0.0))
+    private fun getDateItem(date: Long): ReceiptMonth {
+        return ReceiptMonth(-1L, Shop(date, "", ""), Meta("", "", "", "", 0.0))
     }
  }

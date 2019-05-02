@@ -8,7 +8,6 @@ import shiverawe.github.com.receipt.data.network.utils.UtilsNetwork
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.entity.receipt.base.Receipt
 import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth
-import java.util.*
 import kotlin.collections.ArrayList
 
 class MonthRepository {
@@ -37,6 +36,6 @@ class MonthRepository {
     }
 
     private fun mapToMonthReceipt(receipts: ArrayList<Receipt>): ArrayList<ReceiptMonth> {
-        return ArrayList(receipts.map { ReceiptMonth(it.receiptId, it.shop, it.meta, 0)})
+        return ArrayList(receipts.map { ReceiptMonth(it.receiptId, it.shop, it.meta)})
     }
 }

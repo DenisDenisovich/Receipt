@@ -5,7 +5,7 @@ import io.reactivex.disposables.Disposable
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.data.repository.MonthRepository
-import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth_v2
+import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth
 import shiverawe.github.com.receipt.ui.App
 import shiverawe.github.com.receipt.utils.Metric
 import java.math.BigDecimal
@@ -18,7 +18,7 @@ class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
     private var reportRequest: ReportRequest
     var receiptDisposable: Disposable? = null
     var view: MonthContract.View? = null
-    private var receipts: ArrayList<ReceiptMonth_v2> = ArrayList()
+    private var receipts: ArrayList<ReceiptMonth> = ArrayList()
     private var totalSum: Double = 0.0
     private var isError = false
 
@@ -54,7 +54,7 @@ class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
                     totalSum = 0.0
                     response.forEach {
                         totalSum += it.meta.s
-                        receipts.add(ReceiptMonth_v2(it.receiptId, it.shop, it.meta))
+                        receipts.add(ReceiptMonth(it.receiptId, it.shop, it.meta))
                     }
                     setReceiptsData()
                 }, {

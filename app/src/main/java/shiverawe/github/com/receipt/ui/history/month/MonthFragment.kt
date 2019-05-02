@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_month.*
 import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth_v2
+import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
 import shiverawe.github.com.receipt.ui.history.month.adapter.MonthAdapter
@@ -31,7 +31,7 @@ class MonthFragment : Fragment(), MonthContract.View {
     lateinit var navigation: Navigation
     private var presenter: MonthContract.Presenter? = null
     private lateinit var adapter: MonthAdapter
-    private var receipts: ArrayList<ReceiptMonth_v2> = ArrayList()
+    private var receipts: ArrayList<ReceiptMonth> = ArrayList()
     private var totalSum = ""
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -59,7 +59,7 @@ class MonthFragment : Fragment(), MonthContract.View {
         }
     }
 
-    override fun setReceipts(items: ArrayList<ReceiptMonth_v2>) {
+    override fun setReceipts(items: ArrayList<ReceiptMonth>) {
         receipts = items
         adapter.setItems(receipts)
         pb_month.visibility = View.GONE

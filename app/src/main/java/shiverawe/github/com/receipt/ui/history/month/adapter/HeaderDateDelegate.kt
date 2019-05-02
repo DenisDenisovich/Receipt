@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.header_receipt.view.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth_v2
+import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth
 import shiverawe.github.com.receipt.ui.base.adapter.AdapterDelegate
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HeaderDateDelegate(override var viewType: Int) : AdapterDelegate<ReceiptMonth_v2> {
+class HeaderDateDelegate(override var viewType: Int) : AdapterDelegate<ReceiptMonth> {
     private val dateFormatterDate = SimpleDateFormat("dd.MM_HH:mm", Locale("ru"))
     private val dateFormatterDay = DateFormat.getDateInstance(SimpleDateFormat.FULL, Locale("ru"))
     private var calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
@@ -22,7 +22,7 @@ class HeaderDateDelegate(override var viewType: Int) : AdapterDelegate<ReceiptMo
         dateFormatterDay.timeZone = TimeZone.getTimeZone("UTC")
     }
 
-    override fun isForViewType(items: ArrayList<ReceiptMonth_v2>, position: Int): Boolean {
+    override fun isForViewType(items: ArrayList<ReceiptMonth>, position: Int): Boolean {
         return items[position].receiptId == -1L
     }
 
@@ -30,14 +30,14 @@ class HeaderDateDelegate(override var viewType: Int) : AdapterDelegate<ReceiptMo
         return HeaderDateViewHolder(getLayout(parent, R.layout.header_receipt))
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, items: ArrayList<ReceiptMonth_v2>, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, items: ArrayList<ReceiptMonth>, position: Int) {
         (holder as HeaderDateViewHolder).bind(items[position])
     }
 
     inner class HeaderDateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvDate = itemView.tv_header_receipt
         @SuppressLint("SetTextI18n")
-        fun bind(receipt: ReceiptMonth_v2) {
+        fun bind(receipt: ReceiptMonth) {
             when {
                 isEqualDays(receipt.shop.date, System.currentTimeMillis()) -> tvDate.text = "СЕГОДНЯ"
                 isPreviewDay(receipt.shop.date) -> tvDate.text = "ВЧЕРА"
