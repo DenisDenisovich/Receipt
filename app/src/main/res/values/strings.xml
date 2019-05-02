@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Receipt</string>
     <string name="BASE_URL">https://receipt.shefer.space/</string>
+    <string name="yandex_key">44fd539d-4d62-4c40-b620-1d33f4070334</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Receipt</string>

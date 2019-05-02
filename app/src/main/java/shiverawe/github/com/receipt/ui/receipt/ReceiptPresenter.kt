@@ -3,6 +3,7 @@ package shiverawe.github.com.receipt.ui.receipt
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import shiverawe.github.com.receipt.data.repository.ReceiptRepository
+import shiverawe.github.com.receipt.utils.Metric
 import java.lang.Exception
 
 class ReceiptPresenter {
@@ -22,7 +23,7 @@ class ReceiptPresenter {
         view?.showProgress()
         disposable = repository.getReceiptById(receiptId)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({receipt ->
+                .subscribe({ receipt ->
                     view?.showReceipt(receipt)
                 }, {
                     view?.showError(Throwable("receipt = null"))
@@ -30,14 +31,26 @@ class ReceiptPresenter {
     }
 
     fun getReceiptByMeta(options: String) {
+        val startTime = System.currentTimeMillis()
+        var totalTime: Int
         view?.showProgress()
         parseOptions(options)?.let { meta ->
             disposable = repository.getReceipt(meta)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({receipt ->
-                        if (receipt == null) view?.showError(Throwable("receipt = null"))
-                        else view?.showReceipt(receipt)
+                    .subscribe({ receipt ->
+                        totalTime = ((System.currentTimeMillis() - startTime) / 1000).toInt()
+                        if (receipt == null) {
+                            val t = Throwable("receipt = null")
+                            Metric.sendNewReceiptError(options, totalTime, t)
+                            view?.showError(t)
+                        } else {
+                            view?.showReceipt(receipt)
+                            Metric.sendSuccessNewReceipt(options, totalTime)
+
+                        }
                     }, {
+                        totalTime = ((System.currentTimeMillis() - startTime) / 1000).toInt()
+                        Metric.sendNewReceiptError(options, totalTime, it)
                         view?.showError(it)
                     })
         }
