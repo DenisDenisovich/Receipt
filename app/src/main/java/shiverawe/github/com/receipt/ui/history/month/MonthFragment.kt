@@ -13,6 +13,7 @@ import org.koin.core.parameter.parametersOf
 import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.receipt.month.ReceiptMonth
+import shiverawe.github.com.receipt.ui.App
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
 import shiverawe.github.com.receipt.ui.history.month.adapter.MonthAdapter
@@ -71,7 +72,7 @@ class MonthFragment : Fragment(), MonthContract.View {
     }
 
     override fun setTotalSum(totalSum: String) {
-        this.totalSum = "$totalSum ${resources.getString(R.string.rubleSymbolJava)}"
+        this.totalSum = "$totalSum ${App.appContext.resources.getString(R.string.rubleSymbolJava)}"
         parentFragment?.let {
             (it as HistoryFragment).setCurrentSum(totalSum)
         }
