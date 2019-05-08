@@ -6,7 +6,6 @@ import shiverawe.github.com.receipt.data.network.entity.create.CreateRequest
 import shiverawe.github.com.receipt.data.network.entity.create.CreateResponce
 import shiverawe.github.com.receipt.data.network.mapper.IMapperNetwork
 import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
-import shiverawe.github.com.receipt.ui.App
 
 class ReceiptNetwork(
         private val mapper: IMapperNetwork,

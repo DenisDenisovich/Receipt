@@ -2,11 +2,9 @@ package shiverawe.github.com.receipt.ui.history.month
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.domain.entity.receipt.month.ReceiptMonth
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
-import shiverawe.github.com.receipt.ui.App
 import shiverawe.github.com.receipt.utils.Metric
 import java.math.BigDecimal
 import java.math.RoundingMode
