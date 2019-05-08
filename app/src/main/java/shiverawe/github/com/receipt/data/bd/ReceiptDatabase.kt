@@ -3,12 +3,11 @@ package shiverawe.github.com.receipt.data.bd
 import androidx.room.Transaction
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import shiverawe.github.com.receipt.data.bd.utils.CacheDiffUtility
+import shiverawe.github.com.receipt.data.bd.utils.ICacheDiffUtility
 import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
 
-class ReceiptDatabase: IReceiptDatabase {
+class ReceiptDatabase(private val cacheDiffUtility: ICacheDiffUtility): IReceiptDatabase {
     private val db = ReceiptRoom.getDb()
-    private val cacheDiffUtility = CacheDiffUtility()
     override fun updateMonthCache(dateFrom: Long, dateTo: Long, networkReceipts: ArrayList<Receipt>): Single<ArrayList<Receipt>> {
         return Single.create{
             emitter ->

@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_month.*
+import org.koin.android.ext.android.get
+import org.koin.core.parameter.parametersOf
 import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.receipt.month.ReceiptMonth
@@ -41,7 +43,8 @@ class MonthFragment : Fragment(), MonthContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val dateFrom = arguments!!.getInt(DATE_KEY)
-        presenter = MonthPresenter(dateFrom)
+        //presenter = MonthPresenter(dateFrom)
+        presenter = get { parametersOf(dateFrom) }
         adapter = MonthAdapter { receipt -> navigation.openReceipt(receipt.receiptId) }
     }
 

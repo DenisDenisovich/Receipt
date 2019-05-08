@@ -2,15 +2,14 @@ package shiverawe.github.com.receipt.ui.receipt
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import shiverawe.github.com.receipt.data.repository.ReceiptRepository
+import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import shiverawe.github.com.receipt.utils.Metric
 import java.lang.Exception
 
-class ReceiptPresenter: ReceiptContact.ReceiptPresenter {
-    var repository = ReceiptRepository()
-    var view: ReceiptContact.ReceiptView? = null
+class ReceiptPresenter(private val repository: IReceiptRepository): ReceiptContact.Presenter {
+    var view: ReceiptContact.View? = null
     var disposable: Disposable? = null
-    fun attach(view: ReceiptContact.ReceiptView) {
+    override fun attach(view: ReceiptContact.View) {
         this.view = view
     }
 

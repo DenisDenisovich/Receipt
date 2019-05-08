@@ -4,8 +4,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
-import shiverawe.github.com.receipt.data.repository.MonthRepository
 import shiverawe.github.com.receipt.domain.entity.receipt.month.ReceiptMonth
+import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.ui.App
 import shiverawe.github.com.receipt.utils.Metric
 import java.math.BigDecimal
@@ -13,8 +13,10 @@ import java.math.RoundingMode
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
-    private val repository = MonthRepository()
+class MonthPresenter(
+        private val repository: IMonthRepository,
+        dateFrom: Int
+) : MonthContract.Presenter {
     private var reportRequest: ReportRequest
     var receiptDisposable: Disposable? = null
     var view: MonthContract.View? = null

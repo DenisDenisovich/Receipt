@@ -13,11 +13,12 @@ import java.lang.Exception
 import java.util.concurrent.TimeUnit
 import com.yandex.metrica.YandexMetrica
 import com.yandex.metrica.YandexMetricaConfig
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+import shiverawe.github.com.receipt.di.*
 
 
-
-
-class App: Application() {
+class App : Application() {
     companion object {
         lateinit var appContext: Context
         lateinit var api: Api
@@ -38,6 +39,7 @@ class App: Application() {
         api = retrofit.create(Api::class.java)
         appContext = applicationContext
         initYandexMetric()
+        initKoin()
     }
 
     private fun initYandexMetric() {
@@ -46,6 +48,18 @@ class App: Application() {
             YandexMetrica.activate(applicationContext, config)
             YandexMetrica.enableActivityAutoTracking(this)
         } catch (e: Exception) {
+        }
+    }
+
+    private fun initKoin() {
+        startKoin {
+            androidContext(this@App)
+            modules(monthModule,
+                    receiptModule,
+                    dbModule,
+                    mappersModule,
+                    utilsModule
+            )
         }
     }
 }
