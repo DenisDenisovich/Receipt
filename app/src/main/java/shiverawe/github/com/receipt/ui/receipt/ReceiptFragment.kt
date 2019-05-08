@@ -16,7 +16,7 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_receipt.*
 import retrofit2.HttpException
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.entity.receipt.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
 import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptView
 import shiverawe.github.com.receipt.utils.Settings
 import java.lang.Exception

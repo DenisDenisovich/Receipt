@@ -5,7 +5,7 @@ import io.reactivex.disposables.Disposable
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.data.repository.MonthRepository
-import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth
+import shiverawe.github.com.receipt.domain.entity.receipt.month.ReceiptMonth
 import shiverawe.github.com.receipt.ui.App
 import shiverawe.github.com.receipt.utils.Metric
 import java.math.BigDecimal

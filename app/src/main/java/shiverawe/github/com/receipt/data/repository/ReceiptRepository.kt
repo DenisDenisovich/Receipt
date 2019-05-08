@@ -4,21 +4,22 @@ import io.reactivex.Single
 import shiverawe.github.com.receipt.data.bd.ReceiptDatabase
 import shiverawe.github.com.receipt.data.network.ReceiptNetwork
 import shiverawe.github.com.receipt.data.network.entity.create.CreateResponce
-import shiverawe.github.com.receipt.entity.receipt.base.Receipt
+import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
+import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
 
-class ReceiptRepository {
+class ReceiptRepository: IReceiptRepository {
     private val db = ReceiptDatabase()
     private val network = ReceiptNetwork()
 
-    fun getReceipt(options: Map<String, String>): Single<Receipt?> {
+    override fun getReceipt(options: Map<String, String>): Single<Receipt?> {
         return network.getReceipt(options)
     }
 
-    fun saveReceipt(): Single<CreateResponce> {
+    override fun saveReceipt(): Single<CreateResponce> {
         return network.saveReceipt()
     }
 
-    fun getReceiptById(receiptId: Long): Single<Receipt> {
+    override fun getReceiptById(receiptId: Long): Single<Receipt> {
         return db.getReceiptById(receiptId)
     }
 }

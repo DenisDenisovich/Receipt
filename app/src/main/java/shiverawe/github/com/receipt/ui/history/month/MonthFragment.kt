@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_month.*
 import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth
+import shiverawe.github.com.receipt.domain.entity.receipt.month.ReceiptMonth
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
 import shiverawe.github.com.receipt.ui.history.month.adapter.MonthAdapter

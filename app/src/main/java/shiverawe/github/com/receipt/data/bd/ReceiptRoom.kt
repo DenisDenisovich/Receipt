@@ -8,8 +8,8 @@ import shiverawe.github.com.receipt.data.bd.product.ProductDao
 import shiverawe.github.com.receipt.data.bd.product.ProductEntity
 import shiverawe.github.com.receipt.data.bd.receipt.ReceiptDao
 import shiverawe.github.com.receipt.data.bd.receipt.ReceiptEntity
-import shiverawe.github.com.receipt.data.bd.utils.MapperDb
-import shiverawe.github.com.receipt.entity.receipt.base.Receipt
+import shiverawe.github.com.receipt.data.bd.mapper.MapperDb
+import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
 import shiverawe.github.com.receipt.ui.App
 import kotlin.collections.ArrayList
 

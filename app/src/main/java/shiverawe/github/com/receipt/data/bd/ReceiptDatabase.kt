@@ -4,12 +4,12 @@ import androidx.room.Transaction
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import shiverawe.github.com.receipt.data.bd.utils.CacheDiffUtility
-import shiverawe.github.com.receipt.entity.receipt.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
 
-class ReceiptDatabase {
+class ReceiptDatabase: IReceiptDatabase {
     private val db = ReceiptRoom.getDb()
     private val cacheDiffUtility = CacheDiffUtility()
-    fun updateMonthCache(dateFrom: Long, dateTo: Long, networkReceipts: ArrayList<Receipt>): Single<ArrayList<Receipt>> {
+    override fun updateMonthCache(dateFrom: Long, dateTo: Long, networkReceipts: ArrayList<Receipt>): Single<ArrayList<Receipt>> {
         return Single.create{
             emitter ->
             val localReceipts = db.getReceiptsWithProducts(dateFrom, dateTo)
@@ -31,7 +31,7 @@ class ReceiptDatabase {
     }
 
     @Transaction
-    fun getReceiptById(receiptId: Long): Single<Receipt> {
+    override fun getReceiptById(receiptId: Long): Single<Receipt> {
         return Single.create<Receipt> {
             emitter ->
             val receipt = db.receiptDao().getReceiptById(receiptId)
@@ -40,7 +40,7 @@ class ReceiptDatabase {
         }.subscribeOn(Schedulers.io())
     }
 
-    fun getReceipts(dataFrom: Long, dataTo: Long): Single<ArrayList<Receipt>> {
+    override fun getReceipts(dataFrom: Long, dataTo: Long): Single<ArrayList<Receipt>> {
         return Single.create {
             emitter ->
             val receipts = ArrayList<Receipt>()

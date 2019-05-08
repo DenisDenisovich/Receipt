@@ -6,16 +6,18 @@ import shiverawe.github.com.receipt.data.bd.ReceiptDatabase
 import shiverawe.github.com.receipt.data.network.MonthNetwork
 import shiverawe.github.com.receipt.data.network.utils.UtilsNetwork
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
-import shiverawe.github.com.receipt.entity.receipt.base.Receipt
-import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth
+import shiverawe.github.com.receipt.data.network.utils.IUtilsNetwork
+import shiverawe.github.com.receipt.domain.repository.IMonthRepository
+import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.receipt.month.ReceiptMonth
 import kotlin.collections.ArrayList
 
-class MonthRepository {
+class MonthRepository: IMonthRepository {
 
     private val network = MonthNetwork()
     private val db = ReceiptDatabase()
-
-    fun getMonthReceipt(reportRequest: ReportRequest): Single<ArrayList<ReceiptMonth>> {
+    private val utils: IUtilsNetwork = UtilsNetwork()
+    override fun getMonthReceipt(reportRequest: ReportRequest): Single<ArrayList<ReceiptMonth>> {
         return network.getMonthReceipts(reportRequest)
                 .flatMap { networkReceipts ->
                     val dateFrom = reportRequest.meta.date_from.toLong() * 1000L
@@ -24,7 +26,7 @@ class MonthRepository {
                 }
                 .map { receipts -> mapToMonthReceipt(receipts) }
                 .onErrorResumeNext {
-                    if (it is HttpException || !UtilsNetwork.isOnline()) {
+                    if (it is HttpException || !utils.isOnline()) {
                         val dateFrom = reportRequest.meta.date_from.toLong() * 1000L
                         val dateTo = reportRequest.meta.date_to.toLong() * 1000L
                         db.getReceipts(dateFrom, dateTo)

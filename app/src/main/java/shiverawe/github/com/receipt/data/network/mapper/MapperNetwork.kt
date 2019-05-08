@@ -1,19 +1,19 @@
-package shiverawe.github.com.receipt.data.network.utils
+package shiverawe.github.com.receipt.data.network.mapper
 
 import shiverawe.github.com.receipt.data.network.entity.get.ReceiptResponse
 import shiverawe.github.com.receipt.data.network.entity.report.Report
-import shiverawe.github.com.receipt.entity.receipt.base.Meta
-import shiverawe.github.com.receipt.entity.receipt.base.Product
-import shiverawe.github.com.receipt.entity.receipt.base.Receipt
-import shiverawe.github.com.receipt.entity.receipt.base.Shop
+import shiverawe.github.com.receipt.domain.entity.receipt.base.Meta
+import shiverawe.github.com.receipt.domain.entity.receipt.base.Product
+import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.receipt.base.Shop
 import java.lang.Exception
 import java.lang.NullPointerException
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class MapperNetwork {
+class MapperNetwork: IMapperNetwork {
 
-    fun reportToReceipt(report: ArrayList<Report>): ArrayList<Receipt> {
+    override fun reportToReceipt(report: ArrayList<Report>): ArrayList<Receipt> {
         val monthReceipts: ArrayList<Receipt> = ArrayList()
         report.forEach {
             val receipt = reportToReceipt(it)
@@ -22,7 +22,7 @@ class MapperNetwork {
         return monthReceipts
     }
 
-    fun reportToReceipt(report: Report): Receipt? {
+    override fun reportToReceipt(report: Report): Receipt? {
         try {
             val products: ArrayList<Product> = ArrayList()
             report.items.forEach {
@@ -43,7 +43,7 @@ class MapperNetwork {
         }
     }
 
-    fun getToReceipt(response: ReceiptResponse?): Receipt? {
+    override fun getToReceipt(response: ReceiptResponse?): Receipt? {
         if (response?.meta == null || response.items == null) return null
         val products = java.util.ArrayList<Product>()
         response.items.forEach {
