@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.data.bd.receipt
+package shiverawe.github.com.receipt.data.bd.room.receipt
 
 import androidx.room.*
 

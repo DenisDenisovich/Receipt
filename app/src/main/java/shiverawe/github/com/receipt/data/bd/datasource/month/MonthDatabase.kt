@@ -1,12 +1,11 @@
-package shiverawe.github.com.receipt.data.bd
+package shiverawe.github.com.receipt.data.bd.datasource.month
 
-import androidx.room.Transaction
 import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import shiverawe.github.com.receipt.data.bd.room.ReceiptRoom
 import shiverawe.github.com.receipt.data.bd.utils.ICacheDiffUtility
 import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
 
-class ReceiptDatabase(private val cacheDiffUtility: ICacheDiffUtility): IReceiptDatabase {
+class MonthDatabase(private val cacheDiffUtility: ICacheDiffUtility): IMonthDatabase {
     private val db = ReceiptRoom.getDb()
     override fun updateMonthCache(dateFrom: Long, dateTo: Long, networkReceipts: ArrayList<Receipt>): Single<ArrayList<Receipt>> {
         return Single.create{
@@ -28,17 +27,6 @@ class ReceiptDatabase(private val cacheDiffUtility: ICacheDiffUtility): IReceipt
             emitter.onSuccess(receipts)
         }
     }
-
-    @Transaction
-    override fun getReceiptById(receiptId: Long): Single<Receipt> {
-        return Single.create<Receipt> {
-            emitter ->
-            val receipt = db.receiptDao().getReceiptById(receiptId)
-            val products = db.productDao().getProductsForReceipts(arrayOf(receiptId))
-            emitter.onSuccess(db.mapper.dbToReceipt(receipt, products))
-        }.subscribeOn(Schedulers.io())
-    }
-
     override fun getReceipts(dataFrom: Long, dataTo: Long): Single<ArrayList<Receipt>> {
         return Single.create {
             emitter ->
@@ -52,4 +40,5 @@ class ReceiptDatabase(private val cacheDiffUtility: ICacheDiffUtility): IReceipt
             emitter.onSuccess(receipts)
         }
     }
+
 }

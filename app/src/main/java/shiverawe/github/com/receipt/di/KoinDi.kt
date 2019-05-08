@@ -3,14 +3,16 @@ package shiverawe.github.com.receipt.di
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.data.bd.IReceiptDatabase
-import shiverawe.github.com.receipt.data.bd.ReceiptDatabase
+import shiverawe.github.com.receipt.data.bd.datasource.month.IMonthDatabase
+import shiverawe.github.com.receipt.data.bd.datasource.month.MonthDatabase
+import shiverawe.github.com.receipt.data.bd.datasource.receipt.IReceiptDatabase
+import shiverawe.github.com.receipt.data.bd.datasource.receipt.ReceiptDatabase
 import shiverawe.github.com.receipt.data.bd.utils.CacheDiffUtility
 import shiverawe.github.com.receipt.data.bd.utils.ICacheDiffUtility
-import shiverawe.github.com.receipt.data.network.IMonthNetwork
-import shiverawe.github.com.receipt.data.network.IReceiptNetwork
-import shiverawe.github.com.receipt.data.network.MonthNetwork
-import shiverawe.github.com.receipt.data.network.ReceiptNetwork
+import shiverawe.github.com.receipt.data.network.datasource.month.IMonthNetwork
+import shiverawe.github.com.receipt.data.network.datasource.receipt.IReceiptNetwork
+import shiverawe.github.com.receipt.data.network.datasource.month.MonthNetwork
+import shiverawe.github.com.receipt.data.network.datasource.receipt.ReceiptNetwork
 import shiverawe.github.com.receipt.data.network.api.createRetrofit
 import shiverawe.github.com.receipt.data.network.mapper.IMapperNetwork
 import shiverawe.github.com.receipt.data.network.mapper.MapperNetwork
@@ -36,7 +38,8 @@ val receiptModule = module {
     factory<ReceiptContact.Presenter> { ReceiptPresenter(get()) }
 }
 val dbModule = module {
-    factory<IReceiptDatabase> { ReceiptDatabase(get()) }
+    factory<IReceiptDatabase> { ReceiptDatabase() }
+    factory<IMonthDatabase> { MonthDatabase(get()) }
 }
 
 val networkModule = module {

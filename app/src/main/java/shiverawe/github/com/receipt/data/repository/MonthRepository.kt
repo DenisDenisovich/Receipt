@@ -2,8 +2,8 @@ package shiverawe.github.com.receipt.data.repository
 
 import io.reactivex.Single
 import retrofit2.HttpException
-import shiverawe.github.com.receipt.data.bd.IReceiptDatabase
-import shiverawe.github.com.receipt.data.network.IMonthNetwork
+import shiverawe.github.com.receipt.data.bd.datasource.month.IMonthDatabase
+import shiverawe.github.com.receipt.data.network.datasource.month.IMonthNetwork
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.data.network.utils.IUtilsNetwork
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
@@ -13,7 +13,7 @@ import kotlin.collections.ArrayList
 
 class MonthRepository(
         private val network: IMonthNetwork,
-        private val db: IReceiptDatabase,
+        private val db: IMonthDatabase,
         private val utils: IUtilsNetwork
 ) : IMonthRepository {
     override fun getMonthReceipt(reportRequest: ReportRequest): Single<ArrayList<ReceiptMonth>> {

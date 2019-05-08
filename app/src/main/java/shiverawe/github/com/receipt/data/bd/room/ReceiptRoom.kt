@@ -1,13 +1,13 @@
-package shiverawe.github.com.receipt.data.bd
+package shiverawe.github.com.receipt.data.bd.room
 
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.Transaction
-import shiverawe.github.com.receipt.data.bd.product.ProductDao
-import shiverawe.github.com.receipt.data.bd.product.ProductEntity
-import shiverawe.github.com.receipt.data.bd.receipt.ReceiptDao
-import shiverawe.github.com.receipt.data.bd.receipt.ReceiptEntity
+import shiverawe.github.com.receipt.data.bd.room.product.ProductDao
+import shiverawe.github.com.receipt.data.bd.room.product.ProductEntity
+import shiverawe.github.com.receipt.data.bd.room.receipt.ReceiptDao
+import shiverawe.github.com.receipt.data.bd.room.receipt.ReceiptEntity
 import shiverawe.github.com.receipt.data.bd.mapper.MapperDb
 import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
 import shiverawe.github.com.receipt.ui.App

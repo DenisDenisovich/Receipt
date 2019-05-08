@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.data.network
+package shiverawe.github.com.receipt.data.network.datasource.receipt
 
 import io.reactivex.Single
 import shiverawe.github.com.receipt.data.network.api.Api

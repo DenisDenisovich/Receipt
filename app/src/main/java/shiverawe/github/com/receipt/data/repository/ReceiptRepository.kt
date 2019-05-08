@@ -1,8 +1,8 @@
 package shiverawe.github.com.receipt.data.repository
 
 import io.reactivex.Single
-import shiverawe.github.com.receipt.data.bd.IReceiptDatabase
-import shiverawe.github.com.receipt.data.network.IReceiptNetwork
+import shiverawe.github.com.receipt.data.bd.datasource.receipt.IReceiptDatabase
+import shiverawe.github.com.receipt.data.network.datasource.receipt.IReceiptNetwork
 import shiverawe.github.com.receipt.data.network.entity.create.CreateResponce
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt

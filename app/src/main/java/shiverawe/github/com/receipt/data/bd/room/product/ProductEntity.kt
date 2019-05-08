@@ -1,11 +1,10 @@
-package shiverawe.github.com.receipt.data.bd.product
+package shiverawe.github.com.receipt.data.bd.room.product
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
-import shiverawe.github.com.receipt.data.bd.receipt.ReceiptEntity
+import shiverawe.github.com.receipt.data.bd.room.receipt.ReceiptEntity
 
 @Entity(tableName = "product_table",
         foreignKeys = [ForeignKey(entity = ReceiptEntity::class, parentColumns = ["id"], childColumns = ["receiptId"], onDelete = CASCADE)])

@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.data.bd.product
+package shiverawe.github.com.receipt.data.bd.room.product
 
 import androidx.room.Dao
 import androidx.room.Insert
