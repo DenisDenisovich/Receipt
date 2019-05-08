@@ -27,7 +27,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ReceiptFragment : Fragment(), ReceiptView, View.OnClickListener {
+class ReceiptFragment : Fragment(), ReceiptContact.ReceiptView, View.OnClickListener {
 
     companion object {
         const val RECEIPT_TAG = "receipt_fragment"

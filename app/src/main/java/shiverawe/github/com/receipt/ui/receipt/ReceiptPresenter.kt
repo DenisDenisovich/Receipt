@@ -6,20 +6,20 @@ import shiverawe.github.com.receipt.data.repository.ReceiptRepository
 import shiverawe.github.com.receipt.utils.Metric
 import java.lang.Exception
 
-class ReceiptPresenter {
+class ReceiptPresenter: ReceiptContact.ReceiptPresenter {
     var repository = ReceiptRepository()
-    var view: ReceiptView? = null
+    var view: ReceiptContact.ReceiptView? = null
     var disposable: Disposable? = null
-    fun attach(view: ReceiptView) {
+    fun attach(view: ReceiptContact.ReceiptView) {
         this.view = view
     }
 
-    fun detach() {
+    override fun detach() {
         view = null
         disposable?.dispose()
     }
 
-    fun getReceiptById(receiptId: Long) {
+    override fun getReceiptById(receiptId: Long) {
         view?.showProgress()
         disposable = repository.getReceiptById(receiptId)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -30,7 +30,7 @@ class ReceiptPresenter {
                 })
     }
 
-    fun getReceiptByMeta(options: String) {
+    override fun getReceiptByMeta(options: String) {
         val startTime = System.currentTimeMillis()
         var totalTime: Int
         view?.showProgress()
