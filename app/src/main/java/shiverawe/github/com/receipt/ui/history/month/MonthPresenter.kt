@@ -72,12 +72,12 @@ class MonthPresenter(
             view?.showError()
         } else {
             if (receipts.size == 0) {
-                view?.setTotalSum("0 ${App.appContext.resources.getString(R.string.rubleSymbolJava)}")
+                view?.setTotalSum("0")
                 view?.showEmptyDataMessage()
             } else {
 
                 view?.setReceipts(receipts)
-                val sumStr = BigDecimal(totalSum).setScale(2, RoundingMode.DOWN).toString() + " " + App.appContext.resources.getString(R.string.rubleSymbolJava)
+                val sumStr = BigDecimal(totalSum).setScale(2, RoundingMode.DOWN).toString()
                 view?.setTotalSum(sumStr)
             }
         }

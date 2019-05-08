@@ -71,7 +71,7 @@ class MonthFragment : Fragment(), MonthContract.View {
     }
 
     override fun setTotalSum(totalSum: String) {
-        this.totalSum = totalSum
+        this.totalSum = "$totalSum ${resources.getString(R.string.rubleSymbolJava)}"
         parentFragment?.let {
             (it as HistoryFragment).setCurrentSum(totalSum)
         }

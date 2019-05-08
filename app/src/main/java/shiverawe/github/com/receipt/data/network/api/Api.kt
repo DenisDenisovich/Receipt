@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.data.network
+package shiverawe.github.com.receipt.data.network.api
 
 import io.reactivex.Single
 import retrofit2.http.*

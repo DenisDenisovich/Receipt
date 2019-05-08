@@ -1,16 +1,18 @@
 package shiverawe.github.com.receipt.data.network
 
 import io.reactivex.Single
+import shiverawe.github.com.receipt.data.network.api.Api
 import shiverawe.github.com.receipt.data.network.entity.report.Report
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.data.network.mapper.IMapperNetwork
 import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
-import shiverawe.github.com.receipt.ui.App
 import kotlin.collections.ArrayList
 
-class MonthNetwork(private val mapper: IMapperNetwork): IMonthNetwork {
+class MonthNetwork(
+        private val mapper: IMapperNetwork,
+        private val api: Api): IMonthNetwork {
     override fun getMonthReceipts(reportRequest: ReportRequest): Single<ArrayList<Receipt>> {
-        return App.api.getReceiptForMonth(reportRequest)
+        return api.getReceiptForMonth(reportRequest)
                 .map { report ->
                     val filterReport = filterMonth(report)
                     mapper.reportToReceipt(filterReport)
