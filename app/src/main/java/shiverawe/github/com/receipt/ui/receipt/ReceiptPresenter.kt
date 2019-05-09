@@ -2,24 +2,23 @@ package shiverawe.github.com.receipt.ui.receipt
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import shiverawe.github.com.receipt.data.repository.ReceiptRepository
+import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import shiverawe.github.com.receipt.utils.Metric
 import java.lang.Exception
 
-class ReceiptPresenter {
-    var repository = ReceiptRepository()
-    var view: ReceiptView? = null
+class ReceiptPresenter(private val repository: IReceiptRepository): ReceiptContact.Presenter {
+    var view: ReceiptContact.View? = null
     var disposable: Disposable? = null
-    fun attach(view: ReceiptView) {
+    override fun attach(view: ReceiptContact.View) {
         this.view = view
     }
 
-    fun detach() {
+    override fun detach() {
         view = null
         disposable?.dispose()
     }
 
-    fun getReceiptById(receiptId: Long) {
+    override fun getReceiptById(receiptId: Long) {
         view?.showProgress()
         disposable = repository.getReceiptById(receiptId)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -30,7 +29,7 @@ class ReceiptPresenter {
                 })
     }
 
-    fun getReceiptByMeta(options: String) {
+    override fun getReceiptByMeta(options: String) {
         val startTime = System.currentTimeMillis()
         var totalTime: Int
         view?.showProgress()

@@ -14,9 +14,10 @@ import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_receipt.*
+import org.koin.android.ext.android.inject
 import retrofit2.HttpException
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.entity.receipt.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
 import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptView
 import shiverawe.github.com.receipt.utils.Settings
 import java.lang.Exception
@@ -27,7 +28,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ReceiptFragment : Fragment(), ReceiptView, View.OnClickListener {
+class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
 
     companion object {
         const val RECEIPT_TAG = "receipt_fragment"
@@ -59,7 +60,7 @@ class ReceiptFragment : Fragment(), ReceiptView, View.OnClickListener {
             }
         }
 
-    var presenter = ReceiptPresenter()
+    private val presenter: ReceiptContact.Presenter by inject()
     private var adapter = ProductAdapter()
     private lateinit var touchListener: RvRatingProductTouchListener
     private val dateFormatterDate = SimpleDateFormat("dd.MM.YY_HH:mm", Locale("ru"))

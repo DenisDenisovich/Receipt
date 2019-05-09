@@ -1,6 +1,6 @@
 package shiverawe.github.com.receipt.ui.history.month
 
-import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth
+import shiverawe.github.com.receipt.domain.entity.dto.month.ReceiptMonth
 
 interface MonthContract {
     interface View {
