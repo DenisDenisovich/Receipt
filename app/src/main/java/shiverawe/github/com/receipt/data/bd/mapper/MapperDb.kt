@@ -2,10 +2,10 @@ package shiverawe.github.com.receipt.data.bd.mapper
 
 import shiverawe.github.com.receipt.data.bd.room.product.ProductEntity
 import shiverawe.github.com.receipt.data.bd.room.receipt.ReceiptEntity
-import shiverawe.github.com.receipt.domain.entity.receipt.base.Meta
-import shiverawe.github.com.receipt.domain.entity.receipt.base.Product
-import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
-import shiverawe.github.com.receipt.domain.entity.receipt.base.Shop
+import shiverawe.github.com.receipt.domain.entity.dto.base.Meta
+import shiverawe.github.com.receipt.domain.entity.dto.base.Product
+import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.base.Shop
 
 class MapperDb: IMapperDb {
 

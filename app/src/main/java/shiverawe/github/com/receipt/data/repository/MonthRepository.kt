@@ -7,8 +7,8 @@ import shiverawe.github.com.receipt.data.network.datasource.month.IMonthNetwork
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.data.network.utils.IUtilsNetwork
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
-import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
-import shiverawe.github.com.receipt.domain.entity.receipt.month.ReceiptMonth
+import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.month.ReceiptMonth
 import kotlin.collections.ArrayList
 
 class MonthRepository(

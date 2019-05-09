@@ -2,10 +2,10 @@ package shiverawe.github.com.receipt.data.network.mapper
 
 import shiverawe.github.com.receipt.data.network.entity.get.ReceiptResponse
 import shiverawe.github.com.receipt.data.network.entity.report.Report
-import shiverawe.github.com.receipt.domain.entity.receipt.base.Meta
-import shiverawe.github.com.receipt.domain.entity.receipt.base.Product
-import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
-import shiverawe.github.com.receipt.domain.entity.receipt.base.Shop
+import shiverawe.github.com.receipt.domain.entity.dto.base.Meta
+import shiverawe.github.com.receipt.domain.entity.dto.base.Product
+import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.base.Shop
 import java.lang.Exception
 import java.lang.NullPointerException
 import java.math.BigDecimal

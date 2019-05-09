@@ -5,7 +5,7 @@ import shiverawe.github.com.receipt.data.network.api.Api
 import shiverawe.github.com.receipt.data.network.entity.report.Report
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.data.network.mapper.IMapperNetwork
-import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
 import kotlin.collections.ArrayList
 
 class MonthNetwork(

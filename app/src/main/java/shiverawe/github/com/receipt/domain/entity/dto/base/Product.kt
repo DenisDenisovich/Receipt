@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.domain.entity.receipt.base
+package shiverawe.github.com.receipt.domain.entity.dto.base
 
 data class Product(val text: String,
                    val price: Double,

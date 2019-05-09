@@ -1,6 +1,6 @@
 package shiverawe.github.com.receipt.ui.receipt
 
-import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
 
 interface ReceiptContact {
     interface View {

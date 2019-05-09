@@ -3,7 +3,7 @@ package shiverawe.github.com.receipt.data.bd.datasource.month
 import io.reactivex.Single
 import shiverawe.github.com.receipt.data.bd.room.ReceiptRoom
 import shiverawe.github.com.receipt.data.bd.utils.ICacheDiffUtility
-import shiverawe.github.com.receipt.domain.entity.receipt.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
 
 class MonthDatabase(private val cacheDiffUtility: ICacheDiffUtility): IMonthDatabase {
     private val db = ReceiptRoom.getDb()

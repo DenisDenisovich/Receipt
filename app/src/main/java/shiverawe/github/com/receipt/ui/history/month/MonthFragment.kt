@@ -12,7 +12,7 @@ import org.koin.android.ext.android.get
 import org.koin.core.parameter.parametersOf
 import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.domain.entity.receipt.month.ReceiptMonth
+import shiverawe.github.com.receipt.domain.entity.dto.month.ReceiptMonth
 import shiverawe.github.com.receipt.ui.App
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
