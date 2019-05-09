@@ -8,7 +8,6 @@ import java.util.*
 
 class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
     val dates: ArrayList<Long> = ArrayList(MutableList(count) { 0L })
-
     init {
         // init dates
         val calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))

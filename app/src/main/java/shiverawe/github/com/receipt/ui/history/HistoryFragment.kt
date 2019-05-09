@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import android.view.LayoutInflater
@@ -82,6 +81,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
                 }
             }
         })
+        setCurrentSum("")
     }
 
     override fun onClick(v: View?) {
@@ -147,14 +147,11 @@ class HistoryFragment : Fragment(), View.OnClickListener {
     }
 
     private fun updateMonthSum(position: Int) {
-            val fragments = childFragmentManager.fragments
-            fragments.forEach { fragment ->
-                if (fragment is MonthFragment) {
-                    if (fragment.arguments?.getInt(MonthFragment.POSITION_KEY) == position) {
-                        setCurrentSum(fragment.getSum())
-                        return
-                    }
-                }
+        val fragment = childFragmentManager.fragments.findLast { it.arguments?.getInt(MonthFragment.POSITION_KEY) == position }
+        fragment?.let {
+            if (it is MonthFragment) {
+                setCurrentSum(it.getSum())
             }
+        }
     }
 }

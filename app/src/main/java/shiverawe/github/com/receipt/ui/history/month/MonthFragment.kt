@@ -2,7 +2,6 @@ package shiverawe.github.com.receipt.ui.history.month
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -58,9 +57,13 @@ class MonthFragment : Fragment(), MonthContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         rv_month.adapter = adapter
         rv_month.layoutManager = LinearLayoutManager(context)
-        if (userVisibleHint) {
-            if (receipts.size == 0) presenter?.getReceiptsData()
-            else setReceipts(receipts)
+
+        if (receipts.size == 0) {
+            if (userVisibleHint) {
+                presenter?.getReceiptsData()
+            }
+        } else {
+            setReceipts(receipts)
         }
     }
 
@@ -98,11 +101,12 @@ class MonthFragment : Fragment(), MonthContract.View {
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        Log.d("Visible", "$totalSum $isVisibleToUser")
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
             if (receipts.size == 0) {
                 presenter?.getReceiptsData()
+            } else {
+                setReceipts(receipts)
             }
         }
     }
