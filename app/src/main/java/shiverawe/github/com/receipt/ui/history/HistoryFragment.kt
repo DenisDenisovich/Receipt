@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import android.view.LayoutInflater
@@ -77,7 +78,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
                 if (previewItem != position) {
                     previewItem = position
                     setCurrentMonth(position)
-                    setCurrentSum("")
+                    updateMonthSum(position)
                 }
             }
         })
@@ -113,7 +114,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
     fun setCurrentSum(sum: String) {
         tv_sum_history.post {
             if (sum.isNotEmpty()) {
-                tv_sum_history.text = "Общая сумма: $sum"
+                tv_sum_history.text = "Общая сумма: $sum ${resources.getString(R.string.rubleSymbolJava)}"
             } else
                 tv_sum_history.text = "Общая сумма: ..."
         }
@@ -124,7 +125,6 @@ class HistoryFragment : Fragment(), View.OnClickListener {
         if (position == -1) {
             Toast.makeText(context, "Невозможно отобразить данный месяц", Toast.LENGTH_SHORT).show()
         } else {
-            //pageListener.dateChangedByCalendar()
             vp_history.currentItem = position
         }
     }
@@ -144,5 +144,17 @@ class HistoryFragment : Fragment(), View.OnClickListener {
                 }
             }
         }
+    }
+
+    private fun updateMonthSum(position: Int) {
+            val fragments = childFragmentManager.fragments
+            fragments.forEach { fragment ->
+                if (fragment is MonthFragment) {
+                    if (fragment.arguments?.getInt(MonthFragment.POSITION_KEY) == position) {
+                        setCurrentSum(fragment.getSum())
+                        return
+                    }
+                }
+            }
     }
 }
