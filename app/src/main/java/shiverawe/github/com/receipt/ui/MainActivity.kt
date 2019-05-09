@@ -1,10 +1,10 @@
 package shiverawe.github.com.receipt.ui
 
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.v4.app.Fragment
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.AppCompatActivity
+import com.google.android.material.navigation.NavigationView
+import androidx.fragment.app.Fragment
+import androidx.core.view.GravityCompat
+import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import shiverawe.github.com.receipt.R
@@ -68,8 +68,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun openQr() {
         getTransaction().replace(R.id.container, NewReceiptFragment()).addToBackStack(null).commit()
-/*        val intent = Intent(this, ReceiptLinkActivity::class.java)
-        startActivityForResult(intent, REQUEST_CODE_CREATE_RECEIPT)*/
     }
 
     override fun openNavigationDrawable() {

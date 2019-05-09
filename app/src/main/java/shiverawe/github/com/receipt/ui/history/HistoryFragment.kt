@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,7 +46,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
         // init date dialog
         val currentDate = GregorianCalendar()
         currentDate.time = Date(System.currentTimeMillis())
-        dateDialog = DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+        dateDialog = DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             val selectedDate = GregorianCalendar(TimeZone.getTimeZone("UTC"))
             selectedDate.apply {
                 set(Calendar.YEAR, year)
@@ -77,10 +77,11 @@ class HistoryFragment : Fragment(), View.OnClickListener {
                 if (previewItem != position) {
                     previewItem = position
                     setCurrentMonth(position)
-                    setCurrentSum("")
+                    updateMonthSum(position)
                 }
             }
         })
+        setCurrentSum("")
     }
 
     override fun onClick(v: View?) {
@@ -113,7 +114,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
     fun setCurrentSum(sum: String) {
         tv_sum_history.post {
             if (sum.isNotEmpty()) {
-                tv_sum_history.text = "Общая сумма: $sum"
+                tv_sum_history.text = "Общая сумма: $sum ${resources.getString(R.string.rubleSymbolJava)}"
             } else
                 tv_sum_history.text = "Общая сумма: ..."
         }
@@ -124,7 +125,6 @@ class HistoryFragment : Fragment(), View.OnClickListener {
         if (position == -1) {
             Toast.makeText(context, "Невозможно отобразить данный месяц", Toast.LENGTH_SHORT).show()
         } else {
-            //pageListener.dateChangedByCalendar()
             vp_history.currentItem = position
         }
     }
@@ -142,6 +142,15 @@ class HistoryFragment : Fragment(), View.OnClickListener {
                         return
                     }
                 }
+            }
+        }
+    }
+
+    private fun updateMonthSum(position: Int) {
+        val fragment = childFragmentManager.fragments.findLast { it.arguments?.getInt(MonthFragment.POSITION_KEY) == position }
+        fragment?.let {
+            if (it is MonthFragment) {
+                setCurrentSum(it.getSum())
             }
         }
     }

@@ -2,22 +2,23 @@ package shiverawe.github.com.receipt.ui.history.month
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
-import shiverawe.github.com.receipt.data.repository.MonthRepository
-import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth_v2
-import shiverawe.github.com.receipt.ui.App
+import shiverawe.github.com.receipt.domain.entity.dto.month.ReceiptMonth
+import shiverawe.github.com.receipt.domain.repository.IMonthRepository
+import shiverawe.github.com.receipt.utils.Metric
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
-    private val repository = MonthRepository()
+class MonthPresenter(
+        private val repository: IMonthRepository,
+        dateFrom: Int
+) : MonthContract.Presenter {
     private var reportRequest: ReportRequest
     var receiptDisposable: Disposable? = null
     var view: MonthContract.View? = null
-    private var receipts: ArrayList<ReceiptMonth_v2> = ArrayList()
+    private var receipts: ArrayList<ReceiptMonth> = ArrayList()
     private var totalSum: Double = 0.0
     private var isError = false
 
@@ -43,6 +44,8 @@ class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
     }
 
     override fun getReceiptsData() {
+        val startTime = System.currentTimeMillis()
+        var totalTime: Int
         receiptDisposable?.dispose()
         receiptDisposable = repository.getMonthReceipt(reportRequest)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -51,12 +54,14 @@ class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
                     totalSum = 0.0
                     response.forEach {
                         totalSum += it.meta.s
-                        receipts.add(ReceiptMonth_v2(it.receiptId, it.shop, it.meta))
+                        receipts.add(ReceiptMonth(it.receiptId, it.shop, it.meta))
                     }
                     setReceiptsData()
                 }, {
                     isError = true
                     view?.showError()
+                    totalTime = ((System.currentTimeMillis() - startTime) / 1000).toInt()
+                    Metric.sendHistoryError(totalTime, it)
                 })
     }
 
@@ -65,12 +70,12 @@ class MonthPresenter(dateFrom: Int) : MonthContract.Presenter {
             view?.showError()
         } else {
             if (receipts.size == 0) {
-                view?.setTotalSum("0 ${App.appContext.resources.getString(R.string.rubleSymbolJava)}")
+                view?.setTotalSum("0")
                 view?.showEmptyDataMessage()
             } else {
 
                 view?.setReceipts(receipts)
-                val sumStr = BigDecimal(totalSum).setScale(2, RoundingMode.DOWN).toString() + " " + App.appContext.resources.getString(R.string.rubleSymbolJava)
+                val sumStr = BigDecimal(totalSum).setScale(2, RoundingMode.DOWN).toString()
                 view?.setTotalSum(sumStr)
             }
         }

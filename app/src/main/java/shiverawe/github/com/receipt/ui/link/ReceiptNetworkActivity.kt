@@ -1,7 +1,7 @@
 package shiverawe.github.com.receipt.ui.link
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
@@ -16,9 +16,6 @@ class ReceiptLinkActivity: NewReceiptView, AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receipt_link)
-        val data = intent.data
-        val path = data.query
-        val qrData = path
         btn_error_change_data.visibility = View.GONE
         btn_error_repeat.setOnClickListener {
             (supportFragmentManager.findFragmentById(R.id.container_link_receipt) as ReceiptFragment).sendRequest()
@@ -26,7 +23,11 @@ class ReceiptLinkActivity: NewReceiptView, AppCompatActivity() {
         }
         container_wait.visibility = View.GONE
         container_error.visibility = View.GONE
-        openReceipt(qrData)
+        if (intent?.data?.query == null) {
+            finish()
+        } else {
+            openReceipt(intent!!.data!!.query!!)
+        }
     }
 
     override fun openReceipt(options: String) {

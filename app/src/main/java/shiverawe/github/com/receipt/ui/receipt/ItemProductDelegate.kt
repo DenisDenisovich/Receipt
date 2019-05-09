@@ -1,12 +1,12 @@
 package shiverawe.github.com.receipt.ui.receipt
 
 import android.annotation.SuppressLint
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_product.view.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.entity.receipt.base.Product
+import shiverawe.github.com.receipt.domain.entity.dto.base.Product
 import shiverawe.github.com.receipt.ui.App
 import shiverawe.github.com.receipt.ui.base.adapter.AdapterDelegate
 import java.math.BigDecimal

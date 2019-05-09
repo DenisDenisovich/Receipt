@@ -1,14 +1,13 @@
 package shiverawe.github.com.receipt.ui.history
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import shiverawe.github.com.receipt.ui.history.month.MonthFragment
 import java.util.*
 
 class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
     val dates: ArrayList<Long> = ArrayList(MutableList(count) { 0L })
-
     init {
         // init dates
         val calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
@@ -22,7 +21,7 @@ class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) 
     }
 
     override fun getItem(position: Int): Fragment {
-        return MonthFragment.getNewInstance((dates[position] / 1000).toInt())
+        return MonthFragment.getNewInstance((dates[position] / 1000).toInt(), position)
     }
 
     override fun getCount() = 1200

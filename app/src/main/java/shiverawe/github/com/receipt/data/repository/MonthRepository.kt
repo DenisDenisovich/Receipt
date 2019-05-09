@@ -2,21 +2,21 @@ package shiverawe.github.com.receipt.data.repository
 
 import io.reactivex.Single
 import retrofit2.HttpException
-import shiverawe.github.com.receipt.data.bd.ReceiptDatabase
-import shiverawe.github.com.receipt.data.network.MonthNetwork
-import shiverawe.github.com.receipt.data.network.utils.UtilsNetwork
+import shiverawe.github.com.receipt.data.bd.datasource.month.IMonthDatabase
+import shiverawe.github.com.receipt.data.network.datasource.month.IMonthNetwork
 import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
-import shiverawe.github.com.receipt.entity.receipt.base.Receipt
-import shiverawe.github.com.receipt.entity.receipt.month.ReceiptMonth
-import java.util.*
+import shiverawe.github.com.receipt.data.network.utils.IUtilsNetwork
+import shiverawe.github.com.receipt.domain.repository.IMonthRepository
+import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.month.ReceiptMonth
 import kotlin.collections.ArrayList
 
-class MonthRepository {
-
-    private val network = MonthNetwork()
-    private val db = ReceiptDatabase()
-
-    fun getMonthReceipt(reportRequest: ReportRequest): Single<ArrayList<ReceiptMonth>> {
+class MonthRepository(
+        private val network: IMonthNetwork,
+        private val db: IMonthDatabase,
+        private val utils: IUtilsNetwork
+) : IMonthRepository {
+    override fun getMonthReceipt(reportRequest: ReportRequest): Single<ArrayList<ReceiptMonth>> {
         return network.getMonthReceipts(reportRequest)
                 .flatMap { networkReceipts ->
                     val dateFrom = reportRequest.meta.date_from.toLong() * 1000L
@@ -25,7 +25,7 @@ class MonthRepository {
                 }
                 .map { receipts -> mapToMonthReceipt(receipts) }
                 .onErrorResumeNext {
-                    if (it is HttpException || !UtilsNetwork.isOnline()) {
+                    if (it is HttpException || !utils.isOnline()) {
                         val dateFrom = reportRequest.meta.date_from.toLong() * 1000L
                         val dateTo = reportRequest.meta.date_to.toLong() * 1000L
                         db.getReceipts(dateFrom, dateTo)
@@ -37,6 +37,6 @@ class MonthRepository {
     }
 
     private fun mapToMonthReceipt(receipts: ArrayList<Receipt>): ArrayList<ReceiptMonth> {
-        return ArrayList(receipts.map { ReceiptMonth(it.receiptId, it.shop, it.meta, 0)})
+        return ArrayList(receipts.map { ReceiptMonth(it.receiptId, it.shop, it.meta) })
     }
 }

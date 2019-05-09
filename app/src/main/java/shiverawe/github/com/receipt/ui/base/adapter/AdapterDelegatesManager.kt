@@ -1,7 +1,6 @@
 package shiverawe.github.com.receipt.ui.base.adapter
 
-import android.support.v7.widget.RecyclerView
-import android.util.SparseArray
+import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
 
 class AdapterDelegatesManager<T> {

@@ -1,7 +1,7 @@
 package shiverawe.github.com.receipt.ui.newreceipt
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -244,7 +244,7 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
             changedText.clear()
             changedText.append(s.substring(0, s.length - 1)).toString()
         } else {
-            val separatorStr = s.filterIndexed { index, c -> (index + 1) % 3 == 0 }
+            val separatorStr = s.filterIndexed { index, _ -> (index + 1) % 3 == 0 }
             var stringIsCorrect = true
             for (symbol in separatorStr.iterator()) {
                 if (symbol != separator) {

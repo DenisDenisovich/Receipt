@@ -2,42 +2,54 @@ package shiverawe.github.com.receipt.ui.receipt
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import shiverawe.github.com.receipt.data.repository.ReceiptRepository
+import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
+import shiverawe.github.com.receipt.utils.Metric
 import java.lang.Exception
 
-class ReceiptPresenter {
-    var repository = ReceiptRepository()
-    var view: ReceiptView? = null
+class ReceiptPresenter(private val repository: IReceiptRepository): ReceiptContact.Presenter {
+    var view: ReceiptContact.View? = null
     var disposable: Disposable? = null
-    fun attach(view: ReceiptView) {
+    override fun attach(view: ReceiptContact.View) {
         this.view = view
     }
 
-    fun detach() {
+    override fun detach() {
         view = null
         disposable?.dispose()
     }
 
-    fun getReceiptById(receiptId: Long) {
+    override fun getReceiptById(receiptId: Long) {
         view?.showProgress()
         disposable = repository.getReceiptById(receiptId)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({receipt ->
+                .subscribe({ receipt ->
                     view?.showReceipt(receipt)
                 }, {
                     view?.showError(Throwable("receipt = null"))
                 })
     }
 
-    fun getReceiptByMeta(options: String) {
+    override fun getReceiptByMeta(options: String) {
+        val startTime = System.currentTimeMillis()
+        var totalTime: Int
         view?.showProgress()
         parseOptions(options)?.let { meta ->
             disposable = repository.getReceipt(meta)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({receipt ->
-                        if (receipt == null) view?.showError(Throwable("receipt = null"))
-                        else view?.showReceipt(receipt)
+                    .subscribe({ receipt ->
+                        totalTime = ((System.currentTimeMillis() - startTime) / 1000).toInt()
+                        if (receipt == null) {
+                            val t = Throwable("receipt = null")
+                            Metric.sendNewReceiptError(options, totalTime, t)
+                            view?.showError(t)
+                        } else {
+                            view?.showReceipt(receipt)
+                            Metric.sendSuccessNewReceipt(options, totalTime)
+
+                        }
                     }, {
+                        totalTime = ((System.currentTimeMillis() - startTime) / 1000).toInt()
+                        Metric.sendNewReceiptError(options, totalTime, it)
                         view?.showError(it)
                     })
         }
