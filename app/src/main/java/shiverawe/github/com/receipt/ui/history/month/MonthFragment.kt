@@ -13,7 +13,6 @@ import org.koin.core.parameter.parametersOf
 import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.dto.month.ReceiptMonth
-import shiverawe.github.com.receipt.ui.App
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
 import shiverawe.github.com.receipt.ui.history.month.adapter.MonthAdapter
@@ -22,10 +21,12 @@ import kotlin.collections.ArrayList
 class MonthFragment : Fragment(), MonthContract.View {
     companion object {
         const val DATE_KEY = "date"
-        fun getNewInstance(date: Int): MonthFragment {
+        const val POSITION_KEY = "position"
+        fun getNewInstance(date: Int, position: Int): MonthFragment {
             val fragment = MonthFragment()
             val bundle = Bundle()
             bundle.putInt(DATE_KEY, date)
+            bundle.putInt(POSITION_KEY, position)
             fragment.arguments = bundle
             return fragment
         }
@@ -44,7 +45,6 @@ class MonthFragment : Fragment(), MonthContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val dateFrom = arguments!!.getInt(DATE_KEY)
-        //presenter = MonthPresenter(dateFrom)
         presenter = get { parametersOf(dateFrom) }
         adapter = MonthAdapter { receipt -> navigation.openReceipt(receipt.receiptId) }
     }
@@ -57,9 +57,13 @@ class MonthFragment : Fragment(), MonthContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         rv_month.adapter = adapter
         rv_month.layoutManager = LinearLayoutManager(context)
-        if (userVisibleHint) {
-            if (receipts.size == 0) presenter?.getReceiptsData()
-            else setReceipts(receipts)
+
+        if (receipts.size == 0) {
+            if (userVisibleHint) {
+                presenter?.getReceiptsData()
+            }
+        } else {
+            setReceipts(receipts)
         }
     }
 
@@ -72,7 +76,7 @@ class MonthFragment : Fragment(), MonthContract.View {
     }
 
     override fun setTotalSum(totalSum: String) {
-        this.totalSum = "$totalSum ${App.appContext.resources.getString(R.string.rubleSymbolJava)}"
+        this.totalSum = totalSum
         parentFragment?.let {
             (it as HistoryFragment).setCurrentSum(totalSum)
         }
@@ -99,8 +103,11 @@ class MonthFragment : Fragment(), MonthContract.View {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser) {
-            if (receipts.size == 0) presenter?.getReceiptsData()
-            setTotalSum(totalSum)
+            if (receipts.size == 0) {
+                presenter?.getReceiptsData()
+            } else {
+                setReceipts(receipts)
+            }
         }
     }
 
@@ -109,6 +116,10 @@ class MonthFragment : Fragment(), MonthContract.View {
         receipts.clear()
         totalSum = ""
         presenter?.update()
+    }
+
+    fun getSum(): String {
+        return totalSum
     }
 
     override fun onDestroyView() {

@@ -8,7 +8,6 @@ import java.util.*
 
 class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
     val dates: ArrayList<Long> = ArrayList(MutableList(count) { 0L })
-
     init {
         // init dates
         val calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
@@ -22,7 +21,7 @@ class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) 
     }
 
     override fun getItem(position: Int): Fragment {
-        return MonthFragment.getNewInstance((dates[position] / 1000).toInt())
+        return MonthFragment.getNewInstance((dates[position] / 1000).toInt(), position)
     }
 
     override fun getCount() = 1200

@@ -77,10 +77,11 @@ class HistoryFragment : Fragment(), View.OnClickListener {
                 if (previewItem != position) {
                     previewItem = position
                     setCurrentMonth(position)
-                    setCurrentSum("")
+                    updateMonthSum(position)
                 }
             }
         })
+        setCurrentSum("")
     }
 
     override fun onClick(v: View?) {
@@ -113,7 +114,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
     fun setCurrentSum(sum: String) {
         tv_sum_history.post {
             if (sum.isNotEmpty()) {
-                tv_sum_history.text = "Общая сумма: $sum"
+                tv_sum_history.text = "Общая сумма: $sum ${resources.getString(R.string.rubleSymbolJava)}"
             } else
                 tv_sum_history.text = "Общая сумма: ..."
         }
@@ -124,7 +125,6 @@ class HistoryFragment : Fragment(), View.OnClickListener {
         if (position == -1) {
             Toast.makeText(context, "Невозможно отобразить данный месяц", Toast.LENGTH_SHORT).show()
         } else {
-            //pageListener.dateChangedByCalendar()
             vp_history.currentItem = position
         }
     }
@@ -142,6 +142,15 @@ class HistoryFragment : Fragment(), View.OnClickListener {
                         return
                     }
                 }
+            }
+        }
+    }
+
+    private fun updateMonthSum(position: Int) {
+        val fragment = childFragmentManager.fragments.findLast { it.arguments?.getInt(MonthFragment.POSITION_KEY) == position }
+        fragment?.let {
+            if (it is MonthFragment) {
+                setCurrentSum(it.getSum())
             }
         }
     }
