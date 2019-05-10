@@ -22,13 +22,13 @@ import java.util.*
 class HistoryFragment : Fragment(), View.OnClickListener {
 
     companion object {
-        const val HISTORY_TAG = "receipt_fragment"
+        const val HISTORY_TAG = "receipt_history"
     }
 
     private lateinit var navigation: Navigation
     private lateinit var monthAdapter: FragmentPagerAdapter
     private var previewItem = 0
-    private val dateFormatterYaer = DateFormat.getDateInstance(SimpleDateFormat.LONG, Locale("ru"))
+    private val dateFormatterYear = DateFormat.getDateInstance(SimpleDateFormat.LONG, Locale("ru"))
     private val dateFormatterMonth = SimpleDateFormat("LLLL", Locale("ru"))
     private var calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
     private lateinit var dateDialog: DatePickerDialog
@@ -106,7 +106,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
 
     private fun setCurrentMonth(position: Int) {
         calendar.time = Date(monthAdapter.dates[position])
-        val month = dateFormatterMonth.format(calendar.time).capitalize() + " " + dateFormatterYaer.format(calendar.time).split(" ")[2]
+        val month = dateFormatterMonth.format(calendar.time).capitalize() + " " + dateFormatterYear.format(calendar.time).split(" ")[2]
         tv_month_current_history.text = month
     }
 

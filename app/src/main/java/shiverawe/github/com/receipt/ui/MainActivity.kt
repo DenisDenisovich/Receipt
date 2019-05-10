@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun cleanBackStack() {
         for (i in 0 until supportFragmentManager.backStackEntryCount ) {
-            supportFragmentManager.popBackStack()
+            supportFragmentManager.popBackStackImmediate()
         }
     }
 }
