@@ -2,6 +2,7 @@ package shiverawe.github.com.receipt.ui
 
 import android.app.Application
 import android.content.Context
+import androidx.multidex.MultiDex
 import shiverawe.github.com.receipt.R
 import java.lang.Exception
 import com.yandex.metrica.YandexMetrica
@@ -14,6 +15,11 @@ import shiverawe.github.com.receipt.di.*
 class App : Application() {
     companion object {
         lateinit var appContext: Context
+    }
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
     }
 
     override fun onCreate() {

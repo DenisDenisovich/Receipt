@@ -26,6 +26,7 @@
     <string name="btn_qr_manual">Ввести вручную</string>
     <string name="tv_toolbar_settings">Настройки</string>
     <string name="tv_developer_settings">Я разработчик</string>
+    <string name="app_center_id">5cd51172-48a5-49fd-9a97-ea6b59b8867e</string>
 
 
 </resources>
