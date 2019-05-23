@@ -63,7 +63,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
     private val presenter: ReceiptContact.Presenter by inject()
     private var adapter = ProductAdapter()
     private lateinit var touchListener: RvRatingProductTouchListener
-    private val dateFormatterDate = SimpleDateFormat("dd.MM.YY_HH:mm", Locale("ru"))
+    private val dateFormatterDate = SimpleDateFormat("dd.MM.yy_HH:mm", Locale("ru"))
     private val dateFormatterDay = DateFormat.getDateInstance(SimpleDateFormat.FULL, Locale("ru"))
     private var receipt: Receipt? = null
     private var animator = AnimatorSet()
