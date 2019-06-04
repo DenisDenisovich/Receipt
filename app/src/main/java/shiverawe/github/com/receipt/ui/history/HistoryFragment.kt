@@ -106,17 +106,21 @@ class HistoryFragment : Fragment(), View.OnClickListener {
 
     private fun setCurrentMonth(position: Int) {
         calendar.time = Date(monthAdapter.dates[position])
-        val month = dateFormatterMonth.format(calendar.time).capitalize() + " " + dateFormatterYear.format(calendar.time).split(" ")[2]
-        tv_month_current_history.text = month
+        val month = dateFormatterMonth.format(calendar.time).capitalize()
+        val year = dateFormatterYear.format(calendar.time).split(" ")[2]
+        tv_date_current_history.text = "$month $year"
     }
 
     @SuppressLint("SetTextI18n")
     fun setCurrentSum(sum: String) {
-        tv_sum_history.post {
-            if (sum.isNotEmpty()) {
-                tv_sum_history.text = "Общая сумма: $sum ${resources.getString(R.string.rubleSymbolJava)}"
-            } else
-                tv_sum_history.text = "Общая сумма: ..."
+        tv_sum_history?.let {
+            it.post {
+                if (sum.isNotEmpty()) {
+                    it.text = "Общая сумма: $sum ${resources.getString(R.string.rubleSymbolJava)}"
+                } else {
+                    it.text = "Общая сумма: ..."
+                }
+            }
         }
     }
 
