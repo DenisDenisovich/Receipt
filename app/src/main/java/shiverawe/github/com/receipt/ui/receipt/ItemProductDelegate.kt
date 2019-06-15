@@ -33,12 +33,18 @@ class ItemProductDelegate(override var viewType: Int) : AdapterDelegate<Product>
         @SuppressLint("SetTextI18n")
         fun bind(product: Product) {
             title.text = product.text
-            val price = BigDecimal(product.price).setScale(2, RoundingMode.DOWN)
-            val amount = BigDecimal(product.amount).setScale(2, RoundingMode.DOWN).toLong()
-            if (amount != 1L && amount != 0L) {
+            val price = BigDecimal(product.price).setScale(2, RoundingMode.DOWN).toDouble()
+            val amount = BigDecimal(product.amount).setScale(2, RoundingMode.DOWN)
+            if (amount.toDouble().compareTo(1.0) != 0 && amount.toDouble().compareTo(0.0) != 0) {
                 sumDescription.visibility = View.VISIBLE
-                sumDescription.text = "$amount X $price ${App.appContext.resources.getString(R.string.rubleSymbolJava)}"
-                sum.text = "${amount * price.toLong()} ${App.appContext.resources.getString(R.string.rubleSymbolJava)}"
+                val amountStr: String = if (amount.stripTrailingZeros().scale() <= 0) {
+                    amount.toInt().toString()
+                } else {
+                    amount.toString()
+                }
+                sumDescription.text = "$amountStr X $price ${App.appContext.resources.getString(R.string.rubleSymbolJava)}"
+                val totalSum = BigDecimal(amount.toDouble() * price).setScale(2, RoundingMode.HALF_UP)
+                sum.text = "$totalSum ${App.appContext.resources.getString(R.string.rubleSymbolJava)}"
             } else {
                 sumDescription.visibility = View.GONE
                 sum.text = price.toString() + " " + App.appContext.resources.getString(R.string.rubleSymbolJava)
