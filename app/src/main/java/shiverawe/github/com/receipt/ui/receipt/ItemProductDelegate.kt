@@ -28,11 +28,21 @@ class ItemProductDelegate(override var viewType: Int) : AdapterDelegate<Product>
     class ProductViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val title = itemView.tv_item_product_title
         private val sum = itemView.tv_item_product_sum
+        private val sumDescription = itemView.tv_item_product_sum_description
 
         @SuppressLint("SetTextI18n")
         fun bind(product: Product) {
             title.text = product.text
-            sum.text = BigDecimal(product.price).setScale(2, RoundingMode.DOWN).toString() + " " + App.appContext.resources.getString(R.string.rubleSymbolJava)
+            val price = BigDecimal(product.price).setScale(2, RoundingMode.DOWN)
+            val amount = BigDecimal(product.amount).setScale(2, RoundingMode.DOWN).toLong()
+            if (amount != 1L && amount != 0L) {
+                sumDescription.visibility = View.VISIBLE
+                sumDescription.text = "$amount X $price ${App.appContext.resources.getString(R.string.rubleSymbolJava)}"
+                sum.text = "${amount * price.toLong()} ${App.appContext.resources.getString(R.string.rubleSymbolJava)}"
+            } else {
+                sumDescription.visibility = View.GONE
+                sum.text = price.toString() + " " + App.appContext.resources.getString(R.string.rubleSymbolJava)
+            }
         }
     }
 }

@@ -20,16 +20,32 @@
         android:textColor="@color/colorBlack"
         tools:text="Батон Убойный цена нарез. 1"/>
 
-    <TextView
-        android:id="@+id/tv_item_product_sum"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_gravity="top|end"
-        android:textSize="16sp"
-        android:fontFamily="@font/roboto_regular"
-        android:textColor="@color/colorBlack"
-        tools:text="2218,45 ₽"/>
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical|end">
+        <TextView
+            android:id="@+id/tv_item_product_sum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_gravity="end"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/colorBlack"
+            tools:text="2218,45 ₽"/>
+
+        <TextView
+            android:id="@+id/tv_item_product_sum_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_gravity="end"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="#B3000000"
+            tools:text="4 X 2218,45 ₽"/>
+    </LinearLayout>
+
 
 </FrameLayout>
