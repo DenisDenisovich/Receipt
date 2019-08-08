@@ -9,6 +9,7 @@ import com.yandex.metrica.YandexMetrica
 import com.yandex.metrica.YandexMetricaConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import shiverawe.github.com.receipt.di.*
 
 
@@ -26,7 +27,6 @@ class App : Application() {
         super.onCreate()
         appContext = applicationContext
         initYandexMetric()
-        initKoin()
     }
 
     private fun initYandexMetric() {
@@ -38,7 +38,8 @@ class App : Application() {
         }
     }
 
-    private fun initKoin() {
+    fun reinitKoin() {
+        stopKoin()
         startKoin {
             androidContext(this@App)
             modules(monthModule,

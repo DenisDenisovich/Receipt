@@ -6,6 +6,7 @@ import android.content.Context
 object Settings {
     private const val PREF_NAME = "pref"
     private const val PREF_IS_DEVELOP = "is_develop"
+    private const val PREF_HTTP = "http_connection"
 
     fun setDevelopMod(context: Context, flag: Boolean) {
         context.getSharedPreferences(PREF_NAME, Activity.MODE_PRIVATE).edit().apply {
@@ -15,5 +16,15 @@ object Settings {
     }
     fun getDevelopMod(context: Context): Boolean {
         return context.getSharedPreferences(PREF_NAME, Activity.MODE_PRIVATE).getBoolean(PREF_IS_DEVELOP, false)
+    }
+
+    fun setHttp(context: Context, flag: Boolean) {
+        context.getSharedPreferences(PREF_NAME, Activity.MODE_PRIVATE).edit().apply {
+            putBoolean(PREF_HTTP, flag)
+            apply()
+        }
+    }
+    fun getHttp(context: Context): Boolean {
+        return context.getSharedPreferences(PREF_NAME, Activity.MODE_PRIVATE).getBoolean(PREF_HTTP, true)
     }
 }

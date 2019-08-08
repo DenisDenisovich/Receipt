@@ -26,6 +26,7 @@ import shiverawe.github.com.receipt.ui.history.month.MonthContract
 import shiverawe.github.com.receipt.ui.history.month.MonthPresenter
 import shiverawe.github.com.receipt.ui.receipt.ReceiptContact
 import shiverawe.github.com.receipt.ui.receipt.ReceiptPresenter
+import shiverawe.github.com.receipt.utils.Settings
 
 val monthModule = module {
     factory<IMonthNetwork> { MonthNetwork(get(), get()) }
@@ -41,14 +42,24 @@ val dbModule = module {
     factory<IReceiptDatabase> { ReceiptDatabase() }
     factory<IMonthDatabase> { MonthDatabase(get()) }
 }
-
 val networkModule = module {
-    single { createRetrofit(androidContext().resources.getString(R.string.BASE_URL)) }
+    single {
+        val url = androidContext()
+                .resources
+                .getString(R.string.BASE_URL)
+                .run {
+                    if (Settings.getHttp(androidContext())) {
+                        replace("https", "http")
+                    } else {
+                        this
+                    }
+                }
+        createRetrofit(url)
+    }
 }
 val mappersModule = module {
     single<IMapperNetwork> { MapperNetwork() }
 }
-
 val utilsModule = module {
     single<ICacheDiffUtility> { CacheDiffUtility() }
     single<IUtilsNetwork> { UtilsNetwork() }
