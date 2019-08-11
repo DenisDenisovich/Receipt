@@ -21,11 +21,14 @@ class ItemProductDelegate(override var viewType: Int) : AdapterDelegate<Product>
         return ProductViewHolder(getLayout(parent, R.layout.item_product))
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, items: ArrayList<Product>, position: Int) {
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        items: ArrayList<Product>,
+        position: Int) {
         (holder as ProductViewHolder).bind(items[position])
     }
 
-    class ProductViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val title = itemView.tv_item_product_title
         private val sum = itemView.tv_item_product_sum
         private val sumDescription = itemView.tv_item_product_sum_description
@@ -43,7 +46,8 @@ class ItemProductDelegate(override var viewType: Int) : AdapterDelegate<Product>
                     amount.toString()
                 }
                 sumDescription.text = "$amountStr X $price ${App.appContext.resources.getString(R.string.rubleSymbolJava)}"
-                val totalSum = BigDecimal(amount.toDouble() * price).setScale(2, RoundingMode.HALF_UP)
+                val totalSum = BigDecimal(amount.toDouble() * price)
+                    .setScale(2, RoundingMode.HALF_UP)
                 sum.text = "$totalSum ${App.appContext.resources.getString(R.string.rubleSymbolJava)}"
             } else {
                 sumDescription.visibility = View.GONE

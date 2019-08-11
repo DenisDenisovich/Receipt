@@ -21,9 +21,12 @@ class NewReceiptFragment : Fragment(), NewReceiptView, View.OnClickListener {
     private var permissionDisposable: Disposable? = null
     private lateinit var options: String
     private var forgetQrFragment = false
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_new_receipt, container, false)
-    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_new_receipt, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         container_wait.visibility = View.GONE
@@ -48,31 +51,46 @@ class NewReceiptFragment : Fragment(), NewReceiptView, View.OnClickListener {
     override fun openReceipt(options: String) {
         this.options = options
         if (childFragmentManager.backStackEntryCount != 0 || getTopFragment() is ManualFragment) {
-            getTransaction().replace(R.id.new_receipt_container, ReceiptFragment.getNewInstance(options)).addToBackStack(null).commit()
+            getTransaction()
+                .replace(
+                    R.id.new_receipt_container,
+                    ReceiptFragment.getNewInstance(options)
+                ).addToBackStack(null).commit()
             forgetQrFragment = true
         } else {
             btn_error_change_data.visibility = View.GONE
-            getTransaction().replace(R.id.new_receipt_container, ReceiptFragment.getNewInstance(options)).commit()
+            getTransaction()
+                .replace(
+                    R.id.new_receipt_container,
+                    ReceiptFragment.getNewInstance(options)
+                ).commit()
         }
     }
 
     override fun openManual() {
-        if (getTopFragment() is QrFragment)
-            getTransaction().replace(R.id.new_receipt_container, ManualFragment()).addToBackStack(null).commit()
-        else
+        if (getTopFragment() is QrFragment) {
+            getTransaction()
+                .replace(
+                    R.id.new_receipt_container,
+                    ManualFragment()
+                ).addToBackStack(null).commit()
+        } else {
             getTransaction().replace(R.id.new_receipt_container, ManualFragment()).commit()
+        }
     }
+
     override fun openQr() {
         permissionDisposable = RxPermissions(this)
-                .request(Manifest.permission.CAMERA)
-                .subscribe({ isGranted ->
-                    if (isGranted)
-                        getTransaction().replace(R.id.new_receipt_container, QrFragment()).commit()
-                    else
-                        openManual()
-                }, {
+            .request(Manifest.permission.CAMERA)
+            .subscribe({ isGranted ->
+                if (isGranted) {
+                    getTransaction().replace(R.id.new_receipt_container, QrFragment()).commit()
+                } else {
                     openManual()
-                })
+                }
+            }, {
+                openManual()
+            })
     }
 
     override fun showProgress() {
@@ -112,7 +130,7 @@ class NewReceiptFragment : Fragment(), NewReceiptView, View.OnClickListener {
             false
         } else {
             when {
-                fragment is ReceiptFragment && container_error.visibility == View.VISIBLE ->  {
+                fragment is ReceiptFragment && container_error.visibility == View.VISIBLE -> {
                     childFragmentManager.popBackStack()
                     container_error.visibility = View.GONE
                     return true

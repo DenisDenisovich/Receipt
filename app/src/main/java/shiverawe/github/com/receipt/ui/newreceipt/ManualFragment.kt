@@ -60,9 +60,12 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_manual, container, false)
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_manual, container, false)
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         changeBtnBackground()
@@ -236,7 +239,12 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
         return isCorrect
     }
 
-    private fun changeDateTimeText(s: CharSequence?, separator: Char, maxLength: Int, changeCount: Int): String? {
+    private fun changeDateTimeText(
+        s: CharSequence?,
+        separator: Char,
+        maxLength: Int,
+        changeCount: Int
+    ): String? {
         val changedText = StringBuilder()
         if (s == null) return null
         if (s.length > maxLength) {

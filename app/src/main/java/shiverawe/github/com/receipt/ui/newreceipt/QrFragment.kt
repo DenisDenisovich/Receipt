@@ -15,9 +15,12 @@ import shiverawe.github.com.receipt.R
 class QrFragment : Fragment(), View.OnClickListener {
     private var codeScanner: CodeScanner? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_qr, container, false)
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_qr, container, false)
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         startScanCamera()
@@ -67,14 +70,19 @@ class QrFragment : Fragment(), View.OnClickListener {
             R.id.btn_qr_back -> activity?.onBackPressed()
             R.id.btn_qr_autofocus -> {
                 codeScanner?.isAutoFocusEnabled = !(codeScanner?.isAutoFocusEnabled ?: false)
-                if (codeScanner?.isAutoFocusEnabled == true) btn_qr_autofocus.setImageResource(R.drawable.ic_autofocus_enable)
-                else btn_qr_autofocus.setImageResource(R.drawable.ic_autofocus_disable)
+                if (codeScanner?.isAutoFocusEnabled == true) {
+                    btn_qr_autofocus.setImageResource(R.drawable.ic_autofocus_enable)
+                } else {
+                    btn_qr_autofocus.setImageResource(R.drawable.ic_autofocus_disable)
+                }
             }
             R.id.btn_qr_flash -> {
                 codeScanner?.isFlashEnabled = !(codeScanner?.isFlashEnabled ?: false)
-                if (codeScanner?.isFlashEnabled == true) btn_qr_flash.setImageResource(R.drawable.ic_flash_enable)
-                else btn_qr_flash.setImageResource(R.drawable.ic_flash_disable)
-
+                if (codeScanner?.isFlashEnabled == true) {
+                    btn_qr_flash.setImageResource(R.drawable.ic_flash_enable)
+                } else {
+                    btn_qr_flash.setImageResource(R.drawable.ic_flash_disable)
+                }
             }
         }
     }

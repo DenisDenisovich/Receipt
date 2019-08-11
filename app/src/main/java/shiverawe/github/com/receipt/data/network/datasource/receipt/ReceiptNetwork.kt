@@ -8,12 +8,14 @@ import shiverawe.github.com.receipt.data.network.mapper.IMapperNetwork
 import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
 
 class ReceiptNetwork(
-        private val mapper: IMapperNetwork,
-        private val api: Api): IReceiptNetwork {
+    private val mapper: IMapperNetwork,
+    private val api: Api) : IReceiptNetwork {
     private var parameters: Map<String, String>? = null
     override fun getReceipt(options: Map<String, String>): Single<Receipt?> {
         parameters = options
-        return api.getReceipt(options).map { response -> mapper.getToReceipt(response) }
+        return api.getReceipt(options).map { response ->
+            mapper.getToReceipt(response)
+        }
     }
 
     override fun saveReceipt(): Single<CreateResponce> {

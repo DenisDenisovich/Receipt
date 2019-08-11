@@ -30,27 +30,6 @@ import java.util.*
 
 class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
 
-    companion object {
-        const val RECEIPT_TAG = "receipt_fragment"
-        const val RECEIPT_ID_EXTRA = "receiptId"
-        const val RECEIPT_OPTIONS_EXTRA = "receiptOptions"
-        fun getNewInstance(receiptId: Long): ReceiptFragment {
-            val fragment = ReceiptFragment()
-            val bundle = Bundle()
-            bundle.putLong(RECEIPT_ID_EXTRA, receiptId)
-            fragment.arguments = bundle
-            return fragment
-        }
-
-        fun getNewInstance(receiptOptions: String): ReceiptFragment {
-            val fragment = ReceiptFragment()
-            val bundle = Bundle()
-            bundle.putString(RECEIPT_OPTIONS_EXTRA, receiptOptions)
-            fragment.arguments = bundle
-            return fragment
-        }
-    }
-
     private val containerParent: NewReceiptView?
         get() {
             return when {
@@ -59,6 +38,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
                 else -> null
             }
         }
+    private val baseUrl: String by inject()
 
     private val presenter: ReceiptContact.Presenter by inject()
     private var adapter = ProductAdapter()
@@ -128,7 +108,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
     override fun showError(error: Throwable) {
         if (Settings.getDevelopMod(context!!)) {
             val message = try {
-                resources.getString(R.string.BASE_URL) + "rest/get?" + arguments?.getString(RECEIPT_OPTIONS_EXTRA) + "\n" + (error as HttpException).response().errorBody()?.string()
+                baseUrl + "rest/get?" + arguments?.getString(RECEIPT_OPTIONS_EXTRA) + "\n" + (error as HttpException).response().errorBody()?.string()
             } catch (e: Exception) { error.message?: "error" }
             containerParent?.onError(message)
         } else {
@@ -286,6 +266,27 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
             addUpdateListener {
                 (targetView as TextView).setTextSize(TypedValue.COMPLEX_UNIT_PX, it.animatedValue as Float)
             }
+        }
+    }
+
+    companion object {
+        const val RECEIPT_TAG = "receipt_fragment"
+        const val RECEIPT_ID_EXTRA = "receiptId"
+        const val RECEIPT_OPTIONS_EXTRA = "receiptOptions"
+        fun getNewInstance(receiptId: Long): ReceiptFragment {
+            val fragment = ReceiptFragment()
+            val bundle = Bundle()
+            bundle.putLong(RECEIPT_ID_EXTRA, receiptId)
+            fragment.arguments = bundle
+            return fragment
+        }
+
+        fun getNewInstance(receiptOptions: String): ReceiptFragment {
+            val fragment = ReceiptFragment()
+            val bundle = Bundle()
+            bundle.putString(RECEIPT_OPTIONS_EXTRA, receiptOptions)
+            fragment.arguments = bundle
+            return fragment
         }
     }
 }

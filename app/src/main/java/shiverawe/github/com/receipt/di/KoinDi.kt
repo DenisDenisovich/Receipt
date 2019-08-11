@@ -44,17 +44,30 @@ val dbModule = module {
 }
 val networkModule = module {
     single {
-        val url = androidContext()
-                .resources
-                .getString(R.string.BASE_URL)
-                .run {
-                    if (Settings.getHttp(androidContext())) {
-                        replace("https", "http")
-                    } else {
-                        this
-                    }
+        /*val url = androidContext()
+            .resources
+            .getString(R.string.BASE_URL)
+            .run {
+                if (Settings.getHttp(androidContext())) {
+                    replace("https", "http")
+                } else {
+                    this
                 }
-        createRetrofit(url)
+            }*/
+        createRetrofit(get())
+    }
+    single<String>{
+        val url = androidContext()
+            .resources
+            .getString(R.string.BASE_URL)
+            .run {
+                if (Settings.getHttp(androidContext())) {
+                    replace("https", "http")
+                } else {
+                    this
+                }
+            }
+        url
     }
 }
 val mappersModule = module {

@@ -11,14 +11,15 @@ import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptView
 import shiverawe.github.com.receipt.ui.receipt.ReceiptFragment
 
-class ReceiptLinkActivity: NewReceiptView, AppCompatActivity() {
+class ReceiptLinkActivity : NewReceiptView, AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receipt_link)
         btn_error_change_data.visibility = View.GONE
         btn_error_repeat.setOnClickListener {
-            (supportFragmentManager.findFragmentById(R.id.container_link_receipt) as ReceiptFragment).sendRequest()
+            (supportFragmentManager.findFragmentById(R.id.container_link_receipt) as ReceiptFragment)
+                .sendRequest()
             container_error.visibility = View.GONE
         }
         container_wait.visibility = View.GONE
@@ -31,7 +32,10 @@ class ReceiptLinkActivity: NewReceiptView, AppCompatActivity() {
     }
 
     override fun openReceipt(options: String) {
-        supportFragmentManager.beginTransaction().replace(R.id.container_link_receipt, ReceiptFragment.getNewInstance(options)).commit()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.container_link_receipt, ReceiptFragment.getNewInstance(options))
+            .commit()
     }
 
     override fun openManual() {}
