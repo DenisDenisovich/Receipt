@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
         openHistory()
         initAppCenter()
-        (application as App).reinitKoin()
     }
 
     override fun onBackPressed() {

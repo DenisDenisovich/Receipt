@@ -38,7 +38,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
                 else -> null
             }
         }
-    private val baseUrl: String by inject()
+    private val baseUrl: String by lazy { getString(R.string.BASE_URL) }
 
     private val presenter: ReceiptContact.Presenter by inject()
     private var adapter = ProductAdapter()

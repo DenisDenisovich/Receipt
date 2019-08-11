@@ -58,28 +58,6 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/roboto_regular"
-                android:text="@string/tv_http_settings"
-                android:textAlignment="viewStart"
-                android:textColor="@color/colorBlack"
-                android:textSize="18sp" />
-
-            <CheckBox
-                android:id="@+id/chb_settings_http"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
-
-        </LinearLayout>
     </LinearLayout>
 
 

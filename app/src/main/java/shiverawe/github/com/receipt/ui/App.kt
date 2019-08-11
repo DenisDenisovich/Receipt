@@ -27,6 +27,7 @@ class App : Application() {
         super.onCreate()
         appContext = applicationContext
         initYandexMetric()
+        initKoin()
     }
 
     private fun initYandexMetric() {
@@ -38,7 +39,7 @@ class App : Application() {
         }
     }
 
-    fun reinitKoin() {
+    fun initKoin() {
         stopKoin()
         startKoin {
             androidContext(this@App)

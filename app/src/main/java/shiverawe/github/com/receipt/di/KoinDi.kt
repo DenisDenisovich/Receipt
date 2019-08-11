@@ -43,32 +43,7 @@ val dbModule = module {
     factory<IMonthDatabase> { MonthDatabase(get()) }
 }
 val networkModule = module {
-    single {
-        /*val url = androidContext()
-            .resources
-            .getString(R.string.BASE_URL)
-            .run {
-                if (Settings.getHttp(androidContext())) {
-                    replace("https", "http")
-                } else {
-                    this
-                }
-            }*/
-        createRetrofit(get())
-    }
-    single<String>{
-        val url = androidContext()
-            .resources
-            .getString(R.string.BASE_URL)
-            .run {
-                if (Settings.getHttp(androidContext())) {
-                    replace("https", "http")
-                } else {
-                    this
-                }
-            }
-        url
-    }
+    single { createRetrofit(androidContext().resources.getString(R.string.BASE_URL)) }
 }
 val mappersModule = module {
     single<IMapperNetwork> { MapperNetwork() }
