@@ -12,11 +12,6 @@ import shiverawe.github.com.receipt.ui.history.HistoryFragment
 import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptFragment
 import shiverawe.github.com.receipt.ui.receipt.ReceiptFragment
 import shiverawe.github.com.receipt.ui.settings.SettingsFragment
-import com.microsoft.appcenter.crashes.Crashes
-import com.microsoft.appcenter.analytics.Analytics
-import com.microsoft.appcenter.AppCenter
-import com.microsoft.appcenter.push.Push
-
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, Navigation {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +20,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         nav_view.setNavigationItemSelectedListener(this)
         openHistory()
-        initAppCenter()
     }
 
     override fun onBackPressed() {
@@ -100,13 +94,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         for (i in 0 until supportFragmentManager.backStackEntryCount ) {
             supportFragmentManager.popBackStackImmediate()
         }
-    }
-
-    private fun initAppCenter() {
-        AppCenter.start(application, getString(R.string.app_center_id),
-                Analytics::class.java, Crashes::class.java)
-        AppCenter.start(application, getString(R.string.app_center_id),
-                Analytics::class.java, Push::class.java)
-
     }
 }

@@ -14,7 +14,7 @@ android {
         applicationId "shiverawe.github.com.receipt"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 6
+        versionCode 7
         versionName "2019.08.02"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
@@ -34,8 +34,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
@@ -44,15 +44,12 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:2.2.8"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'com.budiyev.android:code-scanner:2.1.0'
-    implementation 'androidx.room:room-runtime:2.0.0'
-    implementation 'androidx.room:room-rxjava2:2.0.0'
-    kapt 'androidx.room:room-compiler:2.0.0'
+    implementation 'androidx.room:room-runtime:2.1.0'
+    implementation 'androidx.room:room-rxjava2:2.1.0'
+    kapt 'androidx.room:room-compiler:2.1.0'
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
     implementation 'com.yandex.android:mobmetricalib:3.6.0'
     implementation "org.koin:koin-androidx-scope:$koin_version"
-    implementation "com.microsoft.appcenter:appcenter-analytics:${app_center}"
-    implementation "com.microsoft.appcenter:appcenter-crashes:${app_center}"
-    implementation "com.microsoft.appcenter:appcenter-push:${app_center}"
-    implementation 'com.google.firebase:firebase-core:16.0.0'
+    implementation 'com.google.firebase:firebase-core:17.1.0'
     implementation 'com.android.support:multidex:1.0.3'
 }
