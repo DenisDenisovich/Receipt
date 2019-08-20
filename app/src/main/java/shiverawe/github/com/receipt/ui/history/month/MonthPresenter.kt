@@ -6,8 +6,7 @@ import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 import shiverawe.github.com.receipt.domain.entity.dto.month.ReceiptMonth
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.utils.Metric
-import java.math.BigDecimal
-import java.math.RoundingMode
+import shiverawe.github.com.receipt.utils.floorTwo
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -75,7 +74,7 @@ class MonthPresenter(
             } else {
 
                 view?.setReceipts(receipts)
-                val sumStr = BigDecimal(totalSum).setScale(2, RoundingMode.DOWN).toString()
+                val sumStr = totalSum.floorTwo()
                 view?.setTotalSum(sumStr)
             }
         }

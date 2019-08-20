@@ -9,6 +9,7 @@ import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.dto.month.ReceiptMonth
 import shiverawe.github.com.receipt.ui.App
 import shiverawe.github.com.receipt.ui.base.adapter.AdapterDelegate
+import shiverawe.github.com.receipt.utils.floorTwo
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -41,7 +42,8 @@ class ItemReceiptAdapterDelegate(override var viewType: Int) : AdapterDelegate<R
         fun bind(receipt: ReceiptMonth) {
             time.text = timeFormatter.format(Date(receipt.shop.date)).split("_")[1]
             name.text = receipt.shop.place
-            sum.text = receipt.shop.sum + " " + App.appContext.resources.getString(R.string.rubleSymbolJava)
+
+            sum.text = receipt.shop.sum.floorTwo() + " " + App.appContext.resources.getString(R.string.rubleSymbolJava)
             if (receipt.shop.place.isNotEmpty()) {
                 shopLetter.text = receipt.shop.place.first().toString()
             } else {

@@ -15,7 +15,8 @@ class MonthDatabase(private val cacheDiffUtility: ICacheDiffUtility): IMonthData
             if (localReceipts.size == 0) {
                 localIds = db.saveReceipts(networkReceipts)
             } else {
-                val (deletedIds, newNetwork) = cacheDiffUtility.findDiffReceipts(localReceipts, networkReceipts)
+                val (deletedIds, newNetwork) =
+                    cacheDiffUtility.findDiffReceipts(localReceipts, networkReceipts)
                 db.receiptDao().removeMonthReceiptsByIds(deletedIds.toTypedArray())
                 db.saveReceipts(newNetwork)
                 localIds = db.receiptDao().getMonthReceiptsId(dateFrom, dateTo)

@@ -20,6 +20,7 @@ import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
 import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptView
 import shiverawe.github.com.receipt.utils.Settings
+import shiverawe.github.com.receipt.utils.floorTwo
 import java.lang.Exception
 import java.lang.StringBuilder
 import java.math.BigDecimal
@@ -80,7 +81,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
         containerParent?.hideProgress()
         this.receipt = receipt
         tv_toolbar_receipt_title.text = receipt.shop.place
-        tv_toolbar_receipt_sum.text = receipt.shop.sum + " " + resources.getString(R.string.rubleSymbolJava)
+        tv_toolbar_receipt_sum.text = receipt.shop.sum.floorTwo() + " " + resources.getString(R.string.rubleSymbolJava)
         val day = dateFormatterDay.format(Date(receipt.shop.date)).split(",")[0].capitalize()
         val date = dateFormatterDate.format(Date(receipt.shop.date)).split("_")[0]
         val time = dateFormatterDate.format(Date(receipt.shop.date)).split("_")[1]
@@ -218,7 +219,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
             amountString = if (amountNumber == Math.floor(amountNumber)) amountNumber.toInt().toString()
             else amountNumber.toString()
             url.appendln("Кол-во: $amountString")
-            price = BigDecimal(receipt!!.items[productIndex].price).setScale(2, RoundingMode.DOWN).toString() + " p"
+            price = receipt!!.items[productIndex].price.floorTwo() + " p"
             url.appendln("Цена:   $price")
         }
         return url.toString()

@@ -9,8 +9,9 @@ import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.dto.base.Product
 import shiverawe.github.com.receipt.ui.App
 import shiverawe.github.com.receipt.ui.base.adapter.AdapterDelegate
-import java.math.BigDecimal
-import java.math.RoundingMode
+import shiverawe.github.com.receipt.utils.floorThree
+import shiverawe.github.com.receipt.utils.floorTwo
+import java.util.regex.Pattern
 
 class ItemProductDelegate(override var viewType: Int) : AdapterDelegate<Product> {
     override fun isForViewType(items: ArrayList<Product>, position: Int): Boolean {
@@ -29,6 +30,7 @@ class ItemProductDelegate(override var viewType: Int) : AdapterDelegate<Product>
     }
 
     class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val amountEmptyPatter = Pattern.compile("^[0-1](\\.0{0,3})?")
         private val title = itemView.tv_item_product_title
         private val sum = itemView.tv_item_product_sum
         private val sumDescription = itemView.tv_item_product_sum_description
@@ -36,23 +38,23 @@ class ItemProductDelegate(override var viewType: Int) : AdapterDelegate<Product>
         @SuppressLint("SetTextI18n")
         fun bind(product: Product) {
             title.text = product.text
-            val price = BigDecimal(product.price).setScale(2, RoundingMode.DOWN).toDouble()
-            val amount = BigDecimal(product.amount).setScale(2, RoundingMode.DOWN)
-            if (amount.toDouble().compareTo(1.0) != 0 && amount.toDouble().compareTo(0.0) != 0) {
+            val price = product.price.floorTwo()
+            val amount = product.amount.floorThree()
+            if (!amountEmptyPatter.matcher(amount).matches()) {
                 sumDescription.visibility = View.VISIBLE
-                val amountStr: String = if (amount.stripTrailingZeros().scale() <= 0) {
-                    amount.toInt().toString()
-                } else {
-                    amount.toString()
-                }
-                sumDescription.text = "$amountStr X $price ${App.appContext.resources.getString(R.string.rubleSymbolJava)}"
-                val totalSum = BigDecimal(amount.toDouble() * price)
-                    .setScale(2, RoundingMode.HALF_UP)
-                sum.text = "$totalSum ${App.appContext.resources.getString(R.string.rubleSymbolJava)}"
+                val amountStr: String = amount.replace("\\.0+".toRegex(), "")
+                sumDescription.text = "$amountStr X $price ${getRuble()}"
+                val totalSum = (amount.toDouble() * price.toDouble()).floorTwo()
+                sum.text = "$totalSum ${getRuble()}"
             } else {
                 sumDescription.visibility = View.GONE
-                sum.text = price.toString() + " " + App.appContext.resources.getString(R.string.rubleSymbolJava)
+                sum.text = "$price ${getRuble()}"
             }
         }
+
+        private fun getRuble(): String = App.appContext.resources.getString(R.string.rubleSymbolJava)
+
     }
+
+
 }
