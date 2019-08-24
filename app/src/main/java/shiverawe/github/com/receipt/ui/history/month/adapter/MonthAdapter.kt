@@ -12,7 +12,7 @@ import kotlin.collections.ArrayList
 class MonthAdapter(val shopIsClicked: (receipt: ReceiptMonth) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val delegateManager = AdapterDelegatesManager<ReceiptMonth>()
     private val items: ArrayList<ReceiptMonth> = ArrayList()
-    private var calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
+    private var calendar = GregorianCalendar()
 
     init {
         delegateManager.addDelegate(HeaderDateDelegate(0))

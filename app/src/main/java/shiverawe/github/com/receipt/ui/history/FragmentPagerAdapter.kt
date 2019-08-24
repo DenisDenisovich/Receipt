@@ -10,7 +10,7 @@ class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) 
     val dates: ArrayList<Long> = ArrayList(MutableList(count) { 0L })
     init {
         // init dates
-        val calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
+        val calendar = GregorianCalendar()
         calendar.time = Date(System.currentTimeMillis())
         for (dateIndex in dates.size - 1 downTo 0) {
             setBeginOfMonth(calendar)
@@ -27,7 +27,7 @@ class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) 
     override fun getCount() = 1200
 
     fun getPositionByDate(date: Date): Int {
-        val calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
+        val calendar = GregorianCalendar()
         calendar.time = date
         setBeginOfMonth(calendar)
         return dates.indexOf(calendar.timeInMillis)

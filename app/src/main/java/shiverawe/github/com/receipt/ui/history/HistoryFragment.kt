@@ -30,12 +30,8 @@ class HistoryFragment : Fragment(), View.OnClickListener {
     private var previewItem = 0
     private val dateFormatterYear = DateFormat.getDateInstance(SimpleDateFormat.LONG, Locale("ru"))
     private val dateFormatterMonth = SimpleDateFormat("LLLL", Locale("ru"))
-    private var calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
+    private var calendar = GregorianCalendar()
     private lateinit var dateDialog: DatePickerDialog
-
-    init {
-        dateFormatterMonth.timeZone = TimeZone.getTimeZone("UTC")
-    }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -47,7 +43,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
         val currentDate = GregorianCalendar()
         currentDate.time = Date(System.currentTimeMillis())
         dateDialog = DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            val selectedDate = GregorianCalendar(TimeZone.getTimeZone("UTC"))
+            val selectedDate = GregorianCalendar()
             selectedDate.apply {
                 set(Calendar.YEAR, year)
                 set(Calendar.MONTH, month)
