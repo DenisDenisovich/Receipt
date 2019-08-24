@@ -15,12 +15,7 @@ import java.util.*
 class HeaderDateDelegate(override var viewType: Int) : AdapterDelegate<ReceiptMonth> {
     private val dateFormatterDate = SimpleDateFormat("dd.MM_HH:mm", Locale("ru"))
     private val dateFormatterDay = DateFormat.getDateInstance(SimpleDateFormat.FULL, Locale("ru"))
-    private var calendar = GregorianCalendar(TimeZone.getTimeZone("UTC"))
-
-    init {
-        dateFormatterDate.timeZone = TimeZone.getTimeZone("UTC")
-        dateFormatterDay.timeZone = TimeZone.getTimeZone("UTC")
-    }
+    private var calendar = GregorianCalendar()
 
     override fun isForViewType(items: ArrayList<ReceiptMonth>, position: Int): Boolean {
         return items[position].receiptId == -1L

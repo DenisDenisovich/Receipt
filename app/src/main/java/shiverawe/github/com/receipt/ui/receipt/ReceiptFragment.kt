@@ -52,8 +52,6 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         presenter.attach(this)
-        dateFormatterDate.timeZone = TimeZone.getTimeZone("UTC")
-        dateFormatterDay.timeZone = TimeZone.getTimeZone("UTC")
         return inflater.inflate(R.layout.fragment_receipt, container, false)
     }
 

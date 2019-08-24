@@ -16,10 +16,6 @@ import java.util.*
 class ItemReceiptAdapterDelegate(override var viewType: Int) : AdapterDelegate<ReceiptMonth> {
     private val timeFormatter = SimpleDateFormat("dd.MM_HH:mm", Locale("ru"))
 
-    init {
-        timeFormatter.timeZone = TimeZone.getTimeZone("UTC")
-    }
-
     override fun isForViewType(items: ArrayList<ReceiptMonth>, position: Int): Boolean {
         return items[position].receiptId != -1L
     }
