@@ -29,8 +29,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val fragment = getTopFragment()
             if (fragment is ReceiptFragment) {
                 supportFragmentManager.popBackStack()
-            } else if (fragment is NewReceiptFragment){
-                if(!fragment.onBackPressedIsHandled()) supportFragmentManager.popBackStackImmediate()
+            } else if (fragment is NewReceiptFragment) {
+                if (!fragment.onBackPressedIsHandled()) supportFragmentManager.popBackStackImmediate()
             } else {
                 super.onBackPressed()
             }
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun updateHistory(date: Long) {
         supportFragmentManager.popBackStackImmediate()
         val currentFragment = findFragmentByTag(HistoryFragment.HISTORY_TAG)
-        if(currentFragment is HistoryFragment) {
+        if (currentFragment is HistoryFragment) {
             currentFragment.updateMonth(date)
         }
     }
@@ -78,10 +78,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun openReceipt(receiptId: Long) {
-        getTransaction().add(R.id.container, ReceiptFragment.getNewInstance(receiptId), ReceiptFragment.RECEIPT_TAG).addToBackStack(null).commit()
+        getTransaction().apply {
+            replace(
+                R.id.container,
+                ReceiptFragment.getNewInstance(receiptId),
+                ReceiptFragment.RECEIPT_TAG
+            )
+            addToBackStack(null)
+            commit()
+        }
     }
 
-    private fun findFragmentByTag(tag: String) : Fragment? {
+    private fun findFragmentByTag(tag: String): Fragment? {
         val fragment = supportFragmentManager.findFragmentByTag(tag)
         return if (fragment?.isVisible == true) fragment else null
     }
@@ -91,7 +99,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun getTransaction() = supportFragmentManager.beginTransaction()
 
     private fun cleanBackStack() {
-        for (i in 0 until supportFragmentManager.backStackEntryCount ) {
+        for (i in 0 until supportFragmentManager.backStackEntryCount) {
             supportFragmentManager.popBackStackImmediate()
         }
     }
