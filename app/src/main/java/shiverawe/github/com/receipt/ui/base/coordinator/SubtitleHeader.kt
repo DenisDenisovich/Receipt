@@ -5,11 +5,9 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Typeface
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.ColorInt
@@ -30,15 +28,13 @@ class SubtitleHeader @JvmOverloads constructor(
         set(value) {
             field = value
             title?.text = value
-            title?.visibility = View.INVISIBLE
-            calculateTitleStartPosition()
+            setTitleStartPosition()
         }
     var subtitleText: String? = null
         set(value) {
             field = value
-            subtitle?.visibility = View.INVISIBLE
             subtitle?.text = value
-            calculateSubtitleStartPosition()
+            setSubtitleStartPosition()
         }
 
     var typeface: Typeface? = null
@@ -166,8 +162,6 @@ class SubtitleHeader @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.appbar_header, this, true)
         title = tv_toolbar_receipt_title
         subtitle = tv_toolbar_receipt_sum
-        title.visibility = View.INVISIBLE
-        subtitle.visibility = View.INVISIBLE
         titleLayoutParams = title.layoutParams as LayoutParams
         subtitleLayoutParams = subtitle.layoutParams as LayoutParams
         if (titleStartExpanded == 0) {
@@ -225,8 +219,12 @@ class SubtitleHeader @JvmOverloads constructor(
         }
 
         // init start margin
-        calculateTitleStartPosition()
-        calculateSubtitleStartPosition()
+        if (!title.text.isBlank()) {
+            setTitleStartPosition()
+        }
+        if (!subtitle.text.isBlank()) {
+            setSubtitleStartPosition()
+        }
         typedArray.recycle()
     }
 
@@ -255,7 +253,7 @@ class SubtitleHeader @JvmOverloads constructor(
         subtitle?.pivotY = 0F
     }
 
-    private fun calculateTitleStartPosition() {
+    private fun setTitleStartPosition() {
         title?.post {
             val titleInitTop = if (isExpanded) titleTopExpanded else titleTopCollapsed
             if (titleExpandedCenterHorizontal) {
@@ -266,13 +264,12 @@ class SubtitleHeader @JvmOverloads constructor(
                 gravity = Gravity.START
                 setMargins(titleStartExpanded, titleInitTop, 0, 0)
             }
-            title.visibility = View.VISIBLE
             if (isExpanded) setAppBarExpandedPercent(0F)
             else setAppBarExpandedPercent(1F)
         }
     }
 
-    private fun calculateSubtitleStartPosition() {
+    private fun setSubtitleStartPosition() {
         subtitle?.post {
             val subtitleInitTop = if (isExpanded) subtitleTopExpanded else subtitleTopCollapsed
             if (subtitleExpandedCenterHorizontal) {
@@ -283,7 +280,6 @@ class SubtitleHeader @JvmOverloads constructor(
                 gravity = Gravity.START
                 setMargins(subtitleStartExpanded, subtitleInitTop, 0, 0)
             }
-            subtitle.visibility = View.VISIBLE
             if (isExpanded) setAppBarExpandedPercent(0F)
             else setAppBarExpandedPercent(1F)
         }
