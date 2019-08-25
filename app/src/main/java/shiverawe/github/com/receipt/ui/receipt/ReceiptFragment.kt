@@ -1,18 +1,13 @@
 package shiverawe.github.com.receipt.ui.receipt
 
-import android.animation.*
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
-import android.widget.FrameLayout
-import android.widget.TextView
+import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_receipt.*
 import org.koin.android.ext.android.inject
 import retrofit2.HttpException
@@ -43,12 +38,9 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
 
     private val presenter: ReceiptContact.Presenter by inject()
     private var adapter = ProductAdapter()
-    private lateinit var touchListener: RvRatingProductTouchListener
     private val dateFormatterDate = SimpleDateFormat("dd.MM.yy_HH:mm", Locale("ru"))
     private val dateFormatterDay = DateFormat.getDateInstance(SimpleDateFormat.FULL, Locale("ru"))
     private var receipt: Receipt? = null
-    private var animator = AnimatorSet()
-    private lateinit var layoutListener: ViewTreeObserver.OnGlobalLayoutListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         presenter.attach(this)
@@ -58,6 +50,13 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_toolbar_receipt_back.setOnClickListener(this)
         btn_toolbar_receipt_share.setOnClickListener(this)
+        appbar.addOnOffsetChangedListener(
+            AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+                header_collapsed.visibility =
+                    if (-verticalOffset == collapsed.height - collapsed.minimumHeight) View.VISIBLE
+                    else View.INVISIBLE
+            }
+        )
         sendRequest()
     }
 
@@ -78,8 +77,14 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
     override fun showReceipt(receipt: Receipt) {
         containerParent?.hideProgress()
         this.receipt = receipt
-        tv_toolbar_receipt_title.text = receipt.shop.place
-        tv_toolbar_receipt_sum.text = receipt.shop.sum.floorTwo() + " " + resources.getString(R.string.rubleSymbolJava)
+        header_collapsed.apply {
+            titleText = receipt.shop.place
+            subtitleText = receipt.shop.sum.floorTwo() + " " + resources.getString(R.string.rubleSymbolJava)
+        }
+        header_expanded.apply {
+            titleText = receipt.shop.place
+            subtitleText = receipt.shop.sum.floorTwo() + " " + resources.getString(R.string.rubleSymbolJava)
+        }
         val day = dateFormatterDay.format(Date(receipt.shop.date)).split(",")[0].capitalize()
         val date = dateFormatterDate.format(Date(receipt.shop.date)).split("_")[0]
         val time = dateFormatterDate.format(Date(receipt.shop.date)).split("_")[1]
@@ -87,21 +92,6 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
         tv_toolbar_receipt_time.text = time
         adapter.setProducts(receipt.items)
         rv_receipt.adapter = adapter
-
-        layoutListener = ViewTreeObserver.OnGlobalLayoutListener {
-            val layoutManager = rv_receipt.layoutManager as LinearLayoutManager
-            if (layoutManager.findLastVisibleItemPosition() != -1) {
-                if (layoutManager.findLastVisibleItemPosition() != adapter.itemCount - 1) {
-                    touchListener = RvRatingProductTouchListener(rv_receipt) {
-                        if (touchListener.toolbarIsExpanded) openToolbar()
-                        else closeToolbar()
-                    }
-                    rv_receipt.setOnTouchListener(touchListener)
-                }
-                rv_receipt.viewTreeObserver.removeOnGlobalLayoutListener(layoutListener)
-            }
-        }
-        rv_receipt.viewTreeObserver.addOnGlobalLayoutListener(layoutListener)
     }
 
     override fun showError(error: Throwable) {
@@ -133,70 +123,6 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
     override fun onDestroy() {
         presenter.detach()
         super.onDestroy()
-    }
-
-    private fun openToolbar() {
-        touchListener.toolbarAnimationInProgress = true
-        val titleTranslation = getMarginAnimator(tv_toolbar_receipt_title, R.dimen.toolbar_title_collapsed_margin_top, R.dimen.toolbar_title_expanded_margin_top)
-        val titleTextSize = getTextSizeAnimator(tv_toolbar_receipt_title, R.dimen.toolbar_title_collapsed_text_size, R.dimen.toolbar_title_expanded_text_size)
-        val sumTranslation = getMarginAnimator(tv_toolbar_receipt_sum, R.dimen.toolbar_sum_collapsed_margin_top, R.dimen.toolbar_sum_expanded_margin_top)
-        val sumTextSize = getTextSizeAnimator(tv_toolbar_receipt_sum, R.dimen.toolbar_sum_collapsed_text_size, R.dimen.toolbar_sum_expanded_text_size)
-        val dateTranslation = getMarginAnimator(date_container_toolbar, R.dimen.toolbar_date_container_collapsed_margin_top, R.dimen.toolbar_date_container_expanded_margin_top)
-        val dateAlpha = ObjectAnimator.ofFloat(
-                date_container_toolbar,
-                View.ALPHA,
-                0F,
-                1F
-        )
-        val toolbarHeight = ValueAnimator.ofInt(
-                resources.getDimensionPixelSize(R.dimen.toolbar_collapsed_height),
-                resources.getDimensionPixelSize(R.dimen.toolbar_expanded_height)
-        )
-        toolbarHeight.addUpdateListener { toolbar.layoutParams.height = it.animatedValue as Int }
-        animator = AnimatorSet()
-        animator.apply {
-            playTogether(titleTranslation, titleTextSize, sumTranslation, sumTextSize, dateTranslation, dateAlpha, toolbarHeight)
-            addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    touchListener.toolbarAnimationInProgress = false
-                }
-            })
-            duration = 150
-            start()
-        }
-    }
-
-    private fun closeToolbar() {
-        touchListener.toolbarAnimationInProgress = true
-        val titleTranslation = getMarginAnimator(tv_toolbar_receipt_title, R.dimen.toolbar_title_expanded_margin_top, R.dimen.toolbar_title_collapsed_margin_top)
-        val titleTextSize = getTextSizeAnimator(tv_toolbar_receipt_title, R.dimen.toolbar_title_expanded_text_size, R.dimen.toolbar_title_collapsed_text_size)
-        val sumTranslation = getMarginAnimator(tv_toolbar_receipt_sum, R.dimen.toolbar_sum_expanded_margin_top, R.dimen.toolbar_sum_collapsed_margin_top)
-        val sumTextSize = getTextSizeAnimator(tv_toolbar_receipt_sum, R.dimen.toolbar_sum_expanded_text_size, R.dimen.toolbar_sum_collapsed_text_size)
-        val dateTranslation = getMarginAnimator(date_container_toolbar, R.dimen.toolbar_date_container_expanded_margin_top, R.dimen.toolbar_date_container_collapsed_margin_top)
-        val dateAlpha = ObjectAnimator.ofFloat(
-                date_container_toolbar,
-                View.ALPHA,
-                1F,
-                0F
-        )
-        val toolbarHeight = ValueAnimator.ofInt(
-                resources.getDimensionPixelSize(R.dimen.toolbar_expanded_height),
-                resources.getDimensionPixelSize(R.dimen.toolbar_collapsed_height)
-        )
-        toolbarHeight.addUpdateListener { toolbar.layoutParams.height = it.animatedValue as Int }
-
-        animator = AnimatorSet()
-        animator.apply {
-            playTogether(titleTranslation, titleTextSize, sumTranslation, sumTextSize, dateTranslation, dateAlpha, toolbarHeight)
-            duration = 150
-            addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    touchListener.toolbarAnimationInProgress = false
-                }
-            })
-            start()
-        }
-
     }
 
     private fun getShareString(): String {
@@ -243,29 +169,6 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
         strDate.append(hour)
         strDate.append(minutes)
         return strDate.toString()
-    }
-
-    private fun getMarginAnimator(targetView: View, startMarginId: Int, endMarginId: Int): ValueAnimator {
-        return ValueAnimator.ofInt(
-                resources.getDimensionPixelSize(startMarginId),
-                resources.getDimensionPixelSize(endMarginId)
-        ).apply {
-            addUpdateListener {
-                (targetView.layoutParams as FrameLayout.LayoutParams).setMargins(0, it.animatedValue as Int, 0, 0)
-                targetView.invalidate()
-            }
-        }
-    }
-
-    private fun getTextSizeAnimator(targetView: View, startTextSizeId: Int, endTextSizeId: Int): ValueAnimator {
-        return ValueAnimator.ofFloat(
-                resources.getDimension(startTextSizeId),
-                resources.getDimension(endTextSizeId)
-        ).apply {
-            addUpdateListener {
-                (targetView as TextView).setTextSize(TypedValue.COMPLEX_UNIT_PX, it.animatedValue as Float)
-            }
-        }
     }
 
     companion object {

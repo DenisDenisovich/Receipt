@@ -16,8 +16,8 @@
     <dimen name="toolbar_title_collapsed_text_size">14sp</dimen>
 
     <dimen name="toolbar_sum_expanded_margin_top">112dp</dimen>
-    <dimen name="toolbar_sum_expanded_text_size">32sp</dimen>
     <dimen name="toolbar_sum_collapsed_margin_top">28dp</dimen>
+    <dimen name="toolbar_sum_expanded_text_size">32sp</dimen>
     <dimen name="toolbar_sum_collapsed_text_size">20sp</dimen>
 
     <dimen name="toolbar_date_container_expanded_margin_top">168dp</dimen>
