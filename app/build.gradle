@@ -14,8 +14,8 @@ android {
         applicationId "shiverawe.github.com.receipt"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 8
-        versionName "2019.08.28"
+        versionCode 9
+        versionName "2019.08.29"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

@@ -56,8 +56,6 @@ class HistoryFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        fab_history_qr.setOnClickListener(this)
-        btn_menu_history.setOnClickListener(this)
         btn_calendar_history.setOnClickListener(this)
         btn_next_history.setOnClickListener(this)
         btn_preview_history.setOnClickListener(this)
@@ -82,8 +80,6 @@ class HistoryFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.fab_history_qr -> navigation.openQr()
-            R.id.btn_menu_history -> navigation.openNavigationDrawable()
             R.id.btn_calendar_history -> dateDialog.show()
             R.id.btn_next_history -> {
                 if (vp_history.currentItem != monthAdapter.count - 1) {

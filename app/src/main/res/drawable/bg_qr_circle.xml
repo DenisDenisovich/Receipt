@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape
+            android:shape="oval">
+            <size
+                android:width="24dp"
+                android:height="24dp" />
+            <solid android:color="@color/colorAccent" />
+        </shape>
+    </item>
+    <item>
+        <inset android:drawable="@drawable/ripple_circle"/>
+    </item>
+</layer-list>

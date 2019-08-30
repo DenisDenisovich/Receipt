@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.core.view.GravityCompat
 import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
@@ -13,38 +14,44 @@ import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptFragment
 import shiverawe.github.com.receipt.ui.receipt.ReceiptFragment
 import shiverawe.github.com.receipt.ui.settings.SettingsFragment
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, Navigation {
+class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        nav_view.setNavigationItemSelectedListener(this)
         openHistory()
+        btn_history.setOnClickListener(this)
+        btn_qr.setOnClickListener(this)
+        btn_settings.setOnClickListener(this)
     }
 
-    override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
-        } else {
-            val fragment = getTopFragment()
-            if (fragment is ReceiptFragment) {
-                supportFragmentManager.popBackStack()
-            } else if (fragment is NewReceiptFragment) {
-                if (!fragment.onBackPressedIsHandled()) supportFragmentManager.popBackStackImmediate()
-            } else {
-                super.onBackPressed()
+    override fun onClick(view: View?) {
+        when (view?.id) {
+            R.id.btn_history -> {
+                openHistory()
+            }
+            R.id.btn_qr -> {
+                openQr()
+            }
+            R.id.btn_settings -> {
+                openSettings()
             }
         }
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.nav_history -> openHistory()
-            R.id.nav_settings -> openSettings()
+    override fun onBackPressed() {
+        val fragment = getTopFragment()
+        if (fragment is ReceiptFragment) {
+            supportFragmentManager.popBackStack()
+            showBottomAppBar(true)
+        } else if (fragment is NewReceiptFragment) {
+            if (!fragment.onBackPressedIsHandled()) {
+                supportFragmentManager.popBackStack()
+                showBottomAppBar(true)
+            }
+        } else {
+            super.onBackPressed()
         }
-        drawer_layout.closeDrawer(GravityCompat.START)
-        return true
     }
 
     override fun openHistory() {
@@ -66,19 +73,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun openQr() {
-        getTransaction().replace(R.id.container, NewReceiptFragment()).addToBackStack(null).commit()
-    }
-
-    override fun openNavigationDrawable() {
-        drawer_layout.openDrawer(GravityCompat.START)
-    }
-
-    override fun closeNavigationDrawable() {
-        drawer_layout.closeDrawer(GravityCompat.START)
+        getTransaction().apply {
+            setCustomAnimations(
+                R.anim.slide_up,
+                R.anim.fade_out
+            )
+            replace(R.id.container, NewReceiptFragment())
+            addToBackStack(null)
+            commit()
+        }
+        showBottomAppBar(false)
     }
 
     override fun openReceipt(receiptId: Long) {
         getTransaction().apply {
+            setCustomAnimations(
+                R.anim.slide_from_left,
+                R.anim.slide_to_right,
+                R.anim.slide_pop_from_right,
+                R.anim.slide_pop_to_left
+            )
             replace(
                 R.id.container,
                 ReceiptFragment.getNewInstance(receiptId),
@@ -86,6 +100,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             )
             addToBackStack(null)
             commit()
+        }
+        showBottomAppBar(false)
+    }
+
+    private fun showBottomAppBar(show: Boolean) {
+        if (show) {
+            bottom_app_bar.animate().apply {
+                translationYBy(-bottom_app_bar.height.toFloat())
+                duration = 250
+                start()
+            }
+        } else {
+            bottom_app_bar.animate().apply {
+                translationYBy(bottom_app_bar.height.toFloat())
+                duration = 250
+                start()
+            }
         }
     }
 

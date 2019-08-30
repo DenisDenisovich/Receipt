@@ -20,9 +20,6 @@ class SettingsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        btn_menu_settings.setOnClickListener {
-            (activity as Navigation).openNavigationDrawable()
-        }
         chb_settings_developer.isChecked = Settings.getDevelopMod(requireContext())
         chb_settings_developer.setOnClickListener {
             Settings.setDevelopMod(requireContext(), chb_settings_developer.isChecked)

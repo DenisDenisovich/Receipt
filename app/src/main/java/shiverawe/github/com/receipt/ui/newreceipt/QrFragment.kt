@@ -1,6 +1,7 @@
 package shiverawe.github.com.receipt.ui.newreceipt
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +24,9 @@ class QrFragment : Fragment(), View.OnClickListener {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        startScanCamera()
+        Handler().postDelayed({
+            startScanCamera()
+        }, 250)
         btn_qr_reader_manual.setOnClickListener {
             (parentFragment as NewReceiptView).openManual()
             codeScanner?.releaseResources()
@@ -40,24 +43,26 @@ class QrFragment : Fragment(), View.OnClickListener {
 
 
     private fun startScanCamera() {
-        val scannerView = scanner_view
-        val activity = requireActivity()
-        codeScanner = CodeScanner(activity, scannerView)
-        codeScanner?.isFlashEnabled
-        codeScanner?.decodeCallback = DecodeCallback {
-            activity.runOnUiThread {
-                (parentFragment as NewReceiptView).openReceipt(it.text)
+        if (isResumed) {
+            val scannerView = scanner_view
+            val activity = requireActivity()
+            codeScanner = CodeScanner(activity, scannerView)
+            codeScanner?.isFlashEnabled
+            codeScanner?.decodeCallback = DecodeCallback {
+                activity.runOnUiThread {
+                    (parentFragment as NewReceiptView).openReceipt(it.text)
+                }
             }
-        }
-        codeScanner?.errorCallback = ErrorCallback {
-            activity.runOnUiThread {
-                Toast.makeText(context, "Произошла ошибка", Toast.LENGTH_LONG).show()
-                (parentFragment as NewReceiptView).onError()
+            codeScanner?.errorCallback = ErrorCallback {
+                activity.runOnUiThread {
+                    Toast.makeText(context, "Произошла ошибка", Toast.LENGTH_LONG).show()
+                    (parentFragment as NewReceiptView).onError()
+                }
             }
+            codeScanner?.startPreview()
+            codeScanner?.isAutoFocusEnabled = true
+            btn_qr_autofocus.setImageResource(R.drawable.ic_autofocus_enable)
         }
-        codeScanner?.startPreview()
-        codeScanner?.isAutoFocusEnabled = true
-        btn_qr_autofocus.setImageResource(R.drawable.ic_autofocus_enable)
     }
 
     override fun onPause() {
