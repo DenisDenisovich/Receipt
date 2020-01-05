@@ -153,4 +153,5 @@ class HistoryFragment : Fragment(), View.OnClickListener {
                     }
                 }
     }
+
 }

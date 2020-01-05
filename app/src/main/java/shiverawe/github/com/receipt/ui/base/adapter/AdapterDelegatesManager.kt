@@ -26,4 +26,5 @@ class AdapterDelegatesManager<T> {
     fun onBindViewHolder(holder: RecyclerView.ViewHolder, items: ArrayList<T>, position: Int) {
         delegates[holder.itemViewType]!!.onBindViewHolder(holder, items, position)
     }
+
 }
