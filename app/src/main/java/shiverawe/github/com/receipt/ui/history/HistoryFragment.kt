@@ -37,7 +37,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
         dateFormatterMonth.timeZone = TimeZone.getTimeZone("UTC")
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         navigation = context as MainActivity
     }
