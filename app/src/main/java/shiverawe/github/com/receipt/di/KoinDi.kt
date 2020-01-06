@@ -45,6 +45,7 @@ val dbModule = module {
 val networkModule = module {
     single { createRetrofit(androidContext().resources.getString(R.string.BASE_URL)) }
 }
+
 val mappersModule = module {
     single<IMapperNetwork> { MapperNetwork() }
 }
