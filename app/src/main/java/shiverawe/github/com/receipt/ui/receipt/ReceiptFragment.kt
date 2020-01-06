@@ -27,6 +27,7 @@ import java.math.RoundingMode
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.floor
 
 class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
 
@@ -235,7 +236,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
         for (productIndex in 0 until receipt!!.items.size) {
             url.appendln("${productIndex + 1}. ${receipt!!.items[productIndex].text}")
             amountNumber = BigDecimal(receipt!!.items[productIndex].amount).setScale(3, RoundingMode.DOWN).toDouble()
-            amountString = if (amountNumber == Math.floor(amountNumber)) amountNumber.toInt().toString()
+            amountString = if (amountNumber == floor(amountNumber)) amountNumber.toInt().toString()
             else amountNumber.toString()
             url.appendln("Кол-во: $amountString")
             price = BigDecimal(receipt!!.items[productIndex].price).setScale(2, RoundingMode.DOWN).toString() + " p"

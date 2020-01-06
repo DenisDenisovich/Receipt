@@ -18,6 +18,7 @@ import shiverawe.github.com.receipt.ui.history.month.MonthFragment
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.abs
 
 class HistoryFragment : Fragment(), View.OnClickListener {
 
@@ -131,7 +132,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
 
     fun updateMonth(date: Long) {
         val updatedPosition = monthAdapter.getPositionByDate(Date(date))
-        if (updatedPosition != -1 && Math.abs(updatedPosition - vp_history.currentItem) <= 1) {
+        if (updatedPosition != -1 && abs(updatedPosition - vp_history.currentItem) <= 1) {
             calendar.timeInMillis = date
             monthAdapter.setBeginOfMonth(calendar)
             childFragmentManager.fragments

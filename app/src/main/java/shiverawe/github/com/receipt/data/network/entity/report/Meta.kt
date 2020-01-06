@@ -10,5 +10,5 @@ data class Meta(
         val place: String?,
         val provider: String?,
         val date: Int?,
-        val user: String?) {
-}
+        val user: String?
+)

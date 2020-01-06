@@ -37,7 +37,7 @@ abstract class ReceiptRoom : RoomDatabase() {
 
     @Transaction
     fun saveReceipts(receipts: ArrayList<Receipt>): List<Long> {
-        val receiptsDb = receipts.map { it -> mapper.receiptToDb(it) }
+        val receiptsDb = receipts.map { mapper.receiptToDb(it) }
         val savedIds = receiptDao().addReceipts(receiptsDb)
         val savedProducts = ArrayList<ProductEntity>()
         for (receiptIndex in 0 until receipts.size) {

@@ -10,7 +10,7 @@ interface ReceiptContact {
     }
 
     interface Presenter {
-        fun attach(view: ReceiptContact.View)
+        fun attach(view: View)
         fun detach()
         fun getReceiptById(receiptId: Long)
         fun getReceiptByMeta(options: String)
