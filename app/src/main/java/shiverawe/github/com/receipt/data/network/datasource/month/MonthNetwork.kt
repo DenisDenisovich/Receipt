@@ -10,23 +10,32 @@ import kotlin.collections.ArrayList
 
 class MonthNetwork(
         private val mapper: IMapperNetwork,
-        private val api: Api): IMonthNetwork {
+        private val api: Api
+) : IMonthNetwork {
+
     override fun getMonthReceipts(reportRequest: ReportRequest): Single<ArrayList<Receipt>> {
         return api.getReceiptForMonth(reportRequest)
-                .map { report ->
-                    val filterReport = filterMonth(report)
-                    mapper.reportToReceipt(filterReport)
-                }
+                .map { report -> mapper.reportToReceipt(filterMonth(report)) }
     }
 
-    fun filterMonth(response: ArrayList<Report>?): ArrayList<Report> {
+    private fun filterMonth(response: List<Report>?): ArrayList<Report> {
         // if response is empty
-        if (response == null || response.size == 0) {
+        if (response.isNullOrEmpty()) {
             return ArrayList()
         }
+
         // filter response
-        var report = ArrayList(response.filter { it.meta.status != null && it.meta.status != "FAILED" && it.meta.place != null && it.meta.sum != null && it.meta.date != null })
-        report = ArrayList(report.sortedByDescending { it.meta.date })
-        return report
+        val report = response
+                .filter {
+                    it.meta.status != null
+                            && it.meta.status != "FAILED"
+                            && it.meta.place != null
+                            && it.meta.sum != null
+                            && it.meta.date != null
+                }
+                .sortedByDescending { it.meta.date }
+
+        return ArrayList(report) // TODO why ArrayList, not List\MutableList?
     }
+
 }
