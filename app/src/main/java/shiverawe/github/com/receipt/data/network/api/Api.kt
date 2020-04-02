@@ -10,10 +10,14 @@ import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
 
 
 interface Api {
+
     @GET("rest/get")
     fun getReceipt(@QueryMap options: Map<String, String>): Single<ReceiptResponse>
+
     @PUT("rest/report")
     fun getReceiptForMonth(@Body reportRequest: ReportRequest): Single<ArrayList<Report>>
+
     @POST("rest/create")
     fun createReceipt(@Body reportRequest: CreateRequest): Single<CreateResponse>
+
 }
