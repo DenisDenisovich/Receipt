@@ -7,8 +7,11 @@ import shiverawe.github.com.receipt.utils.Metric
 import java.lang.Exception
 
 class ReceiptPresenter(private val repository: IReceiptRepository) : ReceiptContact.Presenter {
+
     var view: ReceiptContact.View? = null
+
     var disposable: Disposable? = null
+
     override fun attach(view: ReceiptContact.View) {
         this.view = view
     }
