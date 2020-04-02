@@ -35,6 +35,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
         const val RECEIPT_TAG = "receipt_fragment"
         const val RECEIPT_ID_EXTRA = "receiptId"
         const val RECEIPT_OPTIONS_EXTRA = "receiptOptions"
+
         fun getNewInstance(receiptId: Long): ReceiptFragment {
             val fragment = ReceiptFragment()
             val bundle = Bundle()
@@ -130,7 +131,9 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
         if (Settings.getDevelopMod(context!!)) {
             val message = try {
                 resources.getString(R.string.BASE_URL) + "rest/get?" + arguments?.getString(RECEIPT_OPTIONS_EXTRA) + "\n" + (error as HttpException).response().errorBody()?.string()
-            } catch (e: Exception) { error.message?: "error" }
+            } catch (e: Exception) {
+                error.message ?: "error"
+            }
             containerParent?.onError(message)
         } else {
             containerParent?.onError()
@@ -142,7 +145,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
     }
 
     fun sendRequest() {
-        val receiptId = arguments?.getLong(RECEIPT_ID_EXTRA)?: 0L
+        val receiptId = arguments?.getLong(RECEIPT_ID_EXTRA) ?: 0L
         val receiptOptions = arguments?.getString(RECEIPT_OPTIONS_EXTRA)
         if (receiptId != 0L)
             presenter.getReceiptById(receiptId)
