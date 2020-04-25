@@ -4,9 +4,9 @@ import io.reactivex.Single
 import retrofit2.http.*
 import shiverawe.github.com.receipt.data.network.entity.create.CreateRequest
 import shiverawe.github.com.receipt.data.network.entity.create.CreateResponce
-import shiverawe.github.com.receipt.data.network.entity.get.ReceiptResponse
-import shiverawe.github.com.receipt.data.network.entity.report.Report
-import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
+import shiverawe.github.com.receipt.data.network.entity.item.ReceiptResponse
+import shiverawe.github.com.receipt.data.network.entity.receipt.Report
+import shiverawe.github.com.receipt.data.network.entity.receipt.ReportRequest
 
 
 interface Api {

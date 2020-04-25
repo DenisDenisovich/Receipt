@@ -1,7 +1,7 @@
 package shiverawe.github.com.receipt.data.network.mapper
 
-import shiverawe.github.com.receipt.data.network.entity.get.ReceiptResponse
-import shiverawe.github.com.receipt.data.network.entity.report.Report
+import shiverawe.github.com.receipt.data.network.entity.item.ReceiptResponse
+import shiverawe.github.com.receipt.data.network.entity.receipt.Report
 import shiverawe.github.com.receipt.domain.entity.dto.base.Meta
 import shiverawe.github.com.receipt.domain.entity.dto.base.Product
 import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt

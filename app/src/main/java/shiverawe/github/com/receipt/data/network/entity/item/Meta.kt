@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.data.network.entity.get
+package shiverawe.github.com.receipt.data.network.entity.item
 
 data class Meta(
         val date: Double?,

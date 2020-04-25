@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.data.network.entity.report
+package shiverawe.github.com.receipt.data.network.entity.receipt
 
 data class Meta(
         val id: Int?,

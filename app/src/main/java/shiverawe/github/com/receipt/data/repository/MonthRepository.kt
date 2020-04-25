@@ -4,7 +4,7 @@ import io.reactivex.Single
 import retrofit2.HttpException
 import shiverawe.github.com.receipt.data.bd.datasource.month.IMonthDatabase
 import shiverawe.github.com.receipt.data.network.datasource.month.IMonthNetwork
-import shiverawe.github.com.receipt.data.network.entity.report.ReportRequest
+import shiverawe.github.com.receipt.data.network.entity.receipt.ReportRequest
 import shiverawe.github.com.receipt.data.network.utils.IUtilsNetwork
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
