@@ -2,6 +2,8 @@ package shiverawe.github.com.receipt.data.network.datasource.month
 
 import io.reactivex.Single
 import shiverawe.github.com.receipt.data.network.api.Api
+import shiverawe.github.com.receipt.data.network.entity.receipt.ReceiptRequest
+import shiverawe.github.com.receipt.data.network.entity.receipt.ReceiptResponse
 import shiverawe.github.com.receipt.data.network.entity.receipt.Report
 import shiverawe.github.com.receipt.data.network.entity.receipt.ReportRequest
 import shiverawe.github.com.receipt.data.network.mapper.IMapperNetwork
@@ -11,29 +13,15 @@ import kotlin.collections.ArrayList
 class MonthNetwork(
     private val mapper: IMapperNetwork,
     private val api: Api) : IMonthNetwork {
-    override fun getMonthReceipts(reportRequest: ReportRequest): Single<ArrayList<Receipt>> {
-        return api.getReceiptForMonth(reportRequest)
-            .map { report ->
-                val filterReport = filterMonth(report)
-                mapper.reportToReceipt(filterReport)
+    override fun getMonthReceipts(dateFrom: String, dateTo: String): Single<ArrayList<Receipt>> =
+        api.getReceiptForMonth(ReceiptRequest(dateFrom, dateTo))
+            .map { response ->
+                val filterReport = response.filter {
+                    it.status != "FAILED" &&
+                        it.place != null &&
+                        it.sum != null &&
+                        it.date != null
+                }
+                mapper.toReceipt(filterReport)
             }
-    }
-
-    private fun filterMonth(response: ArrayList<Report>?): ArrayList<Report> {
-        // if response is empty
-        if (response == null || response.size == 0) {
-            return ArrayList()
-        }
-        // filter response
-        var report = ArrayList(
-            response.filter {
-                it.meta.status != null &&
-                    it.meta.status != "FAILED" &&
-                    it.meta.place != null &&
-                    it.meta.sum != null &&
-                    it.meta.date != null
-            })
-        report = ArrayList(report.sortedByDescending { it.meta.date })
-        return report
-    }
 }

@@ -22,10 +22,10 @@ class MonthFragment : Fragment(), MonthContract.View {
     companion object {
         const val DATE_KEY = "date"
         const val POSITION_KEY = "position"
-        fun getNewInstance(date: Int, position: Int): MonthFragment {
+        fun getNewInstance(date: Long, position: Int): MonthFragment {
             val fragment = MonthFragment()
             val bundle = Bundle()
-            bundle.putInt(DATE_KEY, date)
+            bundle.putLong(DATE_KEY, date)
             bundle.putInt(POSITION_KEY, position)
             fragment.arguments = bundle
             return fragment
@@ -44,7 +44,7 @@ class MonthFragment : Fragment(), MonthContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val dateFrom = arguments!!.getInt(DATE_KEY)
+        val dateFrom = arguments?.getLong(DATE_KEY) ?: 0L
         presenter = get { parametersOf(dateFrom) }
         adapter = MonthAdapter { receipt -> navigation.openReceipt(receipt.receiptId) }
     }

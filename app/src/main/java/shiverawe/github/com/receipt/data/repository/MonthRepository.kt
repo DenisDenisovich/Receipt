@@ -9,6 +9,8 @@ import shiverawe.github.com.receipt.data.network.utils.IUtilsNetwork
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
 import shiverawe.github.com.receipt.domain.entity.dto.month.ReceiptMonth
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.collections.ArrayList
 
 class MonthRepository(
@@ -17,18 +19,16 @@ class MonthRepository(
         private val utils: IUtilsNetwork
 ) : IMonthRepository {
 
-    override fun getMonthReceipt(reportRequest: ReportRequest): Single<ArrayList<ReceiptMonth>> =
-        network.getMonthReceipts(reportRequest)
+    private val formatter = SimpleDateFormat("yyyyMMdd'T'HHmm", Locale.getDefault())
+
+    override fun getMonthReceipt(dateFrom: Long, dateTo: Long): Single<ArrayList<ReceiptMonth>> =
+        network.getMonthReceipts(formatter.format(dateFrom), formatter.format(dateTo))
                 .flatMap { networkReceipts ->
-                    val dateFrom = reportRequest.meta.date_from.toLong() * 1000L
-                    val dateTo = reportRequest.meta.date_to.toLong() * 1000L
                     db.updateMonthCache(dateFrom, dateTo, networkReceipts)
                 }
                 .map { receipts -> mapToMonthReceipt(receipts) }
                 .onErrorResumeNext {
                     if (it is HttpException || !utils.isOnline()) {
-                        val dateFrom = reportRequest.meta.date_from.toLong() * 1000L
-                        val dateTo = reportRequest.meta.date_to.toLong() * 1000L
                         db.getReceipts(dateFrom, dateTo)
                                 .map { receipts -> mapToMonthReceipt(receipts) }
                     } else {

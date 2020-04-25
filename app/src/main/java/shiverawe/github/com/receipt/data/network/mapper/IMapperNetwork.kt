@@ -1,11 +1,11 @@
 package shiverawe.github.com.receipt.data.network.mapper
 
-import shiverawe.github.com.receipt.data.network.entity.item.ReceiptResponse
+import shiverawe.github.com.receipt.data.network.entity.item.ItemResponse
+import shiverawe.github.com.receipt.data.network.entity.receipt.ReceiptResponse
 import shiverawe.github.com.receipt.data.network.entity.receipt.Report
 import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
 
 interface IMapperNetwork {
-    fun reportToReceipt(report: ArrayList<Report>): ArrayList<Receipt>
-    fun reportToReceipt(report: Report): Receipt?
-    fun getToReceipt(response: ReceiptResponse?): Receipt?
+    fun toReceipt(receiptResponse: List<ReceiptResponse>): ArrayList<Receipt>
+    fun getToReceipt(response: ItemResponse?): Receipt?
 }

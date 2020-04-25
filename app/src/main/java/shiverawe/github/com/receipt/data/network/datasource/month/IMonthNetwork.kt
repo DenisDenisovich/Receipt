@@ -5,5 +5,5 @@ import shiverawe.github.com.receipt.data.network.entity.receipt.ReportRequest
 import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
 
 interface IMonthNetwork {
-    fun getMonthReceipts(reportRequest: ReportRequest): Single<ArrayList<Receipt>>
+    fun getMonthReceipts(dateFrom: String, dateTo: String): Single<ArrayList<Receipt>>
 }

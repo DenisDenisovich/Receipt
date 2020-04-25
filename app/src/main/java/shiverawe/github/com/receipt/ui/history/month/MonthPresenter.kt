@@ -2,7 +2,6 @@ package shiverawe.github.com.receipt.ui.history.month
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import shiverawe.github.com.receipt.data.network.entity.receipt.ReportRequest
 import shiverawe.github.com.receipt.domain.entity.dto.month.ReceiptMonth
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.utils.Metric
@@ -12,11 +11,11 @@ import kotlin.collections.ArrayList
 
 class MonthPresenter(
         private val repository: IMonthRepository,
-        dateFrom: Int
+        private val dateFrom: Long
 ) : MonthContract.Presenter {
-    private var reportRequest: ReportRequest
     var receiptDisposable: Disposable? = null
     var view: MonthContract.View? = null
+    private val dateTo: Long
     private var receipts: ArrayList<ReceiptMonth> = ArrayList()
     private var totalSum: Double = 0.0
     private var isError = false
@@ -24,11 +23,10 @@ class MonthPresenter(
     init {
         val date = Date()
         val calendar = GregorianCalendar()
-        date.time = dateFrom.toLong() * 1000
+        date.time = dateFrom
         calendar.time = date
         calendar.add(Calendar.MONTH, 1)
-        val dateTo = (calendar.timeInMillis / 1000).toInt()
-        reportRequest = ReportRequest(dateFrom, dateTo)
+        dateTo = calendar.timeInMillis
     }
 
     override fun attach(view: MonthContract.View) {
@@ -46,7 +44,7 @@ class MonthPresenter(
         val startTime = System.currentTimeMillis()
         var totalTime: Int
         receiptDisposable?.dispose()
-        receiptDisposable = repository.getMonthReceipt(reportRequest)
+        receiptDisposable = repository.getMonthReceipt(dateFrom, dateTo)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
                     receipts = ArrayList()

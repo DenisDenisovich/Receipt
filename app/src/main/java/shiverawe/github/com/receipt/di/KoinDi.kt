@@ -31,7 +31,7 @@ import shiverawe.github.com.receipt.utils.Settings
 val monthModule = module {
     factory<IMonthNetwork> { MonthNetwork(get(), get()) }
     factory<IMonthRepository> { MonthRepository(get(), get(), get()) }
-    factory<MonthContract.Presenter> { (dateFrom: Int) -> MonthPresenter(get(), dateFrom) }
+    factory<MonthContract.Presenter> { (dateFrom: Long) -> MonthPresenter(get(), dateFrom) }
 }
 val receiptModule = module {
     factory<IReceiptNetwork> { ReceiptNetwork(get(), get()) }

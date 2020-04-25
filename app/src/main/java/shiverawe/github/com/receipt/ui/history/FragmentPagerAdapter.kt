@@ -21,7 +21,7 @@ class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) 
     }
 
     override fun getItem(position: Int): Fragment {
-        return MonthFragment.getNewInstance((dates[position] / 1000).toInt(), position)
+        return MonthFragment.getNewInstance(dates[position], position)
     }
 
     override fun getCount() = 1200

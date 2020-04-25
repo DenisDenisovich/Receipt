@@ -78,6 +78,6 @@ class MonthAdapter(val shopIsClicked: (receipt: ReceiptMonth) -> Unit) : Recycle
     }
 
     private fun getDateItem(date: Long): ReceiptMonth {
-        return ReceiptMonth(-1L, Shop(date, "", ""), Meta("", "", "", "", 0.0))
+        return ReceiptMonth(-1L, Shop(date, "", ""), Meta(0L, "", "", "", 0.0))
     }
  }
