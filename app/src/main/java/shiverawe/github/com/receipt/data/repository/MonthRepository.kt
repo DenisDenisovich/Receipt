@@ -16,8 +16,9 @@ class MonthRepository(
         private val db: IMonthDatabase,
         private val utils: IUtilsNetwork
 ) : IMonthRepository {
-    override fun getMonthReceipt(reportRequest: ReportRequest): Single<ArrayList<ReceiptMonth>> {
-        return network.getMonthReceipts(reportRequest)
+
+    override fun getMonthReceipt(reportRequest: ReportRequest): Single<ArrayList<ReceiptMonth>> =
+        network.getMonthReceipts(reportRequest)
                 .flatMap { networkReceipts ->
                     val dateFrom = reportRequest.meta.date_from.toLong() * 1000L
                     val dateTo = reportRequest.meta.date_to.toLong() * 1000L
@@ -34,9 +35,7 @@ class MonthRepository(
                         Single.error(it)
                     }
                 }
-    }
 
-    private fun mapToMonthReceipt(receipts: ArrayList<Receipt>): ArrayList<ReceiptMonth> {
-        return ArrayList(receipts.map { ReceiptMonth(it.receiptId, it.shop, it.meta) })
-    }
+    private fun mapToMonthReceipt(receipts: ArrayList<Receipt>): ArrayList<ReceiptMonth> =
+        ArrayList(receipts.map { ReceiptMonth(it.receiptId, it.shop, it.meta) })
 }
