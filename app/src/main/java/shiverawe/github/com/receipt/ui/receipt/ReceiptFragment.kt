@@ -14,6 +14,7 @@ import retrofit2.HttpException
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
 import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptView
+import shiverawe.github.com.receipt.ui.receipt.adapter.ProductAdapter
 import shiverawe.github.com.receipt.utils.Settings
 import shiverawe.github.com.receipt.utils.floorTwo
 import java.lang.Exception
@@ -23,6 +24,7 @@ import java.math.RoundingMode
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.floor
 
 class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
 
@@ -73,7 +75,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
         }
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "DefaultLocale")
     override fun showReceipt(receipt: Receipt) {
         containerParent?.hideProgress()
         this.receipt = receipt
@@ -97,8 +99,11 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
     override fun showError(error: Throwable) {
         if (Settings.getDevelopMod(context!!)) {
             val message = try {
-                baseUrl + "rest/get?" + arguments?.getString(RECEIPT_OPTIONS_EXTRA) + "\n" + (error as HttpException).response().errorBody()?.string()
-            } catch (e: Exception) { error.message?: "error" }
+                baseUrl + "rest/get?" + arguments?.getString(RECEIPT_OPTIONS_EXTRA) + "\n" +
+                    (error as HttpException).response().errorBody()?.string()
+            } catch (e: Exception) {
+                error.message?: "error"
+            }
             containerParent?.onError(message)
         } else {
             containerParent?.onError()
@@ -110,12 +115,13 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
     }
 
     fun sendRequest() {
-        val receiptId = arguments?.getLong(RECEIPT_ID_EXTRA)?: 0L
-        val receiptOptions = arguments?.getString(RECEIPT_OPTIONS_EXTRA)
-        if (receiptId != 0L)
+        val receiptId = arguments?.getLong(RECEIPT_ID_EXTRA) ?: 0L
+        val receiptOptions = arguments?.getString(RECEIPT_OPTIONS_EXTRA) ?: ""
+        if (receiptId != 0L) {
             presenter.getReceiptById(receiptId)
-        else
-            presenter.getReceiptByMeta(receiptOptions!!)
+        } else {
+            presenter.getReceiptByMeta(receiptOptions)
+        }
     }
 
     fun getTime() = receipt?.shop?.date
@@ -140,7 +146,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
         for (productIndex in 0 until receipt!!.items.size) {
             url.appendln("${productIndex + 1}. ${receipt!!.items[productIndex].text}")
             amountNumber = BigDecimal(receipt!!.items[productIndex].amount).setScale(3, RoundingMode.DOWN).toDouble()
-            amountString = if (amountNumber == Math.floor(amountNumber)) amountNumber.toInt().toString()
+            amountString = if (amountNumber == floor(amountNumber)) amountNumber.toInt().toString()
             else amountNumber.toString()
             url.appendln("Кол-во: $amountString")
             price = receipt!!.items[productIndex].price.floorTwo() + " p"
@@ -172,9 +178,11 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
     }
 
     companion object {
+
         const val RECEIPT_TAG = "receipt_fragment"
         const val RECEIPT_ID_EXTRA = "receiptId"
         const val RECEIPT_OPTIONS_EXTRA = "receiptOptions"
+
         fun getNewInstance(receiptId: Long): ReceiptFragment {
             val fragment = ReceiptFragment()
             val bundle = Bundle()

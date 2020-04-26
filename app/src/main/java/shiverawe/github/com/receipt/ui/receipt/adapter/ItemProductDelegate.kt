@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.receipt
+package shiverawe.github.com.receipt.ui.receipt.adapter
 
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView
