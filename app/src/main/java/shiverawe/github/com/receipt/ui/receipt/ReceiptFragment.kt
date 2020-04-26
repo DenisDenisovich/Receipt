@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.fragment_receipt.*
 import org.koin.android.ext.android.inject
 import retrofit2.HttpException
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.Receipt
 import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptView
 import shiverawe.github.com.receipt.ui.receipt.adapter.ProductAdapter
 import shiverawe.github.com.receipt.utils.Settings

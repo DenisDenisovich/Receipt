@@ -6,18 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.header_receipt.view.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.domain.entity.dto.month.ReceiptMonth
+import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 import shiverawe.github.com.receipt.ui.base.adapter.AdapterDelegate
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HeaderDateDelegate(override var viewType: Int) : AdapterDelegate<ReceiptMonth> {
+class HeaderDateDelegate(override var viewType: Int) : AdapterDelegate<ReceiptHeader> {
     private val dateFormatterDate = SimpleDateFormat("dd.MM_HH:mm", Locale("ru"))
     private val dateFormatterDay = DateFormat.getDateInstance(SimpleDateFormat.FULL, Locale("ru"))
     private var calendar = GregorianCalendar()
 
-    override fun isForViewType(items: ArrayList<ReceiptMonth>, position: Int): Boolean {
+    override fun isForViewType(items: ArrayList<ReceiptHeader>, position: Int): Boolean {
         return items[position].receiptId == -1L
     }
 
@@ -25,14 +25,14 @@ class HeaderDateDelegate(override var viewType: Int) : AdapterDelegate<ReceiptMo
         return HeaderDateViewHolder(getLayout(parent, R.layout.header_receipt))
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, items: ArrayList<ReceiptMonth>, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, items: ArrayList<ReceiptHeader>, position: Int) {
         (holder as HeaderDateViewHolder).bind(items[position])
     }
 
     inner class HeaderDateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvDate = itemView.tv_header_receipt
-        @SuppressLint("SetTextI18n")
-        fun bind(receipt: ReceiptMonth) {
+        @SuppressLint("SetTextI18n", "DefaultLocale")
+        fun bind(receipt: ReceiptHeader) {
             when {
                 isEqualDays(receipt.shop.date, System.currentTimeMillis()) -> tvDate.text = "СЕГОДНЯ"
                 isPreviewDay(receipt.shop.date) -> tvDate.text = "ВЧЕРА"

@@ -12,7 +12,7 @@ import org.koin.android.ext.android.get
 import org.koin.core.parameter.parametersOf
 import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.domain.entity.dto.month.ReceiptMonth
+import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
 import shiverawe.github.com.receipt.ui.history.month.adapter.MonthAdapter
@@ -35,7 +35,7 @@ class MonthFragment : Fragment(), MonthContract.View {
     lateinit var navigation: Navigation
     private var presenter: MonthContract.Presenter? = null
     private lateinit var adapter: MonthAdapter
-    private var receipts: ArrayList<ReceiptMonth> = ArrayList()
+    private var receipts: ArrayList<ReceiptHeader> = ArrayList()
     private var totalSum = ""
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -67,7 +67,7 @@ class MonthFragment : Fragment(), MonthContract.View {
         }
     }
 
-    override fun setReceipts(items: ArrayList<ReceiptMonth>) {
+    override fun setReceipts(items: ArrayList<ReceiptHeader>) {
         receipts = items
         adapter.setItems(receipts)
         pb_month.visibility = View.GONE

@@ -3,11 +3,8 @@ package shiverawe.github.com.receipt.data.network.datasource.month
 import io.reactivex.Single
 import shiverawe.github.com.receipt.data.network.api.Api
 import shiverawe.github.com.receipt.data.network.entity.receipt.ReceiptRequest
-import shiverawe.github.com.receipt.data.network.entity.receipt.ReceiptResponse
-import shiverawe.github.com.receipt.data.network.entity.receipt.Report
-import shiverawe.github.com.receipt.data.network.entity.receipt.ReportRequest
 import shiverawe.github.com.receipt.data.network.mapper.IMapperNetwork
-import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.Receipt
 import kotlin.collections.ArrayList
 
 class MonthNetwork(

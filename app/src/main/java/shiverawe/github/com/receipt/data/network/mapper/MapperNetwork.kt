@@ -2,13 +2,11 @@ package shiverawe.github.com.receipt.data.network.mapper
 
 import shiverawe.github.com.receipt.data.network.entity.item.ItemResponse
 import shiverawe.github.com.receipt.data.network.entity.receipt.ReceiptResponse
-import shiverawe.github.com.receipt.data.network.entity.receipt.Report
-import shiverawe.github.com.receipt.domain.entity.dto.base.Meta
-import shiverawe.github.com.receipt.domain.entity.dto.base.Product
-import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
-import shiverawe.github.com.receipt.domain.entity.dto.base.Shop
+import shiverawe.github.com.receipt.domain.entity.dto.Meta
+import shiverawe.github.com.receipt.domain.entity.dto.Product
+import shiverawe.github.com.receipt.domain.entity.dto.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.Shop
 import java.lang.Exception
-import java.lang.NullPointerException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList

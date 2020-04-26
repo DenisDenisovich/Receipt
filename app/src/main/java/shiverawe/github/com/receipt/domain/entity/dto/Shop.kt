@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.domain.entity.dto.base
+package shiverawe.github.com.receipt.domain.entity.dto
 
 data class Shop(
     val date: Long,

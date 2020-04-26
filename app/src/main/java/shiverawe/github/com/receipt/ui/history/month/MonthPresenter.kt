@@ -2,7 +2,7 @@ package shiverawe.github.com.receipt.ui.history.month
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import shiverawe.github.com.receipt.domain.entity.dto.month.ReceiptMonth
+import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.utils.Metric
 import shiverawe.github.com.receipt.utils.floorTwo
@@ -16,7 +16,7 @@ class MonthPresenter(
     var receiptDisposable: Disposable? = null
     var view: MonthContract.View? = null
     private val dateTo: Long
-    private var receipts: ArrayList<ReceiptMonth> = ArrayList()
+    private var receipts: ArrayList<ReceiptHeader> = ArrayList()
     private var totalSum: Double = 0.0
     private var isError = false
 
@@ -51,7 +51,7 @@ class MonthPresenter(
                     totalSum = 0.0
                     response.forEach {
                         totalSum += it.meta.s
-                        receipts.add(ReceiptMonth(it.receiptId, it.shop, it.meta))
+                        receipts.add(ReceiptHeader(it.receiptId, it.shop, it.meta))
                     }
                     setReceiptsData()
                 }, {
