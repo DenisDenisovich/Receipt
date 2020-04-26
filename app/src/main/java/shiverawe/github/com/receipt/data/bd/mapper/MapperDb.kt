@@ -7,15 +7,12 @@ import shiverawe.github.com.receipt.domain.entity.dto.base.Product
 import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
 import shiverawe.github.com.receipt.domain.entity.dto.base.Shop
 
-class MapperDb: IMapperDb {
+class MapperDb : IMapperDb {
 
     override fun dbToReceipt(receipt: ReceiptEntity, products: List<ProductEntity>): Receipt {
         val shop = Shop(receipt.date, receipt.place, receipt.sum.toString())
         val meta = Meta(receipt.date, receipt.fn, receipt.fd, receipt.fp, receipt.sum)
-        val items = ArrayList<Product>()
-        products.forEach {
-            items.add(Product(it.text, it.price, it.amount.toDouble()))
-        }
+        val items = products.map { Product(it.text, it.price, it.amount.toDouble()) }.toCollection(ArrayList())
         return Receipt(receipt.id!!, shop, meta, items)
     }
 

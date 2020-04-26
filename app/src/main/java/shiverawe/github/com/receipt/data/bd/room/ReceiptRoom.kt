@@ -18,22 +18,8 @@ abstract class ReceiptRoom : RoomDatabase() {
 
     abstract fun receiptDao(): ReceiptDao
     abstract fun productDao(): ProductDao
-    val mapper = MapperDb()
 
-    companion object {
-        private var instance: ReceiptRoom? = null
-        fun getDb(): ReceiptRoom {
-            if (instance == null) {
-                synchronized(ReceiptRoom::class) {
-                    instance = Room.databaseBuilder(App.appContext,
-                            ReceiptRoom::class.java,
-                            "receipt.db")
-                            .build()
-                }
-            }
-            return instance!!
-        }
-    }
+    val mapper = MapperDb()
 
     @Transaction
     fun saveReceipts(receipts: ArrayList<Receipt>): List<Long> {
@@ -60,5 +46,21 @@ abstract class ReceiptRoom : RoomDatabase() {
             receipts.add(mapper.dbToReceipt(receiptDb, productsDb.filter { it.receiptId == receiptDb.id }))
         }
         return receipts
+    }
+
+    companion object {
+
+        private var instance: ReceiptRoom? = null
+
+        @Synchronized
+        fun getDb(): ReceiptRoom {
+            if (instance == null) {
+                instance = Room.databaseBuilder(App.appContext,
+                    ReceiptRoom::class.java,
+                    "receipt.db")
+                    .build()
+            }
+            return instance!!
+        }
     }
 }

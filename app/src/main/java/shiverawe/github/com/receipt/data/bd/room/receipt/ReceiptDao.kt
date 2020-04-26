@@ -28,5 +28,4 @@ interface ReceiptDao {
 
     @Query("DELETE from receipt_table where id IN(:removeIds)")
     fun removeMonthReceiptsByIds(removeIds: Array<Long>): Int
-
 }

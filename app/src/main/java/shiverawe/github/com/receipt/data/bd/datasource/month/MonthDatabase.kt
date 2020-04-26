@@ -5,19 +5,18 @@ import shiverawe.github.com.receipt.data.bd.room.ReceiptRoom
 import shiverawe.github.com.receipt.data.bd.utils.ICacheDiffUtility
 import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
 
-class MonthDatabase(private val cacheDiffUtility: ICacheDiffUtility): IMonthDatabase {
+class MonthDatabase(private val cacheDiffUtility: ICacheDiffUtility) : IMonthDatabase {
 
     private val db = ReceiptRoom.getDb()
 
     override fun updateMonthCache(
         dateFrom: Long,
         dateTo: Long,
-        networkReceipts: ArrayList<Receipt>): Single<ArrayList<Receipt>> =
-        Single.create{
-            emitter ->
+        networkReceipts: ArrayList<Receipt>
+    ): Single<ArrayList<Receipt>> =
+        Single.create { emitter ->
             val localReceipts = db.getReceiptsWithProducts(dateFrom, dateTo)
-            val localIds: List<Long>
-            localIds = if (localReceipts.size == 0) {
+            val localIds: List<Long> = if (localReceipts.size == 0) {
                 db.saveReceipts(networkReceipts)
             } else {
                 val (deletedIds, newNetwork) =

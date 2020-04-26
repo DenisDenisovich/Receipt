@@ -7,6 +7,7 @@ import shiverawe.github.com.receipt.data.bd.room.ReceiptRoom
 import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
 
 class ReceiptDatabase: IReceiptDatabase {
+
     private val db = ReceiptRoom.getDb()
 
     @Transaction
