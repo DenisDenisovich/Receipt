@@ -12,6 +12,7 @@ data class ReceiptEntity(
     var fn: String = "",
     var fd: String = "",
     var fp: String = "",
+    var remoteId: Long = 0,
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null
 )

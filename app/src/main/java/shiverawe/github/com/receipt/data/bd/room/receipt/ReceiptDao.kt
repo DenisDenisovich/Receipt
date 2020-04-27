@@ -15,7 +15,7 @@ interface ReceiptDao {
     fun deleteReceipt(receipt: ReceiptEntity): Int
 
     @Query("SELECT *from receipt_table where date >= :dateFrom and date <= :dateTo")
-    fun getMonthReceipts(dateFrom: Long, dateTo: Long): List<ReceiptEntity>
+    fun getReceiptHeaders(dateFrom: Long, dateTo: Long): List<ReceiptEntity>
 
     @Query("SELECT id from receipt_table where date >= :dateFrom and date <= :dateTo ORDER BY date DESC")
     fun getMonthReceiptsId(dateFrom: Long, dateTo: Long): List<Long>
@@ -27,5 +27,5 @@ interface ReceiptDao {
     fun removeMonthReceipts(dateFrom: Long, dateTo: Long): Int
 
     @Query("DELETE from receipt_table where id IN(:removeIds)")
-    fun removeMonthReceiptsByIds(removeIds: Array<Long>): Int
+    fun removeReceiptHeadersByIds(removeIds: Array<Long>): Int
 }

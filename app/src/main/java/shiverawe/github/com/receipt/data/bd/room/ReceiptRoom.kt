@@ -10,6 +10,7 @@ import shiverawe.github.com.receipt.data.bd.room.receipt.ReceiptDao
 import shiverawe.github.com.receipt.data.bd.room.receipt.ReceiptEntity
 import shiverawe.github.com.receipt.data.bd.mapper.MapperDb
 import shiverawe.github.com.receipt.domain.entity.dto.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 import shiverawe.github.com.receipt.ui.App
 import kotlin.collections.ArrayList
 
@@ -36,17 +37,15 @@ abstract class ReceiptRoom : RoomDatabase() {
     }
 
     @Transaction
-    fun getReceiptsWithProducts(dataFrom: Long, dataTo: Long): ArrayList<Receipt> {
-        val receipts = ArrayList<Receipt>()
-        var receiptsDb = receiptDao().getMonthReceipts(dataFrom, dataTo)
-        receiptsDb = receiptsDb.sortedByDescending { it.date }
-        val receiptIds = receiptsDb.map { it.id }.toTypedArray()
-        val productsDb = productDao().getProductsForReceipts(receiptIds).sortedBy { it.receiptId }
-        receiptsDb.forEach { receiptDb ->
-            receipts.add(mapper.dbToReceipt(receiptDb, productsDb.filter { it.receiptId == receiptDb.id }))
-        }
-        return receipts
+    fun saveReceiptHeaders(receipts: ArrayList<ReceiptHeader>): List<Long> {
+        val receiptsDb = receipts.map { mapper.receiptHeaderToDb(it) }
+        return receiptDao().addReceipts(receiptsDb)
     }
+
+    fun getReceiptHeaders(dateFrom: Long, dateTo: Long): ArrayList<ReceiptHeader> = receiptDao()
+        .getReceiptHeaders(dateFrom, dateTo)
+        .map { mapper.dbToReceiptHeader(it) }
+        .toCollection(ArrayList())
 
     companion object {
 
