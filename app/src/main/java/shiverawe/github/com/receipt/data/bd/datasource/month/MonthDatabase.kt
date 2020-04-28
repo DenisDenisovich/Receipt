@@ -3,7 +3,6 @@ package shiverawe.github.com.receipt.data.bd.datasource.month
 import io.reactivex.Single
 import shiverawe.github.com.receipt.data.bd.room.ReceiptRoom
 import shiverawe.github.com.receipt.data.bd.utils.ICacheDiffUtility
-import shiverawe.github.com.receipt.domain.entity.dto.Receipt
 import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 
 class MonthDatabase(private val cacheDiffUtility: ICacheDiffUtility) : IMonthDatabase {
@@ -17,7 +16,7 @@ class MonthDatabase(private val cacheDiffUtility: ICacheDiffUtility) : IMonthDat
     ): Single<ArrayList<ReceiptHeader>> =
         Single.create { emitter ->
             val localReceipts = db.getReceiptHeaders(dateFrom, dateTo)
-            if (localReceipts.size == 0) {
+            if (localReceipts.isEmpty()) {
                 // DB doesn't contain receipts for this period. Save new data
                 db.saveReceiptHeaders(networkReceipts)
             } else {
@@ -27,6 +26,7 @@ class MonthDatabase(private val cacheDiffUtility: ICacheDiffUtility) : IMonthDat
                 db.receiptDao().removeReceiptHeadersByIds(deletedIds.toTypedArray())
                 db.saveReceiptHeaders(newNetwork)
             }
+            networkReceipts.sortByDescending { it.meta.t }
             emitter.onSuccess(networkReceipts)
         }
 

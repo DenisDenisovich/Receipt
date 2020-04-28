@@ -4,19 +4,32 @@ import androidx.room.Transaction
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import shiverawe.github.com.receipt.data.bd.room.ReceiptRoom
+import shiverawe.github.com.receipt.domain.entity.dto.Product
 import shiverawe.github.com.receipt.domain.entity.dto.Receipt
 
-class ReceiptDatabase: IReceiptDatabase {
+class ReceiptDatabase : IReceiptDatabase {
 
     private val db = ReceiptRoom.getDb()
 
     @Transaction
-    override fun getReceiptById(receiptId: Long): Single<Receipt> {
-        return Single.create<Receipt> {
-            emitter ->
-            val receipt = db.receiptDao().getReceiptById(receiptId)
-            val products = db.productDao().getProductsForReceipts(arrayOf(receiptId))
+    override fun updateProductsCache(remoteReceiptId: Long, networkProducts: ArrayList<Product>): Single<Receipt> =
+        Single.create<Receipt> { emitter ->
+            val receipt = db.receiptDao().getReceiptByRemoteId(remoteReceiptId)
+            val receiptId = receipt.id ?: 0
+            val localProducts = db.productDao().getProductsForReceiptIds(arrayOf(receiptId))
+            if (localProducts.isEmpty()) {
+                // DB doesn't contain products for this period. Save new data
+                db.saveProducts(receiptId, networkProducts)
+            }
+            val receiptHeader = db.mapper.dbToReceiptHeader(receipt)
+            emitter.onSuccess(Receipt(receiptHeader.receiptId, receiptHeader.shop, receiptHeader.meta, networkProducts))
+        }.subscribeOn(Schedulers.io())
+
+    @Transaction
+    override fun getReceiptById(receiptId: Long): Single<Receipt> =
+        Single.create<Receipt> { emitter ->
+            val receipt = db.receiptDao().getReceiptByRemoteId(receiptId)
+            val products = db.productDao().getProductsForReceiptIds(arrayOf(receipt.id))
             emitter.onSuccess(db.mapper.dbToReceipt(receipt, products))
         }.subscribeOn(Schedulers.io())
-    }
 }

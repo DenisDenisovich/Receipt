@@ -9,7 +9,7 @@ import shiverawe.github.com.receipt.data.bd.room.product.ProductEntity
 import shiverawe.github.com.receipt.data.bd.room.receipt.ReceiptDao
 import shiverawe.github.com.receipt.data.bd.room.receipt.ReceiptEntity
 import shiverawe.github.com.receipt.data.bd.mapper.MapperDb
-import shiverawe.github.com.receipt.domain.entity.dto.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.Product
 import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 import shiverawe.github.com.receipt.ui.App
 import kotlin.collections.ArrayList
@@ -23,18 +23,8 @@ abstract class ReceiptRoom : RoomDatabase() {
     val mapper = MapperDb()
 
     @Transaction
-    fun saveReceipts(receipts: ArrayList<Receipt>): List<Long> {
-        val receiptsDb = receipts.map { mapper.receiptToDb(it) }
-        val savedIds = receiptDao().addReceipts(receiptsDb)
-        val savedProducts = ArrayList<ProductEntity>()
-        for (receiptIndex in 0 until receipts.size) {
-            receipts[receiptIndex].items.forEach { product ->
-                savedProducts.add(mapper.productToDb(product, savedIds[receiptIndex]))
-            }
-        }
-        productDao().addProducts(savedProducts)
-        return savedIds
-    }
+    fun saveProducts(receiptId: Long, products: ArrayList<Product>): List<Long> =
+        productDao().addProducts(products.map { mapper.productToDb(it, receiptId) })
 
     @Transaction
     fun saveReceiptHeaders(receipts: ArrayList<ReceiptHeader>): List<Long> {

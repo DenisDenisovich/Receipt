@@ -37,12 +37,18 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
             }
         }
     private val baseUrl: String by lazy { getString(R.string.BASE_URL) }
-
     private val presenter: ReceiptContact.Presenter by inject()
     private var adapter = ProductAdapter()
     private val dateFormatterDate = SimpleDateFormat("dd.MM.yy_HH:mm", Locale("ru"))
     private val dateFormatterDay = DateFormat.getDateInstance(SimpleDateFormat.FULL, Locale("ru"))
     private var receipt: Receipt? = null
+
+    private val offsetChangedListener = AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+        header_collapsed.visibility =
+            if (-verticalOffset == collapsed.height - collapsed.minimumHeight) View.VISIBLE
+            else View.INVISIBLE
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         presenter.attach(this)
@@ -52,14 +58,17 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_toolbar_receipt_back.setOnClickListener(this)
         btn_toolbar_receipt_share.setOnClickListener(this)
-        appbar.addOnOffsetChangedListener(
-            AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
-                header_collapsed.visibility =
-                    if (-verticalOffset == collapsed.height - collapsed.minimumHeight) View.VISIBLE
-                    else View.INVISIBLE
-            }
-        )
         sendRequest()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        appbar.addOnOffsetChangedListener(offsetChangedListener)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        appbar.removeOnOffsetChangedListener(offsetChangedListener)
     }
 
     override fun onClick(v: View?) {

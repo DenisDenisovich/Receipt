@@ -16,5 +16,5 @@ interface IMapperDb {
 
     fun receiptHeaderToDb(receipt: ReceiptHeader): ReceiptEntity
 
-    fun productToDb(product: Product, savedId: Long): ProductEntity
+    fun productToDb(product: Product, receiptId: Long): ProductEntity
 }

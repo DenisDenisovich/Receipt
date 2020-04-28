@@ -39,6 +39,6 @@ class MapperDb : IMapperDb {
         receipt.receiptId
     )
 
-    override fun productToDb(product: Product, savedId: Long): ProductEntity =
-        ProductEntity(product.amount.toFloat(), product.text, product.price, savedId)
+    override fun productToDb(product: Product, receiptId: Long): ProductEntity =
+        ProductEntity(product.amount.toFloat(), product.text, product.price, receiptId)
 }

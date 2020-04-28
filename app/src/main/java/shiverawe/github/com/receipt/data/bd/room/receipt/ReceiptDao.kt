@@ -20,8 +20,8 @@ interface ReceiptDao {
     @Query("SELECT id from receipt_table where date >= :dateFrom and date <= :dateTo ORDER BY date DESC")
     fun getMonthReceiptsId(dateFrom: Long, dateTo: Long): List<Long>
 
-    @Query("SELECT * from receipt_table where id=:receiptId")
-    fun getReceiptById(receiptId: Long): ReceiptEntity
+    @Query("SELECT * from receipt_table where remoteId=:receiptId")
+    fun getReceiptByRemoteId(receiptId: Long): ReceiptEntity
 
     @Query("DELETE from receipt_table where date >= :dateFrom and date <= :dateTo")
     fun removeMonthReceipts(dateFrom: Long, dateTo: Long): Int
