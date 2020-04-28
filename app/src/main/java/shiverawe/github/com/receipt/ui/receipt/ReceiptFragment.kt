@@ -39,6 +39,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
     private val baseUrl: String by lazy { getString(R.string.BASE_URL) }
     private val presenter: ReceiptContact.Presenter by inject()
     private var adapter = ProductAdapter()
+    private val shareDateFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
     private val dateFormatterDate = SimpleDateFormat("dd.MM.yy_HH:mm", Locale("ru"))
     private val dateFormatterDay = DateFormat.getDateInstance(SimpleDateFormat.FULL, Locale("ru"))
     private var receipt: Receipt? = null
@@ -147,7 +148,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
 
     private fun getShareString(): String {
         val url = StringBuilder()
-        val date = getDateForShare(receipt!!.shop.date)
+        val date = shareDateFormatter.format(receipt!!.shop.date)
         url.appendln("Посмотреть чек по ссылке:")
         url.append("http://receipt.shefer.space/?")
         url.appendln("fn=${receipt!!.meta.fn}&i=${receipt!!.meta.fd}&fp=${receipt!!.meta.fp}&s=${receipt!!.meta.s}&t=$date")
@@ -167,28 +168,6 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
             url.appendln("Цена:   $price")
         }
         return url.toString()
-    }
-
-    private fun getDateForShare(date: Long): String {
-        val strDate = StringBuilder()
-        val shareCalendar = GregorianCalendar(TimeZone.getDefault())
-        shareCalendar.time = Date(date)
-        val year = shareCalendar.get(Calendar.YEAR)
-        var month = (shareCalendar.get(Calendar.MONTH) + 1).toString()
-        if (month.length == 1) month = "0$month"
-        var day = shareCalendar.get(Calendar.DAY_OF_MONTH).toString()
-        if (day.length == 1) day = "0$day"
-        var hour = shareCalendar.get(Calendar.HOUR_OF_DAY).toString()
-        if (hour.length == 1) hour = "0$hour"
-        var minutes = shareCalendar.get(Calendar.MINUTE).toString()
-        if (minutes.length == 1) minutes = "0$minutes"
-        strDate.append(year)
-        strDate.append(month)
-        strDate.append(day)
-        strDate.append("T")
-        strDate.append(hour)
-        strDate.append(minutes)
-        return strDate.toString()
     }
 
     companion object {

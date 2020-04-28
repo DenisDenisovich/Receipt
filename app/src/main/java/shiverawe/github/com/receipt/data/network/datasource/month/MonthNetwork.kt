@@ -11,7 +11,7 @@ class MonthNetwork(
     private val mapper: IMapperNetwork,
     private val api: Api) : IMonthNetwork {
     override fun getMonthReceipts(dateFrom: String, dateTo: String): Single<ArrayList<ReceiptHeader>> =
-        api.getReceiptForMonth(ReceiptRequest(dateFrom, dateTo))
+        api.getReceipts(ReceiptRequest(dateFrom = dateFrom, dateTo = dateTo))
             .map { response ->
                 val filterResponse = response.filter {
                     it.status != "FAILED" &&

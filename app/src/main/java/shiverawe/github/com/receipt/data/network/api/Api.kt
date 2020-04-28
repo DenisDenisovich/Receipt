@@ -12,10 +12,10 @@ import shiverawe.github.com.receipt.data.network.entity.receipt.ReceiptResponse
 interface Api {
 
     @PUT("api/items")
-    fun getReceipt(@Body request: ItemRequest): Single<ArrayList<ItemResponse>>
+    fun getProducts(@Body request: ItemRequest): Single<ArrayList<ItemResponse>>
 
     @PUT("api/receipts")
-    fun getReceiptForMonth(@Body receiptRequest: ReceiptRequest): Single<ArrayList<ReceiptResponse>>
+    fun getReceipts(@Body receiptRequest: ReceiptRequest): Single<ArrayList<ReceiptResponse>>
 
     @POST("rest/create")
     fun createReceipt(@Body reportRequest: CreateRequest): Single<CreateResponce>
