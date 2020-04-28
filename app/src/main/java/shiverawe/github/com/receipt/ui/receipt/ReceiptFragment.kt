@@ -49,13 +49,15 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
             else View.INVISIBLE
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         presenter.attach(this)
         return inflater.inflate(R.layout.fragment_receipt, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        if (adapter.itemCount != 0) {
+            pb_receipt.visibility = View.GONE
+        }
         btn_toolbar_receipt_back.setOnClickListener(this)
         btn_toolbar_receipt_share.setOnClickListener(this)
         sendRequest()
@@ -101,7 +103,10 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
         val time = dateFormatterDate.format(Date(receipt.shop.date)).split("_")[1]
         tv_toolbar_receipt_date.text = "$day, $date"
         tv_toolbar_receipt_time.text = time
-        adapter.setProducts(receipt.items)
+        if (receipt.items.isNotEmpty()) {
+            pb_receipt.visibility = View.GONE
+            adapter.setProducts(receipt.items)
+        }
         rv_receipt.adapter = adapter
     }
 

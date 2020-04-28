@@ -6,6 +6,7 @@ import io.reactivex.schedulers.Schedulers
 import shiverawe.github.com.receipt.data.bd.room.ReceiptRoom
 import shiverawe.github.com.receipt.domain.entity.dto.Product
 import shiverawe.github.com.receipt.domain.entity.dto.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 
 class ReceiptDatabase : IReceiptDatabase {
 
@@ -26,10 +27,16 @@ class ReceiptDatabase : IReceiptDatabase {
         }.subscribeOn(Schedulers.io())
 
     @Transaction
-    override fun getReceiptById(receiptId: Long): Single<Receipt> =
+    override fun getReceiptById(remoteReceiptId: Long): Single<Receipt> =
         Single.create<Receipt> { emitter ->
-            val receipt = db.receiptDao().getReceiptByRemoteId(receiptId)
+            val receipt = db.receiptDao().getReceiptByRemoteId(remoteReceiptId)
             val products = db.productDao().getProductsForReceiptIds(arrayOf(receipt.id))
             emitter.onSuccess(db.mapper.dbToReceipt(receipt, products))
+        }.subscribeOn(Schedulers.io())
+
+    override fun getReceiptHeaderById(remoteReceiptId: Long): Single<ReceiptHeader> =
+        Single.create<ReceiptHeader> { emitter ->
+            val receipt = db.receiptDao().getReceiptByRemoteId(remoteReceiptId)
+            emitter.onSuccess(db.mapper.dbToReceiptHeader(receipt))
         }.subscribeOn(Schedulers.io())
 }

@@ -88,6 +88,12 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:listitem="@layout/item_product"/>
 
+        <ProgressBar
+            android:id="@+id/pb_receipt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+
         <shiverawe.github.com.receipt.ui.base.coordinator.SubtitleHeader
             android:id="@+id/header_expanded"
             android:layout_width="match_parent"
@@ -133,14 +139,14 @@
         app:subtitle_typeface="roboto_medium"
         app:init_state="collapsed"/>
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/btn_toolbar_receipt_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:src="@drawable/ic_back" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/btn_toolbar_receipt_share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

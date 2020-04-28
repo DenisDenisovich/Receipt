@@ -1,5 +1,6 @@
 package shiverawe.github.com.receipt.data.repository
 
+import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.HttpException
 import shiverawe.github.com.receipt.data.bd.datasource.receipt.IReceiptDatabase
@@ -24,14 +25,32 @@ class ReceiptRepository(
         return network.saveReceipt()
     }
 
-    override fun getReceiptById(receiptId: Long): Single<Receipt> =
-        network.getProducts(receiptId)
-            .flatMap { db.updateProductsCache(receiptId, it) }
-            .onErrorResumeNext {
-                if (it is HttpException || !utils.isOnline()) {
-                    db.getReceiptById(receiptId)
+    override fun getReceiptById(receiptId: Long): Observable<Receipt> {
+        // Get receipt from DB. Return this receipt if products list isn't empty
+        // Go to network if products list is empty
+        val fullReceiptSource: Observable<Receipt> = db.getReceiptById(receiptId)
+            .flatMap { dbReceipt ->
+                if (dbReceipt.items.isEmpty()) {
+                    network.getProducts(receiptId)
+                        .flatMap { db.updateProductsCache(receiptId, it) }
+                        .onErrorResumeNext {
+                            if (it is HttpException || !utils.isOnline()) {
+                                db.getReceiptById(receiptId)
+                            } else {
+                                Single.error(it)
+                            }
+                        }
                 } else {
-                    Single.error(it)
+                    Single.just(dbReceipt)
                 }
-            }
+            }.toObservable()
+        // Get receipt header, while fullReceiptSource in progress
+        val headerReceiptSource = db.getReceiptHeaderById(receiptId)
+            .map { Receipt(it.receiptId, it.shop, it.meta, ArrayList()) }
+            .toObservable()
+        return Observable.merge(
+            headerReceiptSource,
+            fullReceiptSource
+        )
+    }
 }
