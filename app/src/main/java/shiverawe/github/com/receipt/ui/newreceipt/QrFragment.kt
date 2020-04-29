@@ -27,9 +27,9 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
     private val qrCodeAnalyzer = QrCodeAnalyzer()
     private val torchListener = Observer<Int> {
         if (it == TorchState.ON) {
-            btn_flash.setImageResource(R.drawable.ic_flash_enable)
+            btn_flash.setImageResource(R.drawable.ic_flash_off)
         } else {
-            btn_flash.setImageResource(R.drawable.ic_flash_disable)
+            btn_flash.setImageResource(R.drawable.ic_flash_on)
         }
     }
 

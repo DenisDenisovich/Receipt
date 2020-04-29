@@ -21,10 +21,12 @@
         android:id="@+id/btn_flash"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:padding="20dp"
+        android:padding="16dp"
         android:layout_marginTop="60dp"
         android:layout_gravity="start"
-        android:src="@drawable/ic_flash_disable"/>
+        android:background="?selectableItemBackgroundBorderless"
+
+        android:src="@drawable/ic_flash_off"/>
 
     <Button
         android:id="@+id/btn_qr_reader_manual"
