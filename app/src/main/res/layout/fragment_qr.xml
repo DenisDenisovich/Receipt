@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.camera.view.PreviewView
@@ -10,29 +11,33 @@
         android:layout_height="match_parent"
         tools:background="@android:color/black" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/btn_qr_back"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:padding="16dp"
-        android:src="@drawable/ic_back_qr"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/btn_flash"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:padding="16dp"
-        android:layout_marginTop="60dp"
-        android:layout_gravity="start"
-        android:src="@drawable/ic_flash_off"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btn_qr_back"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:padding="16dp"
+            android:src="@drawable/ic_back_qr"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btn_flash"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:padding="16dp"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_flash_off"/>
+    </FrameLayout>
 
     <Button
         android:id="@+id/btn_qr_reader_manual"
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_gravity="bottom|center"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_margin="16dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:layout_marginBottom="16dp"

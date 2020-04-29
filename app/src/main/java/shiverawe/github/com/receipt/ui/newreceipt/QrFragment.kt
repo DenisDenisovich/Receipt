@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Size
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -45,6 +46,10 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
         btn_flash.setOnClickListener(this)
         btn_qr_reader_manual.setOnClickListener(this)
         setupCamera()
+        requireActivity().window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
     }
 
     override fun onDestroyView() {
@@ -52,6 +57,7 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
         imageAnalyzeExecutor.shutdown()
         cameraProvider?.unbindAll()
         cameraInfo?.torchState?.removeObserver(torchListener)
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
     override fun onClick(v: View?) {
