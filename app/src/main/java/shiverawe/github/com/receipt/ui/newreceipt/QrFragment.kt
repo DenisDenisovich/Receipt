@@ -1,94 +1,115 @@
 package shiverawe.github.com.receipt.ui.newreceipt
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Handler
+import android.util.Size
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import com.budiyev.android.codescanner.CodeScanner
-import com.budiyev.android.codescanner.DecodeCallback
-import com.budiyev.android.codescanner.ErrorCallback
+import androidx.camera.core.*
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.android.synthetic.main.fragment_qr.*
 import shiverawe.github.com.receipt.R
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
-class QrFragment : Fragment(), View.OnClickListener {
-    private var codeScanner: CodeScanner? = null
+class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_qr, container, false)
-
+    private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
+    private lateinit var imageAnalyzeExecutor: ExecutorService
+    private var cameraControl: CameraControl? = null
+    private var cameraInfo: CameraInfo? = null
+    private val qrCodeAnalyzer = QrCodeAnalyzer()
+    private val torchListener = Observer<Int> {
+        if (it != TorchState.ON) {
+            btn_flash.setImageResource(R.drawable.ic_flash_enable)
+        } else {
+            btn_flash.setImageResource(R.drawable.ic_flash_disable)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Handler().postDelayed({
-            startScanCamera()
-        }, 250)
-        btn_qr_reader_manual.setOnClickListener {
-            (parentFragment as NewReceiptView).openManual()
-            codeScanner?.releaseResources()
+        qrCodeAnalyzer.onQrCodeDataFound = {
+            (parentFragment as NewReceiptView).openReceipt(it)
+        }
+        qrCodeAnalyzer.onQrCodeError = {
+            Toast.makeText(context, "Произошла ошибка", Toast.LENGTH_LONG).show()
+            (parentFragment as NewReceiptView).onError()
         }
         btn_qr_back.setOnClickListener(this)
-        btn_qr_autofocus.setOnClickListener(this)
-        btn_qr_flash.setOnClickListener(this)
+        btn_flash.setOnClickListener(this)
+        btn_qr_reader_manual.setOnClickListener(this)
+        setupCamera()
     }
 
-    override fun onResume() {
-        super.onResume()
-        codeScanner?.startPreview()
-    }
-
-
-    private fun startScanCamera() {
-        if (isResumed) {
-            val scannerView = scanner_view
-            val activity = requireActivity()
-            codeScanner = CodeScanner(activity, scannerView)
-            codeScanner?.isFlashEnabled
-            codeScanner?.decodeCallback = DecodeCallback {
-                activity.runOnUiThread {
-                    (parentFragment as NewReceiptView).openReceipt(it.text)
-                }
-            }
-            codeScanner?.errorCallback = ErrorCallback {
-                activity.runOnUiThread {
-                    Toast.makeText(context, "Произошла ошибка", Toast.LENGTH_LONG).show()
-                    (parentFragment as NewReceiptView).onError()
-                }
-            }
-            codeScanner?.startPreview()
-            codeScanner?.isAutoFocusEnabled = true
-            btn_qr_autofocus.setImageResource(R.drawable.ic_autofocus_enable)
-        }
-    }
-
-    override fun onPause() {
-        codeScanner?.releaseResources()
-        super.onPause()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        imageAnalyzeExecutor.shutdown()
+        cameraInfo?.torchState?.removeObserver(torchListener)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_qr_back -> activity?.onBackPressed()
-            R.id.btn_qr_autofocus -> {
-                codeScanner?.isAutoFocusEnabled = !(codeScanner?.isAutoFocusEnabled ?: false)
-                if (codeScanner?.isAutoFocusEnabled == true) {
-                    btn_qr_autofocus.setImageResource(R.drawable.ic_autofocus_enable)
-                } else {
-                    btn_qr_autofocus.setImageResource(R.drawable.ic_autofocus_disable)
-                }
+            R.id.btn_flash -> {
+                cameraControl?.enableTorch(cameraInfo?.torchState?.value != TorchState.ON)
             }
-            R.id.btn_qr_flash -> {
-                codeScanner?.isFlashEnabled = !(codeScanner?.isFlashEnabled ?: false)
-                if (codeScanner?.isFlashEnabled == true) {
-                    btn_qr_flash.setImageResource(R.drawable.ic_flash_enable)
-                } else {
-                    btn_qr_flash.setImageResource(R.drawable.ic_flash_disable)
-                }
+            R.id.btn_qr_reader_manual -> {
+                (parentFragment as NewReceiptView).openManual()
             }
+        }
+    }
+
+    private fun setupCamera() {
+        cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+        cameraProviderFuture.addListener(Runnable {
+            preview_view.post {
+                bindPreview(cameraProviderFuture.get())
+            }
+        }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
+    @SuppressLint("UnsafeExperimentalUsageError")
+    private fun bindPreview(cameraProvider: ProcessCameraProvider) {
+        val preview: Preview = Preview.Builder().build()
+
+        val imageAnalysis = ImageAnalysis.Builder()
+            .setTargetResolution(Size(preview_view.width, preview_view.height))
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .build()
+
+        // set camera frame listener
+        imageAnalyzeExecutor = Executors.newSingleThreadExecutor()
+        imageAnalysis.setAnalyzer(imageAnalyzeExecutor, ImageAnalysis.Analyzer { image ->
+            image.image?.let { analyzedImage ->
+                qrCodeAnalyzer.setImage(analyzedImage, image.imageInfo.rotationDegrees)
+            }
+            image.close()
+        })
+
+        val cameraSelector: CameraSelector = CameraSelector.Builder()
+            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+            .build()
+
+        try {
+            cameraProvider.unbindAll()
+            val camera = cameraProvider.bindToLifecycle(
+                this as LifecycleOwner,
+                cameraSelector,
+                preview,
+                imageAnalysis
+            )
+            cameraControl = camera.cameraControl
+            cameraControl?.enableTorch(false)
+            cameraInfo = camera.cameraInfo
+            cameraInfo?.torchState?.observe(this, torchListener)
+            preview.setSurfaceProvider(preview_view.createSurfaceProvider(camera.cameraInfo))
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

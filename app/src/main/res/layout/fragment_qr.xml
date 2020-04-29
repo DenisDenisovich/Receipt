@@ -2,49 +2,29 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.budiyev.android.codescanner.CodeScannerView
-        android:id="@+id/scanner_view"
+    <androidx.camera.view.PreviewView
+        android:id="@+id/preview_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:autoFocusButtonVisible="false"
-        app:flashButtonVisible="false"
-        app:frameColor="@android:color/white"
-        app:frameCornersSize="50dp"
-        app:frameCornersRadius="0dp"
-        app:frameAspectRatioWidth="1"
-        app:frameAspectRatioHeight="1"
-        app:frameSize="0.75"
-        app:frameThickness="2dp"
-        android:visibility="visible"
-        app:maskColor="#77000000"/>
+        tools:background="@android:color/black" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/btn_qr_back"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:padding="16dp"
         android:src="@drawable/ic_back_qr"/>
 
-    <ImageView
-        android:id="@+id/btn_qr_autofocus"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btn_flash"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:padding="20dp"
         android:layout_marginTop="60dp"
-        android:src="@drawable/ic_autofocus_disable"/>
-
-    <ImageView
-        android:id="@+id/btn_qr_flash"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:padding="20dp"
-        android:layout_marginTop="60dp"
-        android:layout_gravity="end"
+        android:layout_gravity="start"
         android:src="@drawable/ic_flash_disable"/>
-
-
 
     <Button
         android:id="@+id/btn_qr_reader_manual"
