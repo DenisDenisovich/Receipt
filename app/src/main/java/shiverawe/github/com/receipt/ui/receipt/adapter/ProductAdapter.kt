@@ -25,7 +25,7 @@ class ProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         delegateManager.onBindViewHolder(holder, items, position)
     }
 
-    fun setProducts(products: ArrayList<Product>) {
+    fun setProducts(products: List<Product>) {
         items.addAll(products)
         notifyDataSetChanged()
     }
