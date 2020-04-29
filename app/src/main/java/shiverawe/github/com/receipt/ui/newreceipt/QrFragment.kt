@@ -23,9 +23,10 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
     private lateinit var imageAnalyzeExecutor: ExecutorService
     private var cameraControl: CameraControl? = null
     private var cameraInfo: CameraInfo? = null
+    private var cameraProvider: ProcessCameraProvider? = null
     private val qrCodeAnalyzer = QrCodeAnalyzer()
     private val torchListener = Observer<Int> {
-        if (it != TorchState.ON) {
+        if (it == TorchState.ON) {
             btn_flash.setImageResource(R.drawable.ic_flash_enable)
         } else {
             btn_flash.setImageResource(R.drawable.ic_flash_disable)
@@ -49,6 +50,7 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         imageAnalyzeExecutor.shutdown()
+        cameraProvider?.unbindAll()
         cameraInfo?.torchState?.removeObserver(torchListener)
     }
 
@@ -68,15 +70,19 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
         cameraProviderFuture.addListener(Runnable {
             preview_view.post {
-                bindPreview(cameraProviderFuture.get())
+                cameraProvider = cameraProviderFuture.get()
+                bindPreview()
             }
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
     @SuppressLint("UnsafeExperimentalUsageError")
-    private fun bindPreview(cameraProvider: ProcessCameraProvider) {
+    private fun bindPreview() {
         val preview: Preview = Preview.Builder().build()
-
+        val imageCapture = ImageCapture.Builder()
+            .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+            .setFlashMode(ImageCapture.FLASH_MODE_OFF)
+            .build()
         val imageAnalysis = ImageAnalysis.Builder()
             .setTargetResolution(Size(preview_view.width, preview_view.height))
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
@@ -96,18 +102,20 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
             .build()
 
         try {
-            cameraProvider.unbindAll()
-            val camera = cameraProvider.bindToLifecycle(
-                this as LifecycleOwner,
-                cameraSelector,
-                preview,
-                imageAnalysis
-            )
-            cameraControl = camera.cameraControl
-            cameraControl?.enableTorch(false)
-            cameraInfo = camera.cameraInfo
-            cameraInfo?.torchState?.observe(this, torchListener)
-            preview.setSurfaceProvider(preview_view.createSurfaceProvider(camera.cameraInfo))
+            cameraProvider?.let { provider ->
+                val camera = provider.bindToLifecycle(
+                    this as LifecycleOwner,
+                    cameraSelector,
+                    preview,
+                    imageCapture,
+                    imageAnalysis
+                )
+                cameraControl = camera.cameraControl
+                cameraControl?.enableTorch(false)
+                cameraInfo = camera.cameraInfo
+                cameraInfo?.torchState?.observe(this, torchListener)
+                preview.setSurfaceProvider(preview_view.createSurfaceProvider(camera.cameraInfo))
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
