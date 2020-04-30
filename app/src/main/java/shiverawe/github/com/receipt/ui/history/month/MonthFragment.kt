@@ -37,7 +37,8 @@ class MonthFragment : Fragment(), MonthContract.View {
     private lateinit var adapter: MonthAdapter
     private var receipts: ArrayList<ReceiptHeader> = ArrayList()
     private var totalSum = ""
-    override fun onAttach(context: Context?) {
+
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         navigation = context as MainActivity
     }
