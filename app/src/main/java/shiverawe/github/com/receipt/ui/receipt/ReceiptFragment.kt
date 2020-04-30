@@ -91,17 +91,20 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
     override fun showReceipt(receipt: Receipt) {
         containerParent?.hideProgress()
         this.receipt = receipt
+        val receiptPlace = receipt.header.shop.place
+        val receiptSum = receipt.header.shop.sum
+        val receiptDate = receipt.header.shop.date
         header_collapsed.apply {
-            titleText = receipt.shop.place
-            subtitleText = receipt.shop.sum.floorTwo() + " " + resources.getString(R.string.rubleSymbolJava)
+            titleText = receiptPlace
+            subtitleText = receiptSum.floorTwo() + " " + resources.getString(R.string.rubleSymbolJava)
         }
         header_expanded.apply {
-            titleText = receipt.shop.place
-            subtitleText = receipt.shop.sum.floorTwo() + " " + resources.getString(R.string.rubleSymbolJava)
+            titleText = receiptPlace
+            subtitleText = receiptSum.floorTwo() + " " + resources.getString(R.string.rubleSymbolJava)
         }
-        val day = dateFormatterDay.format(Date(receipt.shop.date)).split(",")[0].capitalize()
-        val date = dateFormatterDate.format(Date(receipt.shop.date)).split("_")[0]
-        val time = dateFormatterDate.format(Date(receipt.shop.date)).split("_")[1]
+        val day = dateFormatterDay.format(Date(receiptDate)).split(",")[0].capitalize()
+        val date = dateFormatterDate.format(Date(receiptDate)).split("_")[0]
+        val time = dateFormatterDate.format(Date(receiptDate)).split("_")[1]
         tv_toolbar_receipt_date.text = "$day, $date"
         tv_toolbar_receipt_time.text = time
         if (receipt.items.isNotEmpty()) {
@@ -139,7 +142,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
         }
     }
 
-    fun getTime() = receipt?.shop?.date
+    fun getTime() = receipt?.header?.shop?.date
 
     override fun onDestroy() {
         presenter.detach()
@@ -147,14 +150,16 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
     }
 
     private fun getShareString(): String {
+        val shop = receipt?.header?.shop ?: return ""
+        val meta = receipt?.header?.meta ?: return ""
         val url = StringBuilder()
-        val date = shareDateFormatter.format(receipt!!.shop.date)
+        val date = shareDateFormatter.format(shop.date)
         url.appendln("Посмотреть чек по ссылке:")
         url.append("http://receipt.shefer.space/?")
-        url.appendln("fn=${receipt!!.meta.fn}&i=${receipt!!.meta.fd}&fp=${receipt!!.meta.fp}&s=${receipt!!.meta.s}&t=$date")
-        url.appendln("Магазин: ${receipt!!.shop.place}")
+        url.appendln("fn=${meta.fn}&i=${meta.fd}&fp=${meta.fp}&s=${meta.s}&t=$date")
+        url.appendln("Магазин: ${shop.place}")
         url.appendln("Дата:    ${tv_toolbar_receipt_date.text}")
-        url.appendln("Сумма:   ${receipt!!.shop.sum}")
+        url.appendln("Сумма:   ${shop.sum}")
         var price: String
         var amountNumber: Double
         var amountString: String

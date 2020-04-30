@@ -47,7 +47,7 @@ class ReceiptRepository(
             }.toObservable()
         // Get receipt header, while fullReceiptSource in progress
         val headerReceiptSource = db.getReceiptHeaderById(receiptId)
-            .map { Receipt(it.receiptId, it.shop, it.meta, listOf()) }
+            .map { Receipt(it, listOf()) }
             .toObservable()
         return Observable.merge(
             headerReceiptSource,

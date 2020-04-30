@@ -10,7 +10,7 @@ class MapperDb : IMapperDb {
         val shop = Shop(receipt.date, receipt.place, receipt.sum.toString())
         val meta = Meta(receipt.date, receipt.fn, receipt.fd, receipt.fp, receipt.sum)
         val items = products.map { Product(it.text, it.price, it.amount.toDouble()) }
-        return Receipt(receipt.remoteId, shop, meta, items)
+        return Receipt(ReceiptHeader(receipt.remoteId, shop, meta), items)
     }
 
     override fun dbToReceiptHeader(receipt: ReceiptEntity): ReceiptHeader {
@@ -20,13 +20,13 @@ class MapperDb : IMapperDb {
     }
 
     override fun receiptToDb(receipt: Receipt): ReceiptEntity = ReceiptEntity(
-        receipt.meta.t,
-        receipt.shop.place,
-        receipt.meta.s,
-        receipt.meta.fn,
-        receipt.meta.fd,
-        receipt.meta.fp,
-        receipt.receiptId
+        receipt.header.meta.t,
+        receipt.header.shop.place,
+        receipt.header.meta.s,
+        receipt.header.meta.fn,
+        receipt.header.meta.fd,
+        receipt.header.meta.fp,
+        receipt.header.receiptId
     )
 
     override fun receiptHeaderToDb(receipt: ReceiptHeader): ReceiptEntity = ReceiptEntity(

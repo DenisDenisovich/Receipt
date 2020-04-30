@@ -23,7 +23,7 @@ class ReceiptDatabase : IReceiptDatabase {
                 db.saveProducts(receiptId, networkProducts)
             }
             val receiptHeader = db.mapper.dbToReceiptHeader(receipt)
-            emitter.onSuccess(Receipt(receiptHeader.receiptId, receiptHeader.shop, receiptHeader.meta, networkProducts))
+            emitter.onSuccess(Receipt(receiptHeader, networkProducts))
         }.subscribeOn(Schedulers.io())
 
     @Transaction

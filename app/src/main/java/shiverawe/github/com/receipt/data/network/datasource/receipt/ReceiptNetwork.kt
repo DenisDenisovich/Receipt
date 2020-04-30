@@ -10,6 +10,7 @@ import shiverawe.github.com.receipt.data.network.mapper.IMapperNetwork
 import shiverawe.github.com.receipt.domain.entity.dto.Meta
 import shiverawe.github.com.receipt.domain.entity.dto.Product
 import shiverawe.github.com.receipt.domain.entity.dto.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,7 +35,7 @@ class ReceiptNetwork(
             if (receiptResponse.isNotEmpty()) {
                 val receiptHeader = mapper.toReceiptHeader(receiptResponse)[0]
                 getProducts(receiptHeader.receiptId).map { products ->
-                    Receipt(receiptHeader.receiptId, receiptHeader.shop, receiptHeader.meta, products)
+                    Receipt(receiptHeader, products)
                 }
             } else {
                 Single.error<Receipt>(Throwable(""))
