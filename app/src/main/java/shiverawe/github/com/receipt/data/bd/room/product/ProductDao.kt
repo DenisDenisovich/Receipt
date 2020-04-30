@@ -13,7 +13,7 @@ interface ProductDao {
     @Insert
     fun addProducts(products: List<ProductEntity>): List<Long>
 
-    @Query("DELETE from product_table where id IN(:removeIds)")
+    @Query("DELETE FROM product_table where id IN(:removeIds)")
     fun removeProductsByIds(removeIds: Array<Long>): Int
 
     @Query("SELECT * FROM product_table")
