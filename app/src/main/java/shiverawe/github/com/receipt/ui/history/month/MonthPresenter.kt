@@ -7,14 +7,14 @@ import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.utils.Metric
 import shiverawe.github.com.receipt.utils.floorTwo
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MonthPresenter(
         private val repository: IMonthRepository,
         private val dateFrom: Long
 ) : MonthContract.Presenter {
-    var receiptDisposable: Disposable? = null
-    var view: MonthContract.View? = null
+
+    private var receiptDisposable: Disposable? = null
+    private var view: MonthContract.View? = null
     private val dateTo: Long
     private var receipts: ArrayList<ReceiptHeader> = ArrayList()
     private var totalSum: Double = 0.0

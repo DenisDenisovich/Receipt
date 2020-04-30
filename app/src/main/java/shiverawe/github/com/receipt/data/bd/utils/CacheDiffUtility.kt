@@ -13,9 +13,9 @@ class CacheDiffUtility: ICacheDiffUtility {
      * [Pair.second] - list of [ReceiptHeader], that are not on [oldReceipts]
      **/
     override fun findDiffReceiptsHeader(
-        oldReceipts: ArrayList<ReceiptHeader>,
-        newReceipts: ArrayList<ReceiptHeader>
-    ): Pair<List<Long>, ArrayList<ReceiptHeader>> {
+        oldReceipts: List<ReceiptHeader>,
+        newReceipts: List<ReceiptHeader>
+    ): Pair<List<Long>, List<ReceiptHeader>> {
         val localHash = HashMap<String, Long>()
         val addedReceipts = ArrayList<ReceiptHeader>()
         oldReceipts.forEach { receipt ->

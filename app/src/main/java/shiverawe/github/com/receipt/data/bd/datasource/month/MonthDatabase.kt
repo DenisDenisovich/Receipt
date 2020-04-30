@@ -12,8 +12,8 @@ class MonthDatabase(private val cacheDiffUtility: ICacheDiffUtility) : IMonthDat
     override fun updateMonthCache(
         dateFrom: Long,
         dateTo: Long,
-        networkReceipts: ArrayList<ReceiptHeader>
-    ): Single<ArrayList<ReceiptHeader>> =
+        networkReceipts: List<ReceiptHeader>
+    ): Single<List<ReceiptHeader>> =
         Single.create { emitter ->
             val localReceipts = db.getReceiptHeaders(dateFrom, dateTo)
             if (localReceipts.isEmpty()) {
@@ -26,11 +26,11 @@ class MonthDatabase(private val cacheDiffUtility: ICacheDiffUtility) : IMonthDat
                 db.receiptDao().removeReceiptHeadersByIds(deletedIds.toTypedArray())
                 db.saveReceiptHeaders(newNetwork)
             }
-            networkReceipts.sortByDescending { it.meta.t }
+            networkReceipts.sortedByDescending { it.meta.t }
             emitter.onSuccess(networkReceipts)
         }
 
-    override fun getReceiptHeaders(dataFrom: Long, dataTo: Long): Single<ArrayList<ReceiptHeader>> =
+    override fun getReceiptHeaders(dataFrom: Long, dataTo: Long): Single<List<ReceiptHeader>> =
         Single.create { emitter ->
             val receipts = db.receiptDao()
                 .getReceiptHeaders(dataFrom, dataTo)

@@ -4,5 +4,5 @@ import io.reactivex.Single
 import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 
 interface IMonthNetwork {
-    fun getMonthReceipts(dateFrom: String, dateTo: String): Single<ArrayList<ReceiptHeader>>
+    fun getMonthReceipts(dateFrom: String, dateTo: String): Single<List<ReceiptHeader>>
 }

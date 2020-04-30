@@ -9,7 +9,6 @@ import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MonthRepository(
         private val network: IMonthNetwork,
@@ -19,7 +18,7 @@ class MonthRepository(
 
     private val formatter = SimpleDateFormat("yyyyMMdd'T'HHmm", Locale.getDefault())
 
-    override fun getMonthReceipt(dateFrom: Long, dateTo: Long): Single<ArrayList<ReceiptHeader>> =
+    override fun getMonthReceipt(dateFrom: Long, dateTo: Long): Single<List<ReceiptHeader>> =
         network.getMonthReceipts(formatter.format(dateFrom), formatter.format(dateTo))
                 .flatMap { networkReceipts ->
                     db.updateMonthCache(dateFrom, dateTo, networkReceipts)

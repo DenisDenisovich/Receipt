@@ -4,5 +4,5 @@ import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 
 interface ICacheDiffUtility {
 
-    fun findDiffReceiptsHeader(oldReceipts: ArrayList<ReceiptHeader>, newReceipts: ArrayList<ReceiptHeader>): Pair<List<Long>,ArrayList<ReceiptHeader>>
+    fun findDiffReceiptsHeader(oldReceipts: List<ReceiptHeader>, newReceipts: List<ReceiptHeader>): Pair<List<Long>, List<ReceiptHeader>>
 }
