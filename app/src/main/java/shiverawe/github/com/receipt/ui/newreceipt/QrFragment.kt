@@ -25,13 +25,12 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
     private var cameraControl: CameraControl? = null
     private var cameraInfo: CameraInfo? = null
     private var cameraProvider: ProcessCameraProvider? = null
+
     private val qrCodeAnalyzer = QrCodeAnalyzer()
+
     private val torchListener = Observer<Int> {
-        if (it == TorchState.ON) {
-            btn_flash.setImageResource(R.drawable.ic_flash_off)
-        } else {
-            btn_flash.setImageResource(R.drawable.ic_flash_on)
-        }
+        val flashIcon = if(it == TorchState.ON) R.drawable.ic_flash_off else R.drawable.ic_flash_on
+        btn_flash.setImageResource(flashIcon)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,7 +44,7 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
         btn_qr_back.setOnClickListener(this)
         btn_flash.setOnClickListener(this)
         btn_qr_reader_manual.setOnClickListener(this)
-        setupCamera()
+        createCamera()
         requireActivity().window.setFlags(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
@@ -62,8 +61,12 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_qr_back -> activity?.onBackPressed()
+            R.id.btn_qr_back -> {
+                activity?.onBackPressed()
+            }
             R.id.btn_flash -> {
+                // TODO: Bug - sometimes torch doesn't enable in CameraX (hardware).
+                //  Replace CameraX with Camare2
                 cameraControl?.enableTorch(cameraInfo?.torchState?.value != TorchState.ON)
             }
             R.id.btn_qr_reader_manual -> {
@@ -72,23 +75,27 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
         }
     }
 
-    private fun setupCamera() {
+    private fun createCamera() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
         cameraProviderFuture.addListener(Runnable {
             preview_view.post {
                 cameraProvider = cameraProviderFuture.get()
-                bindPreview()
+                bindCamera()
             }
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
+    // TODO: CameraX library in beta now. Replace CameraX with Camare2
     @SuppressLint("UnsafeExperimentalUsageError")
-    private fun bindPreview() {
+    private fun bindCamera() {
         val preview: Preview = Preview.Builder().build()
+        // set camera preview quality and default flash mode
         val imageCapture = ImageCapture.Builder()
             .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
             .setFlashMode(ImageCapture.FLASH_MODE_OFF)
             .build()
+
+        // Create ImageAnalysis, that provides cameras frames
         val imageAnalysis = ImageAnalysis.Builder()
             .setTargetResolution(Size(preview_view.width, preview_view.height))
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
@@ -96,32 +103,33 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
 
         // set camera frame listener
         imageAnalyzeExecutor = Executors.newSingleThreadExecutor()
-        imageAnalysis.setAnalyzer(imageAnalyzeExecutor, ImageAnalysis.Analyzer { image ->
-            image.image?.let { analyzedImage ->
-                qrCodeAnalyzer.setImage(analyzedImage, image.imageInfo.rotationDegrees)
+        imageAnalysis.setAnalyzer(imageAnalyzeExecutor, ImageAnalysis.Analyzer { imageProxy ->
+            imageProxy.use { proxy ->
+                val image = proxy.image ?: return@use
+                qrCodeAnalyzer.setImage(image, proxy.imageInfo.rotationDegrees)
             }
-            image.close()
         })
 
+        // set camera side: Front of Back
         val cameraSelector: CameraSelector = CameraSelector.Builder()
             .requireLensFacing(CameraSelector.LENS_FACING_BACK)
             .build()
 
+        // bind camera
         try {
-            cameraProvider?.let { provider ->
-                val camera = provider.bindToLifecycle(
-                    this as LifecycleOwner,
-                    cameraSelector,
-                    preview,
-                    imageCapture,
-                    imageAnalysis
-                )
-                cameraControl = camera.cameraControl
-                cameraControl?.enableTorch(false)
-                cameraInfo = camera.cameraInfo
-                cameraInfo?.torchState?.observe(this, torchListener)
-                preview.setSurfaceProvider(preview_view.createSurfaceProvider(camera.cameraInfo))
-            }
+            val provider = cameraProvider ?: return
+            val camera = provider.bindToLifecycle(
+                this as LifecycleOwner,
+                cameraSelector,
+                preview,
+                imageCapture,
+                imageAnalysis
+            )
+            cameraControl = camera.cameraControl
+            cameraControl?.enableTorch(false)
+            cameraInfo = camera.cameraInfo
+            cameraInfo?.torchState?.observe(this, torchListener)
+            preview.setSurfaceProvider(preview_view.createSurfaceProvider(camera.cameraInfo))
         } catch (e: Exception) {
             e.printStackTrace()
         }

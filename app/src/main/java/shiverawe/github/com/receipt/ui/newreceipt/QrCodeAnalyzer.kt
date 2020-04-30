@@ -13,28 +13,24 @@ class QrCodeAnalyzer {
     var onQrCodeDataFound: ((data: String) -> Unit)? = null
     var onQrCodeError: ((e: Exception) -> Unit)? = null
 
-    private val options = FirebaseVisionBarcodeDetectorOptions.Builder()
+    private val detectorOptions = FirebaseVisionBarcodeDetectorOptions.Builder()
         .setBarcodeFormats(
             FirebaseVisionBarcode.FORMAT_QR_CODE,
             FirebaseVisionBarcode.FORMAT_AZTEC)
         .build()
-    private val detector = FirebaseVision.getInstance().getVisionBarcodeDetector(options)
 
-    private fun degreesToFirebaseRotation(degrees: Int): Int {
-        return when (degrees) {
+    private val detector = FirebaseVision.getInstance().getVisionBarcodeDetector(detectorOptions)
+
+    fun setImage(image: Image, degree: Int) {
+        val imageRotation = when (degree) {
             0 -> FirebaseVisionImageMetadata.ROTATION_0
             90 -> FirebaseVisionImageMetadata.ROTATION_90
             180 -> FirebaseVisionImageMetadata.ROTATION_180
             270 -> FirebaseVisionImageMetadata.ROTATION_270
-            else -> throw IllegalArgumentException(
-                "Rotation must be 0, 90, 180, or 270."
-            )
+            else -> FirebaseVisionImageMetadata.ROTATION_0
         }
-    }
-
-    fun setImage(image: Image, degree: Int) {
-        val imageRotation = degreesToFirebaseRotation(degree)
         val firebaseImage = FirebaseVisionImage.fromMediaImage(image, imageRotation)
+        // set qr code detection listener
         detector.detectInImage(firebaseImage)
             .addOnSuccessListener { barcodes ->
                 barcodes.forEach {
