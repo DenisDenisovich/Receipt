@@ -5,13 +5,12 @@ import shiverawe.github.com.receipt.data.network.entity.receipt.ReceiptResponse
 import shiverawe.github.com.receipt.domain.entity.dto.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MapperNetwork : IMapperNetwork {
 
     private val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
 
-    override fun toReceiptHeader(receiptResponse: List<ReceiptResponse>): ArrayList<ReceiptHeader> =
+    override fun toReceiptHeader(receiptResponse: List<ReceiptResponse>): List<ReceiptHeader> =
         receiptResponse
             .asSequence()
             .filter {
@@ -36,8 +35,7 @@ class MapperNetwork : IMapperNetwork {
                     sum
                 )
                 ReceiptHeader(response.id, shop, meta)
-            }
-            .toCollection(ArrayList())
+            }.toList()
 
     override fun toProduct(response: ItemResponse): Product =
         Product(response.text, response.price, response.amount)

@@ -12,7 +12,6 @@ import shiverawe.github.com.receipt.domain.entity.dto.Product
 import shiverawe.github.com.receipt.domain.entity.dto.Receipt
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ReceiptNetwork(
     private val mapper: IMapperNetwork,
@@ -42,9 +41,9 @@ class ReceiptNetwork(
             }
         }
 
-    override fun getProducts(id: Long): Single<ArrayList<Product>> =
+    override fun getProducts(id: Long): Single<List<Product>> =
         api.getProducts(ItemRequest(receiptIds = listOf(id))).map { productResponse ->
-            productResponse.map { mapper.toProduct(it) }.toCollection(ArrayList())
+            productResponse.map { mapper.toProduct(it) }
         }
 
     override fun saveReceipt(): Single<CreateResponce> {

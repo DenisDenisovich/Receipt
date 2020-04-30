@@ -13,7 +13,7 @@ class ReceiptDatabase : IReceiptDatabase {
     private val db = ReceiptRoom.getDb()
 
     @Transaction
-    override fun updateProductsCache(remoteReceiptId: Long, networkProducts: ArrayList<Product>): Single<Receipt> =
+    override fun saveProductsToCache(remoteReceiptId: Long, networkProducts: List<Product>): Single<Receipt> =
         Single.create<Receipt> { emitter ->
             val receipt = db.receiptDao().getReceiptByRemoteId(remoteReceiptId)
             val receiptId = receipt.id ?: 0

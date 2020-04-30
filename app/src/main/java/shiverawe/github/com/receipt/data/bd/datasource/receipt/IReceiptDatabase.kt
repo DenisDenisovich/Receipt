@@ -7,7 +7,7 @@ import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 
 interface IReceiptDatabase {
 
-    fun updateProductsCache(remoteReceiptId: Long, networkProducts: ArrayList<Product>): Single<Receipt>
+    fun saveProductsToCache(remoteReceiptId: Long, networkProducts: List<Product>): Single<Receipt>
 
     fun getReceiptById(remoteReceiptId: Long): Single<Receipt>
 

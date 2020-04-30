@@ -10,7 +10,7 @@ interface IReceiptNetwork {
 
     fun getReceipt(meta: Meta): Single<Receipt?>
 
-    fun getProducts(id: Long): Single<ArrayList<Product>>
+    fun getProducts(id: Long): Single<List<Product>>
 
     fun saveReceipt(): Single<CreateResponce>
 }

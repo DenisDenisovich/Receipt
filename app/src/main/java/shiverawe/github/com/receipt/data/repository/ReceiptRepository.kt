@@ -33,7 +33,7 @@ class ReceiptRepository(
             .flatMap { dbReceipt ->
                 if (dbReceipt.items.isEmpty()) {
                     network.getProducts(receiptId)
-                        .flatMap { db.updateProductsCache(receiptId, it) }
+                        .flatMap { db.saveProductsToCache(receiptId, it) }
                         .onErrorResumeNext {
                             if (it is HttpException || !utils.isOnline()) {
                                 db.getReceiptById(receiptId)
@@ -47,7 +47,7 @@ class ReceiptRepository(
             }.toObservable()
         // Get receipt header, while fullReceiptSource in progress
         val headerReceiptSource = db.getReceiptHeaderById(receiptId)
-            .map { Receipt(it.receiptId, it.shop, it.meta, ArrayList()) }
+            .map { Receipt(it.receiptId, it.shop, it.meta, listOf()) }
             .toObservable()
         return Observable.merge(
             headerReceiptSource,

@@ -37,7 +37,7 @@ class MonthDatabase(private val cacheDiffUtility: ICacheDiffUtility) : IMonthDat
                 .asSequence()
                 .sortedByDescending { it.date }
                 .map { db.mapper.dbToReceiptHeader(it) }
-                .toCollection(ArrayList())
+                .toList()
             emitter.onSuccess(receipts)
         }
 }
