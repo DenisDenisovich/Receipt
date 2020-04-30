@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.receipt
+package shiverawe.github.com.receipt.ui.receipt.adapter
 
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_product.view.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.domain.entity.dto.base.Product
+import shiverawe.github.com.receipt.domain.entity.dto.Product
 import shiverawe.github.com.receipt.ui.App
 import shiverawe.github.com.receipt.ui.base.adapter.AdapterDelegate
 import shiverawe.github.com.receipt.utils.floorThree

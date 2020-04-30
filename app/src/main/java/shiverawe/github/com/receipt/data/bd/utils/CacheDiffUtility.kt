@@ -1,30 +1,35 @@
 package shiverawe.github.com.receipt.data.bd.utils
 
 import com.google.gson.Gson
-import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 
 class CacheDiffUtility: ICacheDiffUtility {
-    override fun findDiffReceipts(localReceipts: ArrayList<Receipt>, networkReceipts: ArrayList<Receipt>): Pair<List<Long>,ArrayList<Receipt>> {
+
+    private val gson = Gson()
+
+    /**
+     * Compare two list.
+     * [Pair.first] - ids of elements there are not on [newReceipts]
+     * [Pair.second] - list of [ReceiptHeader], that are not on [oldReceipts]
+     **/
+    override fun findDiffReceiptsHeader(
+        oldReceipts: List<ReceiptHeader>,
+        newReceipts: List<ReceiptHeader>
+    ): Pair<List<Long>, List<ReceiptHeader>> {
         val localHash = HashMap<String, Long>()
-        val newNetwork = ArrayList<Receipt>()
-        localReceipts.forEach {
-            receipt ->
-            val key = getKey(receipt)
-            localHash[key] = receipt.receiptId
+        val addedReceipts = ArrayList<ReceiptHeader>()
+        oldReceipts.forEach { receipt ->
+            localHash[getKey(receipt)] = receipt.receiptId
         }
-        networkReceipts.forEach {
-            networkReceipt ->
-            val value = localHash.remove(getKey(networkReceipt))
-            if (value == null) newNetwork.add(networkReceipt)
+        newReceipts.forEach { receipt ->
+            if (localHash.remove(getKey(receipt)) == null) {
+                addedReceipts.add(receipt)
+            }
         }
         val deletedIds = localHash.map { it.value }
-        return Pair(deletedIds, newNetwork)
+        return Pair(deletedIds, addedReceipts)
     }
 
-
-    private fun getKey(receipt: Receipt): String {
-        val products = ArrayList(receipt.items.sortedBy { it.text })
-        val keyReceipt = Receipt(0, receipt.shop, receipt.meta, products)
-        return Gson().toJson(keyReceipt)
-    }
+    private fun getKey(receipt: ReceiptHeader): String =
+        gson.toJson(ReceiptHeader(0, receipt.shop, receipt.meta))
 }

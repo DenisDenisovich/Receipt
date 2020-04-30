@@ -1,6 +1,6 @@
 package shiverawe.github.com.receipt.ui.receipt
 
-import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.Receipt
 
 interface ReceiptContact {
     interface View {
@@ -10,7 +10,7 @@ interface ReceiptContact {
     }
 
     interface Presenter {
-        fun attach(view: ReceiptContact.View)
+        fun attach(view: View)
         fun detach()
         fun getReceiptById(receiptId: Long)
         fun getReceiptByMeta(options: String)

@@ -143,9 +143,7 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
         return textIsValid
     }
 
-
-    // Template: YYYYMMDDTHHMM
-    // Example:  20170605T2101
+    // 2019-06-07T22:54:00
     private fun getDateString(date: String, time: String): String {
         val dateValues = date.split(".")
         val timeValues = time.split(":")
@@ -155,12 +153,13 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
         val hour = if (timeValues[0].length == 1) "0${timeValues[0]}" else timeValues[0]
         val minute = if (timeValues[1].length == 1) "0${timeValues[1]}" else timeValues[1]
         val t = StringBuilder()
-        t.append(year)
-        t.append(month)
+        t.append("$year-")
+        t.append("$month-")
         t.append(day)
         t.append("T")
-        t.append(hour)
-        t.append(minute)
+        t.append("$hour:")
+        t.append("$minute:")
+        t.append("00")
         return t.toString()
     }
 

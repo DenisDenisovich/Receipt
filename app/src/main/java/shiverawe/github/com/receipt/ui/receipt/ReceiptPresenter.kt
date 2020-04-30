@@ -2,13 +2,19 @@ package shiverawe.github.com.receipt.ui.receipt
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import shiverawe.github.com.receipt.domain.entity.dto.Meta
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import shiverawe.github.com.receipt.utils.Metric
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.HashMap
 
 class ReceiptPresenter(private val repository: IReceiptRepository): ReceiptContact.Presenter {
-    var view: ReceiptContact.View? = null
-    var disposable: Disposable? = null
+    private var view: ReceiptContact.View? = null
+    private var disposable: Disposable? = null
+    private val dateFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+
     override fun attach(view: ReceiptContact.View) {
         this.view = view
     }
@@ -55,7 +61,7 @@ class ReceiptPresenter(private val repository: IReceiptRepository): ReceiptConta
         }
     }
 
-    private fun parseOptions(options: String): Map<String, String>? {
+    private fun parseOptions(options: String): Meta? {
         val meta = HashMap<String, String>()
         try {
             val parameters = options.split("&")
@@ -64,7 +70,13 @@ class ReceiptPresenter(private val repository: IReceiptRepository): ReceiptConta
                 val value = parameter.substring(parameter.indexOf("=") + 1, parameter.length)
                 meta[key] = value
             }
-            return meta
+            return Meta(
+                t = dateFormatter.parse(meta["t"] ?: "")?.time ?: 0L,
+                fn = meta["fn"] ?: "",
+                fp = meta["fp"] ?: "",
+                fd = meta["i"] ?: "",
+                s = meta["s"]?.toDoubleOrNull() ?: 0.0
+            )
         } catch (e: Exception) {
             view?.showError(Throwable("receipt = null"))
             return null

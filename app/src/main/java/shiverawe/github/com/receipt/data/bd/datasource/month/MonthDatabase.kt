@@ -3,51 +3,41 @@ package shiverawe.github.com.receipt.data.bd.datasource.month
 import io.reactivex.Single
 import shiverawe.github.com.receipt.data.bd.room.ReceiptRoom
 import shiverawe.github.com.receipt.data.bd.utils.ICacheDiffUtility
-import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 
-class MonthDatabase(private val cacheDiffUtility: ICacheDiffUtility): IMonthDatabase {
+class MonthDatabase(private val cacheDiffUtility: ICacheDiffUtility) : IMonthDatabase {
 
     private val db = ReceiptRoom.getDb()
 
     override fun updateMonthCache(
         dateFrom: Long,
         dateTo: Long,
-        networkReceipts: ArrayList<Receipt>): Single<ArrayList<Receipt>> =
-        Single.create{
-            emitter ->
-            val localReceipts = db.getReceiptsWithProducts(dateFrom, dateTo)
-            val localIds: List<Long>
-            localIds = if (localReceipts.size == 0) {
-                db.saveReceipts(networkReceipts)
+        networkReceipts: List<ReceiptHeader>
+    ): Single<List<ReceiptHeader>> =
+        Single.create { emitter ->
+            val localReceipts = db.getReceiptHeaders(dateFrom, dateTo)
+            if (localReceipts.isEmpty()) {
+                // DB doesn't contain receipts for this period. Save new data
+                db.saveReceiptHeaders(networkReceipts)
             } else {
+                // DB already contain data for this period. Update DB
                 val (deletedIds, newNetwork) =
-                    cacheDiffUtility.findDiffReceipts(localReceipts, networkReceipts)
-                db.receiptDao().removeMonthReceiptsByIds(deletedIds.toTypedArray())
-                db.saveReceipts(newNetwork)
-                db.receiptDao().getMonthReceiptsId(dateFrom, dateTo)
+                    cacheDiffUtility.findDiffReceiptsHeader(localReceipts, networkReceipts)
+                db.receiptDao().removeReceiptHeadersByIds(deletedIds.toTypedArray())
+                db.saveReceiptHeaders(newNetwork)
             }
-            val receipts = ArrayList<Receipt>()
-            for (i in 0 until networkReceipts.size) {
-                receipts.add(
-                    Receipt(
-                        localIds[i],
-                        networkReceipts[i].shop,
-                        networkReceipts[i].meta,
-                        ArrayList()
-                    )
-                )
-            }
-            emitter.onSuccess(receipts)
+            networkReceipts.sortedByDescending { it.meta.t }
+            emitter.onSuccess(networkReceipts)
         }
 
-    override fun getReceipts(dataFrom: Long, dataTo: Long): Single<ArrayList<Receipt>> =
+    override fun getReceiptHeaders(dataFrom: Long, dataTo: Long): Single<List<ReceiptHeader>> =
         Single.create { emitter ->
-            val receipts = ArrayList<Receipt>()
-            var receiptsDb = db.receiptDao().getMonthReceipts(dataFrom, dataTo)
-            receiptsDb = receiptsDb.sortedByDescending { it.date }
-            receiptsDb.forEach { receiptDb ->
-                receipts.add(db.mapper.dbToReceipt(receiptDb, ArrayList()))
-            }
+            val receipts = db.receiptDao()
+                .getReceiptHeaders(dataFrom, dataTo)
+                .asSequence()
+                .sortedByDescending { it.date }
+                .map { db.mapper.dbToReceiptHeader(it) }
+                .toList()
             emitter.onSuccess(receipts)
         }
 }

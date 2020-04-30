@@ -9,56 +9,44 @@ import shiverawe.github.com.receipt.data.bd.room.product.ProductEntity
 import shiverawe.github.com.receipt.data.bd.room.receipt.ReceiptDao
 import shiverawe.github.com.receipt.data.bd.room.receipt.ReceiptEntity
 import shiverawe.github.com.receipt.data.bd.mapper.MapperDb
-import shiverawe.github.com.receipt.domain.entity.dto.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.dto.Product
+import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 import shiverawe.github.com.receipt.ui.App
-import kotlin.collections.ArrayList
 
 @Database(entities = [ReceiptEntity::class, ProductEntity::class], version = 1)
 abstract class ReceiptRoom : RoomDatabase() {
 
     abstract fun receiptDao(): ReceiptDao
     abstract fun productDao(): ProductDao
+
     val mapper = MapperDb()
 
+    @Transaction
+    fun saveProducts(receiptId: Long, products: List<Product>): List<Long> =
+        productDao().addProducts(products.map { mapper.productToDb(it, receiptId) })
+
+    fun saveReceiptHeaders(receipts: List<ReceiptHeader>): List<Long> {
+        val receiptsDb = receipts.map { mapper.receiptHeaderToDb(it) }
+        return receiptDao().addReceipts(receiptsDb)
+    }
+
+    fun getReceiptHeaders(dateFrom: Long, dateTo: Long): List<ReceiptHeader> = receiptDao()
+        .getReceiptHeaders(dateFrom, dateTo)
+        .map { mapper.dbToReceiptHeader(it) }
+
     companion object {
+
         private var instance: ReceiptRoom? = null
+
+        @Synchronized
         fun getDb(): ReceiptRoom {
             if (instance == null) {
-                synchronized(ReceiptRoom::class) {
-                    instance = Room.databaseBuilder(App.appContext,
-                            ReceiptRoom::class.java,
-                            "receipt.db")
-                            .build()
-                }
+                instance = Room.databaseBuilder(App.appContext,
+                    ReceiptRoom::class.java,
+                    "receipt.db")
+                    .build()
             }
             return instance!!
         }
-    }
-
-    @Transaction
-    fun saveReceipts(receipts: ArrayList<Receipt>): List<Long> {
-        val receiptsDb = receipts.map { mapper.receiptToDb(it) }
-        val savedIds = receiptDao().addReceipts(receiptsDb)
-        val savedProducts = ArrayList<ProductEntity>()
-        for (receiptIndex in 0 until receipts.size) {
-            receipts[receiptIndex].items.forEach { product ->
-                savedProducts.add(mapper.productToDb(product, savedIds[receiptIndex]))
-            }
-        }
-        productDao().addProducts(savedProducts)
-        return savedIds
-    }
-
-    @Transaction
-    fun getReceiptsWithProducts(dataFrom: Long, dataTo: Long): ArrayList<Receipt> {
-        val receipts = ArrayList<Receipt>()
-        var receiptsDb = receiptDao().getMonthReceipts(dataFrom, dataTo)
-        receiptsDb = receiptsDb.sortedByDescending { it.date }
-        val receiptIds = receiptsDb.map { it.id }.toTypedArray()
-        val productsDb = productDao().getProductsForReceipts(receiptIds).sortedBy { it.receiptId }
-        receiptsDb.forEach { receiptDb ->
-            receipts.add(mapper.dbToReceipt(receiptDb, productsDb.filter { it.receiptId == receiptDb.id }))
-        }
-        return receipts
     }
 }

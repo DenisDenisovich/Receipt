@@ -1,8 +1,8 @@
-package shiverawe.github.com.receipt.ui.receipt
+package shiverawe.github.com.receipt.ui.receipt.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
-import shiverawe.github.com.receipt.domain.entity.dto.base.Product
+import shiverawe.github.com.receipt.domain.entity.dto.Product
 import shiverawe.github.com.receipt.ui.base.adapter.AdapterDelegatesManager
 
 class ProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -25,7 +25,7 @@ class ProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         delegateManager.onBindViewHolder(holder, items, position)
     }
 
-    fun setProducts(products: ArrayList<Product>) {
+    fun setProducts(products: List<Product>) {
         items.addAll(products)
         notifyDataSetChanged()
     }

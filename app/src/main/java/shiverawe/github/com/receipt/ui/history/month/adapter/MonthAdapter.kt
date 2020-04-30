@@ -2,16 +2,16 @@ package shiverawe.github.com.receipt.ui.history.month.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
-import shiverawe.github.com.receipt.domain.entity.dto.base.Meta
-import shiverawe.github.com.receipt.domain.entity.dto.base.Shop
-import shiverawe.github.com.receipt.domain.entity.dto.month.ReceiptMonth
+import shiverawe.github.com.receipt.domain.entity.dto.Meta
+import shiverawe.github.com.receipt.domain.entity.dto.Shop
+import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 import shiverawe.github.com.receipt.ui.base.adapter.AdapterDelegatesManager
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MonthAdapter(val shopIsClicked: (receipt: ReceiptMonth) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val delegateManager = AdapterDelegatesManager<ReceiptMonth>()
-    private val items: ArrayList<ReceiptMonth> = ArrayList()
+class MonthAdapter(val shopIsClicked: (receipt: ReceiptHeader) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val delegateManager = AdapterDelegatesManager<ReceiptHeader>()
+    private val items: ArrayList<ReceiptHeader> = ArrayList()
     private var calendar = GregorianCalendar()
 
     init {
@@ -38,15 +38,15 @@ class MonthAdapter(val shopIsClicked: (receipt: ReceiptMonth) -> Unit) : Recycle
         return delegateManager.getViewType(items, position) ?: 1488
     }
 
-    fun setItems(receipts: ArrayList<ReceiptMonth>) {
+    fun setItems(receipts: ArrayList<ReceiptHeader>) {
         setTypes(receipts)
         items.clear()
         items.addAll(setTypes(receipts))
         notifyDataSetChanged()
     }
 
-    private fun setTypes(oldList: ArrayList<ReceiptMonth>): ArrayList<ReceiptMonth> {
-        val receipts = ArrayList<ReceiptMonth>()
+    private fun setTypes(oldList: ArrayList<ReceiptHeader>): ArrayList<ReceiptHeader> {
+        val receipts = ArrayList<ReceiptHeader>()
         if (oldList.size >= 1) {
             receipts.add(getDateItem(oldList.first().shop.date))
             receipts.add(oldList[0])
@@ -77,7 +77,7 @@ class MonthAdapter(val shopIsClicked: (receipt: ReceiptMonth) -> Unit) : Recycle
         calendar.set(Calendar.MILLISECOND, 0)
     }
 
-    private fun getDateItem(date: Long): ReceiptMonth {
-        return ReceiptMonth(-1L, Shop(date, "", ""), Meta(0L, "", "", "", 0.0))
+    private fun getDateItem(date: Long): ReceiptHeader {
+        return ReceiptHeader(-1L, Shop(date, "", ""), Meta(0L, "", "", "", 0.0))
     }
  }

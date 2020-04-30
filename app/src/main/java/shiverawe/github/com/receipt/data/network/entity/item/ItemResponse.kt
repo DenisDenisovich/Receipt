@@ -1,6 +1,8 @@
 package shiverawe.github.com.receipt.data.network.entity.item
 
 data class ItemResponse(
-        val items: List<Item>?,
-        val meta: Meta?
+    val receiptId: Int,
+    val text: String,
+    val price: Double,
+    val amount: Double
 )
