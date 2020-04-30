@@ -32,15 +32,7 @@ class ReceiptRepository(
         val fullReceiptSource: Observable<Receipt> = db.getReceiptById(receiptId)
             .flatMap { dbReceipt ->
                 if (dbReceipt.items.isEmpty()) {
-                    network.getProducts(receiptId)
-                        .flatMap { db.saveProductsToCache(receiptId, it) }
-                        .onErrorResumeNext {
-                            if (it is HttpException || !utils.isOnline()) {
-                                db.getReceiptById(receiptId)
-                            } else {
-                                Single.error(it)
-                            }
-                        }
+                    getNetworkReceiptAndSaveToDb(receiptId)
                 } else {
                     Single.just(dbReceipt)
                 }
@@ -54,4 +46,15 @@ class ReceiptRepository(
             fullReceiptSource
         )
     }
+
+    private fun getNetworkReceiptAndSaveToDb(receiptId: Long): Single<Receipt> =
+        network.getProducts(receiptId)
+            .flatMap { db.saveProductsToCache(receiptId, it) }
+            .onErrorResumeNext {
+                if (it is HttpException || !utils.isOnline()) {
+                    db.getReceiptById(receiptId)
+                } else {
+                    Single.error(it)
+                }
+            }
 }
