@@ -33,7 +33,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
     private var calendar = GregorianCalendar()
     private lateinit var dateDialog: DatePickerDialog
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         navigation = context as MainActivity
     }

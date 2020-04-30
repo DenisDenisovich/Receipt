@@ -2,57 +2,42 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:fitsSystemWindows="true"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.budiyev.android.codescanner.CodeScannerView
-        android:id="@+id/scanner_view"
+    <androidx.camera.view.PreviewView
+        android:id="@+id/preview_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:autoFocusButtonVisible="false"
-        app:flashButtonVisible="false"
-        app:frameColor="@android:color/white"
-        app:frameCornersSize="50dp"
-        app:frameCornersRadius="0dp"
-        app:frameAspectRatioWidth="1"
-        app:frameAspectRatioHeight="1"
-        app:frameSize="0.75"
-        app:frameThickness="2dp"
-        android:visibility="visible"
-        app:maskColor="#77000000"/>
+        tools:background="@android:color/black" />
 
-    <ImageView
-        android:id="@+id/btn_qr_back"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:padding="16dp"
-        android:src="@drawable/ic_back_qr"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp">
 
-    <ImageView
-        android:id="@+id/btn_qr_autofocus"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:padding="20dp"
-        android:layout_marginTop="60dp"
-        android:src="@drawable/ic_autofocus_disable"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btn_qr_back"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:padding="16dp"
+            android:src="@drawable/ic_back_qr"/>
 
-    <ImageView
-        android:id="@+id/btn_qr_flash"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:padding="20dp"
-        android:layout_marginTop="60dp"
-        android:layout_gravity="end"
-        android:src="@drawable/ic_flash_disable"/>
-
-
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btn_flash"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:padding="16dp"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_flash_off"/>
+    </FrameLayout>
 
     <Button
         android:id="@+id/btn_qr_reader_manual"
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_gravity="bottom|center"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_margin="16dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:layout_marginBottom="16dp"
