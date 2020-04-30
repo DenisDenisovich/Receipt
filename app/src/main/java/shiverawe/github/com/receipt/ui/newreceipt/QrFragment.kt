@@ -29,7 +29,7 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
     private val qrCodeAnalyzer = QrCodeAnalyzer()
 
     private val torchListener = Observer<Int> {
-        val flashIcon = if(it == TorchState.ON) R.drawable.ic_flash_off else R.drawable.ic_flash_on
+        val flashIcon = if (it == TorchState.ON) R.drawable.ic_flash_off else R.drawable.ic_flash_on
         btn_flash.setImageResource(flashIcon)
     }
 
@@ -76,13 +76,13 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
     }
 
     private fun createCamera() {
-        cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-        cameraProviderFuture.addListener(Runnable {
-            preview_view.post {
+        preview_view.post {
+            cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+            cameraProviderFuture.addListener(Runnable {
                 cameraProvider = cameraProviderFuture.get()
                 bindCamera()
-            }
-        }, ContextCompat.getMainExecutor(requireContext()))
+            }, ContextCompat.getMainExecutor(requireContext()))
+        }
     }
 
     // TODO: CameraX library in beta now. Replace CameraX with Camare2
