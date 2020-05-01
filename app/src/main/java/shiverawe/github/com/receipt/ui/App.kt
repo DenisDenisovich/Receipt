@@ -45,7 +45,6 @@ class App : Application() {
             androidContext(this@App)
             modules(monthModule,
                     receiptModule,
-                    mappersModule,
                     utilsModule,
                     dbModule,
                     networkModule

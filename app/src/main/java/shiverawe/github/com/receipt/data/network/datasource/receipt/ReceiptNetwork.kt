@@ -6,16 +6,15 @@ import shiverawe.github.com.receipt.data.network.entity.create.CreateRequest
 import shiverawe.github.com.receipt.data.network.entity.create.CreateResponce
 import shiverawe.github.com.receipt.data.network.entity.item.ItemRequest
 import shiverawe.github.com.receipt.data.network.entity.receipt.ReceiptRequest
-import shiverawe.github.com.receipt.data.network.mapper.IMapperNetwork
+import shiverawe.github.com.receipt.data.network.mapper.toProduct
+import shiverawe.github.com.receipt.data.network.mapper.toReceiptHeader
 import shiverawe.github.com.receipt.domain.entity.dto.Meta
 import shiverawe.github.com.receipt.domain.entity.dto.Product
 import shiverawe.github.com.receipt.domain.entity.dto.Receipt
-import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 import java.text.SimpleDateFormat
 import java.util.*
 
 class ReceiptNetwork(
-    private val mapper: IMapperNetwork,
     private val api: Api) : IReceiptNetwork {
 
     private val timeFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
@@ -33,7 +32,7 @@ class ReceiptNetwork(
             )
         ).flatMap { receiptResponse ->
             if (receiptResponse.isNotEmpty()) {
-                val receiptHeader = mapper.toReceiptHeader(receiptResponse)[0]
+                val receiptHeader = receiptResponse.toReceiptHeader()[0]
                 getProducts(receiptHeader.receiptId).map { products ->
                     Receipt(receiptHeader, products)
                 }
@@ -44,7 +43,7 @@ class ReceiptNetwork(
 
     override fun getProducts(id: Long): Single<List<Product>> =
         api.getProducts(ItemRequest(receiptIds = listOf(id))).map { productResponse ->
-            productResponse.map { mapper.toProduct(it) }
+            productResponse.map { it.toProduct() }
         }
 
     override fun saveReceipt(): Single<CreateResponce> {
