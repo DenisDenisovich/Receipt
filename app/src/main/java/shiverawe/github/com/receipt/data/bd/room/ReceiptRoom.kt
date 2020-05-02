@@ -9,8 +9,8 @@ import shiverawe.github.com.receipt.data.bd.room.product.ProductEntity
 import shiverawe.github.com.receipt.data.bd.room.receipt.ReceiptDao
 import shiverawe.github.com.receipt.data.bd.room.receipt.ReceiptEntity
 import shiverawe.github.com.receipt.data.bd.mapper.toReceiptHeader
-import shiverawe.github.com.receipt.data.bd.mapper.productToDb
-import shiverawe.github.com.receipt.data.bd.mapper.receiptHeaderToDb
+import shiverawe.github.com.receipt.data.bd.mapper.toProductEntity
+import shiverawe.github.com.receipt.data.bd.mapper.toReceiptEntity
 import shiverawe.github.com.receipt.domain.entity.dto.Product
 import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
 import shiverawe.github.com.receipt.ui.App
@@ -23,10 +23,10 @@ abstract class ReceiptRoom : RoomDatabase() {
 
     @Transaction
     fun saveProducts(receiptId: Long, products: List<Product>): List<Long> =
-        productDao().addProducts(products.map { it.productToDb(receiptId) })
+        productDao().addProducts(products.map { it.toProductEntity(receiptId) })
 
     fun saveReceiptHeaders(receipts: List<ReceiptHeader>): List<Long> {
-        val receiptsDb = receipts.map { it.receiptHeaderToDb() }
+        val receiptsDb = receipts.map { it.toReceiptEntity() }
         return receiptDao().addReceipts(receiptsDb)
     }
 

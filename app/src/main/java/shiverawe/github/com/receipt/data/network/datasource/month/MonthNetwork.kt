@@ -11,13 +11,12 @@ class MonthNetwork(
     override fun getMonthReceipts(dateFrom: String, dateTo: String): Single<List<ReceiptHeader>> =
         api.getReceipts(ReceiptRequest(dateFrom = dateFrom, dateTo = dateTo))
             .map { response ->
-                val filterResponse = response.filter {
+                response.filter {
                     it.status != "FAILED" &&
                         it.place != null &&
                         it.sum != null &&
                         it.date != null
-                }
-                filterResponse.toReceiptHeader()
+                }.toReceiptHeader()
             }
 
 }

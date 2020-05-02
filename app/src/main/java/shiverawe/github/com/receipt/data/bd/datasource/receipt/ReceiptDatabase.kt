@@ -17,28 +17,28 @@ class ReceiptDatabase : IReceiptDatabase {
     @Transaction
     override fun saveProductsToCache(remoteReceiptId: Long, networkProducts: List<Product>): Single<Receipt> =
         Single.create<Receipt> { emitter ->
-            val receipt = db.receiptDao().getReceiptByRemoteId(remoteReceiptId)
-            val receiptId = receipt.id ?: 0
-            val localProducts = db.productDao().getProductsForReceiptIds(arrayOf(receiptId))
-            if (localProducts.isEmpty()) {
+            val receiptDb = db.receiptDao().getReceiptByRemoteId(remoteReceiptId)
+            val receiptId = receiptDb.id ?: 0
+            val localProductsDb = db.productDao().getProductsForReceiptIds(arrayOf(receiptId))
+            if (localProductsDb.isEmpty()) {
                 // DB doesn't contain products for this period. Save new data
                 db.saveProducts(receiptId, networkProducts)
             }
-            val receiptHeader = receipt.toReceiptHeader()
+            val receiptHeader = receiptDb.toReceiptHeader()
             emitter.onSuccess(Receipt(receiptHeader, networkProducts))
         }.subscribeOn(Schedulers.io())
 
     @Transaction
     override fun getReceiptById(remoteReceiptId: Long): Single<Receipt> =
         Single.create<Receipt> { emitter ->
-            val receipt = db.receiptDao().getReceiptByRemoteId(remoteReceiptId)
-            val products = db.productDao().getProductsForReceiptIds(arrayOf(receipt.id))
-            emitter.onSuccess(receipt.toReceipt(products))
+            val receiptDb = db.receiptDao().getReceiptByRemoteId(remoteReceiptId)
+            val productsDb = db.productDao().getProductsForReceiptIds(arrayOf(receiptDb.id))
+            emitter.onSuccess(receiptDb.toReceipt(productsDb))
         }.subscribeOn(Schedulers.io())
 
     override fun getReceiptHeaderById(remoteReceiptId: Long): Single<ReceiptHeader> =
         Single.create<ReceiptHeader> { emitter ->
-            val receipt = db.receiptDao().getReceiptByRemoteId(remoteReceiptId)
-            emitter.onSuccess(receipt.toReceiptHeader())
+            val receiptDb = db.receiptDao().getReceiptByRemoteId(remoteReceiptId)
+            emitter.onSuccess(receiptDb.toReceiptHeader())
         }.subscribeOn(Schedulers.io())
 }

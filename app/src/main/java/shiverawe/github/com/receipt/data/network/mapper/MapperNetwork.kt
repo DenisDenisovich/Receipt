@@ -14,8 +14,7 @@ private val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefa
 fun ItemResponse.toProduct(): Product = Product(text, price, amount)
 
 fun List<ReceiptResponse>.toReceiptHeader(): List<ReceiptHeader> =
-        this
-                .asSequence()
+        asSequence()
                 .filter {
                     it.date != null &&
                             it.fd != null &&

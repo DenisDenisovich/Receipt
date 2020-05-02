@@ -17,7 +17,7 @@ fun ReceiptEntity.toReceiptHeader(): ReceiptHeader {
     return ReceiptHeader(remoteId, shop, meta)
 }
 
-fun Receipt.receiptToDb(): ReceiptEntity = ReceiptEntity(
+fun Receipt.toReceiptEntity(): ReceiptEntity = ReceiptEntity(
         header.meta.t,
         header.shop.place,
         header.meta.s,
@@ -27,7 +27,7 @@ fun Receipt.receiptToDb(): ReceiptEntity = ReceiptEntity(
         header.receiptId
 )
 
-fun ReceiptHeader.receiptHeaderToDb(): ReceiptEntity = ReceiptEntity(
+fun ReceiptHeader.toReceiptEntity(): ReceiptEntity = ReceiptEntity(
         meta.t,
         shop.place,
         meta.s,
@@ -37,5 +37,5 @@ fun ReceiptHeader.receiptHeaderToDb(): ReceiptEntity = ReceiptEntity(
         receiptId
 )
 
-fun Product.productToDb(receiptId: Long): ProductEntity =
+fun Product.toProductEntity(receiptId: Long): ProductEntity =
         ProductEntity(amount.toFloat(), text, price, receiptId)
