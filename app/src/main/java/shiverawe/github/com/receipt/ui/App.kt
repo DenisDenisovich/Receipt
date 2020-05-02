@@ -43,12 +43,14 @@ class App : Application() {
         stopKoin()
         startKoin {
             androidContext(this@App)
-            modules(monthModule,
+            modules(
+                listOf(monthModule,
                     receiptModule,
                     mappersModule,
                     utilsModule,
                     dbModule,
                     networkModule
+                )
             )
         }
     }

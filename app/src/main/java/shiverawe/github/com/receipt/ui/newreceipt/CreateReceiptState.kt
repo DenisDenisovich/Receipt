@@ -6,6 +6,7 @@ sealed class CreateReceiptState
 
 data class ErrorState(val error: Throwable? = null, val message: String? = null) : CreateReceiptState()
 data class SuccessState(val date: Long): CreateReceiptState()
+object ExitState: CreateReceiptState()
 
 data class QrCodeState(
     var isWaiting: Boolean = false,

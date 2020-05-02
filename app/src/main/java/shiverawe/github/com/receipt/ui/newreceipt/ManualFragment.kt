@@ -1,22 +1,51 @@
 package shiverawe.github.com.receipt.ui.newreceipt
 
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.Toast
+import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_manual.view.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import shiverawe.github.com.receipt.R
+import shiverawe.github.com.receipt.utils.toast
 import java.lang.Exception
 import java.lang.StringBuilder
 
-class ManualFragment : Fragment(), View.OnFocusChangeListener {
-    private var receiptMeta = ""
+class ManualFragment : Fragment(R.layout.fragment_manual), View.OnFocusChangeListener {
+
+    private val waitingDialog = WaitingDialog(onCancel = DialogInterface.OnClickListener { _, _ ->
+        viewMode.OnCancelWaiting()
+    })
+
+    private val viewMode: CreateReceiptViewModel by sharedViewModel()
+    private val stateObserver = Observer<CreateReceiptState> {
+        if (it is ManualState) {
+            if (it.isWaiting) {
+                // show waiting dialog
+                if (!waitingDialog.isAdded) {
+                    waitingDialog.show(childFragmentManager, null)
+                }
+            } else {
+                // hide waiting dialog if he is showed
+                if(waitingDialog.isAdded) {
+                    waitingDialog.dismiss()
+                }
+            }
+            it.error?.let {
+                // show error
+                waitingDialog.dismiss()
+                toast(R.string.error)
+                viewMode.onShowError()
+            }
+        }
+    }
+
+    private var meta = ""
     private var textIsValid = false
     private var errorMessage = "нет данных"
     private var textWatcher = object : TextWatcher {
@@ -59,25 +88,18 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
         }
     }
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_manual, container, false)
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         changeBtnBackground()
         view.btn_manual.setOnClickListener {
-            if (textIsValid)
-                (parentFragment as NewReceiptView).openReceipt(receiptMeta)
-            else
-                Toast.makeText(context!!, "Ошибка: $errorMessage", Toast.LENGTH_LONG).show()
+            if (textIsValid) {
+                viewMode.createReceipt(meta)
+            } else {
+                viewMode.showError("Ошибка: $errorMessage")
+            }
         }
 
         view.btn_manual_back.setOnClickListener {
-            activity?.onBackPressed()
+            viewMode.goToQrScreen()
         }
 
         view.et_manual_fd.onFocusChangeListener = this
@@ -102,6 +124,16 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
         changeEtBackground(view!!.et_manual_date)
         changeEtBackground(view!!.et_manual_time)
         changeBtnBackground()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewMode.state.observe(this, stateObserver)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewMode.state.removeObserver(stateObserver)
     }
 
     private fun changeEtBackground(view: EditText) {
@@ -135,7 +167,7 @@ class ManualFragment : Fragment(), View.OnFocusChangeListener {
             val t = getDateString(date, time)
             val receiptData = StringBuilder()
             receiptData.append("t=$t&s=$s&fn=$fn&i=$fd&fp=$fp")
-            receiptMeta = receiptData.toString()
+            meta = receiptData.toString()
             textIsValid = true
         } else {
             textIsValid = false

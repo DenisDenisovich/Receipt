@@ -13,9 +13,7 @@ import kotlin.collections.HashMap
 
 class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewModel() {
 
-    val state: MutableLiveData<CreateReceiptState> by lazy {
-        MutableLiveData(QrCodeState())
-    }
+    val state: MutableLiveData<CreateReceiptState> = MutableLiveData(QrCodeState())
     private val qrCodeState: QrCodeState?
         get() = state.value as? QrCodeState
     private val manualState: ManualState?
@@ -25,12 +23,16 @@ class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewM
 
     private var disposable: Disposable? = null
 
-    fun qrCodeScreenIsActive() {
+    fun goToQrScreen() {
         state.value = QrCodeState()
     }
 
-    fun manualScreenIsActive() {
+    fun goToManualScreen() {
         state.value = ManualState()
+    }
+
+    fun exit() {
+        state.value = ExitState
     }
 
     fun createReceipt(qrCodeData: String) {
@@ -70,7 +72,15 @@ class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewM
             })
     }
 
-    fun onShowMessage() {
+    fun showError(message: String? = null) {
+        if (qrCodeState != null) {
+            state.value = QrCodeState(error = ErrorState(message = message))
+        } else if (manualState != null) {
+            state.value = ManualState(error = ErrorState(message = message))
+        }
+    }
+
+    fun onShowError() {
         qrCodeState?.error = null
         manualState?.error = null
     }
@@ -84,7 +94,7 @@ class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewM
         }
     }
 
-    private fun onClose() {
+    private fun cancelTask() {
         disposable?.dispose()
     }
 

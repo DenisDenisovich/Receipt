@@ -7,7 +7,6 @@ import android.util.Size
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -23,16 +22,14 @@ import java.util.concurrent.Executors
 
 class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
 
-    private val waitingDialog = WaitingDialog(onCancel = DialogInterface.OnClickListener { _, _ ->
-        viewMode.OnCancelWaiting()
-    })
-
     private val viewMode: CreateReceiptViewModel by sharedViewModel()
     private val stateObserver = Observer<CreateReceiptState> {
         if (it is QrCodeState) {
             if (it.isWaiting) {
                 // show waiting dialog
-                waitingDialog.show(childFragmentManager, null)
+                if (!waitingDialog.isAdded) {
+                    waitingDialog.show(childFragmentManager, null)
+                }
             } else {
                 // hide waiting dialog if he is showed
                 if(waitingDialog.isAdded) {
@@ -43,18 +40,22 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
                 // show error
                 waitingDialog.dismiss()
                 toast(R.string.error)
+                viewMode.onShowError()
             }
         }
     }
+
+    private val waitingDialog = WaitingDialog(onCancel = DialogInterface.OnClickListener { _, _ ->
+        viewMode.OnCancelWaiting()
+    })
+
+    private val qrCodeAnalyzer = QrCodeAnalyzer()
 
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     private lateinit var imageAnalyzeExecutor: ExecutorService
     private var cameraControl: CameraControl? = null
     private var cameraInfo: CameraInfo? = null
     private var cameraProvider: ProcessCameraProvider? = null
-
-    private val qrCodeAnalyzer = QrCodeAnalyzer()
-
     private val torchListener = Observer<Int> {
         val flashIcon = if (it == TorchState.ON) R.drawable.ic_flash_off else R.drawable.ic_flash_on
         btn_flash.setImageResource(flashIcon)
@@ -62,11 +63,10 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         qrCodeAnalyzer.onQrCodeDataFound = {
-            (parentFragment as NewReceiptView).openReceipt(it)
+            viewMode.createReceipt(it)
         }
         qrCodeAnalyzer.onQrCodeError = {
-            toast(R.string.error)
-            (parentFragment as NewReceiptView).onError()
+            viewMode.showError()
         }
         btn_qr_back.setOnClickListener(this)
         btn_flash.setOnClickListener(this)
@@ -76,6 +76,16 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewMode.state.observe(this, stateObserver)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewMode.state.removeObserver(stateObserver)
     }
 
     override fun onDestroyView() {
@@ -89,7 +99,7 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_qr_back -> {
-                activity?.onBackPressed()
+                viewMode.exit()
             }
             R.id.btn_flash -> {
                 // TODO: Bug - sometimes torch doesn't enable in CameraX (hardware).
@@ -97,7 +107,7 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
                 cameraControl?.enableTorch(cameraInfo?.torchState?.value != TorchState.ON)
             }
             R.id.btn_qr_reader_manual -> {
-                (parentFragment as NewReceiptView).openManual()
+                viewMode.goToManualScreen()
             }
         }
     }

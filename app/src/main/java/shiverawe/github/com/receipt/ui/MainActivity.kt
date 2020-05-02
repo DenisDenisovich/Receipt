@@ -10,6 +10,7 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
+import shiverawe.github.com.receipt.ui.newreceipt.CreateReceiptRootFragment
 import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptFragment
 import shiverawe.github.com.receipt.ui.receipt.ReceiptFragment
 import shiverawe.github.com.receipt.ui.settings.SettingsFragment
@@ -78,7 +79,7 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
                 R.anim.slide_up,
                 R.anim.fade_out
             )
-            replace(R.id.container, NewReceiptFragment())
+            replace(R.id.container, CreateReceiptRootFragment())
             addToBackStack(null)
             commit()
         }
