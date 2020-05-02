@@ -1,6 +1,7 @@
 package shiverawe.github.com.receipt.di
 
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.data.bd.datasource.month.IMonthDatabase
@@ -24,6 +25,7 @@ import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import shiverawe.github.com.receipt.ui.history.month.MonthContract
 import shiverawe.github.com.receipt.ui.history.month.MonthPresenter
+import shiverawe.github.com.receipt.ui.newreceipt.CreateReceiptViewModel
 import shiverawe.github.com.receipt.ui.receipt.ReceiptContact
 import shiverawe.github.com.receipt.ui.receipt.ReceiptPresenter
 
@@ -36,6 +38,7 @@ val receiptModule = module {
     factory<IReceiptNetwork> { ReceiptNetwork(get(), get()) }
     factory<IReceiptRepository> { ReceiptRepository(get(), get(), get()) }
     factory<ReceiptContact.Presenter> { ReceiptPresenter(get()) }
+    viewModel {CreateReceiptViewModel(get()) }
 }
 val dbModule = module {
     factory<IReceiptDatabase> { ReceiptDatabase() }

@@ -7,6 +7,8 @@
     <string name="action_search">Поиск</string>
     <string name="action_calendar">Календарь</string>
 
+    <string name="cancel">Отменить</string>
+    <string name="error">Произошла ошибка</string>
     <string name="history_title">История</string>
     <string name="tv_item_sum">Общая сумма</string>
     <string name="rubleSymbolJava">\u20BD</string>

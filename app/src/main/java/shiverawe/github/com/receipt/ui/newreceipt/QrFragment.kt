@@ -1,6 +1,7 @@
 package shiverawe.github.com.receipt.ui.newreceipt
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Size
 import androidx.fragment.app.Fragment
@@ -14,11 +15,37 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.android.synthetic.main.fragment_qr.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import shiverawe.github.com.receipt.R
+import shiverawe.github.com.receipt.utils.toast
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
+
+    private val waitingDialog = WaitingDialog(onCancel = DialogInterface.OnClickListener { _, _ ->
+        viewMode.OnCancelWaiting()
+    })
+
+    private val viewMode: CreateReceiptViewModel by sharedViewModel()
+    private val stateObserver = Observer<CreateReceiptState> {
+        if (it is QrCodeState) {
+            if (it.isWaiting) {
+                // show waiting dialog
+                waitingDialog.show(childFragmentManager, null)
+            } else {
+                // hide waiting dialog if he is showed
+                if(waitingDialog.isAdded) {
+                    waitingDialog.dismiss()
+                }
+            }
+            it.error?.let {
+                // show error
+                waitingDialog.dismiss()
+                toast(R.string.error)
+            }
+        }
+    }
 
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     private lateinit var imageAnalyzeExecutor: ExecutorService
@@ -38,7 +65,7 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
             (parentFragment as NewReceiptView).openReceipt(it)
         }
         qrCodeAnalyzer.onQrCodeError = {
-            Toast.makeText(context, "Произошла ошибка", Toast.LENGTH_LONG).show()
+            toast(R.string.error)
             (parentFragment as NewReceiptView).onError()
         }
         btn_qr_back.setOnClickListener(this)

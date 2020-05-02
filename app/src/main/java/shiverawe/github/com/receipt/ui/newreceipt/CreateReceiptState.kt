@@ -1,0 +1,19 @@
+package shiverawe.github.com.receipt.ui.newreceipt
+
+import shiverawe.github.com.receipt.domain.entity.dto.Meta
+
+sealed class CreateReceiptState
+
+data class ErrorState(val error: Throwable? = null, val message: String? = null) : CreateReceiptState()
+data class SuccessState(val date: Long): CreateReceiptState()
+
+data class QrCodeState(
+    var isWaiting: Boolean = false,
+    var error: ErrorState? = null
+) : CreateReceiptState()
+
+data class ManualState(
+    val meta: Meta = Meta(),
+    var isWaiting: Boolean = false,
+    var error: ErrorState? = null
+) : CreateReceiptState()
