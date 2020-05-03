@@ -58,14 +58,17 @@ class MonthFragment : Fragment(), MonthContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         rv_month.adapter = adapter
         rv_month.layoutManager = LinearLayoutManager(context)
+       swipeRefreshLayout.setOnRefreshListener{
+           if (receipts.size == 0) {
+               if (userVisibleHint) {
+                   presenter?.getReceiptsData()
+               }
+           } else {
+               setReceipts(receipts)
+           }
+           swipeRefreshLayout.isRefreshing = false
+       }
 
-        if (receipts.size == 0) {
-            if (userVisibleHint) {
-                presenter?.getReceiptsData()
-            }
-        } else {
-            setReceipts(receipts)
-        }
     }
 
     override fun setReceipts(items: ArrayList<ReceiptHeader>) {
