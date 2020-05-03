@@ -3,6 +3,7 @@ package shiverawe.github.com.receipt.ui.newreceipt
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.util.Size
 import androidx.fragment.app.Fragment
 import android.view.View
@@ -40,7 +41,9 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
             }
             it.error?.let {
                 // show error
-                waitingDialog.dismiss()
+                if(waitingDialog.isAdded) {
+                    waitingDialog.dismiss()
+                }
                 toast(R.string.error)
                 viewMode.onShowError()
             }
@@ -145,6 +148,7 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
         imageAnalysis.setAnalyzer(imageAnalyzeExecutor, ImageAnalysis.Analyzer { imageProxy ->
             imageProxy.use { proxy ->
                 val image = proxy.image ?: return@use
+                Log.d("LogImage", lifecycle.currentState.name)
                 qrCodeAnalyzer.setImage(image, proxy.imageInfo.rotationDegrees)
             }
         })

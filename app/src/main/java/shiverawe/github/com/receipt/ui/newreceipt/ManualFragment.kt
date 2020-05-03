@@ -40,7 +40,9 @@ class ManualFragment : Fragment(R.layout.fragment_manual), View.OnFocusChangeLis
             }
             it.error?.let {
                 // show error
-                waitingDialog.dismiss()
+                if(waitingDialog.isAdded) {
+                    waitingDialog.dismiss()
+                }
                 toast(R.string.error)
                 viewMode.onShowError()
             }
