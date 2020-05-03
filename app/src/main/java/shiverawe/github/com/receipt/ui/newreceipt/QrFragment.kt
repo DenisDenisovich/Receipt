@@ -3,10 +3,12 @@ package shiverawe.github.com.receipt.ui.newreceipt
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.util.Size
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -27,32 +29,37 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
     }
     private val stateObserver = Observer<CreateReceiptState> { state ->
         if (state is QrCodeState) {
-            if (state.isWaiting) {
-                // show waiting dialog
-                if (!waitingDialog.isAdded) {
-                    waitingDialog.show(childFragmentManager, null)
+            when {
+                state.isWaiting -> {
+                    // show waiting dialog
+                    if (!waitingDialog.isAdded) {
+                        waitingDialog.show(childFragmentManager, null)
+                    }
                 }
-            } else {
-                // hide waiting dialog if he is showed
-                if(waitingDialog.isAdded) {
-                    waitingDialog.dismiss()
+                !state.isWaiting && state.error == null -> {
+                    // hide waiting dialog if he is showed and state is not error
+                    if (waitingDialog.isAdded) {
+                        waitingDialog.dismiss()
+                    }
                 }
-            }
-            state.error?.let {
-                // show error
-                if(waitingDialog.isAdded) {
-                    waitingDialog.dismiss()
+                state.error != null -> {
+                    if (waitingDialog.isAdded) {
+                        // if dialog is already showed, show error on dialog
+                        waitingDialog.setError(getString(R.string.error))
+                    } else if (errorToast?.view?.isShown != true) {
+                        // if toast isn't show now, show error on toast
+                        errorToast = toast(R.string.error, isLongDuration = false)
+                    }
+                    viewMode.onShowError()
                 }
-                toast(R.string.error)
-                viewMode.onShowError()
             }
         }
     }
 
-    private val waitingDialog = WaitingDialog(onCancel = DialogInterface.OnClickListener { _, _ ->
+    private val waitingDialog = CreateReceiptDialog(onCancel = DialogInterface.OnClickListener { _, _ ->
         viewMode.onCancelWaiting()
     })
-
+    private var errorToast: Toast? = null
     private val qrCodeAnalyzer = QrCodeAnalyzer()
 
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>

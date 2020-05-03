@@ -20,7 +20,7 @@ import java.lang.StringBuilder
 
 class ManualFragment : Fragment(R.layout.fragment_manual), View.OnFocusChangeListener {
 
-    private val waitingDialog = WaitingDialog(onCancel = DialogInterface.OnClickListener { _, _ ->
+    private val waitingDialog = CreateReceiptDialog(onCancel = DialogInterface.OnClickListener { _, _ ->
         viewMode.onCancelWaiting()
     })
 

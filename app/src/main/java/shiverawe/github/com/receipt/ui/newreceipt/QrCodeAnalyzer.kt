@@ -36,8 +36,8 @@ class QrCodeAnalyzer {
             // set qr code detection listener
             detector.detectInImage(firebaseImage)
                 .addOnSuccessListener { barcodes ->
-                    barcodes.forEach {
-                        it.rawValue?.let { data ->
+                    barcodes.forEach { barcode ->
+                        barcode.rawValue?.let { data ->
                             onQrCodeDataFound?.invoke(data)
                         }
                     }
