@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.EditText
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_manual.view.*
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.utils.toast
 import java.lang.Exception
@@ -19,10 +19,12 @@ import java.lang.StringBuilder
 class ManualFragment : Fragment(R.layout.fragment_manual), View.OnFocusChangeListener {
 
     private val waitingDialog = WaitingDialog(onCancel = DialogInterface.OnClickListener { _, _ ->
-        viewMode.OnCancelWaiting()
+        viewMode.onCancelWaiting()
     })
 
-    private val viewMode: CreateReceiptViewModel by sharedViewModel()
+    private val viewMode: CreateReceiptViewModel by lazy {
+        getSharedViewModel<CreateReceiptViewModel>(from = {requireParentFragment()})
+    }
     private val stateObserver = Observer<CreateReceiptState> {
         if (it is ManualState) {
             if (it.isWaiting) {
@@ -99,7 +101,7 @@ class ManualFragment : Fragment(R.layout.fragment_manual), View.OnFocusChangeLis
         }
 
         view.btn_manual_back.setOnClickListener {
-            viewMode.goToQrScreen()
+            viewMode.goBack()
         }
 
         view.et_manual_fd.onFocusChangeListener = this

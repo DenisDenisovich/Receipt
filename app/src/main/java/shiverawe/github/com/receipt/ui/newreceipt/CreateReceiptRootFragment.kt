@@ -2,7 +2,6 @@ package shiverawe.github.com.receipt.ui.newreceipt
 
 import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -10,67 +9,53 @@ import io.reactivex.disposables.Disposable
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.Navigation
+import shiverawe.github.com.receipt.ui.BackPressedHandle
 
-private const val QR_CODE_TAG = "QrCode"
-private const val MANUAL_TAG = "Manual"
-
-class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root) {
+class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root), BackPressedHandle {
 
     private var navigation: Navigation? = null
 
-    private val viewModel: CreateReceiptViewModel by sharedViewModel()
+    private val viewModel: CreateReceiptViewModel by sharedViewModel(from = {this})
 
     private val stateObserver = Observer<CreateReceiptState> {
         when (it) {
             is QrCodeState -> {
-                when {
-                    // current fragment is QrFragment, do nothing
-                    findFragment(QR_CODE_TAG) != null -> {
-                        return@Observer
-                    }
-                    // current fragment is ManualFragment, return to QrFragment
-                    findFragment(MANUAL_TAG) != null -> {
+                when (currentScreen) {
+                    CurrentScreen.MANUAL -> {
                         childFragmentManager.popBackStack()
                     }
-                    // root doesn't have current fragment. Set QrFragment as first fragment
-                    findFragment(MANUAL_TAG) == null -> {
+                    CurrentScreen.NOTHING -> {
                         requestCameraPermission(
                             onGranted = {
                                 childFragmentManager.beginTransaction().apply {
-                                    replace(R.id.root_create_receipt, QrFragment(), QR_CODE_TAG)
+                                    addToBackStack(CurrentScreen.QR.name)
+                                    replace(R.id.root_create_receipt, QrFragment(), CurrentScreen.QR.name)
                                     commit()
                                 }
                             },
                             onDenied = {
-                                viewModel.goToManualScreen()
+                                viewModel.goToManualScreen(isFirstScreen = true)
                             }
                         )
+                    }
+                    else -> {
                     }
                 }
             }
             is ManualState -> {
-                when {
-                    findFragment(MANUAL_TAG) != null -> {
-                        // current fragment is ManualFragment, do nothing
-                        return@Observer
-                    }
-                    findFragment(QR_CODE_TAG) != null -> {
-                        // current fragment is QrFragment, go to ManualFragment
-                        childFragmentManager.beginTransaction().apply {
+                if (currentScreen != CurrentScreen.MANUAL) {
+                    // open ManualFragment if he isn't added to stack yet
+                    childFragmentManager.beginTransaction().apply {
+                        // ManualFragment isn't first screen. Open with animation
+                        if (currentScreen == CurrentScreen.QR) {
                             setCustomAnimations(
                                 R.anim.slide_up,
                                 R.anim.fade_out
                             )
-                            replace(R.id.root_create_receipt, ManualFragment(), MANUAL_TAG)
-                            commit()
                         }
-                    }
-                    findFragment(MANUAL_TAG) == null -> {
-                        // root doesn't have current fragment. Set ManualFragment as first fragment
-                        childFragmentManager.beginTransaction().apply {
-                            replace(R.id.root_create_receipt, ManualFragment(), MANUAL_TAG)
-                            commit()
-                        }
+                        addToBackStack(CurrentScreen.MANUAL.name)
+                        replace(R.id.root_create_receipt, ManualFragment(), CurrentScreen.MANUAL.name)
+                        commit()
                     }
                 }
             }
@@ -78,10 +63,18 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
                 navigation?.updateHistory(it.date)
             }
             is ExitState -> {
-                navigation?.openHistory()
+                requireActivity().onBackPressed()
             }
         }
     }
+
+    private val currentScreen: CurrentScreen
+        get() = when {
+            childFragmentManager.findFragmentById(R.id.root_create_receipt) is QrFragment -> CurrentScreen.QR
+            childFragmentManager.findFragmentById(R.id.root_create_receipt) is ManualFragment -> CurrentScreen.MANUAL
+            childFragmentManager.findFragmentById(R.id.root_create_receipt) == null -> CurrentScreen.NOTHING
+            else -> CurrentScreen.OTHER
+        }
 
     private var cameraPermissionDisposable: Disposable? = null
 
@@ -100,7 +93,14 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
         viewModel.state.removeObserver(stateObserver)
     }
 
-    private fun findFragment(tag: String) = childFragmentManager.findFragmentByTag(tag)
+    override fun onBackPressed(): Boolean {
+        return if (viewModel.state.value is ExitState) {
+            true
+        } else {
+            viewModel.goBack()
+            false
+        }
+    }
 
     private fun requestCameraPermission(onGranted: () -> Unit, onDenied: () -> Unit) {
         cameraPermissionDisposable = RxPermissions(this)
@@ -114,5 +114,12 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
             }, {
                 onDenied()
             })
+    }
+
+    private enum class CurrentScreen {
+        MANUAL,
+        QR,
+        NOTHING,
+        OTHER
     }
 }

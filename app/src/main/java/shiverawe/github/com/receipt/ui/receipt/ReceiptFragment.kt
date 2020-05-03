@@ -13,7 +13,6 @@ import org.koin.android.ext.android.inject
 import retrofit2.HttpException
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.dto.Receipt
-import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptView
 import shiverawe.github.com.receipt.ui.receipt.adapter.ProductAdapter
 import shiverawe.github.com.receipt.utils.Settings
 import shiverawe.github.com.receipt.utils.floorTwo
@@ -28,14 +27,6 @@ import kotlin.math.floor
 
 class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
 
-    private val containerParent: NewReceiptView?
-        get() {
-            return when {
-                parentFragment is NewReceiptView -> parentFragment as NewReceiptView
-                activity is NewReceiptView -> activity as NewReceiptView
-                else -> null
-            }
-        }
     private val baseUrl: String by lazy { getString(R.string.BASE_URL) }
     private val presenter: ReceiptContact.Presenter by inject()
     private var adapter = ProductAdapter()
@@ -89,7 +80,6 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
 
     @SuppressLint("SetTextI18n", "DefaultLocale")
     override fun showReceipt(receipt: Receipt) {
-        containerParent?.hideProgress()
         this.receipt = receipt
         val receiptPlace = receipt.header.shop.place
         val receiptSum = receipt.header.shop.sum
@@ -122,14 +112,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
             } catch (e: Exception) {
                 error.message?: "error"
             }
-            containerParent?.onError(message)
-        } else {
-            containerParent?.onError()
         }
-    }
-
-    override fun showProgress() {
-        containerParent?.showProgress()
     }
 
     fun sendRequest() {

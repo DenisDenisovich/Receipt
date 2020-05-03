@@ -14,7 +14,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.android.synthetic.main.fragment_qr.*
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.utils.toast
 import java.util.concurrent.ExecutorService
@@ -22,7 +22,9 @@ import java.util.concurrent.Executors
 
 class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
 
-    private val viewMode: CreateReceiptViewModel by sharedViewModel()
+    private val viewMode: CreateReceiptViewModel by lazy {
+        getSharedViewModel<CreateReceiptViewModel>(from = { requireParentFragment() })
+    }
     private val stateObserver = Observer<CreateReceiptState> {
         if (it is QrCodeState) {
             if (it.isWaiting) {
@@ -46,7 +48,7 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
     }
 
     private val waitingDialog = WaitingDialog(onCancel = DialogInterface.OnClickListener { _, _ ->
-        viewMode.OnCancelWaiting()
+        viewMode.onCancelWaiting()
     })
 
     private val qrCodeAnalyzer = QrCodeAnalyzer()
@@ -99,7 +101,7 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_qr_back -> {
-                viewMode.exit()
+                viewMode.goBack()
             }
             R.id.btn_flash -> {
                 // TODO: Bug - sometimes torch doesn't enable in CameraX (hardware).

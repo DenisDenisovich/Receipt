@@ -18,21 +18,28 @@ class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewM
         get() = state.value as? QrCodeState
     private val manualState: ManualState?
         get() = state.value as? ManualState
-    private val successState: SuccessState?
-        get() = state.value as? SuccessState
 
     private var disposable: Disposable? = null
 
-    fun goToQrScreen() {
-        state.value = QrCodeState()
-    }
+    private var manualIsFirstScreen: Boolean = false
 
-    fun goToManualScreen() {
+    fun goToManualScreen(isFirstScreen: Boolean = false) {
+        manualIsFirstScreen = isFirstScreen
         state.value = ManualState()
     }
 
-    fun exit() {
-        state.value = ExitState
+    fun goBack() {
+        if (state.value is QrCodeState) {
+            state.value = ExitState
+            cancelTask()
+        } else if (state.value is ManualState){
+            if (manualIsFirstScreen) {
+                state.value = ExitState
+                cancelTask()
+            } else {
+                state.value = QrCodeState()
+            }
+        }
     }
 
     fun createReceipt(qrCodeData: String) {
@@ -85,7 +92,7 @@ class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewM
         manualState?.error = null
     }
 
-    fun OnCancelWaiting() {
+    fun onCancelWaiting() {
         qrCodeState?.let {
             state.value = it.apply { isWaiting = false }
         }

@@ -6,7 +6,6 @@ interface ReceiptContact {
     interface View {
         fun showReceipt(receipt: Receipt)
         fun showError(error: Throwable)
-        fun showProgress()
     }
 
     interface Presenter {

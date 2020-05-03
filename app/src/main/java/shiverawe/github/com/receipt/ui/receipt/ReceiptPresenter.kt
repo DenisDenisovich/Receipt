@@ -25,7 +25,6 @@ class ReceiptPresenter(private val repository: IReceiptRepository): ReceiptConta
     }
 
     override fun getReceiptById(receiptId: Long) {
-        view?.showProgress()
         disposable = repository.getReceiptById(receiptId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ receipt ->
@@ -38,7 +37,6 @@ class ReceiptPresenter(private val repository: IReceiptRepository): ReceiptConta
     override fun getReceiptByMeta(options: String) {
         val startTime = System.currentTimeMillis()
         var totalTime: Int
-        view?.showProgress()
         parseOptions(options)?.let { meta ->
             disposable = repository.getReceipt(meta)
                     .observeOn(AndroidSchedulers.mainThread())

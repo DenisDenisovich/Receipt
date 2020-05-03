@@ -8,7 +8,6 @@ import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.activity_receipt_link.*
 import kotlinx.android.synthetic.main.view_error.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptView
 import shiverawe.github.com.receipt.ui.receipt.ReceiptFragment
 
 class ReceiptLinkActivity : NewReceiptView, AppCompatActivity() {
@@ -37,10 +36,6 @@ class ReceiptLinkActivity : NewReceiptView, AppCompatActivity() {
             .replace(R.id.container_link_receipt, ReceiptFragment.getNewInstance(options))
             .commit()
     }
-
-    override fun openManual() {}
-
-    override fun openQr() {}
 
     override fun showProgress() {
         container_wait.visibility = View.VISIBLE
