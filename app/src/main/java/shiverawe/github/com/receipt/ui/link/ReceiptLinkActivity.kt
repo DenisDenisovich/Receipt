@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.view_error.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.receipt.ReceiptFragment
 
-class ReceiptLinkActivity : NewReceiptView, AppCompatActivity() {
+class ReceiptLinkActivity : ReceiptLinkView, AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +59,4 @@ class ReceiptLinkActivity : NewReceiptView, AppCompatActivity() {
         tv_error_description.visibility = View.VISIBLE
         tv_error_description.text = message
     }
-
-    override fun onBackPressedIsHandled() = false
 }
