@@ -12,6 +12,8 @@ import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_manual.view.*
 import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
 import shiverawe.github.com.receipt.R
+import shiverawe.github.com.receipt.domain.entity.dto.Meta
+import shiverawe.github.com.receipt.utils.toLongWithMilliseconds
 import shiverawe.github.com.receipt.utils.toast
 import java.lang.Exception
 import java.lang.StringBuilder
@@ -49,7 +51,7 @@ class ManualFragment : Fragment(R.layout.fragment_manual), View.OnFocusChangeLis
         }
     }
 
-    private var meta = ""
+    private var meta: Meta? = null
     private var textIsValid = false
     private var errorMessage = "нет данных"
     private var textWatcher = object : TextWatcher {
@@ -96,7 +98,9 @@ class ManualFragment : Fragment(R.layout.fragment_manual), View.OnFocusChangeLis
         changeBtnBackground()
         view.btn_manual.setOnClickListener {
             if (textIsValid) {
-                viewMode.createReceipt(meta)
+                meta?.let {
+                    viewMode.createReceipt(it)
+                }
             } else {
                 viewMode.showError("Ошибка: $errorMessage")
             }
@@ -171,7 +175,7 @@ class ManualFragment : Fragment(R.layout.fragment_manual), View.OnFocusChangeLis
             val t = getDateString(date, time)
             val receiptData = StringBuilder()
             receiptData.append("t=$t&s=$s&fn=$fn&i=$fd&fp=$fp")
-            meta = receiptData.toString()
+            meta = Meta(t.toLongWithMilliseconds(), fn, fd, fp, s.toDouble())
             textIsValid = true
         } else {
             textIsValid = false

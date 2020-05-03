@@ -3,7 +3,6 @@ package shiverawe.github.com.receipt.ui.newreceipt
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.util.Size
 import androidx.fragment.app.Fragment
 import android.view.View
@@ -26,9 +25,9 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
     private val viewMode: CreateReceiptViewModel by lazy {
         getSharedViewModel<CreateReceiptViewModel>(from = { requireParentFragment() })
     }
-    private val stateObserver = Observer<CreateReceiptState> {
-        if (it is QrCodeState) {
-            if (it.isWaiting) {
+    private val stateObserver = Observer<CreateReceiptState> { state ->
+        if (state is QrCodeState) {
+            if (state.isWaiting) {
                 // show waiting dialog
                 if (!waitingDialog.isAdded) {
                     waitingDialog.show(childFragmentManager, null)
@@ -39,7 +38,7 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
                     waitingDialog.dismiss()
                 }
             }
-            it.error?.let {
+            state.error?.let {
                 // show error
                 if(waitingDialog.isAdded) {
                     waitingDialog.dismiss()
@@ -148,7 +147,6 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
         imageAnalysis.setAnalyzer(imageAnalyzeExecutor, ImageAnalysis.Analyzer { imageProxy ->
             imageProxy.use { proxy ->
                 val image = proxy.image ?: return@use
-                Log.d("LogImage", lifecycle.currentState.name)
                 qrCodeAnalyzer.setImage(image, proxy.imageInfo.rotationDegrees)
             }
         })

@@ -43,6 +43,7 @@ class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewM
     }
 
     fun createReceipt(qrCodeData: String) {
+        if (qrCodeState?.isWaiting == true) return
         state.value = QrCodeState(isWaiting = true)
         val meta = parseQrCode(qrCodeData)
         if (meta == null) {
@@ -64,6 +65,7 @@ class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewM
     }
 
     fun createReceipt(meta: Meta) {
+        if (manualState?.isWaiting == true) return
         state.value = ManualState(isWaiting = true)
         disposable?.dispose()
         disposable = repository.saveReceipt(meta)
