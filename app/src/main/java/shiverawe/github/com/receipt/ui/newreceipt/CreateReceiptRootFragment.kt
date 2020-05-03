@@ -10,6 +10,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.BackPressedHandle
+import shiverawe.github.com.receipt.utils.toast
 
 class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root), BackPressedHandle {
 
@@ -60,6 +61,7 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
                 }
             }
             is SuccessState -> {
+                toast(R.string.success_create_receipt, isLongDuration = false)
                 navigation?.updateHistory(it.date)
             }
             is ExitState -> {

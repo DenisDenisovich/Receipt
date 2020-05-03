@@ -9,3 +9,7 @@ private val dateFormatterWithSeconds= SimpleDateFormat("yyyyMMdd'T'HHmm", Locale
 fun String.toLongWithMilliseconds(): Long = dateFormatterWithMilliseconds.parse(this)?.time ?: 0L
 
 fun String.toLongWithSeconds(): Long = dateFormatterWithSeconds.parse(this)?.time ?: 0L
+
+fun Long.toStringWithMilliseconds() = dateFormatterWithMilliseconds.format(this)
+
+fun Long.toStringWithSeconds(): String = dateFormatterWithSeconds.format(this)

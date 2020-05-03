@@ -5,7 +5,6 @@ import io.reactivex.Single
 import retrofit2.HttpException
 import shiverawe.github.com.receipt.data.bd.datasource.receipt.IReceiptDatabase
 import shiverawe.github.com.receipt.data.network.datasource.receipt.IReceiptNetwork
-import shiverawe.github.com.receipt.data.network.entity.create.CreateResponse
 import shiverawe.github.com.receipt.data.network.utils.IUtilsNetwork
 import shiverawe.github.com.receipt.domain.entity.dto.Meta
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
