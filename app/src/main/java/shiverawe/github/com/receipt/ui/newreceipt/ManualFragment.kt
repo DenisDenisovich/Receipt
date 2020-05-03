@@ -1,8 +1,6 @@
 package shiverawe.github.com.receipt.ui.newreceipt
 
-import android.content.DialogInterface
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -14,39 +12,27 @@ import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.dto.Meta
 import shiverawe.github.com.receipt.utils.toLongWithMilliseconds
-import shiverawe.github.com.receipt.utils.toast
 import java.lang.Exception
 import java.lang.StringBuilder
 
-class ManualFragment : Fragment(R.layout.fragment_manual), View.OnFocusChangeListener {
-
-    private val waitingDialog = CreateReceiptDialog(onCancel = DialogInterface.OnClickListener { _, _ ->
-        viewMode.onCancelWaiting()
-    })
+class ManualFragment : NewReceiptFragment(R.layout.fragment_manual), View.OnFocusChangeListener {
 
     private val viewMode: CreateReceiptViewModel by lazy {
         getSharedViewModel<CreateReceiptViewModel>(from = {requireParentFragment()})
     }
-    private val stateObserver = Observer<CreateReceiptState> {
-        if (it is ManualState) {
-            if (it.isWaiting) {
-                // show waiting dialog
-                if (!waitingDialog.isAdded) {
-                    waitingDialog.show(childFragmentManager, null)
+    private val stateObserver = Observer<CreateReceiptState> { state ->
+        if (state is ManualState) {
+            when {
+                state.isWaiting -> {
+                    showDialog()
                 }
-            } else {
-                // hide waiting dialog if he is showed
-                if(waitingDialog.isAdded) {
-                    waitingDialog.dismiss()
+                !state.isWaiting && state.error == null -> {
+                    dismissDialog()
                 }
-            }
-            it.error?.let {
-                // show error
-                if(waitingDialog.isAdded) {
-                    waitingDialog.dismiss()
+                state.error != null -> {
+                    showError(getString(R.string.error))
+                    viewMode.onShowError()
                 }
-                toast(R.string.error)
-                viewMode.onShowError()
             }
         }
     }
@@ -132,6 +118,10 @@ class ManualFragment : Fragment(R.layout.fragment_manual), View.OnFocusChangeLis
         changeEtBackground(view!!.et_manual_date)
         changeEtBackground(view!!.et_manual_time)
         changeBtnBackground()
+    }
+
+    override fun onCancelDialogClick() {
+        viewMode.onCancelWaiting()
     }
 
     override fun onResume() {
