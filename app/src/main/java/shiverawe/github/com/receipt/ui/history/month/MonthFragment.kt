@@ -58,16 +58,16 @@ class MonthFragment : Fragment(), MonthContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         rv_month.adapter = adapter
         rv_month.layoutManager = LinearLayoutManager(context)
-       swipeRefreshLayout.setOnRefreshListener{
-           if (receipts.size == 0) {
-               if (userVisibleHint) {
-                   presenter?.getReceiptsData()
-               }
-           } else {
-               setReceipts(receipts)
-           }
-           swipeRefreshLayout.isRefreshing = false
-       }
+        swipe_refresh_layout_.setOnRefreshListener {
+            if (receipts.size == 0) {
+                if (userVisibleHint) {
+                    presenter?.getReceiptsData()
+                }
+            } else {
+                setReceipts(receipts)
+            }
+            swipe_refresh_layout_.isRefreshing = false
+        }
 
     }
 
