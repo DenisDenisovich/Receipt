@@ -23,25 +23,21 @@ class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewM
 
     private var disposable: Disposable? = null
 
-    private var manualIsFirstScreen: Boolean = false
-
     fun goToManualScreen(isFirstScreen: Boolean = false) {
-        manualIsFirstScreen = isFirstScreen
-        state.value = ManualState()
+        state.value = ManualState(isFirstScreen = isFirstScreen)
     }
 
     fun goBack() {
-        if (state.value is QrCodeState) {
+        if (qrCodeState != null) {
             state.value = ExitState
-            cancelTask()
-        } else if (state.value is ManualState){
-            if (manualIsFirstScreen) {
+        } else if (manualState != null) {
+            if (manualState?.isFirstScreen == true) {
                 state.value = ExitState
-                cancelTask()
             } else {
                 state.value = QrCodeState()
             }
         }
+        cancelTask()
     }
 
     fun createReceipt(qrCodeData: String) {
@@ -73,7 +69,7 @@ class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewM
     fun createReceipt(meta: Meta) {
         if (manualState?.isWaiting == true) return
         if (!isOnline()) {
-            state.value = QrCodeState(error = ErrorState(type = ErrorType.OFFLINE))
+            state.value = ManualState(error = ErrorState(type = ErrorType.OFFLINE))
             return
         }
         state.value = ManualState(isWaiting = true)
@@ -105,6 +101,7 @@ class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewM
     }
 
     fun onCancelWaiting() {
+        cancelTask()
         qrCodeState?.let {
             state.value = it.apply { isWaiting = false }
         }

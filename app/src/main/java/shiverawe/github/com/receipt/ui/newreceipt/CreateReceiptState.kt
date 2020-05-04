@@ -22,5 +22,6 @@ data class QrCodeState(
 data class ManualState(
     val meta: Meta = Meta(),
     var isWaiting: Boolean = false,
-    var error: ErrorState? = null
+    var error: ErrorState? = null,
+    val isFirstScreen: Boolean = false
 ) : CreateReceiptState()
