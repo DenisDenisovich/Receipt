@@ -134,5 +134,4 @@ class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewM
             return null
         }
     }
-
 }
