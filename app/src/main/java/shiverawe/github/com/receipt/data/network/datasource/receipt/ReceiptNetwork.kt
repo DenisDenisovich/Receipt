@@ -40,12 +40,12 @@ class ReceiptNetwork(
         }
 
     override fun saveReceipt(meta: Meta): Single<Long> = api.createReceipt(
-            CreateRequest(
-                fn = meta.fn,
-                fp = meta.fp,
-                fd = meta.fd,
-                sum = meta.s.toString(),
-                date = meta.t.toStringWithSeconds()
-            )
+        CreateRequest(
+            fn = meta.fn,
+            fp = meta.fp,
+            fd = meta.fd,
+            sum = meta.s.toString(),
+            date = meta.t.toStringWithSeconds()
         )
+    )
 }

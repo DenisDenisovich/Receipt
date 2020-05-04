@@ -30,8 +30,10 @@ class ManualFragment : NewReceiptFragment(R.layout.fragment_manual), View.OnFocu
                     dismissDialog()
                 }
                 state.error != null -> {
-                    showError(getString(R.string.error))
-                    viewMode.onShowError()
+                    state.error?.let { errorState ->
+                        showError(errorState)
+                        viewMode.onShowError()
+                    }
                 }
             }
         }

@@ -9,6 +9,7 @@
 
     <string name="cancel">Отменить</string>
     <string name="error">Произошла ошибка</string>
+    <string name="error_network">Проверьте интернет соединение</string>
     <string name="history_title">История</string>
     <string name="tv_item_sum">Общая сумма</string>
     <string name="rubleSymbolJava">\u20BD</string>
@@ -27,7 +28,8 @@
     <string name="tv_developer_settings">Я разработчик</string>
     <string name="tv_http_settings">Использовать http</string>
     <string name="app_center_id">5cd51172-48a5-49fd-9a97-ea6b59b8867e</string>
-    <string name="success_create_receipt">Чек успешно загружен</string>
+    <string name="create_receipt_success">Чек успешно загружен</string>
+    <string name="create_receipt_waiting">Загрузка чека</string>
 
 
 </resources>

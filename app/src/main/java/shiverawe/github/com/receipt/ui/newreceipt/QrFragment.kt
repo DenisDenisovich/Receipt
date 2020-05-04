@@ -32,8 +32,10 @@ class QrFragment : NewReceiptFragment(R.layout.fragment_qr), View.OnClickListene
                     dismissDialog()
                 }
                 state.error != null -> {
-                    showError(getString(R.string.error))
-                    viewMode.onShowError()
+                    state.error?.let { errorState ->
+                        showError(errorState)
+                        viewMode.onShowError()
+                    }
                 }
             }
         }

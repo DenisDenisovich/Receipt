@@ -61,7 +61,7 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
                 }
             }
             is SuccessState -> {
-                toast(R.string.success_create_receipt, isLongDuration = false)
+                toast(R.string.create_receipt_success, isLongDuration = false)
                 navigation?.updateHistory(it.date)
             }
             is ExitState -> {
@@ -71,10 +71,10 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
     }
 
     private val currentScreen: CurrentScreen
-        get() = when {
-            childFragmentManager.findFragmentById(R.id.root_create_receipt) is QrFragment -> CurrentScreen.QR
-            childFragmentManager.findFragmentById(R.id.root_create_receipt) is ManualFragment -> CurrentScreen.MANUAL
-            childFragmentManager.findFragmentById(R.id.root_create_receipt) == null -> CurrentScreen.NOTHING
+        get() = when(childFragmentManager.findFragmentById(R.id.root_create_receipt)) {
+            is QrFragment -> CurrentScreen.QR
+            is ManualFragment -> CurrentScreen.MANUAL
+            null -> CurrentScreen.NOTHING
             else -> CurrentScreen.OTHER
         }
 

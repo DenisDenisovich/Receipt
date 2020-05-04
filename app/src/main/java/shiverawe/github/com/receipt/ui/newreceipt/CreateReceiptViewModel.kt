@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import retrofit2.HttpException
+import shiverawe.github.com.receipt.data.network.utils.isOnline
 import shiverawe.github.com.receipt.domain.entity.dto.Meta
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import shiverawe.github.com.receipt.utils.toLongWithSeconds
@@ -44,6 +46,10 @@ class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewM
 
     fun createReceipt(qrCodeData: String) {
         if (qrCodeState?.isWaiting == true) return
+        if (!isOnline()) {
+            state.value = QrCodeState(error = ErrorState(type = ErrorType.OFFLINE))
+            return
+        }
         state.value = QrCodeState(isWaiting = true)
         val meta = parseQrCode(qrCodeData)
         if (meta == null) {
@@ -66,6 +72,10 @@ class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewM
 
     fun createReceipt(meta: Meta) {
         if (manualState?.isWaiting == true) return
+        if (!isOnline()) {
+            state.value = QrCodeState(error = ErrorState(type = ErrorType.OFFLINE))
+            return
+        }
         state.value = ManualState(isWaiting = true)
         disposable?.dispose()
         disposable = repository.saveReceipt(meta)
