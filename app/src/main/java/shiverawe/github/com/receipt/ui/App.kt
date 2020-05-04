@@ -44,7 +44,8 @@ class App : Application() {
         startKoin {
             androidContext(this@App)
             modules(
-                listOf(monthModule,
+                listOf(
+                    monthModule,
                     receiptModule,
                     utilsModule,
                     dbModule,
