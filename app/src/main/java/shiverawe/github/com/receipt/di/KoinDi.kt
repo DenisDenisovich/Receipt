@@ -15,8 +15,6 @@ import shiverawe.github.com.receipt.data.network.datasource.receipt.IReceiptNetw
 import shiverawe.github.com.receipt.data.network.datasource.month.MonthNetwork
 import shiverawe.github.com.receipt.data.network.datasource.receipt.ReceiptNetwork
 import shiverawe.github.com.receipt.data.network.api.createRetrofit
-import shiverawe.github.com.receipt.data.network.mapper.IMapperNetwork
-import shiverawe.github.com.receipt.data.network.mapper.MapperNetwork
 import shiverawe.github.com.receipt.data.repository.MonthRepository
 import shiverawe.github.com.receipt.data.repository.ReceiptRepository
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
@@ -28,12 +26,12 @@ import shiverawe.github.com.receipt.ui.receipt.ReceiptContact
 import shiverawe.github.com.receipt.ui.receipt.ReceiptPresenter
 
 val monthModule = module {
-    factory<IMonthNetwork> { MonthNetwork(get(), get()) }
+    factory<IMonthNetwork> { MonthNetwork(get()) }
     factory<IMonthRepository> { MonthRepository(get(), get()) }
     factory<MonthContract.Presenter> { (dateFrom: Long) -> MonthPresenter(get(), dateFrom) }
 }
 val receiptModule = module {
-    factory<IReceiptNetwork> { ReceiptNetwork(get(), get()) }
+    factory<IReceiptNetwork> { ReceiptNetwork(get()) }
     factory<IReceiptRepository> { ReceiptRepository(get(), get()) }
     factory<ReceiptContact.Presenter> { ReceiptPresenter(get()) }
     viewModel {CreateReceiptViewModel(get()) }
@@ -45,9 +43,7 @@ val dbModule = module {
 val networkModule = module {
     single { createRetrofit(androidContext().resources.getString(R.string.BASE_URL)) }
 }
-val mappersModule = module {
-    single<IMapperNetwork> { MapperNetwork() }
-}
+
 val utilsModule = module {
     single<ICacheDiffUtility> { CacheDiffUtility() }
 }

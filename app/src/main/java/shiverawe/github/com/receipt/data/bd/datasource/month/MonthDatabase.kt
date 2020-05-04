@@ -1,6 +1,7 @@
 package shiverawe.github.com.receipt.data.bd.datasource.month
 
 import io.reactivex.Single
+import shiverawe.github.com.receipt.data.bd.mapper.toReceiptHeader
 import shiverawe.github.com.receipt.data.bd.room.ReceiptRoom
 import shiverawe.github.com.receipt.data.bd.utils.ICacheDiffUtility
 import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
@@ -36,7 +37,7 @@ class MonthDatabase(private val cacheDiffUtility: ICacheDiffUtility) : IMonthDat
                 .getReceiptHeaders(dataFrom, dataTo)
                 .asSequence()
                 .sortedByDescending { it.date }
-                .map { db.mapper.dbToReceiptHeader(it) }
+                .map { it.toReceiptHeader() }
                 .toList()
             emitter.onSuccess(receipts)
         }
