@@ -5,9 +5,10 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.lifecycle.Observer
-import kotlinx.android.synthetic.main.fragment_manual.view.*
+import kotlinx.android.synthetic.main.fragment_manual.*
 import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.dto.Meta
@@ -18,7 +19,7 @@ import java.lang.StringBuilder
 class ManualFragment : NewReceiptFragment(R.layout.fragment_manual), View.OnFocusChangeListener {
 
     private val viewMode: CreateReceiptViewModel by lazy {
-        getSharedViewModel<CreateReceiptViewModel>(from = {requireParentFragment()})
+        getSharedViewModel<CreateReceiptViewModel>(from = { requireParentFragment() })
     }
     private val stateObserver = Observer<CreateReceiptState> { state ->
         if (state is ManualState) {
@@ -41,7 +42,8 @@ class ManualFragment : NewReceiptFragment(R.layout.fragment_manual), View.OnFocu
 
     private var meta: Meta? = null
     private var textIsValid = false
-    private var errorMessage = "нет данных"
+    private var errorMessage: String = ""
+
     private var textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
             changeBtnBackground()
@@ -60,12 +62,11 @@ class ManualFragment : NewReceiptFragment(R.layout.fragment_manual), View.OnFocu
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             val newText = changeDateTimeText(s, '.', 8, count)
             newText?.let {
-                view!!.et_manual_date.setText(newText)
-                view!!.et_manual_date.setSelection(newText.length)
+                et_manual_date?.setText(newText)
+                et_manual_date?.setSelection(newText.length)
             }
         }
     }
-
 
     private var timeTextWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
@@ -76,49 +77,50 @@ class ManualFragment : NewReceiptFragment(R.layout.fragment_manual), View.OnFocu
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             val newText = changeDateTimeText(s, ':', 5, count)
             newText?.let {
-                view!!.et_manual_time.setText(newText)
-                view!!.et_manual_time.setSelection(newText.length)
+                et_manual_time?.setText(newText)
+                et_manual_time?.setSelection(newText.length)
             }
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         changeBtnBackground()
-        view.btn_manual.setOnClickListener {
-            if (textIsValid) {
-                meta?.let {
-                    viewMode.createReceipt(it)
-                }
-            } else {
-                viewMode.showError("Ошибка: $errorMessage")
-            }
+        btn_manual?.setOnClickListener {
+            createReceipt()
         }
 
-        view.btn_manual_back.setOnClickListener {
+        btn_manual_back?.setOnClickListener {
             viewMode.goBack()
         }
 
-        view.et_manual_fd.onFocusChangeListener = this
-        view.et_manual_fn.onFocusChangeListener = this
-        view.et_manual_fp.onFocusChangeListener = this
-        view.et_manual_sum.onFocusChangeListener = this
-        view.et_manual_date.onFocusChangeListener = this
-        view.et_manual_time.onFocusChangeListener = this
-        view.et_manual_fd.addTextChangedListener(textWatcher)
-        view.et_manual_fn.addTextChangedListener(textWatcher)
-        view.et_manual_fp.addTextChangedListener(textWatcher)
-        view.et_manual_sum.addTextChangedListener(textWatcher)
-        view.et_manual_date.addTextChangedListener(dateTextWatcher)
-        view.et_manual_time.addTextChangedListener(timeTextWatcher)
+        et_manual_fd?.onFocusChangeListener = this
+        et_manual_fn?.onFocusChangeListener = this
+        et_manual_fp?.onFocusChangeListener = this
+        et_manual_sum?.onFocusChangeListener = this
+        et_manual_date?.onFocusChangeListener = this
+        et_manual_time?.onFocusChangeListener = this
+        et_manual_fd?.addTextChangedListener(textWatcher)
+        et_manual_fn?.addTextChangedListener(textWatcher)
+        et_manual_fp?.addTextChangedListener(textWatcher)
+        et_manual_sum?.addTextChangedListener(textWatcher)
+        et_manual_date?.addTextChangedListener(dateTextWatcher)
+        et_manual_time?.addTextChangedListener(timeTextWatcher)
+
+        et_manual_time.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                createReceipt()
+            }
+            false
+        }
     }
 
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
-        changeEtBackground(view!!.et_manual_fd)
-        changeEtBackground(view!!.et_manual_fn)
-        changeEtBackground(view!!.et_manual_fp)
-        changeEtBackground(view!!.et_manual_sum)
-        changeEtBackground(view!!.et_manual_date)
-        changeEtBackground(view!!.et_manual_time)
+        changeEtBackground(et_manual_fd)
+        changeEtBackground(et_manual_fn)
+        changeEtBackground(et_manual_fp)
+        changeEtBackground(et_manual_sum)
+        changeEtBackground(et_manual_date)
+        changeEtBackground(et_manual_time)
         changeBtnBackground()
     }
 
@@ -136,7 +138,16 @@ class ManualFragment : NewReceiptFragment(R.layout.fragment_manual), View.OnFocu
         viewMode.state.removeObserver(stateObserver)
     }
 
-    private fun changeEtBackground(view: EditText) {
+    private fun createReceipt() {
+        if (textIsValid) {
+            meta?.let { viewMode.createReceipt(it) }
+        } else {
+            viewMode.showError(errorMessage)
+        }
+    }
+
+    private fun changeEtBackground(view: EditText?) {
+        if (view == null) return
         if (!view.hasFocus() && view.text.toString().isNotEmpty())
             view.setBackgroundResource(R.drawable.et_manual_finish)
         else
@@ -145,28 +156,27 @@ class ManualFragment : NewReceiptFragment(R.layout.fragment_manual), View.OnFocu
 
     private fun changeBtnBackground() {
         if (checkData()) {
-            view!!.btn_manual.setBackgroundResource(R.drawable.btn_blue)
+            btn_manual?.setBackgroundResource(R.drawable.btn_blue)
         } else {
-            view!!.btn_manual.setBackgroundResource(R.drawable.btn_gray)
+            btn_manual?.setBackgroundResource(R.drawable.btn_gray)
         }
     }
 
     private fun checkData(): Boolean {
-        val fd = view!!.et_manual_fd.text.toString().trim()
-        val fn = view!!.et_manual_fn.text.toString().trim()
-        val fp = view!!.et_manual_fp.text.toString().trim()
-        val s = view!!.et_manual_sum.text.toString().trim()
-        val date = view!!.et_manual_date.text.toString().trim()
-        val time = view!!.et_manual_time.text.toString().trim()
+        val fd = et_manual_fd?.text.toString().trim()
+        val fn = et_manual_fn?.text.toString().trim()
+        val fp = et_manual_fp?.text.toString().trim()
+        val s = et_manual_sum?.text.toString().trim()
+        val date = et_manual_date?.text.toString().trim()
+        val time = et_manual_time?.text.toString().trim()
         if (checkFd(fd) &&
-                checkFn(fn) &&
-                checkFp(fp) &&
-                checkSum(s) &&
-                checkDate(date) &&
-                checkTime(time)) {
+            checkFn(fn) &&
+            checkFp(fp) &&
+            checkSum(s) &&
+            checkDate(date) &&
+            checkTime(time)
+        ) {
             val t = getDateString(date, time)
-            val receiptData = StringBuilder()
-            receiptData.append("t=$t&s=$s&fn=$fn&i=$fd&fp=$fp")
             meta = Meta(t.toLongWithMilliseconds(), fn, fd, fp, s.toDouble())
             textIsValid = true
         } else {
@@ -197,37 +207,36 @@ class ManualFragment : NewReceiptFragment(R.layout.fragment_manual), View.OnFocu
 
     private fun checkFd(fd: String): Boolean {
         val isCorrect = fd.isNotEmpty()
-        if (!isCorrect) errorMessage = "формат ФД неверный"
+        if (!isCorrect) errorMessage = getString(R.string.fd_error)
         return isCorrect
     }
 
     private fun checkFn(fn: String): Boolean {
         val isCorrect = fn.isNotEmpty()
-        if (!isCorrect) errorMessage = "формат ФН неверный"
+        if (!isCorrect) errorMessage = getString(R.string.fn_error)
         return isCorrect
     }
 
     private fun checkFp(fp: String): Boolean {
         val isCorrect = fp.isNotEmpty()
-        if (!isCorrect) errorMessage = "формат ФП неверный"
+        if (!isCorrect) errorMessage = getString(R.string.fp_error)
         return isCorrect
     }
-
 
     private fun checkDate(date: String): Boolean {
         var isCorrect = false
         val values = date.split(".")
         if (values.size == 3) {
-            try {
+            isCorrect = try {
                 val day = values[0].toInt()
                 val month = values[1].toInt()
                 val year = values[2].toInt()
-                isCorrect = month in 0..12 && day in 0..31 && year in 0..99
+                month in 0..12 && day in 0..31 && year in 0..99
             } catch (e: Exception) {
-                isCorrect = false
+                false
             }
         }
-        if (!isCorrect) errorMessage = "формат даты неверный"
+        if (!isCorrect) errorMessage = getString(R.string.date_error)
         return isCorrect
     }
 
@@ -235,15 +244,15 @@ class ManualFragment : NewReceiptFragment(R.layout.fragment_manual), View.OnFocu
         var isCorrect = false
         val values = time.split(":")
         if (values.size == 2) {
-            try {
+            isCorrect = try {
                 val hour = values[0].toInt()
                 val minute = values[1].toInt()
-                isCorrect = hour in 0..23 && minute in 0..59
+                hour in 0..23 && minute in 0..59
             } catch (e: Exception) {
-                isCorrect = false
+                false
             }
         }
-        if (!isCorrect) errorMessage = "формат времени неверный"
+        if (!isCorrect) errorMessage = getString(R.string.time_error)
         return isCorrect
     }
 
@@ -266,7 +275,7 @@ class ManualFragment : NewReceiptFragment(R.layout.fragment_manual), View.OnFocu
                 isCorrect = TextUtils.isDigitsOnly(sum)
             }
         }
-        if (!isCorrect) errorMessage = "формат суммы неверный"
+        if (!isCorrect) errorMessage = getString(R.string.sum_error)
         return isCorrect
     }
 
@@ -295,7 +304,7 @@ class ManualFragment : NewReceiptFragment(R.layout.fragment_manual), View.OnFocu
                 if (changeCount != 0) {
                     val textWithoutSeparator = s.filter { it != separator }
                     changedText.clear()
-                    for (index in 0 until textWithoutSeparator.length) {
+                    for (index in textWithoutSeparator.indices) {
                         if (index != 0 && index % 2 == 0) changedText.append(separator)
                         changedText.append(textWithoutSeparator[index])
                     }

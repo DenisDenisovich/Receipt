@@ -27,10 +27,11 @@ abstract class NewReceiptFragment(@LayoutRes layoutId: Int) : Fragment(layoutId)
      * @return true if error is shown
      **/
     protected fun showError(errorState: ErrorState): Boolean {
-        val message = if (errorState.type == ErrorType.DEFAULT) {
-            getString(R.string.error)
-        } else {
-            getString(R.string.error_network)
+        val message = when {
+            errorState.message != null -> errorState.message
+            errorState.type == ErrorType.DEFAULT -> getString(R.string.error)
+            errorState.type == ErrorType.OFFLINE -> getString(R.string.error_network)
+            else -> getString(R.string.error)
         }
 
         return when {

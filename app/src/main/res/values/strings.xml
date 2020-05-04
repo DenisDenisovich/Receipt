@@ -36,6 +36,11 @@
     <string name="sum_hint">125.00</string>
     <string name="date_hint">26.03.19</string>
     <string name="time_hint">20:00</string>
-
+    <string name="fd_error">Формат ФД неверный</string>
+    <string name="fn_error">Формат ФН неверный</string>
+    <string name="fp_error">Формат ФП неверный</string>
+    <string name="date_error">Формат даты неверный</string>
+    <string name="time_error">Формат времени неверный</string>
+    <string name="sum_error">Формат суммы неверный</string>
 
 </resources>
