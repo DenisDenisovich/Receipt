@@ -16,53 +16,22 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
 
     private var navigation: Navigation? = null
 
-    private val viewModel: CreateReceiptViewModel by sharedViewModel(from = {this})
+    private val viewModel: CreateReceiptViewModel by sharedViewModel(from = { this })
 
-    private val stateObserver = Observer<CreateReceiptState> {
-        when (it) {
+    // Handle current screen's states. All navigation commands handled there.
+    private val stateObserver = Observer<CreateReceiptState> { state ->
+        when (state) {
             is QrCodeState -> {
-                when (currentScreen) {
-                    CurrentScreen.MANUAL -> {
-                        childFragmentManager.popBackStack()
-                    }
-                    CurrentScreen.NOTHING -> {
-                        requestCameraPermission(
-                            onGranted = {
-                                childFragmentManager.beginTransaction().apply {
-                                    addToBackStack(CurrentScreen.QR.name)
-                                    replace(R.id.root_create_receipt, QrFragment(), CurrentScreen.QR.name)
-                                    commit()
-                                }
-                            },
-                            onDenied = {
-                                viewModel.goToManualScreen(isFirstScreen = true)
-                            }
-                        )
-                    }
-                    else -> {
-                    }
-                }
+                handleQrCodeState()
             }
             is ManualState -> {
                 if (currentScreen != CurrentScreen.MANUAL) {
-                    // open ManualFragment if he isn't added to stack yet
-                    childFragmentManager.beginTransaction().apply {
-                        // ManualFragment isn't first screen. Open with animation
-                        if (currentScreen == CurrentScreen.QR) {
-                            setCustomAnimations(
-                                R.anim.slide_up,
-                                R.anim.fade_out
-                            )
-                        }
-                        addToBackStack(CurrentScreen.MANUAL.name)
-                        replace(R.id.root_create_receipt, ManualFragment(), CurrentScreen.MANUAL.name)
-                        commit()
-                    }
+                    openManualScreen()
                 }
             }
             is SuccessState -> {
                 toast(R.string.create_receipt_success, isLongDuration = false)
-                navigation?.updateHistory(it.date)
+                navigation?.updateHistory(state.date)
             }
             is ExitState -> {
                 requireActivity().onBackPressed()
@@ -71,7 +40,7 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
     }
 
     private val currentScreen: CurrentScreen
-        get() = when(childFragmentManager.findFragmentById(R.id.root_create_receipt)) {
+        get() = when (childFragmentManager.findFragmentById(R.id.root_create_receipt)) {
             is QrFragment -> CurrentScreen.QR
             is ManualFragment -> CurrentScreen.MANUAL
             null -> CurrentScreen.NOTHING
@@ -116,6 +85,45 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
             }, {
                 onDenied()
             })
+    }
+
+    private fun handleQrCodeState() {
+        when (currentScreen) {
+            CurrentScreen.MANUAL -> {
+                childFragmentManager.popBackStack()
+            }
+            CurrentScreen.NOTHING -> {
+                requestCameraPermission(
+                    onGranted = { openQrScreen() },
+                    onDenied = { viewModel.goToManualScreen(isFirstScreen = true) }
+                )
+            }
+            else -> {
+            }
+        }
+    }
+
+    private fun openQrScreen() {
+        childFragmentManager.beginTransaction().apply {
+            addToBackStack(CurrentScreen.QR.name)
+            replace(R.id.root_create_receipt, QrFragment(), CurrentScreen.QR.name)
+            commit()
+        }
+    }
+
+    private fun openManualScreen() {
+        childFragmentManager.beginTransaction().apply {
+            if (currentScreen == CurrentScreen.QR) {
+                // ManualFragment isn't first screen. Open with animation
+                setCustomAnimations(
+                    R.anim.slide_up,
+                    R.anim.fade_out
+                )
+            }
+            addToBackStack(CurrentScreen.MANUAL.name)
+            replace(R.id.root_create_receipt, ManualFragment(), CurrentScreen.MANUAL.name)
+            commit()
+        }
     }
 
     private enum class CurrentScreen {
