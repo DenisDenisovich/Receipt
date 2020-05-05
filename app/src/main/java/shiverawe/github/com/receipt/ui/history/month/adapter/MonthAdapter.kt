@@ -2,9 +2,9 @@ package shiverawe.github.com.receipt.ui.history.month.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
-import shiverawe.github.com.receipt.domain.entity.dto.Meta
-import shiverawe.github.com.receipt.domain.entity.dto.Shop
-import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
+import shiverawe.github.com.receipt.domain.entity.base.Meta
+import shiverawe.github.com.receipt.domain.entity.base.Shop
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.ui.base.adapter.AdapterDelegatesManager
 import java.util.*
 import kotlin.collections.ArrayList

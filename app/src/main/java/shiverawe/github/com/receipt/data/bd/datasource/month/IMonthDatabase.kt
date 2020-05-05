@@ -1,7 +1,7 @@
 package shiverawe.github.com.receipt.data.bd.datasource.month
 
 import io.reactivex.Single
-import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 interface IMonthDatabase {
 

@@ -3,10 +3,8 @@ package shiverawe.github.com.receipt.ui.newreceipt
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Size
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -14,20 +12,29 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.android.synthetic.main.fragment_qr.*
+import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
 import shiverawe.github.com.receipt.R
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
+class QrFragment : NewReceiptFragment(R.layout.fragment_qr), View.OnClickListener {
+
+    private val viewMode: CreateReceiptViewModel by lazy {
+        getSharedViewModel<CreateReceiptViewModel>(from = { requireParentFragment() })
+    }
+    private val stateObserver = Observer<CreateReceiptUiState> { state ->
+        if (state is QrCodeState) {
+            handleQrState(state)
+        }
+    }
+
+    private val qrCodeAnalyzer = QrCodeAnalyzer()
 
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     private lateinit var imageAnalyzeExecutor: ExecutorService
     private var cameraControl: CameraControl? = null
     private var cameraInfo: CameraInfo? = null
     private var cameraProvider: ProcessCameraProvider? = null
-
-    private val qrCodeAnalyzer = QrCodeAnalyzer()
-
     private val torchListener = Observer<Int> {
         val flashIcon = if (it == TorchState.ON) R.drawable.ic_flash_off else R.drawable.ic_flash_on
         btn_flash.setImageResource(flashIcon)
@@ -35,11 +42,14 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         qrCodeAnalyzer.onQrCodeDataFound = {
-            (parentFragment as NewReceiptView).openReceipt(it)
+            if (!waitingDialog.isAdded) {
+                viewMode.createReceipt(it)
+            }
         }
         qrCodeAnalyzer.onQrCodeError = {
-            Toast.makeText(context, "Произошла ошибка", Toast.LENGTH_LONG).show()
-            (parentFragment as NewReceiptView).onError()
+            if (!waitingDialog.isAdded) {
+                viewMode.showError()
+            }
         }
         btn_qr_back.setOnClickListener(this)
         btn_flash.setOnClickListener(this)
@@ -49,6 +59,20 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
+    }
+
+    override fun onCancelDialogClick() {
+        viewMode.onCancelWaiting()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewMode.state.observe(this, stateObserver)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewMode.state.removeObserver(stateObserver)
     }
 
     override fun onDestroyView() {
@@ -62,7 +86,7 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_qr_back -> {
-                activity?.onBackPressed()
+                viewMode.goBack()
             }
             R.id.btn_flash -> {
                 // TODO: Bug - sometimes torch doesn't enable in CameraX (hardware).
@@ -70,7 +94,26 @@ class QrFragment : Fragment(R.layout.fragment_qr), View.OnClickListener {
                 cameraControl?.enableTorch(cameraInfo?.torchState?.value != TorchState.ON)
             }
             R.id.btn_qr_reader_manual -> {
-                (parentFragment as NewReceiptView).openManual()
+                viewMode.goToManualScreen()
+            }
+        }
+    }
+
+    private fun handleQrState(state: QrCodeState) {
+        when {
+            state.isWaiting -> {
+                showDialog()
+            }
+
+            !state.isWaiting && state.error == null -> {
+                dismissDialog()
+            }
+
+            state.error != null -> {
+                state.error?.let { errorState ->
+                    showError(errorState)
+                    viewMode.onShowError()
+                }
             }
         }
     }

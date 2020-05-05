@@ -5,8 +5,7 @@ buildscript {
         app_center = '2.0.0'
         kotlin_version = '1.3.71'
         room_version = "1.1.1"
-        retrofit_version = "2.5.0"
-        koin_version = "2.0.0-GA"
+        retrofit_version = "2.8.1"
     }
     repositories {
         google()

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_receipt.view.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.ui.App
 import shiverawe.github.com.receipt.ui.base.adapter.AdapterDelegate
 import shiverawe.github.com.receipt.utils.floorTwo

@@ -2,7 +2,7 @@ package shiverawe.github.com.receipt.data.bd.mapper
 
 import shiverawe.github.com.receipt.data.bd.room.product.ProductEntity
 import shiverawe.github.com.receipt.data.bd.room.receipt.ReceiptEntity
-import shiverawe.github.com.receipt.domain.entity.dto.*
+import shiverawe.github.com.receipt.domain.entity.base.*
 
 fun ReceiptEntity.toReceipt(products: List<ProductEntity>): Receipt {
     val shop = Shop(date, place, sum.toString())

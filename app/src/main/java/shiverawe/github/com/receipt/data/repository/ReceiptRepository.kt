@@ -5,16 +5,14 @@ import io.reactivex.Single
 import retrofit2.HttpException
 import shiverawe.github.com.receipt.data.bd.datasource.receipt.IReceiptDatabase
 import shiverawe.github.com.receipt.data.network.datasource.receipt.IReceiptNetwork
-import shiverawe.github.com.receipt.data.network.entity.create.CreateResponce
-import shiverawe.github.com.receipt.data.network.utils.IUtilsNetwork
-import shiverawe.github.com.receipt.domain.entity.dto.Meta
+import shiverawe.github.com.receipt.data.network.utils.isOnline
+import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
-import shiverawe.github.com.receipt.domain.entity.dto.Receipt
+import shiverawe.github.com.receipt.domain.entity.base.Receipt
 
 class ReceiptRepository(
     private val db: IReceiptDatabase,
-    private val network: IReceiptNetwork,
-    private val utils: IUtilsNetwork
+    private val network: IReceiptNetwork
 
 ) : IReceiptRepository {
 
@@ -22,9 +20,7 @@ class ReceiptRepository(
         return network.getReceipt(meta)
     }
 
-    override fun saveReceipt(): Single<CreateResponce> {
-        return network.saveReceipt()
-    }
+    override suspend fun saveReceipt(meta: Meta): Long = network.saveReceipt(meta)
 
     override fun getReceiptById(receiptId: Long): Observable<Receipt> {
         // Get receipt from DB. Return this receipt if products list isn't empty
@@ -51,7 +47,7 @@ class ReceiptRepository(
         network.getProducts(receiptId)
             .flatMap { db.saveProductsToCache(receiptId, it) }
             .onErrorResumeNext {
-                if (it is HttpException || !utils.isOnline()) {
+                if (it is HttpException || !isOnline()) {
                     db.getReceiptById(receiptId)
                 } else {
                     Single.error(it)

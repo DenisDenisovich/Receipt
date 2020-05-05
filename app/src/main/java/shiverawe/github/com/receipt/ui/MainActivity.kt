@@ -1,16 +1,13 @@
 package shiverawe.github.com.receipt.ui
 
 import android.os.Bundle
-import com.google.android.material.navigation.NavigationView
 import androidx.fragment.app.Fragment
-import androidx.core.view.GravityCompat
 import androidx.appcompat.app.AppCompatActivity
-import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
-import shiverawe.github.com.receipt.ui.newreceipt.NewReceiptFragment
+import shiverawe.github.com.receipt.ui.newreceipt.CreateReceiptRootFragment
 import shiverawe.github.com.receipt.ui.receipt.ReceiptFragment
 import shiverawe.github.com.receipt.ui.settings.SettingsFragment
 
@@ -40,17 +37,22 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
     }
 
     override fun onBackPressed() {
-        val fragment = getTopFragment()
-        if (fragment is ReceiptFragment) {
-            supportFragmentManager.popBackStack()
-            showBottomAppBar(true)
-        } else if (fragment is NewReceiptFragment) {
-            if (!fragment.onBackPressedIsHandled()) {
+        when (val topFragment = getTopFragment()) {
+            is ReceiptFragment -> {
                 supportFragmentManager.popBackStack()
                 showBottomAppBar(true)
             }
-        } else {
-            super.onBackPressed()
+
+            is CreateReceiptRootFragment -> {
+                if (topFragment.onBackPressed()) {
+                    supportFragmentManager.popBackStack()
+                    showBottomAppBar(true)
+                }
+            }
+
+            else -> {
+                super.onBackPressed()
+            }
         }
     }
 
@@ -66,6 +68,7 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
 
     override fun updateHistory(date: Long) {
         supportFragmentManager.popBackStackImmediate()
+        showBottomAppBar(true)
         val currentFragment = findFragmentByTag(HistoryFragment.HISTORY_TAG)
         if (currentFragment is HistoryFragment) {
             currentFragment.updateMonth(date)
@@ -78,7 +81,7 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
                 R.anim.slide_up,
                 R.anim.fade_out
             )
-            replace(R.id.container, NewReceiptFragment())
+            replace(R.id.container, CreateReceiptRootFragment())
             addToBackStack(null)
             commit()
         }

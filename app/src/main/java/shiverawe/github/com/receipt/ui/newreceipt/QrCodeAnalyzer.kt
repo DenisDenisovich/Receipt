@@ -29,18 +29,24 @@ class QrCodeAnalyzer {
             270 -> FirebaseVisionImageMetadata.ROTATION_270
             else -> FirebaseVisionImageMetadata.ROTATION_0
         }
-        val firebaseImage = FirebaseVisionImage.fromMediaImage(image, imageRotation)
-        // set qr code detection listener
-        detector.detectInImage(firebaseImage)
-            .addOnSuccessListener { barcodes ->
-                barcodes.forEach {
-                    it.rawValue?.let { data ->
-                        onQrCodeDataFound?.invoke(data)
+        // TODO: FirebaseVisionImage.fromMediaImage throw java.lang.IllegalStateException: buffer is inaccessible.
+        //  Find reason this Exception
+        try {
+            val firebaseImage = FirebaseVisionImage.fromMediaImage(image, imageRotation)
+            // set qr code detection listener
+            detector.detectInImage(firebaseImage)
+                .addOnSuccessListener { barcodes ->
+                    barcodes.forEach { barcode ->
+                        barcode.rawValue?.let { data ->
+                            onQrCodeDataFound?.invoke(data)
+                        }
                     }
                 }
-            }
-            .addOnFailureListener {
-                onQrCodeError?.invoke(it)
-            }
+                .addOnFailureListener {
+                    onQrCodeError?.invoke(it)
+                }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

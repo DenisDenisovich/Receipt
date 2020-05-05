@@ -4,11 +4,10 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite">
 
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="56dp">
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/btn_manual_back"
             android:layout_width="56dp"
             android:layout_height="56dp"
@@ -26,247 +25,204 @@
             android:text="@string/tv_manual_title" />
     </FrameLayout>
 
-
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="80dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/btn_help_fn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="#000000"
-                    android:text="@string/fn_manual" />
+                android:layout_gravity="center_vertical"
+                android:textColor="#000000"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:drawableEnd="@drawable/ic_help_manual"
+                android:drawablePadding="9dp"
+                android:text="@string/fn_manual" />
 
-                <ImageView
-                    android:id="@+id/btn_help_fn"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:padding="9dp"
-                    android:src="@drawable/ic_help_manual"/>
-            </LinearLayout>
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_manual_fn"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="8dp"
                 android:lines="1"
+                android:nextFocusDown="@id/et_manual_fd"
+                android:imeOptions="actionNext"
                 android:inputType="number"
                 android:textColor="#333333"
                 android:textColorHint="#A0A0A0"
-                android:hint="9282000100036317"
+                android:hint="@string/fn_hint"
                 android:background="@drawable/et_manual" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/btn_help_fd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="#000000"
-                    android:text="@string/fd_manual" />
+                android:layout_gravity="center_vertical"
+                android:textColor="#000000"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:drawableEnd="@drawable/ic_help_manual"
+                android:drawablePadding="9dp"
+                android:text="@string/fd_manual" />
 
-                <ImageView
-                    android:id="@+id/btn_help_fd"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:padding="9dp"
-                    android:src="@drawable/ic_help_manual"/>
-            </LinearLayout>
-
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_manual_fd"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="8dp"
                 android:lines="1"
+                android:nextFocusDown="@id/et_manual_fp"
+                android:imeOptions="actionNext"
                 android:inputType="number"
                 android:textColor="#333333"
                 android:textColorHint="#A0A0A0"
-                android:hint="175917"
+                android:hint="@string/fd_hint"
                 android:background="@drawable/et_manual" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/btn_help_fp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="#000000"
-                    android:text="@string/fp_manual" />
+                android:layout_gravity="center_vertical"
+                android:textColor="#000000"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:drawableEnd="@drawable/ic_help_manual"
+                android:drawablePadding="9dp"
+                android:text="@string/fp_manual" />
 
-                <ImageView
-                    android:id="@+id/btn_help_fp"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:padding="9dp"
-                    android:src="@drawable/ic_help_manual"/>
-            </LinearLayout>
-
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_manual_fp"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="8dp"
                 android:lines="1"
+                android:nextFocusDown="@id/et_manual_sum"
+                android:imeOptions="actionNext"
                 android:inputType="number"
                 android:textColor="#333333"
                 android:textColorHint="#A0A0A0"
-                android:hint="2527314583"
+                android:hint="@string/fp_hint"
                 android:background="@drawable/et_manual" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/btn_help_sum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="#000000"
-                    android:text="@string/sum_manual" />
+                android:layout_gravity="center_vertical"
+                android:textColor="#000000"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:drawableEnd="@drawable/ic_help_manual"
+                android:drawablePadding="9dp"
+                android:text="@string/sum_manual" />
 
-                <ImageView
-                    android:id="@+id/btn_help_sum"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:padding="9dp"
-                    android:src="@drawable/ic_help_manual"/>
-            </LinearLayout>
-
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_manual_sum"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginBottom="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="8dp"
                 android:lines="1"
+                android:nextFocusDown="@id/et_manual_date"
+                android:imeOptions="actionNext"
                 android:inputType="numberDecimal"
                 android:textColor="#333333"
                 android:textColorHint="#A0A0A0"
-                android:hint="125.00"
+                android:hint="@string/sum_hint"
                 android:background="@drawable/et_manual" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:orientation="horizontal">
-                <FrameLayout
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:layout_weight="1">
-                    <LinearLayout
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/btn_help_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:textColor="#000000"
-                            android:text="@string/date_manual" />
+                        android:textColor="#000000"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:drawableEnd="@drawable/ic_help_manual"
+                        android:drawablePadding="9dp"
+                        android:text="@string/date_manual" />
 
-                        <ImageView
-                            android:id="@+id/btn_help_date"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:padding="9dp"
-                            android:src="@drawable/ic_help_manual"/>
-                    </LinearLayout>
-
-                    <EditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/et_manual_date"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginTop="33dp"
                         android:paddingStart="16dp"
                         android:paddingEnd="8dp"
                         android:lines="1"
+                        android:nextFocusRight="@id/et_manual_time"
+                        android:imeOptions="actionNext"
                         android:inputType="number"
                         android:textColor="#333333"
                         android:textColorHint="#A0A0A0"
-                        android:hint="26.03.19"
+                        android:hint="@string/date_hint"
                         android:background="@drawable/et_manual" />
-                </FrameLayout>
+                </LinearLayout>
 
-                <FrameLayout
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1">
-                    <LinearLayout
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/btn_help_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:textColor="#000000"
-                            android:text="@string/time_manual" />
+                        android:textColor="#000000"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:drawableEnd="@drawable/ic_help_manual"
+                        android:drawablePadding="9dp"
+                        android:text="@string/time_manual" />
 
-                        <ImageView
-                            android:id="@+id/btn_help_time"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:padding="9dp"
-                            android:src="@drawable/ic_help_manual"/>
-                    </LinearLayout>
-
-                    <EditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/et_manual_time"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginTop="33dp"
                         android:paddingStart="16dp"
                         android:paddingEnd="8dp"
                         android:lines="1"
+                        android:imeOptions="actionDone"
                         android:inputType="number"
                         android:textColor="#333333"
                         android:textColorHint="#A0A0A0"
-                        android:hint="20:00"
+                        android:hint="@string/time_hint"
                         android:background="@drawable/et_manual" />
-                </FrameLayout>
-
+                </LinearLayout>
             </LinearLayout>
 
             <Button
@@ -274,13 +230,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
-                android:layout_margin="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/btn_blue"
                 android:textColor="#FFFFFF"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:text="@string/tv_manual_find_btn"/>
         </LinearLayout>
-
     </ScrollView>
 </FrameLayout>

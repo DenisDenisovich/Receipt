@@ -4,7 +4,7 @@ import io.reactivex.Single
 import shiverawe.github.com.receipt.data.bd.mapper.toReceiptHeader
 import shiverawe.github.com.receipt.data.bd.room.ReceiptRoom
 import shiverawe.github.com.receipt.data.bd.utils.ICacheDiffUtility
-import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 class MonthDatabase(private val cacheDiffUtility: ICacheDiffUtility) : IMonthDatabase {
 

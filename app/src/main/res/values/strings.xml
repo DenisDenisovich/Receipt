@@ -1,12 +1,15 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Receipt</string>
     <string name="BASE_URL">https://receipt.shefer.space/</string>
-    <string name="yandex_key">44fd539d-4d62-4c40-b620-1d33f4070334</string>
+    <string name="yandex_key" tools:ignore="TypographyDashes">44fd539d-4d62-4c40-b620-1d33f4070334</string>
     <string name="nav_header_title">Receipt</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="action_search">Поиск</string>
     <string name="action_calendar">Календарь</string>
 
+    <string name="cancel">Отменить</string>
+    <string name="error">Произошла ошибка</string>
+    <string name="error_network">Проверьте интернет соединение</string>
     <string name="history_title">История</string>
     <string name="tv_item_sum">Общая сумма</string>
     <string name="rubleSymbolJava">\u20BD</string>
@@ -24,7 +27,20 @@
     <string name="tv_toolbar_settings">Настройки</string>
     <string name="tv_developer_settings">Я разработчик</string>
     <string name="tv_http_settings">Использовать http</string>
-    <string name="app_center_id">5cd51172-48a5-49fd-9a97-ea6b59b8867e</string>
-
+    <string name="app_center_id" tools:ignore="TypographyDashes">5cd51172-48a5-49fd-9a97-ea6b59b8867e</string>
+    <string name="create_receipt_success">Чек успешно загружен</string>
+    <string name="create_receipt_waiting">Загрузка чека</string>
+    <string name="fn_hint">9282000100036317</string>
+    <string name="fd_hint">175917</string>
+    <string name="fp_hint">2527314583</string>
+    <string name="sum_hint">125.00</string>
+    <string name="date_hint">26.03.19</string>
+    <string name="time_hint">20:00</string>
+    <string name="fd_error">Формат ФД неверный</string>
+    <string name="fn_error">Формат ФН неверный</string>
+    <string name="fp_error">Формат ФП неверный</string>
+    <string name="date_error">Формат даты неверный</string>
+    <string name="time_error">Формат времени неверный</string>
+    <string name="sum_error">Формат суммы неверный</string>
 
 </resources>
