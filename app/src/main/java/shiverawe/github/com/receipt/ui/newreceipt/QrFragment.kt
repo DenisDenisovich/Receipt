@@ -1,6 +1,7 @@
 package shiverawe.github.com.receipt.ui.newreceipt
 
 import android.annotation.SuppressLint
+import android.graphics.*
 import android.os.Bundle
 import android.util.Size
 import android.view.View
@@ -73,11 +74,14 @@ class QrFragment : NewReceiptFragment(R.layout.fragment_qr), View.OnClickListene
 
     override fun onResume() {
         super.onResume()
+        iv_preview.visibility = View.GONE
         viewMode.state.observe(this, stateObserver)
     }
 
     override fun onPause() {
         super.onPause()
+        iv_preview.setImageBitmap(getPreview())
+        iv_preview.visibility = View.VISIBLE
         viewMode.state.removeObserver(stateObserver)
     }
 
@@ -192,5 +196,25 @@ class QrFragment : NewReceiptFragment(R.layout.fragment_qr), View.OnClickListene
         }
 
         return statusBarHeight
+    }
+
+    // get bitmap from preview view
+    private fun getPreview(): Bitmap {
+        val bitmap = Bitmap.createBitmap(
+            preview_view?.width ?: 0,
+            preview_view?.height ?: 0,
+            Bitmap.Config.ARGB_8888
+        )
+        preview_view?.let { preview ->
+            val canvas = Canvas(bitmap)
+            val bgDrawable = preview.background
+            if (bgDrawable != null) {
+                bgDrawable.draw(canvas)
+            } else {
+                canvas.drawColor(Color.BLACK)
+            }
+            preview.draw(canvas)
+        }
+        return bitmap
     }
 }
