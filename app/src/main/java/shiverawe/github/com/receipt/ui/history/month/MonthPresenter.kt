@@ -9,8 +9,8 @@ import shiverawe.github.com.receipt.utils.floorTwo
 import java.util.*
 
 class MonthPresenter(
-        private val repository: IMonthRepository,
-        private val dateFrom: Long
+    private val repository: IMonthRepository,
+    private val dateFrom: Long
 ) : MonthContract.Presenter {
 
     private var receiptDisposable: Disposable? = null
@@ -45,21 +45,21 @@ class MonthPresenter(
         var totalTime: Int
         receiptDisposable?.dispose()
         receiptDisposable = repository.getMonthReceipt(dateFrom, dateTo)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response ->
-                    receipts = ArrayList()
-                    totalSum = 0.0
-                    response.forEach {
-                        totalSum += it.meta.s
-                        receipts.add(ReceiptHeader(it.receiptId, it.shop, it.meta))
-                    }
-                    setReceiptsData()
-                }, {
-                    isError = true
-                    view?.showError()
-                    totalTime = ((System.currentTimeMillis() - startTime) / 1000).toInt()
-                    Metric.sendHistoryError(totalTime, it)
-                })
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ response ->
+                receipts = ArrayList()
+                totalSum = 0.0
+                response.forEach {
+                    totalSum += it.meta.s
+                    receipts.add(ReceiptHeader(it.receiptId, it.shop, it.meta))
+                }
+                setReceiptsData()
+            }, {
+                isError = true
+                view?.showError()
+                totalTime = ((System.currentTimeMillis() - startTime) / 1000).toInt()
+                Metric.sendHistoryError(totalTime, it)
+            })
     }
 
     private fun setReceiptsData() {

@@ -58,7 +58,9 @@ class MonthFragment : Fragment(), MonthContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         rv_month.adapter = adapter
         rv_month.layoutManager = LinearLayoutManager(context)
-
+        swipe_refresh_layout_.setOnRefreshListener {
+            presenter?.getReceiptsData()
+        }
         if (receipts.size == 0) {
             if (userVisibleHint) {
                 presenter?.getReceiptsData()
@@ -74,6 +76,7 @@ class MonthFragment : Fragment(), MonthContract.View {
         pb_month.visibility = View.GONE
         tv_month_error_message.visibility = View.GONE
         rv_month.visibility = View.VISIBLE
+        swipe_refresh_layout_.isRefreshing = false
     }
 
     override fun setTotalSum(totalSum: String) {
@@ -93,12 +96,14 @@ class MonthFragment : Fragment(), MonthContract.View {
         pb_month.visibility = View.GONE
         tv_month_error_message.text = "Произошла ошибка"
         tv_month_error_message.visibility = View.VISIBLE
+        swipe_refresh_layout_.isRefreshing = false
     }
 
     override fun showEmptyDataMessage() {
         pb_month.visibility = View.GONE
         tv_month_error_message.text = "Нет данных"
         tv_month_error_message.visibility = View.VISIBLE
+        swipe_refresh_layout_.isRefreshing = false
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
