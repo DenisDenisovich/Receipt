@@ -46,7 +46,6 @@ class CreateReceiptViewModel(private val interactor: ICreateReceiptInteractor) :
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
             when(val result = interactor.createReceipt(qrCodeData)) {
-
                 is CreateReceiptSuccessState -> {
                     state.value = SuccessState(result.meta.t)
                 }
@@ -69,7 +68,6 @@ class CreateReceiptViewModel(private val interactor: ICreateReceiptInteractor) :
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
             when(val result = interactor.createReceipt(meta)) {
-
                 is CreateReceiptSuccessState -> {
                     state.value = SuccessState(result.meta.t)
                 }

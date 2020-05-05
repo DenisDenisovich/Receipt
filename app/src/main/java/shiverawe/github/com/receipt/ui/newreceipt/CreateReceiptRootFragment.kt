@@ -24,15 +24,18 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
             is QrCodeState -> {
                 handleQrCodeState()
             }
+
             is ManualState -> {
                 if (currentScreen != CurrentScreen.MANUAL) {
                     openManualScreen()
                 }
             }
+
             is SuccessState -> {
                 toast(R.string.create_receipt_success, isLongDuration = false)
                 navigation?.updateHistory(state.date)
             }
+
             is ExitState -> {
                 requireActivity().onBackPressed()
             }
@@ -89,15 +92,18 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
 
     private fun handleQrCodeState() {
         when (currentScreen) {
+
             CurrentScreen.MANUAL -> {
                 childFragmentManager.popBackStack()
             }
+
             CurrentScreen.NOTHING -> {
                 requestCameraPermission(
                     onGranted = { openQrScreen() },
                     onDenied = { viewModel.goToManualScreen(isFirstScreen = true) }
                 )
             }
+
             else -> {
             }
         }

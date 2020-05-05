@@ -28,9 +28,11 @@ class QrFragment : NewReceiptFragment(R.layout.fragment_qr), View.OnClickListene
                 state.isWaiting -> {
                     showDialog()
                 }
+
                 !state.isWaiting && state.error == null -> {
                     dismissDialog()
                 }
+
                 state.error != null -> {
                     state.error?.let { errorState ->
                         showError(errorState)

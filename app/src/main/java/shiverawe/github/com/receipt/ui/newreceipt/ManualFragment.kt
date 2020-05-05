@@ -27,9 +27,11 @@ class ManualFragment : NewReceiptFragment(R.layout.fragment_manual), View.OnFocu
                 state.isWaiting -> {
                     showDialog()
                 }
+
                 !state.isWaiting && state.error == null -> {
                     dismissDialog()
                 }
+
                 state.error != null -> {
                     state.error?.let { errorState ->
                         showError(errorState)
