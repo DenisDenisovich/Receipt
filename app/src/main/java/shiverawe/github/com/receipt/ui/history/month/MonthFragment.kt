@@ -12,6 +12,7 @@ import org.koin.android.ext.android.get
 import org.koin.core.parameter.parametersOf
 import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
+import shiverawe.github.com.receipt.domain.entity.base.ErrorType
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
@@ -59,7 +60,7 @@ class MonthFragment : Fragment(), MonthContract.View {
         rv_month.adapter = adapter
         rv_month.layoutManager = LinearLayoutManager(context)
         swipe_refresh_layout_.setOnRefreshListener {
-            presenter?.getReceiptsData()
+            presenter?.getReceiptsData(isRefresh = true)
         }
         if (receipts.size == 0) {
             if (userVisibleHint) {
@@ -92,16 +93,20 @@ class MonthFragment : Fragment(), MonthContract.View {
         pb_month.visibility = View.VISIBLE
     }
 
-    override fun showError() {
+    override fun showError(errorType: ErrorType) {
+        val message = when(errorType) {
+            ErrorType.OFFLINE -> R.string.error_network
+            ErrorType.ERROR -> R.string.error
+        }
         pb_month.visibility = View.GONE
-        tv_month_error_message.text = "Произошла ошибка"
+        tv_month_error_message.text = getString(message)
         tv_month_error_message.visibility = View.VISIBLE
         swipe_refresh_layout_.isRefreshing = false
     }
 
     override fun showEmptyDataMessage() {
         pb_month.visibility = View.GONE
-        tv_month_error_message.text = "Нет данных"
+        tv_month_error_message.text = getString(R.string.no_data)
         tv_month_error_message.visibility = View.VISIBLE
         swipe_refresh_layout_.isRefreshing = false
     }

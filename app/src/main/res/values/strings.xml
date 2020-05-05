@@ -42,5 +42,6 @@
     <string name="date_error">Формат даты неверный</string>
     <string name="time_error">Формат времени неверный</string>
     <string name="sum_error">Формат суммы неверный</string>
+    <string name="no_data">Нет данных</string>
 
 </resources>

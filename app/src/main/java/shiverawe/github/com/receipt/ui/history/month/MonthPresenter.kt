@@ -2,6 +2,8 @@ package shiverawe.github.com.receipt.ui.history.month
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import shiverawe.github.com.receipt.data.network.utils.isOnline
+import shiverawe.github.com.receipt.domain.entity.base.ErrorType
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.utils.Metric
@@ -40,42 +42,48 @@ class MonthPresenter(
         getReceiptsData()
     }
 
-    override fun getReceiptsData() {
+    override fun getReceiptsData(isRefresh: Boolean) {
         val startTime = System.currentTimeMillis()
         var totalTime: Int
         receiptDisposable?.dispose()
         receiptDisposable = repository.getMonthReceipt(dateFrom, dateTo)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ response ->
-                receipts = ArrayList()
-                totalSum = 0.0
-                response.forEach {
-                    totalSum += it.meta.s
-                    receipts.add(ReceiptHeader(it.receiptId, it.shop, it.meta))
-                }
-                setReceiptsData()
+            .subscribe({ receipts ->
+                setReceipts(receipts, isRefresh)
             }, {
-                isError = true
-                view?.showError()
                 totalTime = ((System.currentTimeMillis() - startTime) / 1000).toInt()
-                Metric.sendHistoryError(totalTime, it)
+                setError(it, totalTime)
             })
     }
 
-    private fun setReceiptsData() {
-        if (isError) {
-            view?.showError()
-        } else {
-            if (receipts.size == 0) {
-                view?.setTotalSum("0")
-                view?.showEmptyDataMessage()
-            } else {
+    private fun setReceipts(newData: List<ReceiptHeader>, isRefresh: Boolean) {
+        receipts = ArrayList()
+        totalSum = 0.0
 
-                view?.setReceipts(receipts)
-                val sumStr = totalSum.floorTwo()
-                view?.setTotalSum(sumStr)
-            }
+        newData.forEach {
+            totalSum += it.meta.s
+            receipts.add(ReceiptHeader(it.receiptId, it.shop, it.meta))
         }
+
+        if (receipts.size == 0) {
+            view?.setTotalSum("0")
+            if (!isOnline() && isRefresh) {
+                view?.showError(ErrorType.OFFLINE)
+            } else {
+                view?.showEmptyDataMessage()
+            }
+        } else {
+            view?.setReceipts(receipts)
+            val sumStr = totalSum.floorTwo()
+            view?.setTotalSum(sumStr)
+        }
+    }
+
+    private fun setError(error: Throwable, totalTime: Int) {
+        isError = true
+        val errorType = if (!isOnline()) ErrorType.OFFLINE else ErrorType.ERROR
+        view?.showError(errorType)
+        Metric.sendHistoryError(totalTime, error)
     }
 
     override fun detach() {
