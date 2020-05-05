@@ -1,10 +1,12 @@
 package shiverawe.github.com.receipt.ui.newreceipt
 
 import android.annotation.SuppressLint
+import android.graphics.*
 import android.os.Bundle
 import android.util.Size
 import android.view.View
 import android.view.WindowManager
+import android.widget.FrameLayout
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -14,6 +16,7 @@ import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.android.synthetic.main.fragment_qr.*
 import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
 import shiverawe.github.com.receipt.R
+import shiverawe.github.com.receipt.utils.toPixels
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -53,12 +56,16 @@ class QrFragment : NewReceiptFragment(R.layout.fragment_qr), View.OnClickListene
         }
         btn_qr_back.setOnClickListener(this)
         btn_flash.setOnClickListener(this)
-        btn_qr_reader_manual.setOnClickListener(this)
+        btn_manual.setOnClickListener(this)
         createCamera()
         requireActivity().window.setFlags(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
+        btn_manual.layoutParams = (btn_manual.layoutParams as FrameLayout.LayoutParams).apply {
+            val margin = 16.toPixels()
+            setMargins(margin, margin, margin, margin + getBottomNavigationBarHeight())
+        }
     }
 
     override fun onCancelDialogClick() {
@@ -67,11 +74,14 @@ class QrFragment : NewReceiptFragment(R.layout.fragment_qr), View.OnClickListene
 
     override fun onResume() {
         super.onResume()
+        iv_preview.visibility = View.GONE
         viewMode.state.observe(this, stateObserver)
     }
 
     override fun onPause() {
         super.onPause()
+        iv_preview.setImageBitmap(getPreview())
+        iv_preview.visibility = View.VISIBLE
         viewMode.state.removeObserver(stateObserver)
     }
 
@@ -93,7 +103,7 @@ class QrFragment : NewReceiptFragment(R.layout.fragment_qr), View.OnClickListene
                 //  Replace CameraX with Camare2
                 cameraControl?.enableTorch(cameraInfo?.torchState?.value != TorchState.ON)
             }
-            R.id.btn_qr_reader_manual -> {
+            R.id.btn_manual -> {
                 viewMode.goToManualScreen()
             }
         }
@@ -176,5 +186,35 @@ class QrFragment : NewReceiptFragment(R.layout.fragment_qr), View.OnClickListene
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun getBottomNavigationBarHeight(): Int {
+        var statusBarHeight = 0
+        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+        if (resourceId > 0) {
+            statusBarHeight = resources.getDimensionPixelSize(resourceId)
+        }
+
+        return statusBarHeight
+    }
+
+    // get bitmap from preview view
+    private fun getPreview(): Bitmap {
+        val bitmap = Bitmap.createBitmap(
+            preview_view?.width ?: 0,
+            preview_view?.height ?: 0,
+            Bitmap.Config.ARGB_8888
+        )
+        preview_view?.let { preview ->
+            val canvas = Canvas(bitmap)
+            val bgDrawable = preview.background
+            if (bgDrawable != null) {
+                bgDrawable.draw(canvas)
+            } else {
+                canvas.drawColor(Color.BLACK)
+            }
+            preview.draw(canvas)
+        }
+        return bitmap
     }
 }
