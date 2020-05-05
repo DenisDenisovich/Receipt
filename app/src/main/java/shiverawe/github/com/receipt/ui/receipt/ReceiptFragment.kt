@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.fragment_receipt.*
 import org.koin.android.ext.android.inject
 import retrofit2.HttpException
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.domain.entity.dto.Receipt
+import shiverawe.github.com.receipt.domain.entity.base.Receipt
 import shiverawe.github.com.receipt.ui.receipt.adapter.ProductAdapter
 import shiverawe.github.com.receipt.utils.Settings
 import shiverawe.github.com.receipt.utils.floorTwo
@@ -108,7 +108,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
         if (Settings.getDevelopMod(context!!)) {
             val message = try {
                 baseUrl + "rest/get?" + arguments?.getString(RECEIPT_OPTIONS_EXTRA) + "\n" +
-                    (error as HttpException).response().errorBody()?.string()
+                    (error as HttpException).response()?.errorBody()?.string()
             } catch (e: Exception) {
                 error.message?: "error"
             }

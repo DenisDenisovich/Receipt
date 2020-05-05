@@ -11,8 +11,8 @@ import shiverawe.github.com.receipt.data.bd.room.receipt.ReceiptEntity
 import shiverawe.github.com.receipt.data.bd.mapper.toReceiptHeader
 import shiverawe.github.com.receipt.data.bd.mapper.toProductEntity
 import shiverawe.github.com.receipt.data.bd.mapper.toReceiptEntity
-import shiverawe.github.com.receipt.domain.entity.dto.Product
-import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
+import shiverawe.github.com.receipt.domain.entity.base.Product
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.ui.App
 
 @Database(entities = [ReceiptEntity::class, ProductEntity::class], version = 1)

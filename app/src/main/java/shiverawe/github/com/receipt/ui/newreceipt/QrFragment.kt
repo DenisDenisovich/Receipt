@@ -22,7 +22,7 @@ class QrFragment : NewReceiptFragment(R.layout.fragment_qr), View.OnClickListene
     private val viewMode: CreateReceiptViewModel by lazy {
         getSharedViewModel<CreateReceiptViewModel>(from = { requireParentFragment() })
     }
-    private val stateObserver = Observer<CreateReceiptState> { state ->
+    private val stateObserver = Observer<CreateReceiptUiState> { state ->
         if (state is QrCodeState) {
             when {
                 state.isWaiting -> {

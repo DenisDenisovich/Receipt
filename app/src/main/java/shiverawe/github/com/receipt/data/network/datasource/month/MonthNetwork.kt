@@ -4,7 +4,7 @@ import io.reactivex.Single
 import shiverawe.github.com.receipt.data.network.api.Api
 import shiverawe.github.com.receipt.data.network.entity.receipt.ReceiptRequest
 import shiverawe.github.com.receipt.data.network.mapper.toReceiptHeader
-import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 class MonthNetwork(
     private val api: Api) : IMonthNetwork {

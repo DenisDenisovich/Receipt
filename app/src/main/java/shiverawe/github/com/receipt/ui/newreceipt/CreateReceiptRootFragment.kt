@@ -19,7 +19,7 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
     private val viewModel: CreateReceiptViewModel by sharedViewModel(from = { this })
 
     // Handle current screen's states. All navigation commands handled there.
-    private val stateObserver = Observer<CreateReceiptState> { state ->
+    private val stateObserver = Observer<CreateReceiptUiState> { state ->
         when (state) {
             is QrCodeState -> {
                 handleQrCodeState()

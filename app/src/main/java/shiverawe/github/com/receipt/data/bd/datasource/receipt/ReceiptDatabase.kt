@@ -6,9 +6,9 @@ import io.reactivex.schedulers.Schedulers
 import shiverawe.github.com.receipt.data.bd.mapper.toReceipt
 import shiverawe.github.com.receipt.data.bd.mapper.toReceiptHeader
 import shiverawe.github.com.receipt.data.bd.room.ReceiptRoom
-import shiverawe.github.com.receipt.domain.entity.dto.Product
-import shiverawe.github.com.receipt.domain.entity.dto.Receipt
-import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
+import shiverawe.github.com.receipt.domain.entity.base.Product
+import shiverawe.github.com.receipt.domain.entity.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 class ReceiptDatabase : IReceiptDatabase {
 

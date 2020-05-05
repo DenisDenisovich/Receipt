@@ -1,27 +1,27 @@
 package shiverawe.github.com.receipt.ui.newreceipt
 
-import shiverawe.github.com.receipt.domain.entity.dto.Meta
-import shiverawe.github.com.receipt.domain.entity.dto.ErrorType
-sealed class CreateReceiptState
+import shiverawe.github.com.receipt.domain.entity.base.Meta
+import shiverawe.github.com.receipt.domain.entity.base.ErrorType
+sealed class CreateReceiptUiState
 
 data class ErrorState(
     val error: Throwable? = null,
     val message: String? = null,
     val type: ErrorType = ErrorType.ERROR
-) : CreateReceiptState()
+) : CreateReceiptUiState()
 
-data class SuccessState(val date: Long) : CreateReceiptState()
+data class SuccessState(val date: Long) : CreateReceiptUiState()
 
-object ExitState : CreateReceiptState()
+object ExitState : CreateReceiptUiState()
 
 data class QrCodeState(
     var isWaiting: Boolean = false,
     var error: ErrorState? = null
-) : CreateReceiptState()
+) : CreateReceiptUiState()
 
 data class ManualState(
     val meta: Meta = Meta(),
     var isWaiting: Boolean = false,
     var error: ErrorState? = null,
     val isFirstScreen: Boolean = false
-) : CreateReceiptState()
+) : CreateReceiptUiState()

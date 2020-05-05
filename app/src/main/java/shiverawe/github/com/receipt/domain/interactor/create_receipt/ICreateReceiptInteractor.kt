@@ -1,12 +1,11 @@
 package shiverawe.github.com.receipt.domain.interactor.create_receipt
 
-import shiverawe.github.com.receipt.domain.entity.dto.Meta
+import shiverawe.github.com.receipt.domain.entity.CreateReceiptState
+import shiverawe.github.com.receipt.domain.entity.base.Meta
 
 interface ICreateReceiptInteractor {
 
-    fun createReceipt(qrRawData: String, resultListener: CreateReceiptListener)
+    suspend fun createReceipt(qrRawData: String): CreateReceiptState
 
-    fun createReceipt(meta: Meta, resultListener: CreateReceiptListener)
-
-    fun cancelWork()
+    suspend fun createReceipt(meta: Meta): CreateReceiptState
 }

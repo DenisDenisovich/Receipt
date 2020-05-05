@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_manual.*
 import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.domain.entity.dto.Meta
+import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.utils.toLongWithMilliseconds
 import java.lang.Exception
 import java.lang.StringBuilder
@@ -21,7 +21,7 @@ class ManualFragment : NewReceiptFragment(R.layout.fragment_manual), View.OnFocu
     private val viewMode: CreateReceiptViewModel by lazy {
         getSharedViewModel<CreateReceiptViewModel>(from = { requireParentFragment() })
     }
-    private val stateObserver = Observer<CreateReceiptState> { state ->
+    private val stateObserver = Observer<CreateReceiptUiState> { state ->
         if (state is ManualState) {
             when {
                 state.isWaiting -> {

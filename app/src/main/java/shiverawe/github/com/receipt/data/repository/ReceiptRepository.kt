@@ -6,9 +6,9 @@ import retrofit2.HttpException
 import shiverawe.github.com.receipt.data.bd.datasource.receipt.IReceiptDatabase
 import shiverawe.github.com.receipt.data.network.datasource.receipt.IReceiptNetwork
 import shiverawe.github.com.receipt.data.network.utils.isOnline
-import shiverawe.github.com.receipt.domain.entity.dto.Meta
+import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
-import shiverawe.github.com.receipt.domain.entity.dto.Receipt
+import shiverawe.github.com.receipt.domain.entity.base.Receipt
 
 class ReceiptRepository(
     private val db: IReceiptDatabase,
@@ -20,7 +20,7 @@ class ReceiptRepository(
         return network.getReceipt(meta)
     }
 
-    override fun saveReceipt(meta: Meta): Single<Long> = network.saveReceipt(meta)
+    override suspend fun saveReceipt(meta: Meta): Long = network.saveReceipt(meta)
 
     override fun getReceiptById(receiptId: Long): Observable<Receipt> {
         // Get receipt from DB. Return this receipt if products list isn't empty

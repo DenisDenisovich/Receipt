@@ -2,14 +2,14 @@ package shiverawe.github.com.receipt.data.network.mapper
 
 import shiverawe.github.com.receipt.data.network.entity.item.ItemResponse
 import shiverawe.github.com.receipt.data.network.entity.receipt.ReceiptResponse
-import shiverawe.github.com.receipt.domain.entity.dto.Meta
-import shiverawe.github.com.receipt.domain.entity.dto.Product
-import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
-import shiverawe.github.com.receipt.domain.entity.dto.Shop
+import shiverawe.github.com.receipt.domain.entity.base.Meta
+import shiverawe.github.com.receipt.domain.entity.base.Product
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
+import shiverawe.github.com.receipt.domain.entity.base.Shop
 import java.text.SimpleDateFormat
 import java.util.*
 
-private val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+private val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale("ru"))
 
 fun ItemResponse.toProduct(): Product = Product(text, price, amount)
 

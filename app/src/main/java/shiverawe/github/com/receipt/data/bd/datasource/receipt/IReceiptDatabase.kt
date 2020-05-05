@@ -1,9 +1,9 @@
 package shiverawe.github.com.receipt.data.bd.datasource.receipt
 
 import io.reactivex.Single
-import shiverawe.github.com.receipt.domain.entity.dto.Product
-import shiverawe.github.com.receipt.domain.entity.dto.Receipt
-import shiverawe.github.com.receipt.domain.entity.dto.ReceiptHeader
+import shiverawe.github.com.receipt.domain.entity.base.Product
+import shiverawe.github.com.receipt.domain.entity.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 interface IReceiptDatabase {
 

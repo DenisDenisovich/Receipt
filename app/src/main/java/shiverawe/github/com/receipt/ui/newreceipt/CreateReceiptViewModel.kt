@@ -2,35 +2,25 @@ package shiverawe.github.com.receipt.ui.newreceipt
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import shiverawe.github.com.receipt.domain.entity.dto.Meta
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import shiverawe.github.com.receipt.domain.entity.CreateReceiptErrorState
+import shiverawe.github.com.receipt.domain.entity.CreateReceiptSuccessState
+import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.domain.interactor.create_receipt.CreateReceiptListener
-import shiverawe.github.com.receipt.domain.entity.dto.ErrorType
+import shiverawe.github.com.receipt.domain.entity.base.ErrorType
 import shiverawe.github.com.receipt.domain.interactor.create_receipt.ICreateReceiptInteractor
 
 class CreateReceiptViewModel(private val interactor: ICreateReceiptInteractor) : ViewModel() {
 
-    val state: MutableLiveData<CreateReceiptState> = MutableLiveData(QrCodeState())
+    val state: MutableLiveData<CreateReceiptUiState> = MutableLiveData(QrCodeState())
     private val qrCodeState: QrCodeState?
         get() = state.value as? QrCodeState
     private val manualState: ManualState?
         get() = state.value as? ManualState
 
-    // callback of receipt creation
-    private val createReceiptListener = object : CreateReceiptListener {
-        override fun onSuccess(id: Long, meta: Meta) {
-            state.value = SuccessState(meta.t)
-        }
-
-        override fun onError(error: Throwable?, errorType: ErrorType) {
-            if (qrCodeState != null) {
-                // current state is QrCodeState. Set error to QrCodeState
-                state.value = QrCodeState(isWaiting = false, error = ErrorState(error, type = errorType))
-            } else if (manualState != null) {
-                // current state is ManualState. Set error to ManualState
-                state.value = ManualState(isWaiting = false, error = ErrorState(error, type = errorType))
-            }
-        }
-    }
+    private var currentJob: Job? = null
 
     fun goToManualScreen(isFirstScreen: Boolean = false) {
         state.value = ManualState(isFirstScreen = isFirstScreen)
@@ -52,13 +42,48 @@ class CreateReceiptViewModel(private val interactor: ICreateReceiptInteractor) :
     fun createReceipt(qrCodeData: String) {
         if (qrCodeState?.isWaiting == true) return
         state.value = QrCodeState(isWaiting = true)
-        interactor.createReceipt(qrCodeData, createReceiptListener)
+
+        currentJob?.cancel()
+        currentJob = viewModelScope.launch {
+            when(val result = interactor.createReceipt(qrCodeData)) {
+
+                is CreateReceiptSuccessState -> {
+                    state.value = SuccessState(result.meta.t)
+                }
+
+                is CreateReceiptErrorState -> {
+                    qrCodeState?.let {
+                        state.value = QrCodeState(
+                            isWaiting = false,
+                            error = ErrorState(result.error, type = result.type)
+                        )
+                    }
+                }
+            }
+        }
     }
 
     fun createReceipt(meta: Meta) {
         if (manualState?.isWaiting == true) return
         state.value = ManualState(isWaiting = true)
-        interactor.createReceipt(meta, createReceiptListener)
+        currentJob?.cancel()
+        currentJob = viewModelScope.launch {
+            when(val result = interactor.createReceipt(meta)) {
+
+                is CreateReceiptSuccessState -> {
+                    state.value = SuccessState(result.meta.t)
+                }
+
+                is CreateReceiptErrorState -> {
+                    manualState?.let {
+                        state.value = ManualState(
+                            isWaiting = false,
+                            error = ErrorState(result.error, type = result.type)
+                        )
+                    }
+                }
+            }
+        }
     }
 
     fun showError(message: String? = null) {
@@ -85,6 +110,6 @@ class CreateReceiptViewModel(private val interactor: ICreateReceiptInteractor) :
     }
 
     private fun cancelTask() {
-        interactor.cancelWork()
+        currentJob?.cancel()
     }
 }

@@ -1,52 +1,46 @@
 package shiverawe.github.com.receipt.domain.interactor.create_receipt
 
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import retrofit2.HttpException
 import shiverawe.github.com.receipt.data.network.utils.isOnline
-import shiverawe.github.com.receipt.domain.entity.dto.ErrorType
-import shiverawe.github.com.receipt.domain.entity.dto.Meta
+import shiverawe.github.com.receipt.domain.entity.CreateReceiptCancelTask
+import shiverawe.github.com.receipt.domain.entity.CreateReceiptErrorState
+import shiverawe.github.com.receipt.domain.entity.CreateReceiptState
+import shiverawe.github.com.receipt.domain.entity.CreateReceiptSuccessState
+import shiverawe.github.com.receipt.domain.entity.base.ErrorType
+import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import shiverawe.github.com.receipt.utils.toLongWithSeconds
 import java.lang.Exception
+import java.util.concurrent.CancellationException
 
 class CreateReceiptInteractor(private val repository: IReceiptRepository) : ICreateReceiptInteractor {
 
-    private var disposable: Disposable? = null
-
-    override fun createReceipt(qrRawData: String, resultListener: CreateReceiptListener) {
+    override suspend fun createReceipt(qrRawData: String): CreateReceiptState =
         try {
             val meta = parseQrCode(qrRawData)
-            createReceiptNetwork(meta, resultListener)
+            createReceiptNetwork(meta)
         } catch (e: ParseQrException) {
-            resultListener.onError(error = e, errorType = ErrorType.ERROR)
+            CreateReceiptErrorState(error = e, type = ErrorType.ERROR)
         }
-    }
 
-    override fun createReceipt(meta: Meta, resultListener: CreateReceiptListener) {
-        createReceiptNetwork(meta, resultListener)
-    }
+    override suspend fun createReceipt(meta: Meta): CreateReceiptState = createReceiptNetwork(meta)
 
     // Go to network for creation receipt
-    private fun createReceiptNetwork(meta: Meta, resultListener: CreateReceiptListener) {
+    private suspend fun createReceiptNetwork(meta: Meta): CreateReceiptState {
         if (!isOnline()) {
-            resultListener.onError(errorType = ErrorType.OFFLINE)
-            return
+            return CreateReceiptErrorState(type = ErrorType.OFFLINE)
         }
         // post request for creation receipt
-        disposable?.dispose()
-        disposable = repository.saveReceipt(meta)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                resultListener.onSuccess(it, meta)
-            }, {
-                resultListener.onError(error = it, errorType = ErrorType.ERROR)
-            })
-    }
-
-    override fun cancelWork() {
-        disposable?.dispose()
+        return try {
+            val newReceiptId = repository.saveReceipt(meta)
+            CreateReceiptSuccessState(newReceiptId, meta)
+        } catch (e: CancellationException) {
+            CreateReceiptCancelTask
+        } catch (e: Exception) {
+            CreateReceiptErrorState(error = e, type = ErrorType.ERROR)
+        }
     }
 
     /**

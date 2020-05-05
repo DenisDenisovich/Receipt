@@ -2,7 +2,7 @@ package shiverawe.github.com.receipt.ui.receipt.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
-import shiverawe.github.com.receipt.domain.entity.dto.Product
+import shiverawe.github.com.receipt.domain.entity.base.Product
 import shiverawe.github.com.receipt.ui.base.adapter.AdapterDelegatesManager
 
 class ProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
