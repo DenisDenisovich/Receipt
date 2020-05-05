@@ -53,11 +53,13 @@ class CreateReceiptInteractor(private val repository: IReceiptRepository) : ICre
         try {
             val meta = HashMap<String, String>()
             val parameters = qrRawData.split("&")
+
             parameters.forEach { parameter ->
                 val key = parameter.substring(0, parameter.indexOf("="))
                 val value = parameter.substring(parameter.indexOf("=") + 1, parameter.length)
                 meta[key] = value
             }
+
             return Meta(
                 t = (meta["t"] ?: "").toLongWithSeconds(),
                 fn = meta["fn"] ?: "",

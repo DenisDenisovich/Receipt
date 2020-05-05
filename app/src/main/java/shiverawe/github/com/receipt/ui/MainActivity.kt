@@ -42,12 +42,14 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
                 supportFragmentManager.popBackStack()
                 showBottomAppBar(true)
             }
+
             is CreateReceiptRootFragment -> {
                 if (topFragment.onBackPressed()) {
                     supportFragmentManager.popBackStack()
                     showBottomAppBar(true)
                 }
             }
+
             else -> {
                 super.onBackPressed()
             }

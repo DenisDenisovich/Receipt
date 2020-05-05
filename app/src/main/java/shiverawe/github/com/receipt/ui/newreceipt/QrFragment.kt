@@ -24,22 +24,7 @@ class QrFragment : NewReceiptFragment(R.layout.fragment_qr), View.OnClickListene
     }
     private val stateObserver = Observer<CreateReceiptUiState> { state ->
         if (state is QrCodeState) {
-            when {
-                state.isWaiting -> {
-                    showDialog()
-                }
-
-                !state.isWaiting && state.error == null -> {
-                    dismissDialog()
-                }
-
-                state.error != null -> {
-                    state.error?.let { errorState ->
-                        showError(errorState)
-                        viewMode.onShowError()
-                    }
-                }
-            }
+            handleQrState(state)
         }
     }
 
@@ -110,6 +95,25 @@ class QrFragment : NewReceiptFragment(R.layout.fragment_qr), View.OnClickListene
             }
             R.id.btn_qr_reader_manual -> {
                 viewMode.goToManualScreen()
+            }
+        }
+    }
+
+    private fun handleQrState(state: QrCodeState) {
+        when {
+            state.isWaiting -> {
+                showDialog()
+            }
+
+            !state.isWaiting && state.error == null -> {
+                dismissDialog()
+            }
+
+            state.error != null -> {
+                state.error?.let { errorState ->
+                    showError(errorState)
+                    viewMode.onShowError()
+                }
             }
         }
     }
