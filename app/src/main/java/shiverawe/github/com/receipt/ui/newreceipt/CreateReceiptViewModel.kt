@@ -2,18 +2,12 @@ package shiverawe.github.com.receipt.ui.newreceipt
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import retrofit2.HttpException
-import shiverawe.github.com.receipt.data.network.utils.isOnline
 import shiverawe.github.com.receipt.domain.entity.dto.Meta
-import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
-import shiverawe.github.com.receipt.utils.toLongWithSeconds
-import java.lang.Exception
-import kotlin.collections.HashMap
+import shiverawe.github.com.receipt.domain.interactor.create_receipt.CreateReceiptListener
+import shiverawe.github.com.receipt.domain.entity.dto.ErrorType
+import shiverawe.github.com.receipt.domain.interactor.create_receipt.ICreateReceiptInteractor
 
-class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewModel() {
+class CreateReceiptViewModel(private val interactor: ICreateReceiptInteractor) : ViewModel() {
 
     val state: MutableLiveData<CreateReceiptState> = MutableLiveData(QrCodeState())
     private val qrCodeState: QrCodeState?
@@ -21,7 +15,22 @@ class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewM
     private val manualState: ManualState?
         get() = state.value as? ManualState
 
-    private var disposable: Disposable? = null
+    // callback of receipt creation
+    private val createReceiptListener = object : CreateReceiptListener {
+        override fun onSuccess(id: Long, meta: Meta) {
+            state.value = SuccessState(meta.t)
+        }
+
+        override fun onError(error: Throwable?, errorType: ErrorType) {
+            if (qrCodeState != null) {
+                // current state is QrCodeState. Set error to QrCodeState
+                state.value = QrCodeState(isWaiting = false, error = ErrorState(error, type = errorType))
+            } else if (manualState != null) {
+                // current state is ManualState. Set error to ManualState
+                state.value = ManualState(isWaiting = false, error = ErrorState(error, type = errorType))
+            }
+        }
+    }
 
     fun goToManualScreen(isFirstScreen: Boolean = false) {
         state.value = ManualState(isFirstScreen = isFirstScreen)
@@ -42,49 +51,14 @@ class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewM
 
     fun createReceipt(qrCodeData: String) {
         if (qrCodeState?.isWaiting == true) return
-        if (!isOnline()) {
-            state.value = QrCodeState(error = ErrorState(type = ErrorType.OFFLINE))
-            return
-        }
         state.value = QrCodeState(isWaiting = true)
-        val meta = parseQrCode(qrCodeData)
-        if (meta == null) {
-            state.value = QrCodeState(error = ErrorState())
-            return
-        }
-        disposable?.dispose()
-        disposable = repository.saveReceipt(meta)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                state.value = SuccessState(meta.t)
-            }, {
-                state.value = qrCodeState?.apply {
-                    isWaiting = false
-                    error = ErrorState(it)
-                }
-            })
+        interactor.createReceipt(qrCodeData, createReceiptListener)
     }
 
     fun createReceipt(meta: Meta) {
         if (manualState?.isWaiting == true) return
-        if (!isOnline()) {
-            state.value = ManualState(error = ErrorState(type = ErrorType.OFFLINE))
-            return
-        }
         state.value = ManualState(isWaiting = true)
-        disposable?.dispose()
-        disposable = repository.saveReceipt(meta)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                state.value = SuccessState(meta.t)
-            }, {
-                state.value = manualState?.apply {
-                    isWaiting = false
-                    error = ErrorState(it)
-                }
-            })
+        interactor.createReceipt(meta, createReceiptListener)
     }
 
     fun showError(message: String? = null) {
@@ -111,27 +85,6 @@ class CreateReceiptViewModel(private val repository: IReceiptRepository) : ViewM
     }
 
     private fun cancelTask() {
-        disposable?.dispose()
-    }
-
-    private fun parseQrCode(data: String): Meta? {
-        val meta = HashMap<String, String>()
-        try {
-            val parameters = data.split("&")
-            parameters.forEach { parameter ->
-                val key = parameter.substring(0, parameter.indexOf("="))
-                val value = parameter.substring(parameter.indexOf("=") + 1, parameter.length)
-                meta[key] = value
-            }
-            return Meta(
-                t = (meta["t"] ?: "").toLongWithSeconds(),
-                fn = meta["fn"] ?: "",
-                fp = meta["fp"] ?: "",
-                fd = meta["i"] ?: "",
-                s = meta["s"]?.toDoubleOrNull() ?: 0.0
-            )
-        } catch (e: Exception) {
-            return null
-        }
+        interactor.cancelWork()
     }
 }

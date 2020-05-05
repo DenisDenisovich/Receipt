@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import shiverawe.github.com.receipt.R
+import shiverawe.github.com.receipt.domain.entity.dto.ErrorType
 import shiverawe.github.com.receipt.utils.toast
 
 abstract class NewReceiptFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
@@ -12,7 +13,7 @@ abstract class NewReceiptFragment(@LayoutRes layoutId: Int) : Fragment(layoutId)
     protected var errorToast: Toast? = null
 
     protected fun showDialog() {
-        waitingDialog.show(childFragmentManager, null)
+        waitingDialog.showNow(childFragmentManager, null)
     }
 
     // hide waiting dialog if he is showed
@@ -29,7 +30,7 @@ abstract class NewReceiptFragment(@LayoutRes layoutId: Int) : Fragment(layoutId)
     protected fun showError(errorState: ErrorState): Boolean {
         val message = when {
             errorState.message != null -> errorState.message
-            errorState.type == ErrorType.DEFAULT -> getString(R.string.error)
+            errorState.type == ErrorType.ERROR -> getString(R.string.error)
             errorState.type == ErrorType.OFFLINE -> getString(R.string.error_network)
             else -> getString(R.string.error)
         }
