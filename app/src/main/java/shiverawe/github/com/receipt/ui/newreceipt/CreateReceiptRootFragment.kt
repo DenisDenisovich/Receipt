@@ -74,7 +74,7 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
         viewModel.state.removeObserver(stateObserver)
     }
 
-    override fun canGoBack(): Boolean {
+    override fun quitOnBackPressed(): Boolean {
         return when {
             viewModel.state.value is ExitState -> {
                 true
