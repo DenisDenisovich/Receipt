@@ -4,6 +4,7 @@ import io.reactivex.Single
 import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.domain.entity.base.Product
 import shiverawe.github.com.receipt.domain.entity.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 interface IReceiptNetwork {
 
@@ -11,5 +12,5 @@ interface IReceiptNetwork {
 
     fun getProducts(id: Long): Single<List<Product>>
 
-    suspend fun saveReceipt(meta: Meta): Long
+    suspend fun saveReceipt(meta: Meta): ReceiptHeader
 }

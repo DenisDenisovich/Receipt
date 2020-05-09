@@ -17,5 +17,5 @@ interface Api {
     fun getReceipts(@Body receiptRequest: ReceiptRequest): Single<List<ReceiptResponse>>
 
     @POST("api/create")
-    suspend fun createReceipt(@Body createRequest: CreateRequest): Long
+    suspend fun createReceipt(@Body createRequest: CreateRequest): ReceiptResponse
 }

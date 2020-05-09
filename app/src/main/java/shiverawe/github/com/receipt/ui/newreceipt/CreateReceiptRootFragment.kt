@@ -8,8 +8,10 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.Disposable
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import shiverawe.github.com.receipt.R
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.BackPressedHandle
+import shiverawe.github.com.receipt.ui.receipt.ReceiptFragment
 import shiverawe.github.com.receipt.utils.toast
 
 class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root), BackPressedHandle {
@@ -34,6 +36,10 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
             is SuccessState -> {
                 toast(R.string.create_receipt_success, isLongDuration = false)
                 navigation?.updateHistory(state.date)
+            }
+
+            is ShowReceiptState -> {
+                    openReceiptScreen(state.receiptHeader)
             }
 
             is ExitState -> {
@@ -67,12 +73,20 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
         viewModel.state.removeObserver(stateObserver)
     }
 
-    override fun onBackPressed(): Boolean {
-        return if (viewModel.state.value is ExitState) {
-            true
-        } else {
-            viewModel.goBack()
-            false
+    override fun canGoBack(): Boolean {
+        return when {
+            viewModel.state.value is ExitState -> {
+                true
+            }
+
+            currentScreen == CurrentScreen.RECEIPT -> {
+                true
+            }
+
+            else -> {
+                viewModel.goBack()
+                false
+            }
         }
     }
 
@@ -132,9 +146,22 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
         }
     }
 
+    private fun openReceiptScreen(receiptHeader: ReceiptHeader) {
+        childFragmentManager.beginTransaction().apply {
+            addToBackStack(CurrentScreen.QR.name)
+            replace(
+                R.id.root_create_receipt,
+                ReceiptFragment.getNewInstance(receiptHeader),
+                CurrentScreen.RECEIPT.name
+            )
+            commit()
+        }
+    }
+
     private enum class CurrentScreen {
         MANUAL,
         QR,
+        RECEIPT,
         NOTHING,
         OTHER
     }

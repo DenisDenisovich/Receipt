@@ -3,5 +3,5 @@ package shiverawe.github.com.receipt.ui
 interface BackPressedHandle {
 
     // return true if component can't handle action
-    fun onBackPressed(): Boolean
+    fun canGoBack(): Boolean
 }

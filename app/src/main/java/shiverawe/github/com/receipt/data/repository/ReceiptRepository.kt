@@ -2,13 +2,16 @@ package shiverawe.github.com.receipt.data.repository
 
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
 import shiverawe.github.com.receipt.data.bd.datasource.receipt.IReceiptDatabase
 import shiverawe.github.com.receipt.data.network.datasource.receipt.IReceiptNetwork
 import shiverawe.github.com.receipt.data.network.utils.isOnline
 import shiverawe.github.com.receipt.domain.entity.base.Meta
+import shiverawe.github.com.receipt.domain.entity.base.Product
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import shiverawe.github.com.receipt.domain.entity.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 class ReceiptRepository(
     private val db: IReceiptDatabase,
@@ -20,7 +23,13 @@ class ReceiptRepository(
         return network.getReceipt(meta)
     }
 
-    override suspend fun saveReceipt(meta: Meta): Long = network.saveReceipt(meta)
+    override suspend fun saveReceipt(meta: Meta): ReceiptHeader = network.saveReceipt(meta)
+
+    override suspend fun getProducts(id: Long): List<Product> {
+        return network.getProducts(id)
+            .subscribeOn(Schedulers.io())
+            .blockingGet()
+    }
 
     override fun getReceiptById(receiptId: Long): Observable<Receipt> {
         // Get receipt from DB. Return this receipt if products list isn't empty

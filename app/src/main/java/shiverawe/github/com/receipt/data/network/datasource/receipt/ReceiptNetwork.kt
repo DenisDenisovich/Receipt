@@ -10,6 +10,7 @@ import shiverawe.github.com.receipt.data.network.mapper.toReceiptHeader
 import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.domain.entity.base.Product
 import shiverawe.github.com.receipt.domain.entity.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.utils.toStringWithSeconds
 
 class ReceiptNetwork(private val api: Api) : IReceiptNetwork {
@@ -37,7 +38,7 @@ class ReceiptNetwork(private val api: Api) : IReceiptNetwork {
             productResponse.map { it.toProduct() }
         }
 
-    override suspend fun saveReceipt(meta: Meta): Long = api.createReceipt(
+    override suspend fun saveReceipt(meta: Meta): ReceiptHeader = api.createReceipt(
         CreateRequest(
             fn = meta.fn,
             fp = meta.fp,
@@ -45,5 +46,5 @@ class ReceiptNetwork(private val api: Api) : IReceiptNetwork {
             sum = meta.s.toString(),
             date = meta.t.toStringWithSeconds()
         )
-    )
+    ).toReceiptHeader()
 }

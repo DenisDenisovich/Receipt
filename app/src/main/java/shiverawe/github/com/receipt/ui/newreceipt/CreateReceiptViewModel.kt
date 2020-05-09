@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import shiverawe.github.com.receipt.domain.entity.CreateReceiptErrorState
+import shiverawe.github.com.receipt.domain.entity.CreateReceiptIsExistState
 import shiverawe.github.com.receipt.domain.entity.CreateReceiptSuccessState
 import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.domain.interactor.create_receipt.CreateReceiptListener
@@ -50,6 +51,10 @@ class CreateReceiptViewModel(private val interactor: ICreateReceiptInteractor) :
                     state.value = SuccessState(result.meta.t)
                 }
 
+                is CreateReceiptIsExistState -> {
+                    state.value = ShowReceiptState(result.receiptHeader)
+                }
+
                 is CreateReceiptErrorState -> {
                     qrCodeState?.let {
                         state.value = QrCodeState(
@@ -70,6 +75,10 @@ class CreateReceiptViewModel(private val interactor: ICreateReceiptInteractor) :
             when(val result = interactor.createReceipt(meta)) {
                 is CreateReceiptSuccessState -> {
                     state.value = SuccessState(result.meta.t)
+                }
+
+                is CreateReceiptIsExistState -> {
+                    state.value = ShowReceiptState(result.receiptHeader)
                 }
 
                 is CreateReceiptErrorState -> {
