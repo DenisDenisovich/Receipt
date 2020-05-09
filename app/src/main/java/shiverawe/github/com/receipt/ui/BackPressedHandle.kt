@@ -2,6 +2,9 @@ package shiverawe.github.com.receipt.ui
 
 interface BackPressedHandle {
 
-    // return true if component can't handle action
-    fun onBackPressed(): Boolean
+    /**
+     * @return true, if component allows to close himself
+     * @return false, if component forbid to close himself
+     **/
+    fun quitOnBackPressed(): Boolean
 }

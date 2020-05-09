@@ -8,13 +8,13 @@ fun ReceiptEntity.toReceipt(products: List<ProductEntity>): Receipt {
     val shop = Shop(date, place, sum.toString())
     val meta = Meta(date, fn, fd, fp, sum)
     val items = products.map { Product(it.text, it.price, it.amount.toDouble()) }
-    return Receipt(ReceiptHeader(remoteId, shop, meta), items)
+    return Receipt(ReceiptHeader(remoteId, ReceiptStatus.LOADED, shop, meta), items)
 }
 
 fun ReceiptEntity.toReceiptHeader(): ReceiptHeader {
     val shop = Shop(date, place, sum.toString())
     val meta = Meta(date, fn, fd, fp, sum)
-    return ReceiptHeader(remoteId, shop, meta)
+    return ReceiptHeader(remoteId, ReceiptStatus.LOADED, shop, meta)
 }
 
 fun Receipt.toReceiptEntity(): ReceiptEntity = ReceiptEntity(

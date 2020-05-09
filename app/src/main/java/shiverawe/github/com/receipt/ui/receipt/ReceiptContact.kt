@@ -1,6 +1,7 @@
 package shiverawe.github.com.receipt.ui.receipt
 
 import shiverawe.github.com.receipt.domain.entity.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 interface ReceiptContact {
     interface View {
@@ -13,6 +14,7 @@ interface ReceiptContact {
         fun detach()
         fun getReceiptById(receiptId: Long)
         fun getReceiptByMeta(options: String)
+        fun getReceiptByHeader(receiptHeader: ReceiptHeader)
     }
 
 }

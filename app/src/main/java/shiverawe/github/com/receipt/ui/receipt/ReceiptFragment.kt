@@ -13,6 +13,7 @@ import org.koin.android.ext.android.inject
 import retrofit2.HttpException
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.base.Receipt
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.ui.receipt.adapter.ProductAdapter
 import shiverawe.github.com.receipt.utils.Settings
 import shiverawe.github.com.receipt.utils.floorTwo
@@ -118,14 +119,14 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
     fun sendRequest() {
         val receiptId = arguments?.getLong(RECEIPT_ID_EXTRA) ?: 0L
         val receiptOptions = arguments?.getString(RECEIPT_OPTIONS_EXTRA) ?: ""
-        if (receiptId != 0L) {
-            presenter.getReceiptById(receiptId)
-        } else {
-            presenter.getReceiptByMeta(receiptOptions)
+        val receiptHeader = arguments?.getSerializable(RECEIPT_HEADER_EXTRA) as? ReceiptHeader
+
+        when {
+            receiptId != 0L -> presenter.getReceiptById(receiptId)
+            receiptOptions != "" -> presenter.getReceiptByMeta(receiptOptions)
+            receiptHeader != null -> presenter.getReceiptByHeader(receiptHeader)
         }
     }
-
-    fun getTime() = receipt?.header?.shop?.date
 
     override fun onDestroy() {
         presenter.detach()
@@ -163,6 +164,7 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
         const val RECEIPT_TAG = "receipt_fragment"
         const val RECEIPT_ID_EXTRA = "receiptId"
         const val RECEIPT_OPTIONS_EXTRA = "receiptOptions"
+        const val RECEIPT_HEADER_EXTRA = "receiptHeader"
 
         fun getNewInstance(receiptId: Long): ReceiptFragment {
             val fragment = ReceiptFragment()
@@ -178,6 +180,12 @@ class ReceiptFragment : Fragment(), ReceiptContact.View, View.OnClickListener {
             bundle.putString(RECEIPT_OPTIONS_EXTRA, receiptOptions)
             fragment.arguments = bundle
             return fragment
+        }
+
+        fun getNewInstance(receiptHeader: ReceiptHeader) = ReceiptFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable(RECEIPT_HEADER_EXTRA, receiptHeader)
+            }
         }
     }
 }

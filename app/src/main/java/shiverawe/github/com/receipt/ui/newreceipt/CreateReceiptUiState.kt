@@ -2,6 +2,8 @@ package shiverawe.github.com.receipt.ui.newreceipt
 
 import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.domain.entity.base.ErrorType
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
+
 sealed class CreateReceiptUiState
 
 data class ErrorState(
@@ -11,6 +13,8 @@ data class ErrorState(
 ) : CreateReceiptUiState()
 
 data class SuccessState(val date: Long) : CreateReceiptUiState()
+
+data class ShowReceiptState(val receiptHeader: ReceiptHeader): CreateReceiptUiState()
 
 object ExitState : CreateReceiptUiState()
 

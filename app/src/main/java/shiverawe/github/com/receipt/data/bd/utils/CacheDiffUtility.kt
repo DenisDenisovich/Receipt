@@ -31,5 +31,5 @@ class CacheDiffUtility: ICacheDiffUtility {
     }
 
     private fun getKey(receipt: ReceiptHeader): String =
-        gson.toJson(ReceiptHeader(0, receipt.shop, receipt.meta))
+        gson.toJson(ReceiptHeader(0, receipt.status, receipt.shop, receipt.meta))
 }
