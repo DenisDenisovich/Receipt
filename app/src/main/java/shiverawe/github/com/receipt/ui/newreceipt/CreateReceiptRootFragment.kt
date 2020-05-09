@@ -52,6 +52,7 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
         get() = when (childFragmentManager.findFragmentById(R.id.root_create_receipt)) {
             is QrFragment -> CurrentScreen.QR
             is ManualFragment -> CurrentScreen.MANUAL
+            is ReceiptFragment -> CurrentScreen.RECEIPT
             null -> CurrentScreen.NOTHING
             else -> CurrentScreen.OTHER
         }

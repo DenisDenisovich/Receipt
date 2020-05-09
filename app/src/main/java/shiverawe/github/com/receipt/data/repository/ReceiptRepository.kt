@@ -3,6 +3,8 @@ package shiverawe.github.com.receipt.data.repository
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import shiverawe.github.com.receipt.data.bd.datasource.receipt.IReceiptDatabase
 import shiverawe.github.com.receipt.data.network.datasource.receipt.IReceiptNetwork
@@ -16,7 +18,6 @@ import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 class ReceiptRepository(
     private val db: IReceiptDatabase,
     private val network: IReceiptNetwork
-
 ) : IReceiptRepository {
 
     override fun getReceipt(meta: Meta): Single<Receipt?> {
@@ -25,10 +26,8 @@ class ReceiptRepository(
 
     override suspend fun saveReceipt(meta: Meta): ReceiptHeader = network.saveReceipt(meta)
 
-    override suspend fun getProducts(id: Long): List<Product> {
-        return network.getProducts(id)
-            .subscribeOn(Schedulers.io())
-            .blockingGet()
+    override suspend fun getProducts(id: Long): List<Product> = withContext(Dispatchers.IO) {
+        network.getProducts(id).subscribeOn(Schedulers.io()).blockingGet()
     }
 
     override fun getReceiptById(receiptId: Long): Observable<Receipt> {

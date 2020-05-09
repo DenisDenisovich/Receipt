@@ -34,7 +34,6 @@ fun List<ReceiptResponse>.toReceiptHeader(): List<ReceiptHeader> =
                 it.fn != null &&
                 it.fp != null &&
                 it.place != null &&
-                it.provider != null &&
                 it.status != null &&
                 it.sum != null
         }

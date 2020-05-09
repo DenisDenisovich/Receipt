@@ -16,7 +16,7 @@ import kotlin.collections.HashMap
 class ReceiptPresenter(private val repository: IReceiptRepository): ReceiptContact.Presenter {
     private var view: ReceiptContact.View? = null
     private var disposable: Disposable? = null
-    private var currentScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
+    private var currentScope: CoroutineScope? = null
     private val dateFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
 
     override fun attach(view: ReceiptContact.View) {
@@ -26,7 +26,7 @@ class ReceiptPresenter(private val repository: IReceiptRepository): ReceiptConta
     override fun detach() {
         view = null
         disposable?.dispose()
-        currentScope.cancel()
+        currentScope?.cancel()
     }
 
     override fun getReceiptById(receiptId: Long) {
@@ -64,9 +64,11 @@ class ReceiptPresenter(private val repository: IReceiptRepository): ReceiptConta
     }
 
     override fun getReceiptByHeader(receiptHeader: ReceiptHeader) {
-        currentScope.cancel()
-        currentScope.launch {
+        currentScope?.cancel()
+        currentScope = MainScope()
+        currentScope?.launch {
             try {
+                view?.showReceipt(Receipt(receiptHeader, arrayListOf()))
                 val products = repository.getProducts(receiptHeader.receiptId)
                 view?.showReceipt(Receipt(receiptHeader, products))
             } catch (e: Exception) {
