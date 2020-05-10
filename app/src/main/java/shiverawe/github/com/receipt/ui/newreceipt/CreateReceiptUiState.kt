@@ -1,7 +1,7 @@
 package shiverawe.github.com.receipt.ui.newreceipt
 
 import shiverawe.github.com.receipt.domain.entity.base.Meta
-import shiverawe.github.com.receipt.domain.entity.base.ErrorType
+import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 sealed class CreateReceiptUiState

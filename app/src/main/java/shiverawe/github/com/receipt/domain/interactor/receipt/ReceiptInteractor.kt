@@ -2,42 +2,44 @@ package shiverawe.github.com.receipt.domain.interactor.receipt
 
 import kotlinx.coroutines.CancellationException
 import shiverawe.github.com.receipt.data.network.utils.isOnline
-import shiverawe.github.com.receipt.domain.entity.base.ErrorType
+import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.base.Receipt
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
+import shiverawe.github.com.receipt.domain.entity.Result
+import shiverawe.github.com.receipt.domain.entity.ResultError
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import java.lang.Exception
 
 class ReceiptInteractor(private val repository: IReceiptRepository) : IReceiptInteractor {
 
-    override suspend fun getReceipt(id: Long): ReceiptResult<Receipt> =
+    override suspend fun getReceipt(id: Long): Result<Receipt> =
         try {
-            ReceiptResult(repository.getReceipt(id))
+            Result(repository.getReceipt(id))
         } catch (e: CancellationException) {
-            ReceiptResult(isCancel = true)
+            Result(isCancel = true)
         } catch (e: Exception) {
-            ReceiptResult(error = getErrorResult(e))
+            Result(error = getErrorResult(e))
         }
 
-    override suspend fun getReceipt(receiptHeader: ReceiptHeader): ReceiptResult<Receipt> =
+    override suspend fun getReceipt(receiptHeader: ReceiptHeader): Result<Receipt> =
         try {
             val products = repository.getProducts(receiptHeader.receiptId)
-            ReceiptResult(Receipt(receiptHeader, products))
+            Result(Receipt(receiptHeader, products))
         } catch (e: CancellationException) {
-            ReceiptResult(isCancel = true)
+            Result(isCancel = true)
         } catch (e: Exception) {
-            ReceiptResult(error = getErrorResult(e))
+            Result(error = getErrorResult(e))
         }
 
-    override suspend fun getReceiptHeader(id: Long): ReceiptResult<ReceiptHeader> =
+    override suspend fun getReceiptHeader(id: Long): Result<ReceiptHeader> =
         try {
-            ReceiptResult(repository.getReceiptHeader(id))
+            Result(repository.getReceiptHeader(id))
         } catch (e: CancellationException) {
-            ReceiptResult(isCancel = true)
+            Result(isCancel = true)
         } catch (e: Exception) {
-            ReceiptResult(error = ReceiptErrorResult(e, ErrorType.ERROR))
+            Result(error = ResultError(e, ErrorType.ERROR))
         }
 
-    private fun getErrorResult(e: Exception): ReceiptErrorResult =
-        ReceiptErrorResult(e, if (isOnline()) ErrorType.ERROR else ErrorType.OFFLINE)
+    private fun getErrorResult(e: Exception): ResultError =
+        ResultError(e, if (isOnline()) ErrorType.ERROR else ErrorType.OFFLINE)
 }

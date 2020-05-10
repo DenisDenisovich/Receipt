@@ -1,6 +1,6 @@
 package shiverawe.github.com.receipt.ui.history.month
 
-import shiverawe.github.com.receipt.domain.entity.base.ErrorType
+import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 interface MonthContract {
