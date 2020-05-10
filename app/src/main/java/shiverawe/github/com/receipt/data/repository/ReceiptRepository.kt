@@ -13,7 +13,7 @@ class ReceiptRepository(
     private val network: IReceiptNetwork
 ) : IReceiptRepository {
 
-    override suspend fun createReceipt(meta: Meta): ReceiptHeader? = network.createReceipt(meta)
+    override suspend fun createReceipt(meta: Meta): ReceiptHeader = network.createReceipt(meta)
 
     override suspend fun getReceipt(receiptId: Long): Receipt? =
         db.getReceiptById(receiptId) ?: network.getReceipt(receiptId)

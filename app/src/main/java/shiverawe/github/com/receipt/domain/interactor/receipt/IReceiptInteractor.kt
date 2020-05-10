@@ -5,9 +5,9 @@ import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 interface IReceiptInteractor {
 
-    suspend fun getReceipt(id: Long): Receipt?
+    suspend fun getReceipt(id: Long): ReceiptResult<Receipt>
 
-    suspend fun getReceipt(receiptHeader: ReceiptHeader): Receipt
+    suspend fun getReceipt(receiptHeader: ReceiptHeader): ReceiptResult<Receipt>
 
-    suspend fun getReceiptHeader(id: Long): ReceiptHeader?
+    suspend fun getReceiptHeader(id: Long): ReceiptResult<ReceiptHeader>
 }

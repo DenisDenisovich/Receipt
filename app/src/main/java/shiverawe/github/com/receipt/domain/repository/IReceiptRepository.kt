@@ -7,7 +7,7 @@ import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 interface IReceiptRepository {
 
-    suspend fun createReceipt(meta: Meta): ReceiptHeader?
+    suspend fun createReceipt(meta: Meta): ReceiptHeader
 
     suspend fun getReceipt(receiptId: Long): Receipt?
 

@@ -11,5 +11,5 @@ interface IReceiptNetwork {
 
     suspend fun getProducts(id: Long): List<Product>
 
-    suspend fun createReceipt(meta: Meta): ReceiptHeader?
+    suspend fun createReceipt(meta: Meta): ReceiptHeader
 }

@@ -26,6 +26,7 @@ import shiverawe.github.com.receipt.ui.history.month.MonthPresenter
 import shiverawe.github.com.receipt.ui.newreceipt.CreateReceiptViewModel
 import shiverawe.github.com.receipt.ui.receipt.ReceiptContact
 import shiverawe.github.com.receipt.ui.receipt.ReceiptPresenter
+import shiverawe.github.com.receipt.ui.receipt.ReceiptViewModel
 
 val monthModule = module {
     factory<IMonthNetwork> { MonthNetwork(get()) }
@@ -36,9 +37,10 @@ val monthModule = module {
 val receiptModule = module {
     factory<IReceiptNetwork> { ReceiptNetwork(get()) }
     factory<IReceiptRepository> { ReceiptRepository(get(), get()) }
+    factory<ICreateReceiptInteractor> { CreateReceiptInteractor(get()) }
     factory<ReceiptContact.Presenter> { ReceiptPresenter(get()) }
     viewModel { CreateReceiptViewModel(get()) }
-    factory<ICreateReceiptInteractor> { CreateReceiptInteractor(get()) }
+    viewModel { ReceiptViewModel(get()) }
 }
 
 val dbModule = module {

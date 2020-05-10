@@ -5,12 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import shiverawe.github.com.receipt.domain.entity.CreateReceiptErrorState
-import shiverawe.github.com.receipt.domain.entity.CreateReceiptIsExistState
-import shiverawe.github.com.receipt.domain.entity.CreateReceiptSuccessState
+import shiverawe.github.com.receipt.domain.interactor.create_receipt.CreateReceiptErrorResult
+import shiverawe.github.com.receipt.domain.interactor.create_receipt.CreateReceiptIsExistResult
+import shiverawe.github.com.receipt.domain.interactor.create_receipt.CreateReceiptSuccessResult
 import shiverawe.github.com.receipt.domain.entity.base.Meta
-import shiverawe.github.com.receipt.domain.interactor.create_receipt.CreateReceiptListener
-import shiverawe.github.com.receipt.domain.entity.base.ErrorType
 import shiverawe.github.com.receipt.domain.interactor.create_receipt.ICreateReceiptInteractor
 
 class CreateReceiptViewModel(private val interactor: ICreateReceiptInteractor) : ViewModel() {
@@ -47,15 +45,15 @@ class CreateReceiptViewModel(private val interactor: ICreateReceiptInteractor) :
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
             when(val result = interactor.createReceipt(qrCodeData)) {
-                is CreateReceiptSuccessState -> {
+                is CreateReceiptSuccessResult -> {
                     state.value = SuccessState(result.meta.t)
                 }
 
-                is CreateReceiptIsExistState -> {
+                is CreateReceiptIsExistResult -> {
                     state.value = ShowReceiptState(result.receiptHeader)
                 }
 
-                is CreateReceiptErrorState -> {
+                is CreateReceiptErrorResult -> {
                     qrCodeState?.let {
                         state.value = QrCodeState(
                             isWaiting = false,
@@ -73,15 +71,15 @@ class CreateReceiptViewModel(private val interactor: ICreateReceiptInteractor) :
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
             when(val result = interactor.createReceipt(meta)) {
-                is CreateReceiptSuccessState -> {
+                is CreateReceiptSuccessResult -> {
                     state.value = SuccessState(result.meta.t)
                 }
 
-                is CreateReceiptIsExistState -> {
+                is CreateReceiptIsExistResult -> {
                     state.value = ShowReceiptState(result.receiptHeader)
                 }
 
-                is CreateReceiptErrorState -> {
+                is CreateReceiptErrorResult -> {
                     manualState?.let {
                         state.value = ManualState(
                             isWaiting = false,

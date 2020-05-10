@@ -27,6 +27,6 @@ class ReceiptNetwork(private val api: Api) : IReceiptNetwork {
     override suspend fun getProducts(id: Long): List<Product> =
         api.getProducts(ItemRequest(receiptIds = listOf(id))).map { it.toProduct() }
 
-    override suspend fun createReceipt(meta: Meta): ReceiptHeader? =
-        api.createReceipt(meta.toCreateRequest()).toReceiptHeader()
+    override suspend fun createReceipt(meta: Meta): ReceiptHeader =
+        api.createReceipt(meta.toCreateRequest()).toReceiptHeader()!!
 }
