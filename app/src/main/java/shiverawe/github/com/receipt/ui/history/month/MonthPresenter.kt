@@ -67,13 +67,16 @@ class MonthPresenter(
 
         if (receipts.size == 0) {
             view?.setTotalSum("0")
-            if (!isOnline() && isRefresh) {
+            if (!isOnline()) {
                 view?.showError(ErrorType.OFFLINE)
             } else {
                 view?.showEmptyDataMessage()
             }
         } else {
             view?.setReceipts(receipts)
+            if (!isOnline() && isRefresh) {
+                view?.showErrorToast(ErrorType.OFFLINE)
+            }
             val sumStr = totalSum.floorTwo()
             view?.setTotalSum(sumStr)
         }

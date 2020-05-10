@@ -17,6 +17,7 @@ import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
 import shiverawe.github.com.receipt.ui.history.month.adapter.MonthAdapter
+import shiverawe.github.com.receipt.utils.toast
 import kotlin.collections.ArrayList
 
 class MonthFragment : Fragment(), MonthContract.View {
@@ -102,6 +103,14 @@ class MonthFragment : Fragment(), MonthContract.View {
         tv_month_error_message.text = getString(message)
         tv_month_error_message.visibility = View.VISIBLE
         swipe_refresh_layout_.isRefreshing = false
+    }
+
+    override fun showErrorToast(errorType: ErrorType) {
+        val message = when(errorType) {
+            ErrorType.OFFLINE -> R.string.error_network
+            ErrorType.ERROR -> R.string.error
+        }
+        toast(message, isLongDuration = false)
     }
 
     override fun showEmptyDataMessage() {

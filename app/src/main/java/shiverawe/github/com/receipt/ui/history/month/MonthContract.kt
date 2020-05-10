@@ -9,6 +9,7 @@ interface MonthContract {
         fun setTotalSum(totalSum: String)
         fun showProgressbar()
         fun showError(errorType: ErrorType)
+        fun showErrorToast(errorType: ErrorType)
         fun showEmptyDataMessage()
     }
 
