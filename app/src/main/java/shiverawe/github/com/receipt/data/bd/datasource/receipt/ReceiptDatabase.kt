@@ -1,6 +1,5 @@
 package shiverawe.github.com.receipt.data.bd.datasource.receipt
 
-import androidx.room.EmptyResultSetException
 import androidx.room.Transaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -18,36 +17,26 @@ class ReceiptDatabase : IReceiptDatabase {
     @Transaction
     override suspend fun saveProductsToCache(remoteReceiptId: Long, products: List<Product>) =
         withContext(Dispatchers.IO) {
-            try {
-                val receiptDb = db.receiptDao().getReceiptByRemoteId(remoteReceiptId)
-                val receiptId = receiptDb.id ?: 0
-                val localProductsDb = db.productDao().getProductsForReceiptIds(arrayOf(receiptId))
-                if (localProductsDb.isEmpty()) {
-                    // DB doesn't contain products for this period. Save new data
-                    db.saveProducts(receiptId, products)
-                }
-            } catch (e: EmptyResultSetException) {
-                e.printStackTrace()
+            val receiptDb = db.receiptDao().getReceiptByRemoteId(remoteReceiptId)
+            val receiptId = receiptDb?.id ?: 0
+            val localProductsDb = db.productDao().getProductsForReceiptIds(arrayOf(receiptId))
+            if (localProductsDb.isEmpty()) {
+                // DB doesn't contain products for this period. Save new data
+                db.saveProducts(receiptId, products)
             }
         }
 
     @Transaction
     override suspend fun getReceiptById(remoteReceiptId: Long): Receipt? = withContext(Dispatchers.IO) {
-        try {
-            val receiptDb = db.receiptDao().getReceiptByRemoteId(remoteReceiptId)
-            val productsDb = db.productDao().getProductsForReceiptIds(arrayOf(receiptDb.id))
+        val receiptDb = db.receiptDao().getReceiptByRemoteId(remoteReceiptId)
+        receiptDb?.id?.let { receiptDbId ->
+            val productsDb = db.productDao().getProductsForReceiptIds(arrayOf(receiptDbId))
             receiptDb.toReceipt(productsDb)
-        } catch (e: EmptyResultSetException) {
-            null
         }
     }
 
     override suspend fun getReceiptHeaderById(remoteReceiptId: Long): ReceiptHeader? =
         withContext(Dispatchers.IO) {
-            try {
-                db.receiptDao().getReceiptByRemoteId(remoteReceiptId).toReceiptHeader()
-            } catch (e: EmptyResultSetException) {
-                null
-            }
+            db.receiptDao().getReceiptByRemoteId(remoteReceiptId)?.toReceiptHeader()
         }
 }

@@ -98,6 +98,8 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
         val receiptId = arguments?.getLong(RECEIPT_ID_EXTRA) ?: 0L
         val receiptHeader = arguments?.getSerializable(RECEIPT_HEADER_EXTRA) as? ReceiptHeader
         if (receiptId != 0L) {
+            header_collapsed.titleText = getString(R.string.waiting_receipt_text)
+            header_expanded.titleText = getString(R.string.waiting_receipt_text)
             viewModel.getReceipt(receiptId)
         } else if (receiptHeader != null) {
             viewModel.getReceipt(receiptHeader)

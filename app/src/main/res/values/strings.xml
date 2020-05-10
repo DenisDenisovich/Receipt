@@ -54,4 +54,6 @@
     <string name="share_receipt">Отправить чек</string>
     <string name="receipt_download">Повторить загрузку</string>
 
+    <string name="waiting_receipt_text">Загрузка чека</string>
+
 </resources>
