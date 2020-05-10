@@ -12,8 +12,8 @@ import shiverawe.github.com.receipt.domain.interactor.receipt.IReceiptInteractor
 
 class ReceiptViewModel(private val interactor: IReceiptInteractor): ViewModel() {
 
-    val receipt: MutableLiveData<Receipt> = MutableLiveData()
-    val error: MutableLiveData<ErrorType> = MutableLiveData()
+    val receiptData: MutableLiveData<Receipt> = MutableLiveData()
+    val errorData: MutableLiveData<ErrorType> = MutableLiveData()
 
     private var currentJob: Job? = null
 
@@ -21,16 +21,27 @@ class ReceiptViewModel(private val interactor: IReceiptInteractor): ViewModel() 
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
             val receipt = interactor.getReceipt(id)
-            receipt
+            receipt.result?.let {
+                receiptData.value = it
+            }
+            receipt.error?.let {
+                errorData.value = it.type
+            }
         }
     }
 
-    fun getReceipt(meta: String) {
-
-    }
-
     fun getReceipt(receiptHeader: ReceiptHeader) {
-
+        receiptData.value = Receipt(receiptHeader, arrayListOf())
+        currentJob?.cancel()
+        currentJob = viewModelScope.launch {
+            val receipt = interactor.getReceipt(receiptHeader)
+            receipt.result?.let {
+                receiptData.value = it
+            }
+            receipt.error?.let {
+                errorData.value = it.type
+            }
+        }
     }
 
     fun  onClose() {

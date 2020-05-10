@@ -44,4 +44,13 @@
     <string name="sum_error">Формат суммы неверный</string>
     <string name="no_data">Нет данных</string>
 
+    <string name="share_title">Посмотреть чек по ссылке:</string>
+    <string name="share_link">https:/receipt.shefer.space/receipt/?%d</string>
+    <string name="share_shop">Магазин: %s</string>
+    <string name="share_date">Дата:    %s</string>
+    <string name="share_sum">Сумма:   %s</string>
+    <string name="share_amount">Кол-во: %s</string>
+    <string name="share_price">Цена:   %s р</string>
+    <string name="share_receipt">Отправить чек</string>
+
 </resources>
