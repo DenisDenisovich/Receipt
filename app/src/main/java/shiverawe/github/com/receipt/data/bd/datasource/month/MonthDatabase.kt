@@ -27,8 +27,7 @@ class MonthDatabase(private val cacheDiffUtility: ICacheDiffUtility) : IMonthDat
                 db.receiptDao().removeReceiptHeadersByIds(deletedIds.toTypedArray())
                 db.saveReceiptHeaders(newNetwork)
             }
-            networkReceipts.sortedByDescending { it.meta.t }
-            emitter.onSuccess(networkReceipts)
+            emitter.onSuccess(networkReceipts.sortedByDescending { it.meta.t })
         }
 
     override fun getReceiptHeaders(dataFrom: Long, dataTo: Long): Single<List<ReceiptHeader>> =
