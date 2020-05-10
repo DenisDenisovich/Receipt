@@ -2,7 +2,6 @@ package shiverawe.github.com.receipt.data.network.mapper
 
 import shiverawe.github.com.receipt.data.network.entity.create.CreateRequest
 import shiverawe.github.com.receipt.data.network.entity.item.ItemResponse
-import shiverawe.github.com.receipt.data.network.entity.receipt.ReceiptRequest
 import shiverawe.github.com.receipt.data.network.entity.receipt.ReceiptResponse
 import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.domain.entity.base.Product
@@ -20,11 +19,10 @@ fun ItemResponse.toProduct(): Product = Product(text, price, amount)
 fun ReceiptResponse.toReceiptHeader(): ReceiptHeader? {
     if (date == null || fd == null || fn == null || fp == null || sum == null) return null
 
-    val date = formatter.parse(date)?.time ?: 0L
-    val shop = Shop(date, place ?: "", sum.toString())
-    val meta = Meta(date, fn, fd, fp, sum)
+    val dateLong = formatter.parse(date)?.time ?: 0L
+    val shop = Shop(dateLong, place.orEmpty(), sum.toString())
+    val meta = Meta(dateLong, fn, fd, fp, sum)
     val status = ReceiptStatus.valueOf(status)
-
     return ReceiptHeader(id, status, shop, meta)
 }
 
@@ -38,11 +36,11 @@ fun List<ReceiptResponse>.toReceiptHeader(): List<ReceiptHeader> =
                 it.sum != null
         }
         .map { response ->
-            val date = formatter.parse(response.date!!)?.time ?: 0L
+            val dateLong = formatter.parse(response.date!!)?.time ?: 0L
             val sum = response.sum!!
-            val shop = Shop(date, response.place ?: "", sum.toString())
+            val shop = Shop(dateLong, response.place ?: "", sum.toString())
             val meta = Meta(
-                date,
+                dateLong,
                 response.fn!!,
                 response.fd!!,
                 response.fp!!,

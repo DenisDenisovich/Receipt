@@ -95,8 +95,8 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
     }
 
     private fun getReceipt() {
-        val receiptId = arguments?.getLong(RECEIPT_ID_EXTRA) ?: 0L
-        val receiptHeader = arguments?.getSerializable(RECEIPT_HEADER_EXTRA) as? ReceiptHeader
+        val receiptId = arguments?.getLong(RECEIPT_ID_KEY) ?: 0L
+        val receiptHeader = arguments?.getSerializable(RECEIPT_HEADER_KEY) as? ReceiptHeader
         if (receiptId != 0L) {
             header_collapsed.titleText = getString(R.string.waiting_receipt_text)
             header_expanded.titleText = getString(R.string.waiting_receipt_text)
@@ -206,18 +206,18 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
     companion object {
 
         const val RECEIPT_TAG = "receipt_fragment"
-        const val RECEIPT_ID_EXTRA = "receiptId"
-        const val RECEIPT_HEADER_EXTRA = "receiptHeader"
+        private const val RECEIPT_ID_KEY = "receiptId"
+        private const val RECEIPT_HEADER_KEY = "receiptHeader"
 
         fun getNewInstance(receiptId: Long) = ReceiptFragment().apply {
             arguments = Bundle().apply {
-                putLong(RECEIPT_ID_EXTRA, receiptId)
+                putLong(RECEIPT_ID_KEY, receiptId)
             }
         }
 
         fun getNewInstance(receiptHeader: ReceiptHeader) = ReceiptFragment().apply {
             arguments = Bundle().apply {
-                putSerializable(RECEIPT_HEADER_EXTRA, receiptHeader)
+                putSerializable(RECEIPT_HEADER_KEY, receiptHeader)
             }
         }
     }
