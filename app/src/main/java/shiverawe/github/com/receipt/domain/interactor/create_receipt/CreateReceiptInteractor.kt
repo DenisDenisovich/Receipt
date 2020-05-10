@@ -8,6 +8,7 @@ import shiverawe.github.com.receipt.domain.entity.base.ReceiptStatus
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import shiverawe.github.com.receipt.utils.toLongWithSeconds
 import java.lang.Exception
+import java.lang.NullPointerException
 import java.util.concurrent.CancellationException
 
 class CreateReceiptInteractor(private val repository: IReceiptRepository) : ICreateReceiptInteractor {
@@ -27,14 +28,27 @@ class CreateReceiptInteractor(private val repository: IReceiptRepository) : ICre
         if (!isOnline()) {
             return CreateReceiptErrorState(type = ErrorType.OFFLINE)
         }
-        // post request for creation receipt
+
         return try {
-            val receiptHeader = repository.saveReceipt(meta)
-            if (receiptHeader.status == ReceiptStatus.LOADED) {
-                CreateReceiptIsExistState(receiptHeader)
-            } else {
-                CreateReceiptSuccessState(receiptHeader.receiptId, meta)
+            val receiptHeader = repository.createReceipt(meta)
+
+            when {
+                receiptHeader == null -> {
+                    CreateReceiptErrorState(
+                        NullPointerException("receiptHeader is null"),
+                        ErrorType.ERROR
+                    )
+                }
+
+                receiptHeader.status == ReceiptStatus.LOADED -> {
+                    CreateReceiptIsExistState(receiptHeader)
+                }
+
+                else -> {
+                    CreateReceiptSuccessState(receiptHeader.receiptId, meta)
+                }
             }
+
         } catch (e: CancellationException) {
             CreateReceiptCancelTask
         } catch (e: Exception) {

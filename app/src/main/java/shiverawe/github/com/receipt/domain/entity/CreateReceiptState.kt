@@ -12,8 +12,8 @@ data class CreateReceiptIsExistState(val receiptHeader: ReceiptHeader): CreateRe
 
 data class CreateReceiptErrorState(
     val error: Throwable? = null,
-    val message: String? = null,
-    val type: ErrorType = ErrorType.ERROR
+    val type: ErrorType = ErrorType.ERROR,
+    val message: String? = null
 ): CreateReceiptState()
 
 object CreateReceiptCancelTask: CreateReceiptState()

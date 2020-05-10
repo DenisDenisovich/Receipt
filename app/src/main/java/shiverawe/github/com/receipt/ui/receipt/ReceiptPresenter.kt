@@ -33,6 +33,7 @@ class ReceiptPresenter(private val repository: IReceiptRepository) : ReceiptCont
     }
 
     override fun getReceiptById(receiptId: Long) {
+/*
         disposable = repository.getReceiptById(receiptId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ receipt ->
@@ -40,9 +41,11 @@ class ReceiptPresenter(private val repository: IReceiptRepository) : ReceiptCont
             }, {
                 view?.showError(Throwable("receipt = null"))
             })
+*/
     }
 
     override fun getReceiptByMeta(options: String) {
+/*
         val startTime = System.currentTimeMillis()
         var totalTime: Int
         parseOptions(options)?.let { meta ->
@@ -64,9 +67,11 @@ class ReceiptPresenter(private val repository: IReceiptRepository) : ReceiptCont
                     view?.showError(it)
                 })
         }
+*/
     }
 
     override fun getReceiptByHeader(receiptHeader: ReceiptHeader) {
+/*
         currentScope?.cancel()
         currentScope = MainScope()
         currentScope?.launch {
@@ -78,6 +83,7 @@ class ReceiptPresenter(private val repository: IReceiptRepository) : ReceiptCont
                 view?.showError(e)
             }
         }
+*/
     }
 
     private fun parseOptions(options: String): Meta? {
