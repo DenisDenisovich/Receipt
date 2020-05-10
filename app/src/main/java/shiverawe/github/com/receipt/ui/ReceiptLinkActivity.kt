@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.link
+package shiverawe.github.com.receipt.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
