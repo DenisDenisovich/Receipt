@@ -2,10 +2,10 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -15,8 +15,8 @@
             android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            android:background="#FFFFFF">
+            android:background="#FFFFFF"
+            android:minHeight="?attr/actionBarSize">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/collapsed"
@@ -28,40 +28,42 @@
 
                 <androidx.appcompat.widget.Toolbar
                     android:layout_width="wrap_content"
-                    android:layout_height="?actionBarSize"/>
+                    android:layout_height="?actionBarSize" />
+
                 <FrameLayout
                     android:id="@+id/date_container_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/toolbar_date_container_height"
                     android:layout_marginTop="@dimen/toolbar_date_container_expanded_margin_top"
                     app:layout_collapseMode="parallax">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:textSize="14sp"
                         android:fontFamily="@font/roboto_medium"
-                        android:text="@string/tv_toolbar_receipt_date"/>
+                        android:text="@string/tv_toolbar_receipt_date"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tv_toolbar_receipt_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="25dp"
                         android:layout_marginStart="16dp"
+                        android:layout_marginTop="25dp"
+                        android:fontFamily="@font/roboto_regular"
                         android:textColor="@color/colorBlack"
                         android:textSize="16sp"
-                        android:fontFamily="@font/roboto_regular"
-                        tools:text="Суббота, 23.03.19"/>
+                        tools:text="Суббота, 23.03.19" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_marginEnd="16dp"
-                        android:textSize="14sp"
                         android:fontFamily="@font/roboto_medium"
-                        android:text="@string/tv_toolbar_receipt_time"/>
+                        android:text="@string/tv_toolbar_receipt_time"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tv_toolbar_receipt_time"
@@ -70,10 +72,10 @@
                         android:layout_gravity="end"
                         android:layout_marginTop="25dp"
                         android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/roboto_regular"
                         android:textColor="@color/colorBlack"
                         android:textSize="16sp"
-                        android:fontFamily="@font/roboto_regular"
-                        tools:text="20:08"/>
+                        tools:text="20:08" />
                 </FrameLayout>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -83,41 +85,67 @@
             android:id="@+id/rv_receipt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:listitem="@layout/item_product"/>
+            tools:listitem="@layout/item_product" />
 
         <ProgressBar
             android:id="@+id/pb_receipt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/tv_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:visibility="gone"
+            tools:text="Error message there"
+            tools:visibility="visible" />
+
+        <Button
+            android:id="@+id/btn_repeat"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_gravity="bottom|center"
+            android:layout_margin="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/btn_blue"
+            android:textColor="#FFFFFF"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:text="@string/receipt_download"/>
+
 
         <shiverawe.github.com.receipt.ui.base.coordinator.SubtitleHeader
             android:id="@+id/header_expanded"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title_color="@color/colorBlack"
-            app:title_margin_top_collapsed="@dimen/toolbar_title_collapsed_margin_top"
-            app:title_margin_top_expanded="@dimen/toolbar_title_expanded_margin_top"
-            app:title_text_size_collapsed="@dimen/toolbar_title_collapsed_text_size"
-            app:title_text_size_expanded="@dimen/toolbar_title_expanded_text_size"
-            app:title_typeface="roboto_medium"
+            app:layout_behavior=".ui.base.coordinator.SubtitleHeaderBehavior"
             app:subtitle_color="@color/colorAccent"
             app:subtitle_margin_top_collapsed="@dimen/toolbar_sum_collapsed_margin_top"
             app:subtitle_margin_top_expanded="@dimen/toolbar_sum_expanded_margin_top"
             app:subtitle_text_size_collapsed="@dimen/toolbar_sum_collapsed_text_size"
             app:subtitle_text_size_expanded="@dimen/toolbar_sum_expanded_text_size"
             app:subtitle_typeface="roboto_medium"
-            app:layout_behavior=".ui.base.coordinator.SubtitleHeaderBehavior"/>
+            app:title_color="@color/colorBlack"
+            app:title_margin_top_collapsed="@dimen/toolbar_title_collapsed_margin_top"
+            app:title_margin_top_expanded="@dimen/toolbar_title_expanded_margin_top"
+            app:title_text_size_collapsed="@dimen/toolbar_title_collapsed_text_size"
+            app:title_text_size_expanded="@dimen/toolbar_title_expanded_text_size"
+            app:title_typeface="roboto_medium" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="4dp"
+            android:background="@drawable/shadow"
             app:layout_anchor="@id/collapsed"
-            app:layout_anchorGravity="bottom"
-            android:background="@drawable/shadow"/>
+            app:layout_anchorGravity="bottom" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -125,19 +153,19 @@
         android:id="@+id/header_collapsed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title_color="@color/colorBlack"
-        app:title_margin_top_collapsed="@dimen/toolbar_title_collapsed_margin_top"
-        app:title_margin_top_expanded="@dimen/toolbar_title_expanded_margin_top"
-        app:title_text_size_collapsed="@dimen/toolbar_title_collapsed_text_size"
-        app:title_text_size_expanded="@dimen/toolbar_title_expanded_text_size"
-        app:title_typeface="roboto_medium"
+        app:init_state="collapsed"
         app:subtitle_color="@color/colorAccent"
         app:subtitle_margin_top_collapsed="@dimen/toolbar_sum_collapsed_margin_top"
         app:subtitle_margin_top_expanded="@dimen/toolbar_sum_expanded_margin_top"
         app:subtitle_text_size_collapsed="@dimen/toolbar_sum_collapsed_text_size"
         app:subtitle_text_size_expanded="@dimen/toolbar_sum_expanded_text_size"
         app:subtitle_typeface="roboto_medium"
-        app:init_state="collapsed"/>
+        app:title_color="@color/colorBlack"
+        app:title_margin_top_collapsed="@dimen/toolbar_title_collapsed_margin_top"
+        app:title_margin_top_expanded="@dimen/toolbar_title_expanded_margin_top"
+        app:title_text_size_collapsed="@dimen/toolbar_title_collapsed_text_size"
+        app:title_text_size_expanded="@dimen/toolbar_title_expanded_text_size"
+        app:title_typeface="roboto_medium" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/btn_toolbar_receipt_back"
@@ -152,6 +180,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:padding="16dp"
-        android:src="@drawable/ic_share"/>
+        android:src="@drawable/ic_share" />
 
 </FrameLayout>

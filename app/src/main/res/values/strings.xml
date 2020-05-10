@@ -48,9 +48,10 @@
     <string name="share_link">https:/receipt.shefer.space/receipt/?%d</string>
     <string name="share_shop">Магазин: %s</string>
     <string name="share_date">Дата:    %s</string>
-    <string name="share_sum">Сумма:   %s</string>
+    <string name="share_sum">Сумма:    %s</string>
     <string name="share_amount">Кол-во: %s</string>
     <string name="share_price">Цена:   %s р</string>
     <string name="share_receipt">Отправить чек</string>
+    <string name="receipt_download">Повторить загрузку</string>
 
 </resources>
