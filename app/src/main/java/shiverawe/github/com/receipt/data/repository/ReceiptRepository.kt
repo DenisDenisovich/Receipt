@@ -15,8 +15,28 @@ class ReceiptRepository(
 
     override suspend fun createReceipt(meta: Meta): ReceiptHeader = network.createReceipt(meta)
 
-    override suspend fun getReceipt(receiptId: Long): Receipt? =
-        db.getReceiptById(receiptId) ?: network.getReceipt(receiptId)
+    override suspend fun getReceipt(receiptId: Long): Receipt? {
+        val dbReceipt = db.getReceiptById(receiptId)
+
+        return when {
+            // db doesn't have receipt with this id. Get it from rest api
+            dbReceipt == null -> {
+                network.getReceipt(receiptId)
+            }
+
+            // db doesn't have products for this receipt. Get it from rest api and save to db
+            dbReceipt.items.isEmpty() -> {
+                val products = network.getProducts(receiptId)
+                saveProducts(receiptId, products)
+                Receipt(dbReceipt.header, network.getProducts(receiptId))
+            }
+
+            // return db receipt
+            else -> {
+                dbReceipt
+            }
+        }
+    }
 
     override suspend fun getReceiptHeader(receiptId: Long): ReceiptHeader? =
         db.getReceiptHeaderById(receiptId)

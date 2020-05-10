@@ -45,7 +45,7 @@
     <string name="no_data">Нет данных</string>
 
     <string name="share_title">Посмотреть чек по ссылке:</string>
-    <string name="share_link">https:/receipt.shefer.space/receipt/?%d</string>
+    <string name="share_link">https://receipt.shefer.space/receipt/?%d</string>
     <string name="share_shop">Магазин: %s</string>
     <string name="share_date">Дата:    %s</string>
     <string name="share_sum">Сумма:    %s</string>
