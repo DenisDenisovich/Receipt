@@ -1,58 +1,44 @@
 package shiverawe.github.com.receipt.domain.interactor.create_receipt
 
 import shiverawe.github.com.receipt.data.network.utils.isOnline
-import shiverawe.github.com.receipt.domain.entity.*
 import shiverawe.github.com.receipt.domain.entity.base.ErrorType
 import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptStatus
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import shiverawe.github.com.receipt.utils.toLongWithSeconds
 import java.lang.Exception
-import java.lang.NullPointerException
 import java.util.concurrent.CancellationException
 
 class CreateReceiptInteractor(private val repository: IReceiptRepository) : ICreateReceiptInteractor {
 
-    override suspend fun createReceipt(qrRawData: String): CreateReceiptState =
+    override suspend fun createReceipt(qrRawData: String): CreateReceiptResult =
         try {
             val meta = parseQrCode(qrRawData)
             createReceiptNetwork(meta)
         } catch (e: ParseQrException) {
-            CreateReceiptErrorState(error = e, type = ErrorType.ERROR)
+            CreateReceiptErrorResult(error = e, type = ErrorType.ERROR)
         }
 
-    override suspend fun createReceipt(meta: Meta): CreateReceiptState = createReceiptNetwork(meta)
+    override suspend fun createReceipt(meta: Meta): CreateReceiptResult = createReceiptNetwork(meta)
 
     // Go to network for creation receipt
-    private suspend fun createReceiptNetwork(meta: Meta): CreateReceiptState {
+    private suspend fun createReceiptNetwork(meta: Meta): CreateReceiptResult {
         if (!isOnline()) {
-            return CreateReceiptErrorState(type = ErrorType.OFFLINE)
+            return CreateReceiptErrorResult(type = ErrorType.OFFLINE)
         }
 
         return try {
             val receiptHeader = repository.createReceipt(meta)
 
-            when {
-                receiptHeader == null -> {
-                    CreateReceiptErrorState(
-                        NullPointerException("receiptHeader is null"),
-                        ErrorType.ERROR
-                    )
-                }
-
-                receiptHeader.status == ReceiptStatus.LOADED -> {
-                    CreateReceiptIsExistState(receiptHeader)
-                }
-
-                else -> {
-                    CreateReceiptSuccessState(receiptHeader.receiptId, meta)
-                }
+            if (receiptHeader.status == ReceiptStatus.LOADED) {
+                CreateReceiptIsExistResult(receiptHeader)
+            } else {
+                CreateReceiptSuccessResult(receiptHeader.receiptId, meta)
             }
-
         } catch (e: CancellationException) {
-            CreateReceiptCancelTask
+            CreateReceiptCancelTaskResult
         } catch (e: Exception) {
-            CreateReceiptErrorState(error = e, type = ErrorType.ERROR)
+            CreateReceiptErrorResult(error = e, type = ErrorType.ERROR)
         }
     }
 
