@@ -11,7 +11,7 @@ class ReceiptLinkActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receipt_link)
 
-        val receiptId = intent?.data?.query?.toLongOrNull()
+        val receiptId = intent?.data?.lastPathSegment?.toLongOrNull()
         if (receiptId == null) {
             // deeplink format is incorrect. Close activity
             finish()
