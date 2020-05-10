@@ -12,11 +12,13 @@ fun createRetrofit(baseUrl: String): Api {
         .readTimeout(180, TimeUnit.SECONDS)
         .connectTimeout(180, TimeUnit.SECONDS)
         .build()
+
     val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
         .build()
+
     return retrofit.create(Api::class.java)
 }

@@ -1,7 +1,7 @@
 package shiverawe.github.com.receipt.domain.entity
 
-data class Result<T>(
+data class ReceiptResult<T>(
     val result: T? = null,
-    val error: ResultError? = null,
+    val error: ReceiptError? = null,
     val isCancel: Boolean = false
 )

@@ -28,7 +28,7 @@ class ReceiptRepository(
             dbReceipt.items.isEmpty() -> {
                 val products = network.getProducts(receiptId)
                 saveProducts(receiptId, products)
-                Receipt(dbReceipt.header, network.getProducts(receiptId))
+                Receipt(dbReceipt.header, products)
             }
 
             // return db receipt

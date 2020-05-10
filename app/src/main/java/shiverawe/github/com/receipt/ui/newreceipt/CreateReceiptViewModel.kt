@@ -5,10 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import shiverawe.github.com.receipt.domain.interactor.create_receipt.CreateReceiptErrorResult
-import shiverawe.github.com.receipt.domain.interactor.create_receipt.CreateReceiptIsExistResult
-import shiverawe.github.com.receipt.domain.interactor.create_receipt.CreateReceiptSuccessResult
 import shiverawe.github.com.receipt.domain.entity.base.Meta
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptStatus
 import shiverawe.github.com.receipt.domain.interactor.create_receipt.ICreateReceiptInteractor
 
 class CreateReceiptViewModel(private val interactor: ICreateReceiptInteractor) : ViewModel() {
@@ -44,22 +42,22 @@ class CreateReceiptViewModel(private val interactor: ICreateReceiptInteractor) :
 
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
-            when(val result = interactor.createReceipt(qrCodeData)) {
-                is CreateReceiptSuccessResult -> {
-                    state.value = SuccessState(result.meta.t)
-                }
+            val result = interactor.createReceipt(qrCodeData)
 
-                is CreateReceiptIsExistResult -> {
-                    state.value = ShowReceiptState(result.receiptHeader)
+            result.result?.let { header ->
+                if (header.status == ReceiptStatus.LOADED) {
+                    state.value = ShowReceiptState(header)
+                } else {
+                    state.value = SuccessState(header.meta.t)
                 }
+            }
 
-                is CreateReceiptErrorResult -> {
-                    qrCodeState?.let {
-                        state.value = QrCodeState(
-                            isWaiting = false,
-                            error = ErrorState(result.error, type = result.type)
-                        )
-                    }
+            result.error?.let { receiptError ->
+                qrCodeState?.let {
+                    state.value = QrCodeState(
+                        isWaiting = false,
+                        error = ErrorState(receiptError.error, type = receiptError.type)
+                    )
                 }
             }
         }
@@ -70,22 +68,22 @@ class CreateReceiptViewModel(private val interactor: ICreateReceiptInteractor) :
         state.value = ManualState(isWaiting = true)
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
-            when(val result = interactor.createReceipt(meta)) {
-                is CreateReceiptSuccessResult -> {
-                    state.value = SuccessState(result.meta.t)
-                }
+            val result = interactor.createReceipt(meta)
 
-                is CreateReceiptIsExistResult -> {
-                    state.value = ShowReceiptState(result.receiptHeader)
+            result.result?.let { header ->
+                if (header.status == ReceiptStatus.LOADED) {
+                    state.value = ShowReceiptState(header)
+                } else {
+                    state.value = SuccessState(header.meta.t)
                 }
+            }
 
-                is CreateReceiptErrorResult -> {
-                    manualState?.let {
-                        state.value = ManualState(
-                            isWaiting = false,
-                            error = ErrorState(result.error, type = result.type)
-                        )
-                    }
+            result.error?.let { receiptError ->
+                qrCodeState?.let {
+                    state.value = ManualState(
+                        isWaiting = false,
+                        error = ErrorState(receiptError.error, type = receiptError.type)
+                    )
                 }
             }
         }
