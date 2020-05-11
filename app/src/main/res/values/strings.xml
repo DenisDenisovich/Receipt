@@ -55,5 +55,6 @@
     <string name="receipt_download">Повторить загрузку</string>
 
     <string name="waiting_receipt_text">Загрузка чека</string>
+    <string name="shop_placeholder">Магазин</string>
 
 </resources>

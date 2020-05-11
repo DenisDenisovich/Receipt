@@ -116,7 +116,7 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
         tv_error.gone()
         btn_repeat.gone()
 
-        val shopName = receipt.header.shop.place
+        val shopName = receipt.header.shop.title.ifEmpty { getString(R.string.shop_placeholder) }
         val sum = receipt.header.shop.sum
         val date = receipt.header.shop.date
 

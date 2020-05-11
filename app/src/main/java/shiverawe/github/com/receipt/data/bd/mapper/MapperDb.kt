@@ -19,7 +19,7 @@ fun ReceiptEntity.toReceiptHeader(): ReceiptHeader {
 
 fun Receipt.toReceiptEntity(): ReceiptEntity = ReceiptEntity(
         header.meta.t,
-        header.shop.place,
+        header.shop.title,
         header.meta.s,
         header.meta.fn,
         header.meta.fd,
@@ -29,7 +29,7 @@ fun Receipt.toReceiptEntity(): ReceiptEntity = ReceiptEntity(
 
 fun ReceiptHeader.toReceiptEntity(): ReceiptEntity = ReceiptEntity(
         meta.t,
-        shop.place,
+        shop.title,
         meta.s,
         meta.fn,
         meta.fd,
