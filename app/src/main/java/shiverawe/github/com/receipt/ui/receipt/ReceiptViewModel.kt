@@ -17,7 +17,7 @@ class ReceiptViewModel(private val interactor: IReceiptInteractor) : ViewModel()
 
     private var currentJob: Job? = null
 
-    fun getReceipt(id: Long) {
+    fun loadReceipt(id: Long) {
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
             // get header from db
@@ -36,7 +36,7 @@ class ReceiptViewModel(private val interactor: IReceiptInteractor) : ViewModel()
         }
     }
 
-    fun getReceipt(receiptHeader: ReceiptHeader) {
+    fun loadReceipt(receiptHeader: ReceiptHeader) {
         receiptData.value = Receipt(receiptHeader, arrayListOf())
         currentJob?.cancel()
         currentJob = viewModelScope.launch {

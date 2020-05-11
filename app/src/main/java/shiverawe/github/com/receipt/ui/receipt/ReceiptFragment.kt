@@ -100,9 +100,9 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
         if (receiptId != 0L) {
             header_collapsed.titleText = getString(R.string.waiting_receipt_text)
             header_expanded.titleText = getString(R.string.waiting_receipt_text)
-            viewModel.getReceipt(receiptId)
+            viewModel.loadReceipt(receiptId)
         } else if (receiptHeader != null) {
-            viewModel.getReceipt(receiptHeader)
+            viewModel.loadReceipt(receiptHeader)
         }
     }
 
