@@ -3,7 +3,7 @@ package shiverawe.github.com.receipt.ui.history.month
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import shiverawe.github.com.receipt.data.network.utils.isOnline
-import shiverawe.github.com.receipt.domain.entity.base.ErrorType
+import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.utils.Metric
@@ -67,13 +67,16 @@ class MonthPresenter(
 
         if (receipts.size == 0) {
             view?.setTotalSum("0")
-            if (!isOnline() && isRefresh) {
+            if (!isOnline()) {
                 view?.showError(ErrorType.OFFLINE)
             } else {
                 view?.showEmptyDataMessage()
             }
         } else {
             view?.setReceipts(receipts)
+            if (!isOnline() && isRefresh) {
+                view?.showErrorToast(ErrorType.OFFLINE)
+            }
             val sumStr = totalSum.floorTwo()
             view?.setTotalSum(sumStr)
         }

@@ -19,13 +19,16 @@ import shiverawe.github.com.receipt.data.repository.MonthRepository
 import shiverawe.github.com.receipt.data.repository.ReceiptRepository
 import shiverawe.github.com.receipt.domain.interactor.create_receipt.CreateReceiptInteractor
 import shiverawe.github.com.receipt.domain.interactor.create_receipt.ICreateReceiptInteractor
+import shiverawe.github.com.receipt.domain.interactor.create_receipt.receipt_printer.IReceiptPrinter
+import shiverawe.github.com.receipt.domain.interactor.create_receipt.receipt_printer.ShareReceiptPrinter
+import shiverawe.github.com.receipt.domain.interactor.receipt.IReceiptInteractor
+import shiverawe.github.com.receipt.domain.interactor.receipt.ReceiptInteractor
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import shiverawe.github.com.receipt.ui.history.month.MonthContract
 import shiverawe.github.com.receipt.ui.history.month.MonthPresenter
 import shiverawe.github.com.receipt.ui.newreceipt.CreateReceiptViewModel
-import shiverawe.github.com.receipt.ui.receipt.ReceiptContact
-import shiverawe.github.com.receipt.ui.receipt.ReceiptPresenter
+import shiverawe.github.com.receipt.ui.receipt.ReceiptViewModel
 
 val monthModule = module {
     factory<IMonthNetwork> { MonthNetwork(get()) }
@@ -36,9 +39,11 @@ val monthModule = module {
 val receiptModule = module {
     factory<IReceiptNetwork> { ReceiptNetwork(get()) }
     factory<IReceiptRepository> { ReceiptRepository(get(), get()) }
-    factory<ReceiptContact.Presenter> { ReceiptPresenter(get()) }
-    viewModel { CreateReceiptViewModel(get()) }
     factory<ICreateReceiptInteractor> { CreateReceiptInteractor(get()) }
+    single<IReceiptPrinter> { ShareReceiptPrinter(androidContext()) }
+    factory<IReceiptInteractor> { ReceiptInteractor(get(), get()) }
+    viewModel { CreateReceiptViewModel(get()) }
+    viewModel { ReceiptViewModel(get()) }
 }
 
 val dbModule = module {

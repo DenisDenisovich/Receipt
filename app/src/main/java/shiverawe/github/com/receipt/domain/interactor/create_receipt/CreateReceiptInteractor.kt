@@ -1,10 +1,11 @@
 package shiverawe.github.com.receipt.domain.interactor.create_receipt
 
 import shiverawe.github.com.receipt.data.network.utils.isOnline
-import shiverawe.github.com.receipt.domain.entity.*
-import shiverawe.github.com.receipt.domain.entity.base.ErrorType
+import shiverawe.github.com.receipt.domain.entity.ErrorType
+import shiverawe.github.com.receipt.domain.entity.ReceiptResult
+import shiverawe.github.com.receipt.domain.entity.ReceiptError
 import shiverawe.github.com.receipt.domain.entity.base.Meta
-import shiverawe.github.com.receipt.domain.entity.base.ReceiptStatus
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import shiverawe.github.com.receipt.utils.toLongWithSeconds
 import java.lang.Exception
@@ -12,33 +13,28 @@ import java.util.concurrent.CancellationException
 
 class CreateReceiptInteractor(private val repository: IReceiptRepository) : ICreateReceiptInteractor {
 
-    override suspend fun createReceipt(qrRawData: String): CreateReceiptState =
+    override suspend fun createReceipt(qrRawData: String): ReceiptResult<ReceiptHeader> =
         try {
             val meta = parseQrCode(qrRawData)
             createReceiptNetwork(meta)
         } catch (e: ParseQrException) {
-            CreateReceiptErrorState(error = e, type = ErrorType.ERROR)
+            ReceiptResult(error = ReceiptError(error = e, type = ErrorType.ERROR))
         }
 
-    override suspend fun createReceipt(meta: Meta): CreateReceiptState = createReceiptNetwork(meta)
+    override suspend fun createReceipt(meta: Meta): ReceiptResult<ReceiptHeader> = createReceiptNetwork(meta)
 
     // Go to network for creation receipt
-    private suspend fun createReceiptNetwork(meta: Meta): CreateReceiptState {
+    private suspend fun createReceiptNetwork(meta: Meta): ReceiptResult<ReceiptHeader> {
         if (!isOnline()) {
-            return CreateReceiptErrorState(type = ErrorType.OFFLINE)
+            return ReceiptResult(error = ReceiptError(type = ErrorType.OFFLINE))
         }
-        // post request for creation receipt
+
         return try {
-            val receiptHeader = repository.saveReceipt(meta)
-            if (receiptHeader.status == ReceiptStatus.LOADED) {
-                CreateReceiptIsExistState(receiptHeader)
-            } else {
-                CreateReceiptSuccessState(receiptHeader.receiptId, meta)
-            }
+            ReceiptResult(repository.createReceipt(meta))
         } catch (e: CancellationException) {
-            CreateReceiptCancelTask
+            ReceiptResult(isCancel = true)
         } catch (e: Exception) {
-            CreateReceiptErrorState(error = e, type = ErrorType.ERROR)
+            ReceiptResult(error = ReceiptError(error = e, type = ErrorType.ERROR))
         }
     }
 

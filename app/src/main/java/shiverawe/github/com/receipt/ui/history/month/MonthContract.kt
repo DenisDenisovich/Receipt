@@ -1,6 +1,6 @@
 package shiverawe.github.com.receipt.ui.history.month
 
-import shiverawe.github.com.receipt.domain.entity.base.ErrorType
+import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 interface MonthContract {
@@ -9,6 +9,7 @@ interface MonthContract {
         fun setTotalSum(totalSum: String)
         fun showProgressbar()
         fun showError(errorType: ErrorType)
+        fun showErrorToast(errorType: ErrorType)
         fun showEmptyDataMessage()
     }
 

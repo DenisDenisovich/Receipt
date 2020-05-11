@@ -4,7 +4,7 @@ import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.domain.entity.base.ErrorType
+import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.utils.toast
 
 abstract class NewReceiptFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
