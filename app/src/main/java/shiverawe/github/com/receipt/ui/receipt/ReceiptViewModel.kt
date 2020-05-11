@@ -54,6 +54,8 @@ class ReceiptViewModel(private val interactor: IReceiptInteractor) : ViewModel()
         }
     }
 
+    fun getSharedReceipt(receipt: Receipt): String = interactor.getSharedReceipt(receipt)
+
     fun onClose() {
         currentJob?.cancel()
     }

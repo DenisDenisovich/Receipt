@@ -12,4 +12,6 @@ interface IReceiptInteractor {
     suspend fun getProducts(id: Long): ReceiptResult<List<Product>>
 
     suspend fun getReceiptHeader(id: Long): ReceiptResult<ReceiptHeader>
+
+    fun getSharedReceipt(receipt: Receipt): String
 }

@@ -28,24 +28,21 @@ import shiverawe.github.com.receipt.ui.receipt.adapter.ProductAdapter
 import shiverawe.github.com.receipt.utils.floorTwo
 import shiverawe.github.com.receipt.utils.gone
 import shiverawe.github.com.receipt.utils.visible
-import java.lang.StringBuilder
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.floor
 
 class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListener {
 
     private var adapter = ProductAdapter()
+
     private val offsetChangedListener = AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
         header_collapsed.visibility =
             if (-verticalOffset == collapsed.height - collapsed.minimumHeight) View.VISIBLE
             else View.INVISIBLE
     }
-    private val dateFormatterDate = SimpleDateFormat("dd.MM.yy_HH:mm", Locale("ru"))
-    private val dateFormatterDay = DateFormat.getDateInstance(SimpleDateFormat.FULL, Locale("ru"))
+
+    private val dateFormatter = SimpleDateFormat("EEEE, dd.MM.yyyy", Locale("ru"))
+    private val timeFormatter = SimpleDateFormat("HH:mm", Locale("ru"))
 
     private val viewModel: ReceiptViewModel by viewModel()
 
@@ -56,7 +53,7 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        getReceipt()
+        loadReceipt()
 
         btn_toolbar_receipt_back.setOnClickListener(this)
         btn_toolbar_receipt_share.setOnClickListener(this)
@@ -82,19 +79,19 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
         when (v?.id) {
             R.id.btn_toolbar_receipt_back -> activity?.onBackPressed()
             R.id.btn_toolbar_receipt_share -> shareReceipt()
-            R.id.btn_repeat -> repeatReceipt()
+            R.id.btn_repeat -> repeatReceiptLoading()
         }
     }
 
-    private fun repeatReceipt() {
+    private fun repeatReceiptLoading() {
         rv_receipt.gone()
         tv_error.gone()
         btn_repeat.gone()
         pb_receipt.visible()
-        getReceipt()
+        loadReceipt()
     }
 
-    private fun getReceipt() {
+    private fun loadReceipt() {
         val receiptId = arguments?.getLong(RECEIPT_ID_KEY) ?: 0L
         val receiptHeader = arguments?.getSerializable(RECEIPT_HEADER_KEY) as? ReceiptHeader
         if (receiptId != 0L) {
@@ -119,24 +116,21 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
         tv_error.gone()
         btn_repeat.gone()
 
-        val receiptPlace = receipt.header.shop.place
-        val receiptSum = receipt.header.shop.sum
-        val receiptDate = receipt.header.shop.date
+        val shopName = receipt.header.shop.place
+        val sum = receipt.header.shop.sum
+        val date = receipt.header.shop.date
 
         header_collapsed.apply {
-            titleText = receiptPlace
-            subtitleText = receiptSum.floorTwo() + " " + resources.getString(R.string.rubleSymbolJava)
+            titleText = shopName
+            subtitleText = sum.floorTwo() + " " + resources.getString(R.string.rubleSymbolJava)
         }
         header_expanded.apply {
-            titleText = receiptPlace
-            subtitleText = receiptSum.floorTwo() + " " + resources.getString(R.string.rubleSymbolJava)
+            titleText = shopName
+            subtitleText = sum.floorTwo() + " " + resources.getString(R.string.rubleSymbolJava)
         }
 
-        val day = dateFormatterDay.format(Date(receiptDate)).split(",")[0].capitalize()
-        val date = dateFormatterDate.format(Date(receiptDate)).split("_")[0]
-        val time = dateFormatterDate.format(Date(receiptDate)).split("_")[1]
-        tv_toolbar_receipt_date.text = "$day, $date"
-        tv_toolbar_receipt_time.text = time
+        tv_toolbar_receipt_date.text = dateFormatter.format(date).capitalize()
+        tv_toolbar_receipt_time.text = timeFormatter.format(date)
 
         if (receipt.items.isNotEmpty()) {
             pb_receipt.visibility = View.GONE
@@ -164,43 +158,10 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
         viewModel.receiptData.value?.let { receipt ->
             val sendIntent = Intent()
             sendIntent.action = Intent.ACTION_SEND
-            sendIntent.putExtra(Intent.EXTRA_TEXT, getShareString(receipt))
+            sendIntent.putExtra(Intent.EXTRA_TEXT, viewModel.getSharedReceipt(receipt))
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, getString(R.string.share_receipt)))
         }
-    }
-
-    private fun getShareString(receipt: Receipt): String {
-        val shop = receipt.header.shop
-        val shareText = StringBuilder()
-
-        // build receipt header
-        shareText.appendln(getString(R.string.share_title))
-        shareText.appendln(getString(R.string.share_link, receipt.header.receiptId))
-        shareText.appendln(getString(R.string.share_shop, shop.place))
-        shareText.appendln(getString(R.string.share_date, tv_toolbar_receipt_date.text))
-        shareText.appendln(getString(R.string.share_sum, shop.sum))
-
-        // build receipt's products
-        var price: String
-        var amountNumber: Double
-        var amountString: String
-        for (productIndex in receipt.items.indices) {
-            shareText.appendln("${productIndex + 1}. ${receipt.items[productIndex].text}")
-            amountNumber = BigDecimal(receipt.items[productIndex].amount).setScale(3, RoundingMode.DOWN).toDouble()
-
-            amountString = if (amountNumber == floor(amountNumber)) {
-                amountNumber.toInt().toString()
-            } else {
-                amountNumber.toString()
-            }
-
-            shareText.appendln(getString(R.string.share_amount, amountString))
-            price = receipt.items[productIndex].price.floorTwo()
-            shareText.appendln(getString(R.string.share_price, price))
-        }
-
-        return shareText.toString()
     }
 
     companion object {

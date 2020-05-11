@@ -19,6 +19,8 @@ import shiverawe.github.com.receipt.data.repository.MonthRepository
 import shiverawe.github.com.receipt.data.repository.ReceiptRepository
 import shiverawe.github.com.receipt.domain.interactor.create_receipt.CreateReceiptInteractor
 import shiverawe.github.com.receipt.domain.interactor.create_receipt.ICreateReceiptInteractor
+import shiverawe.github.com.receipt.domain.interactor.create_receipt.receipt_printer.IReceiptPrinter
+import shiverawe.github.com.receipt.domain.interactor.create_receipt.receipt_printer.ShareReceiptPrinter
 import shiverawe.github.com.receipt.domain.interactor.receipt.IReceiptInteractor
 import shiverawe.github.com.receipt.domain.interactor.receipt.ReceiptInteractor
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
@@ -38,7 +40,8 @@ val receiptModule = module {
     factory<IReceiptNetwork> { ReceiptNetwork(get()) }
     factory<IReceiptRepository> { ReceiptRepository(get(), get()) }
     factory<ICreateReceiptInteractor> { CreateReceiptInteractor(get()) }
-    factory<IReceiptInteractor> { ReceiptInteractor(get()) }
+    single<IReceiptPrinter> { ShareReceiptPrinter(androidContext()) }
+    factory<IReceiptInteractor> { ReceiptInteractor(get(), get()) }
     viewModel { CreateReceiptViewModel(get()) }
     viewModel { ReceiptViewModel(get()) }
 }
