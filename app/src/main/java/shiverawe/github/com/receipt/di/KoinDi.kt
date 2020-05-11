@@ -27,8 +27,8 @@ import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import shiverawe.github.com.receipt.ui.history.month.MonthContract
 import shiverawe.github.com.receipt.ui.history.month.MonthPresenter
-import shiverawe.github.com.receipt.ui.newreceipt.CreateReceiptViewModel
-import shiverawe.github.com.receipt.ui.receipt.ReceiptViewModel
+import shiverawe.github.com.receipt.ui.receipt.create.CreateReceiptViewModel
+import shiverawe.github.com.receipt.ui.receipt.info.ReceiptViewModel
 
 val monthModule = module {
     factory<IMonthNetwork> { MonthNetwork(get()) }

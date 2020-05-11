@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.newreceipt
+package shiverawe.github.com.receipt.ui.receipt.create
 
 import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.domain.entity.ErrorType

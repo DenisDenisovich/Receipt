@@ -7,8 +7,8 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
-import shiverawe.github.com.receipt.ui.newreceipt.CreateReceiptRootFragment
-import shiverawe.github.com.receipt.ui.receipt.ReceiptFragment
+import shiverawe.github.com.receipt.ui.receipt.create.CreateReceiptRootFragment
+import shiverawe.github.com.receipt.ui.receipt.info.ReceiptFragment
 import shiverawe.github.com.receipt.ui.settings.SettingsFragment
 
 class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {

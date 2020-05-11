@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.newreceipt
+package shiverawe.github.com.receipt.ui.receipt.create
 
 import android.os.Bundle
 import android.text.Editable
@@ -16,7 +16,7 @@ import shiverawe.github.com.receipt.utils.toLongWithMilliseconds
 import java.lang.Exception
 import java.lang.StringBuilder
 
-class ManualFragment : NewReceiptFragment(R.layout.fragment_manual), View.OnFocusChangeListener {
+class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnFocusChangeListener {
 
     private val viewMode: CreateReceiptViewModel by lazy {
         getSharedViewModel<CreateReceiptViewModel>(from = { requireParentFragment() })

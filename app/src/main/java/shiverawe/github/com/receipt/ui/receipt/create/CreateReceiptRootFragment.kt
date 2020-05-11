@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.newreceipt
+package shiverawe.github.com.receipt.ui.receipt.create
 
 import android.Manifest
 import android.content.Context
@@ -11,7 +11,7 @@ import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.BackPressedHandle
-import shiverawe.github.com.receipt.ui.receipt.ReceiptFragment
+import shiverawe.github.com.receipt.ui.receipt.info.ReceiptFragment
 import shiverawe.github.com.receipt.utils.toast
 
 class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root), BackPressedHandle {

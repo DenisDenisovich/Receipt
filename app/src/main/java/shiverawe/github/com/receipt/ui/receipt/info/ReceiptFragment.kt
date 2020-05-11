@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.receipt
+package shiverawe.github.com.receipt.ui.receipt.info
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -24,7 +24,7 @@ import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.base.Receipt
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
-import shiverawe.github.com.receipt.ui.receipt.adapter.ProductAdapter
+import shiverawe.github.com.receipt.ui.receipt.info.adapter.ProductAdapter
 import shiverawe.github.com.receipt.utils.floorTwo
 import shiverawe.github.com.receipt.utils.gone
 import shiverawe.github.com.receipt.utils.visible

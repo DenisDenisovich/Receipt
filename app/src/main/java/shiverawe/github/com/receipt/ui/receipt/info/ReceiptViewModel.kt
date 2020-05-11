@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.receipt
+package shiverawe.github.com.receipt.ui.receipt.info
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

@@ -3,7 +3,7 @@ package shiverawe.github.com.receipt.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.ui.receipt.ReceiptFragment
+import shiverawe.github.com.receipt.ui.receipt.info.ReceiptFragment
 
 class ReceiptLinkActivity : AppCompatActivity() {
 

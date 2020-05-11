@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.newreceipt
+package shiverawe.github.com.receipt.ui.receipt.create
 
 import android.annotation.SuppressLint
 import android.graphics.*
@@ -20,7 +20,7 @@ import shiverawe.github.com.receipt.utils.toPixels
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class QrFragment : NewReceiptFragment(R.layout.fragment_qr), View.OnClickListener {
+class QrFragment : CreateReceiptFragment(R.layout.fragment_qr), View.OnClickListener {
 
     private val viewMode: CreateReceiptViewModel by lazy {
         getSharedViewModel<CreateReceiptViewModel>(from = { requireParentFragment() })

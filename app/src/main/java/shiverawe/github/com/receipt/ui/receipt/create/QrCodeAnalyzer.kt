@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.newreceipt
+package shiverawe.github.com.receipt.ui.receipt.create
 
 import android.media.Image
 import com.google.firebase.ml.vision.FirebaseVision
