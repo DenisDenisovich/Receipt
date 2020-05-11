@@ -26,6 +26,6 @@ interface ReceiptDao {
     @Query("DELETE FROM receipt_table WHERE date >= :dateFrom AND date <= :dateTo")
     fun removeMonthReceipts(dateFrom: Long, dateTo: Long): Int
 
-    @Query("DELETE FROM receipt_table WHERE id IN(:removeIds)")
+    @Query("DELETE FROM receipt_table WHERE remoteId IN(:removeIds)")
     fun removeReceiptHeadersByIds(removeIds: Array<Long>): Int
 }

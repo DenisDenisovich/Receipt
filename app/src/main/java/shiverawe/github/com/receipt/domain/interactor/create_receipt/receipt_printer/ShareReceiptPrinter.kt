@@ -23,7 +23,10 @@ class ShareReceiptPrinter(val context: Context) : IReceiptPrinter {
         // build receipt header
         shareText.appendln(context.getString(R.string.share_title))
         shareText.appendln(context.getString(R.string.share_link, receipt.header.receiptId))
-        shareText.appendln(context.getString(R.string.share_shop, shop.title))
+
+        val shopTitle = shop.title.ifEmpty { context.getString(R.string.shop_placeholder) }
+        shareText.appendln(context.getString(R.string.share_shop, shopTitle))
+
         shareText.appendln(context.getString(R.string.share_date, dateFormatter.format(shop.date).capitalize()))
         shareText.appendln(context.getString(R.string.share_sum, shop.sum))
 

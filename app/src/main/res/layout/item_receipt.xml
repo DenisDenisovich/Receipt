@@ -30,7 +30,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="150dp">
         <TextView
-            android:id="@+id/tv_item_month_name"
+            android:id="@+id/tv_item_month_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"

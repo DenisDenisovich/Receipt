@@ -30,22 +30,20 @@ class ItemReceiptAdapterDelegate(override var viewType: Int) : AdapterDelegate<R
 
     inner class ItemReceiptViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val shopLetter = itemView.tv_item_month_image
-        private val name = itemView.tv_item_month_name
+        private val title = itemView.tv_item_month_title
         private val sum = itemView.tv_item_month_sum
         private val time = itemView.tv_item_month_time
+
+        private val titlePlaceholder = itemView.context.getString(R.string.shop_placeholder)
 
         @SuppressLint("SetTextI18n")
         fun bind(receipt: ReceiptHeader) {
             time.text = timeFormatter.format(Date(receipt.shop.date)).split("_")[1]
-            name.text = receipt.shop.title
+            val titleText = receipt.shop.title.ifEmpty { titlePlaceholder }
+            title.text = titleText
 
-            sum.text = receipt.shop.sum.floorTwo() + " " + App.appContext.resources.getString(R.string.rubleSymbolJava)
-            if (receipt.shop.title.isNotEmpty()) {
-                shopLetter.text = receipt.shop.title.first().toString()
-            } else {
-                shopLetter.text = "S"
-            }
+            sum.text = receipt.shop.sum.floorTwo() + " " + itemView.context.getString(R.string.rubleSymbolJava)
+            shopLetter.text = titleText.first().toString()
         }
     }
-
 }
