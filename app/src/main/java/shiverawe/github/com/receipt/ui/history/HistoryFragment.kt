@@ -125,21 +125,6 @@ class HistoryFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    fun updateMonth(date: Long) {
-        val updatedPosition = monthAdapter.getPositionByDate(Date(date))
-        if (updatedPosition != -1 && Math.abs(updatedPosition - vp_history.currentItem) <= 1) {
-            calendar.timeInMillis = date
-            monthAdapter.setBeginOfMonth(calendar)
-            childFragmentManager.fragments
-                    .firstOrNull { it.arguments?.getInt(MonthFragment.POSITION_KEY) == updatedPosition }
-                    ?.let {
-                        if (it is MonthFragment) {
-                            it.update()
-                        }
-                    }
-        }
-    }
-
     private fun updateMonthSum(position: Int) {
         childFragmentManager.fragments
                 .firstOrNull { it.arguments?.getInt(MonthFragment.POSITION_KEY) == position }

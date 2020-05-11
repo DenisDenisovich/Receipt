@@ -131,13 +131,6 @@ class MonthFragment : Fragment(), MonthContract.View {
         }
     }
 
-    fun update() {
-        showProgressbar()
-        receipts.clear()
-        totalSum = ""
-        presenter?.update()
-    }
-
     fun getSum(): String {
         return totalSum
     }

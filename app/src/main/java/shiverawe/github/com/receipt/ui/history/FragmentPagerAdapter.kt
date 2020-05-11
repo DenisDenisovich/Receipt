@@ -6,8 +6,12 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import shiverawe.github.com.receipt.ui.history.month.MonthFragment
 import java.util.*
 
-class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+class FragmentPagerAdapter(
+    fm: FragmentManager
+) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+
     val dates: ArrayList<Long> = ArrayList(MutableList(count) { 0L })
+
     init {
         // init dates
         val calendar = GregorianCalendar()
@@ -34,10 +38,12 @@ class FragmentPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) 
     }
 
     fun setBeginOfMonth(calendar: GregorianCalendar) {
-        calendar.set(Calendar.DAY_OF_MONTH, 1)
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
+        calendar.apply {
+            set(Calendar.DAY_OF_MONTH, 1)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
     }
 }
