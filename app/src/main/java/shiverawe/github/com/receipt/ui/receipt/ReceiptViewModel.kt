@@ -44,11 +44,11 @@ class ReceiptViewModel(private val interactor: IReceiptInteractor) : ViewModel()
             receiptData.value = Receipt(receiptHeader, arrayListOf())
 
             // get full receipt
-            val receipt = interactor.getReceipt(receiptHeader)
-            receipt.result?.let {
-                receiptData.value = it
+            val products = interactor.getProducts(receiptHeader.receiptId)
+            products.result?.let {
+                receiptData.value = Receipt(receiptHeader, it)
             }
-            receipt.error?.let {
+            products.error?.let {
                 errorData.value = it.type
             }
         }

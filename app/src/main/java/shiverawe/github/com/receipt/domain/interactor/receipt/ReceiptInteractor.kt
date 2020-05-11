@@ -7,6 +7,7 @@ import shiverawe.github.com.receipt.domain.entity.base.Receipt
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.domain.entity.ReceiptResult
 import shiverawe.github.com.receipt.domain.entity.ReceiptError
+import shiverawe.github.com.receipt.domain.entity.base.Product
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import java.lang.Exception
 
@@ -21,10 +22,9 @@ class ReceiptInteractor(private val repository: IReceiptRepository) : IReceiptIn
             ReceiptResult(error = getErrorResult(e))
         }
 
-    override suspend fun getReceipt(receiptHeader: ReceiptHeader): ReceiptResult<Receipt> =
+    override suspend fun getProducts(id: Long): ReceiptResult<List<Product>> =
         try {
-            val products = repository.getProducts(receiptHeader.receiptId)
-            ReceiptResult(Receipt(receiptHeader, products))
+            ReceiptResult(repository.getProducts(id))
         } catch (e: CancellationException) {
             ReceiptResult(isCancel = true)
         } catch (e: Exception) {
