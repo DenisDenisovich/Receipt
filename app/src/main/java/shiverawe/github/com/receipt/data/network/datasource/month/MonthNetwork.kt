@@ -14,7 +14,6 @@ class MonthNetwork(private val api: Api) : IMonthNetwork {
             .map { response ->
                 response.filter {
                     it.status == ReceiptStatus.LOADED.name &&
-                        it.place != null &&
                         it.sum != null &&
                         it.date != null
                 }.toReceiptHeader()

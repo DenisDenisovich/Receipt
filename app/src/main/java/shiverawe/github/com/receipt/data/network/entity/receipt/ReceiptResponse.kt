@@ -7,6 +7,6 @@ data class ReceiptResponse(
     val fp: String?,
     val date: String?,
     val sum: Double?,
-    val place: String?,
+    val merchantName: String?,
     val status: String
 )

@@ -37,11 +37,11 @@ class ItemReceiptAdapterDelegate(override var viewType: Int) : AdapterDelegate<R
         @SuppressLint("SetTextI18n")
         fun bind(receipt: ReceiptHeader) {
             time.text = timeFormatter.format(Date(receipt.shop.date)).split("_")[1]
-            name.text = receipt.shop.place
+            name.text = receipt.shop.title
 
             sum.text = receipt.shop.sum.floorTwo() + " " + App.appContext.resources.getString(R.string.rubleSymbolJava)
-            if (receipt.shop.place.isNotEmpty()) {
-                shopLetter.text = receipt.shop.place.first().toString()
+            if (receipt.shop.title.isNotEmpty()) {
+                shopLetter.text = receipt.shop.title.first().toString()
             } else {
                 shopLetter.text = "S"
             }
