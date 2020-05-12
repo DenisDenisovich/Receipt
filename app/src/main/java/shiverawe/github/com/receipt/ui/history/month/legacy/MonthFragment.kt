@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.history.month
+package shiverawe.github.com.receipt.ui.history.month.legacy
 
 import android.content.Context
 import android.os.Bundle
@@ -60,7 +60,7 @@ class MonthFragment : Fragment(), MonthContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         rv_month.adapter = adapter
         rv_month.layoutManager = LinearLayoutManager(context)
-        swipe_refresh_layout_.setOnRefreshListener {
+        swipe_refresh_layout.setOnRefreshListener {
             presenter?.getReceiptsData(isRefresh = true)
         }
         if (receipts.size == 0) {
@@ -78,7 +78,7 @@ class MonthFragment : Fragment(), MonthContract.View {
         pb_month.visibility = View.GONE
         tv_month_error_message.visibility = View.GONE
         rv_month.visibility = View.VISIBLE
-        swipe_refresh_layout_.isRefreshing = false
+        swipe_refresh_layout.isRefreshing = false
     }
 
     override fun setTotalSum(totalSum: String) {
@@ -102,7 +102,7 @@ class MonthFragment : Fragment(), MonthContract.View {
         pb_month.visibility = View.GONE
         tv_month_error_message.text = getString(message)
         tv_month_error_message.visibility = View.VISIBLE
-        swipe_refresh_layout_.isRefreshing = false
+        swipe_refresh_layout.isRefreshing = false
     }
 
     override fun showErrorToast(errorType: ErrorType) {
@@ -117,7 +117,7 @@ class MonthFragment : Fragment(), MonthContract.View {
         pb_month.visibility = View.GONE
         tv_month_error_message.text = getString(R.string.no_data)
         tv_month_error_message.visibility = View.VISIBLE
-        swipe_refresh_layout_.isRefreshing = false
+        swipe_refresh_layout.isRefreshing = false
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {

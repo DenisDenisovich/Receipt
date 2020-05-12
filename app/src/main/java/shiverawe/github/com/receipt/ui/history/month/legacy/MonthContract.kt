@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.history.month
+package shiverawe.github.com.receipt.ui.history.month.legacy
 
 import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader

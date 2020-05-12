@@ -1,4 +1,4 @@
-package shiverawe.github.com.receipt.ui.history.month
+package shiverawe.github.com.receipt.ui.history.month.legacy
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

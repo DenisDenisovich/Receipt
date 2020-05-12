@@ -10,7 +10,10 @@ import shiverawe.github.com.receipt.ui.base.adapter.AdapterDelegatesManager
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MonthAdapter(val shopIsClicked: (receipt: ReceiptHeader) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MonthAdapter(
+    val shopIsClicked: (receipt: ReceiptHeader) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     private val delegateManager = AdapterDelegatesManager<ReceiptHeader>()
     private val items: ArrayList<ReceiptHeader> = ArrayList()
     private var calendar = GregorianCalendar()
@@ -22,10 +25,12 @@ class MonthAdapter(val shopIsClicked: (receipt: ReceiptHeader) -> Unit) : Recycl
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val holder = delegateManager.onCreateViewHolder(parent, viewType)
+
         holder.itemView.setOnClickListener {
             val position = holder.adapterPosition
             if (items[position].receiptId != -1L) shopIsClicked(items[position])
         }
+
         return holder
     }
 
@@ -48,6 +53,7 @@ class MonthAdapter(val shopIsClicked: (receipt: ReceiptHeader) -> Unit) : Recycl
 
     private fun setTypes(oldList: ArrayList<ReceiptHeader>): ArrayList<ReceiptHeader> {
         val receipts = ArrayList<ReceiptHeader>()
+
         if (oldList.size >= 1) {
             receipts.add(getDateItem(oldList.first().shop.date))
             receipts.add(oldList[0])
@@ -58,6 +64,7 @@ class MonthAdapter(val shopIsClicked: (receipt: ReceiptHeader) -> Unit) : Recycl
                 receipts.add(oldList[index])
             }
         }
+
         return receipts
     }
 
@@ -72,10 +79,12 @@ class MonthAdapter(val shopIsClicked: (receipt: ReceiptHeader) -> Unit) : Recycl
     }
 
     private fun clearCalendar() {
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
+        calendar.apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
     }
 
     private fun getDateItem(date: Long): ReceiptHeader {
