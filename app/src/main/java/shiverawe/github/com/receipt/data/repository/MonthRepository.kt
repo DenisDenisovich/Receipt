@@ -1,23 +1,28 @@
 package shiverawe.github.com.receipt.data.repository
 
-import io.reactivex.Single
-import retrofit2.HttpException
 import shiverawe.github.com.receipt.data.bd.datasource.month.IMonthDatabase
 import shiverawe.github.com.receipt.data.network.datasource.month.IMonthNetwork
-import shiverawe.github.com.receipt.data.network.utils.isOnline
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
-import java.text.SimpleDateFormat
-import java.util.*
+import shiverawe.github.com.receipt.utils.toStringWithSeconds
 
 class MonthRepository(
-        private val network: IMonthNetwork,
-        private val db: IMonthDatabase
+    private val network: IMonthNetwork,
+    private val db: IMonthDatabase
 ) : IMonthRepository {
 
-    private val formatter = SimpleDateFormat("yyyyMMdd'T'HHmm", Locale.getDefault())
+    override suspend fun getMonthReceipt(dateFrom: Long, dateTo: Long): List<ReceiptHeader> {
+        val networkReceipts = network.getMonthReceipts(
+            dateFrom.toStringWithSeconds(),
+            dateTo.toStringWithSeconds()
+        )
 
-    override fun getMonthReceipt(dateFrom: Long, dateTo: Long): Single<List<ReceiptHeader>> =
+        return db.updateMonthCache(dateFrom, dateTo, networkReceipts)
+    }
+
+    override suspend fun getMonthReceiptFromDb(dateFrom: Long, dateTo: Long): List<ReceiptHeader> =
+        db.getReceiptHeaders(dateFrom, dateTo)
+/*
         network.getMonthReceipts(formatter.format(dateFrom), formatter.format(dateTo))
                 .flatMap { networkReceipts ->
                     db.updateMonthCache(dateFrom, dateTo, networkReceipts)
@@ -29,4 +34,5 @@ class MonthRepository(
                         Single.error(it)
                     }
                 }
+*/
 }

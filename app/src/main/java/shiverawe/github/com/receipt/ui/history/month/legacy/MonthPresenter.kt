@@ -1,7 +1,5 @@
 package shiverawe.github.com.receipt.ui.history.month.legacy
 
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import shiverawe.github.com.receipt.data.network.utils.isOnline
 import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
@@ -15,7 +13,7 @@ class MonthPresenter(
     private val dateFrom: Long
 ) : MonthContract.Presenter {
 
-    private var receiptDisposable: Disposable? = null
+    //private var receiptDisposable: Disposable? = null
     private var view: MonthContract.View? = null
     private val dateTo: Long
     private var receipts: ArrayList<ReceiptHeader> = ArrayList()
@@ -36,13 +34,16 @@ class MonthPresenter(
     }
 
     override fun update() {
+/*
         receipts.clear()
         isError = false
         receiptDisposable?.dispose()
         getReceiptsData()
+*/
     }
 
     override fun getReceiptsData(isRefresh: Boolean) {
+/*
         val startTime = System.currentTimeMillis()
         var totalTime: Int
         receiptDisposable?.dispose()
@@ -54,6 +55,7 @@ class MonthPresenter(
                 totalTime = ((System.currentTimeMillis() - startTime) / 1000).toInt()
                 setError(it, totalTime)
             })
+*/
     }
 
     private fun setReceipts(newData: List<ReceiptHeader>, isRefresh: Boolean) {
@@ -91,6 +93,6 @@ class MonthPresenter(
 
     override fun detach() {
         view = null
-        receiptDisposable?.dispose()
+       // receiptDisposable?.dispose()
     }
 }

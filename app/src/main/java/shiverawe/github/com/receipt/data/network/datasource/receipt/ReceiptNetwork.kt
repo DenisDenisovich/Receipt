@@ -14,7 +14,7 @@ import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 class ReceiptNetwork(private val api: Api) : IReceiptNetwork {
 
     override suspend fun getReceipt(id: Long): Receipt? {
-        val receiptHeader = api.getReceiptsCoroutine(ReceiptRequest(ids = listOf(id)))
+        val receiptHeader = api.getReceipts(ReceiptRequest(ids = listOf(id)))
             .map { it.toReceiptHeader() }
             .getOrNull(0)
 
