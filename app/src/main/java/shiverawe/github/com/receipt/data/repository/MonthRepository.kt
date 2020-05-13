@@ -11,28 +11,13 @@ class MonthRepository(
     private val db: IMonthDatabase
 ) : IMonthRepository {
 
-    override suspend fun getMonthReceipt(dateFrom: Long, dateTo: Long): List<ReceiptHeader> {
-        val networkReceipts = network.getMonthReceipts(
-            dateFrom.toStringWithSeconds(),
-            dateTo.toStringWithSeconds()
-        )
+    override suspend fun getMonthReceipt(dateFrom: Long, dateTo: Long): List<ReceiptHeader> =
+        network.getMonthReceipts(dateFrom.toStringWithSeconds(), dateTo.toStringWithSeconds())
 
-        return db.updateMonthCache(dateFrom, dateTo, networkReceipts)
+    override suspend fun updateMonthCache(dateFrom: Long, dateTo: Long, networkReceipts: List<ReceiptHeader>) {
+        db.updateMonthCache(dateFrom, dateTo, networkReceipts)
     }
 
     override suspend fun getMonthReceiptFromDb(dateFrom: Long, dateTo: Long): List<ReceiptHeader> =
         db.getReceiptHeaders(dateFrom, dateTo)
-/*
-        network.getMonthReceipts(formatter.format(dateFrom), formatter.format(dateTo))
-                .flatMap { networkReceipts ->
-                    db.updateMonthCache(dateFrom, dateTo, networkReceipts)
-                }
-                .onErrorResumeNext {
-                    if (it is HttpException || !isOnline()) {
-                        db.getReceiptHeaders(dateFrom, dateTo)
-                    } else {
-                        Single.error(it)
-                    }
-                }
-*/
 }

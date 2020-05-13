@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 private val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale("ru"))
-
 fun ItemResponse.toProduct(): Product = Product(text, price, amount)
 
 fun ReceiptResponse.toReceiptHeader(): ReceiptHeader? {
@@ -22,7 +21,7 @@ fun ReceiptResponse.toReceiptHeader(): ReceiptHeader? {
     val dateLong = formatter.parse(date)?.time ?: 0L
     val shop = Shop(dateLong, merchantName.orEmpty(), sum.toString())
     val meta = Meta(dateLong, fn, fd, fp, sum)
-    val status = ReceiptStatus.valueOf(status)
+    val status = ReceiptStatus.valueOf(status ?: return null)
     return ReceiptHeader(id, status, shop, meta)
 }
 
@@ -33,7 +32,8 @@ fun List<ReceiptResponse>.toReceiptHeader(): List<ReceiptHeader> =
                 it.fd != null &&
                 it.fn != null &&
                 it.fp != null &&
-                it.sum != null
+                it.sum != null &&
+                it.status != null
         }
         .map { response ->
             val dateLong = formatter.parse(response.date!!)?.time ?: 0L
@@ -46,7 +46,7 @@ fun List<ReceiptResponse>.toReceiptHeader(): List<ReceiptHeader> =
                 response.fp!!,
                 sum
             )
-            val status = ReceiptStatus.valueOf(response.status)
+            val status = ReceiptStatus.valueOf(response.status!!)
             ReceiptHeader(response.id, status, shop, meta)
         }
         .toList()

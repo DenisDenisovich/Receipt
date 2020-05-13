@@ -1,6 +1,6 @@
 package shiverawe.github.com.receipt.domain.interactor.create_receipt
 
-import shiverawe.github.com.receipt.data.network.utils.isOnline
+import shiverawe.github.com.receipt.data.network.utils.isOffline
 import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.ReceiptResult
 import shiverawe.github.com.receipt.domain.entity.ReceiptError
@@ -18,14 +18,14 @@ class CreateReceiptInteractor(private val repository: IReceiptRepository) : ICre
             val meta = parseQrCode(qrRawData)
             createReceiptNetwork(meta)
         } catch (e: ParseQrException) {
-            ReceiptResult(error = ReceiptError(error = e, type = ErrorType.ERROR))
+            ReceiptResult(error = ReceiptError(throwable = e, type = ErrorType.ERROR))
         }
 
     override suspend fun createReceipt(meta: Meta): ReceiptResult<ReceiptHeader> = createReceiptNetwork(meta)
 
     // Go to network for creation receipt
     private suspend fun createReceiptNetwork(meta: Meta): ReceiptResult<ReceiptHeader> {
-        if (!isOnline()) {
+        if (isOffline()) {
             return ReceiptResult(error = ReceiptError(type = ErrorType.OFFLINE))
         }
 
@@ -34,7 +34,7 @@ class CreateReceiptInteractor(private val repository: IReceiptRepository) : ICre
         } catch (e: CancellationException) {
             ReceiptResult(isCancel = true)
         } catch (e: Exception) {
-            ReceiptResult(error = ReceiptError(error = e, type = ErrorType.ERROR))
+            ReceiptResult(error = ReceiptError(throwable = e, type = ErrorType.ERROR))
         }
     }
 

@@ -1,7 +1,7 @@
 package shiverawe.github.com.receipt.domain.interactor.receipt
 
 import kotlinx.coroutines.CancellationException
-import shiverawe.github.com.receipt.data.network.utils.isOnline
+import shiverawe.github.com.receipt.data.network.utils.isOffline
 import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.base.Receipt
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
@@ -48,5 +48,5 @@ class ReceiptInteractor(
         receiptPrinter.receiptToString(receipt)
 
     private fun getErrorResult(e: Exception): ReceiptError =
-        ReceiptError(e, if (isOnline()) ErrorType.ERROR else ErrorType.OFFLINE)
+        ReceiptError(e, if (isOffline()) ErrorType.OFFLINE else ErrorType.ERROR)
 }

@@ -5,5 +5,5 @@ import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 interface IMonthInteractor {
 
-    suspend fun getMonthReceipt(dateFrom: Long, dateTo: Long): ReceiptResult<List<ReceiptHeader>>
+    suspend fun getMonthReceipt(dateFrom: Long): ReceiptResult<List<ReceiptHeader>>
 }

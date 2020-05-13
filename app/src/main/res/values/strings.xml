@@ -56,5 +56,8 @@
 
     <string name="waiting_receipt_text">Загрузка чека</string>
     <string name="shop_placeholder">Магазин</string>
+    <string name="error_set_month">Невозможно отобразить данный месяц</string>
+    <string name="total_sum">Общая сумма: %s \u20BD</string>
+    <string name="empty_total_sum">Общая сумма: …</string>
 
 </resources>

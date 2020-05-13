@@ -3,7 +3,7 @@ package shiverawe.github.com.receipt.ui.history
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import shiverawe.github.com.receipt.ui.history.month.MonthFragment2
+import shiverawe.github.com.receipt.ui.history.month.MonthFragment
 import java.util.*
 
 class FragmentPagerAdapter(
@@ -25,7 +25,7 @@ class FragmentPagerAdapter(
     }
 
     override fun getItem(position: Int): Fragment {
-        return MonthFragment2.getNewInstance(dates[position], position)
+        return MonthFragment.getNewInstance(dates[position], position)
     }
 
     override fun getCount() = 1200
