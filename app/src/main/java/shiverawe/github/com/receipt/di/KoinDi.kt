@@ -8,8 +8,6 @@ import shiverawe.github.com.receipt.data.bd.datasource.month.IMonthDatabase
 import shiverawe.github.com.receipt.data.bd.datasource.month.MonthDatabase
 import shiverawe.github.com.receipt.data.bd.datasource.receipt.IReceiptDatabase
 import shiverawe.github.com.receipt.data.bd.datasource.receipt.ReceiptDatabase
-import shiverawe.github.com.receipt.data.bd.utils.CacheDiffUtility
-import shiverawe.github.com.receipt.data.bd.utils.ICacheDiffUtility
 import shiverawe.github.com.receipt.data.network.datasource.month.IMonthNetwork
 import shiverawe.github.com.receipt.data.network.datasource.receipt.IReceiptNetwork
 import shiverawe.github.com.receipt.data.network.datasource.month.MonthNetwork
@@ -55,8 +53,4 @@ val dbModule = module {
 
 val networkModule = module {
     single { createRetrofit(androidContext().resources.getString(R.string.BASE_URL)) }
-}
-
-val utilsModule = module {
-    single<ICacheDiffUtility> { CacheDiffUtility() }
 }
