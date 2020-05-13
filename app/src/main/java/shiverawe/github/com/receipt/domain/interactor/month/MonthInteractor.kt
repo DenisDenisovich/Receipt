@@ -24,7 +24,7 @@ class MonthInteractor(private val repository: IMonthRepository) : IMonthInteract
         }
 
         return try {
-            ReceiptResult(getReceipts(dateFrom, dateTo))
+            ReceiptResult(getNetworkReceipts(dateFrom, dateTo))
         } catch (e: CancellationException) {
             // Coroutine is cancelled, return nothing
             ReceiptResult(isCancel = true)
@@ -37,12 +37,12 @@ class MonthInteractor(private val repository: IMonthRepository) : IMonthInteract
         }
     }
 
-    private suspend fun getReceipts(dateFrom: Long, dateTo: Long): List<ReceiptHeader> {
+    private suspend fun getNetworkReceipts(dateFrom: Long, dateTo: Long): List<ReceiptHeader> {
         // Get receipts from network and update db cache
-        val networkReceipts = repository.getMonthReceipt(dateFrom, dateTo)
+        val networkReceipts = repository.getNetworkReceipt(dateFrom, dateTo)
             .filter { it.status == ReceiptStatus.LOADED }
 
-        repository.updateMonthCache(dateFrom, dateTo, networkReceipts)
+        repository.updateCache(dateFrom, dateTo, networkReceipts)
 
         return networkReceipts
     }
@@ -54,7 +54,7 @@ class MonthInteractor(private val repository: IMonthRepository) : IMonthInteract
         errorType: ErrorType
     ): ReceiptResult<List<ReceiptHeader>> {
         return try {
-            val dbReceipts = repository.getMonthReceiptFromDb(dateFrom, dateTo)
+            val dbReceipts = repository.getReceiptFromDb(dateFrom, dateTo)
             ReceiptResult(dbReceipts, ReceiptError(error, errorType))
         } catch (e: Exception) {
             // Error while getting data from db. Return error without data

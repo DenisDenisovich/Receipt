@@ -4,9 +4,9 @@ import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 interface IMonthRepository {
 
-    suspend fun getMonthReceipt(dateFrom: Long, dateTo: Long): List<ReceiptHeader>
+    suspend fun getNetworkReceipt(dateFrom: Long, dateTo: Long): List<ReceiptHeader>
 
-    suspend fun updateMonthCache(dateFrom: Long, dateTo: Long, networkReceipts: List<ReceiptHeader>)
+    suspend fun updateCache(dateFrom: Long, dateTo: Long, networkReceipts: List<ReceiptHeader>)
 
-    suspend fun getMonthReceiptFromDb(dateFrom: Long, dateTo: Long): List<ReceiptHeader>
+    suspend fun getReceiptFromDb(dateFrom: Long, dateTo: Long): List<ReceiptHeader>
 }
