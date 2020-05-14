@@ -7,14 +7,16 @@ import shiverawe.github.com.receipt.domain.entity.base.*
 fun ReceiptEntity.toReceipt(products: List<ProductEntity>): Receipt {
     val shop = Shop(date, place, sum.toString())
     val meta = Meta(date, fn, fd, fp, sum)
+    val address = merchantAddress
     val items = products.map { Product(it.text, it.price, it.amount.toDouble()) }
-    return Receipt(ReceiptHeader(remoteId, ReceiptStatus.LOADED, shop, meta), items)
+    return Receipt(ReceiptHeader(remoteId, ReceiptStatus.LOADED, shop, address, meta), items)
 }
 
 fun ReceiptEntity.toReceiptHeader(): ReceiptHeader {
     val shop = Shop(date, place, sum.toString())
     val meta = Meta(date, fn, fd, fp, sum)
-    return ReceiptHeader(remoteId, ReceiptStatus.LOADED, shop, meta)
+    val address = merchantAddress
+    return ReceiptHeader(remoteId, ReceiptStatus.LOADED, shop, address, meta)
 }
 
 fun Receipt.toReceiptEntity(): ReceiptEntity = ReceiptEntity(
@@ -24,7 +26,8 @@ fun Receipt.toReceiptEntity(): ReceiptEntity = ReceiptEntity(
         header.meta.fn,
         header.meta.fd,
         header.meta.fp,
-        header.receiptId
+        header.receiptId,
+        header.address
 )
 
 fun ReceiptHeader.toReceiptEntity(): ReceiptEntity = ReceiptEntity(
@@ -34,7 +37,8 @@ fun ReceiptHeader.toReceiptEntity(): ReceiptEntity = ReceiptEntity(
         meta.fn,
         meta.fd,
         meta.fp,
-        receiptId
+        receiptId,
+        address
 )
 
 fun Product.toProductEntity(receiptId: Long): ProductEntity =

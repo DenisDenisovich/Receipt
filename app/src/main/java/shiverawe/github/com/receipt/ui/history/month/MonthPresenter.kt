@@ -62,7 +62,7 @@ class MonthPresenter(
 
         newData.forEach {
             totalSum += it.meta.s
-            receipts.add(ReceiptHeader(it.receiptId, it.status, it.shop, it.meta))
+            receipts.add(ReceiptHeader(it.receiptId, it.status, it.shop, it.address, it.meta))
         }
 
         if (receipts.size == 0) {

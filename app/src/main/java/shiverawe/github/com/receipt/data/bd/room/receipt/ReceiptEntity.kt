@@ -13,6 +13,7 @@ data class ReceiptEntity(
     var fd: String = "",
     var fp: String = "",
     var remoteId: Long = 0,
+    var merchantAddress: String = "",
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null
 )

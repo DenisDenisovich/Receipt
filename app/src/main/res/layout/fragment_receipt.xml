@@ -182,4 +182,13 @@
         android:padding="16dp"
         android:src="@drawable/ic_share" />
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btn_toolbar_shop_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="57dp"
+        android:padding="16dp"
+        android:src="@drawable/ic_location" />
+
 </FrameLayout>

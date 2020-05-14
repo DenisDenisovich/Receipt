@@ -56,5 +56,6 @@
 
     <string name="waiting_receipt_text">Загрузка чека</string>
     <string name="shop_placeholder">Магазин</string>
+    <string name="shop_location">Показать магазин на карте</string>
 
 </resources>

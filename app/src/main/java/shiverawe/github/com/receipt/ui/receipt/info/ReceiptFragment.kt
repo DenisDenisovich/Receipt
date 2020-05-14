@@ -1,24 +1,18 @@
 package shiverawe.github.com.receipt.ui.receipt.info
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.location.Address
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.fragment_receipt.appbar
-import kotlinx.android.synthetic.main.fragment_receipt.btn_repeat
-import kotlinx.android.synthetic.main.fragment_receipt.btn_toolbar_receipt_back
-import kotlinx.android.synthetic.main.fragment_receipt.btn_toolbar_receipt_share
-import kotlinx.android.synthetic.main.fragment_receipt.collapsed
-import kotlinx.android.synthetic.main.fragment_receipt.header_collapsed
-import kotlinx.android.synthetic.main.fragment_receipt.header_expanded
-import kotlinx.android.synthetic.main.fragment_receipt.pb_receipt
-import kotlinx.android.synthetic.main.fragment_receipt.rv_receipt
-import kotlinx.android.synthetic.main.fragment_receipt.tv_error
-import kotlinx.android.synthetic.main.fragment_receipt.tv_toolbar_receipt_date
-import kotlinx.android.synthetic.main.fragment_receipt.tv_toolbar_receipt_time
+import kotlinx.android.synthetic.main.fragment_receipt.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.ErrorType
@@ -48,7 +42,7 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.receiptData.observe(this, Observer { receipt -> setReceipt(receipt)})
+        viewModel.receiptData.observe(this, Observer { receipt -> setReceipt(receipt) })
         viewModel.errorData.observe(this, Observer { errorType -> setError(errorType) })
     }
 
@@ -57,7 +51,9 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
 
         btn_toolbar_receipt_back.setOnClickListener(this)
         btn_toolbar_receipt_share.setOnClickListener(this)
+        btn_toolbar_shop_location.setOnClickListener(this)
         btn_repeat.setOnClickListener(this)
+
     }
 
     override fun onResume() {
@@ -80,6 +76,7 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
             R.id.btn_toolbar_receipt_back -> activity?.onBackPressed()
             R.id.btn_toolbar_receipt_share -> shareReceipt()
             R.id.btn_repeat -> repeatReceiptLoading()
+            R.id.btn_toolbar_shop_location -> shopLocation()
         }
     }
 
@@ -163,6 +160,49 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
             startActivity(Intent.createChooser(sendIntent, getString(R.string.share_receipt)))
         }
     }
+
+    private fun shopLocation() {
+        viewModel.receiptData.value?.let { receipt -> {
+            val address = receipt.header.address
+            val viewMapIntent = Intent()
+            viewMapIntent.action = Intent.ACTION_VIEW
+            val chooserIntent = Intent.createChooser(viewMapIntent, getString(R.string.shop_location))
+            try {
+                //viewMapIntent.data = Uri.parse("https://www.google.ru/maps/search/197374,+СПб,+ул.+Савушкина,+112,+лит.+А") +++
+                //viewMapIntent.data = Uri.parse("https://www.google.ru/maps/search/197374, СПб, ул. Савушкина, 112, лит. А") +++
+                //viewMapIntent.data = Uri.parse("https://www.google.ru/maps/search/197374, СПб, ул. Савушкина, 112, лит. А------------------") +++
+                viewMapIntent.data = Uri.parse("https://www.google.ru/maps/search/$address")
+                //viewMapIntent.data = Uri.parse("-------197374, СПб, ул. Савушкина, 112, лит. А--------") ---
+                startActivity(chooserIntent)
+            } catch (e: ActivityNotFoundException) {
+                /*viewMapIntent.data = Uri.parse("geo:0,0?q=$address")
+                startActivity(chooserIntent)*/
+            }
+        }
+            /*when (receipt.header.address) {
+                null, "" -> {}
+                else -> {
+                    val address = receipt.header.address
+                    val viewMapIntent = Intent()
+                    viewMapIntent.action = Intent.ACTION_VIEW
+                    val chooserIntent = Intent.createChooser(viewMapIntent, getString(R.string.shop_location))
+                    try {
+                        //viewMapIntent.data = Uri.parse("https://www.google.ru/maps/search/197374,+СПб,+ул.+Савушкина,+112,+лит.+А") +++
+                        //viewMapIntent.data = Uri.parse("https://www.google.ru/maps/search/197374, СПб, ул. Савушкина, 112, лит. А") +++
+                        //viewMapIntent.data = Uri.parse("https://www.google.ru/maps/search/197374, СПб, ул. Савушкина, 112, лит. А------------------") +++
+                        viewMapIntent.data = Uri.parse("https://www.google.ru/maps/search/$address")
+                        //viewMapIntent.data = Uri.parse("-------197374, СПб, ул. Савушкина, 112, лит. А--------") ---
+                        startActivity(chooserIntent)
+                    } catch (e: ActivityNotFoundException) {
+                        *//*viewMapIntent.data = Uri.parse("geo:0,0?q=$address")
+                        startActivity(chooserIntent)*//*
+                    }
+                }
+            }*/
+
+        }
+    }
+
 
     companion object {
 
