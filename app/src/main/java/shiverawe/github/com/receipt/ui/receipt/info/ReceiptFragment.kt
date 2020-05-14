@@ -16,10 +16,7 @@ import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.base.Receipt
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.ui.receipt.info.adapter.ProductAdapter
-import shiverawe.github.com.receipt.utils.floorTwo
-import shiverawe.github.com.receipt.utils.gone
-import shiverawe.github.com.receipt.utils.toast
-import shiverawe.github.com.receipt.utils.visible
+import shiverawe.github.com.receipt.utils.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -46,13 +43,12 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         loadReceipt()
-
         btn_toolbar_receipt_back.setOnClickListener(this)
         btn_toolbar_receipt_share.setOnClickListener(this)
         btn_toolbar_shop_location.setOnClickListener(this)
         btn_repeat.setOnClickListener(this)
-
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -114,6 +110,11 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
         val shopName = receipt.header.shop.title.ifEmpty { getString(R.string.shop_placeholder) }
         val sum = receipt.header.shop.sum
         val date = receipt.header.shop.date
+
+        if (receipt.header.shop.address.isEmpty()) {
+            btn_toolbar_shop_location.isEnabled = false
+            btn_toolbar_shop_location.setColorFilter(color(R.color.colorGray))
+        }
 
         header_collapsed.apply {
             titleText = shopName

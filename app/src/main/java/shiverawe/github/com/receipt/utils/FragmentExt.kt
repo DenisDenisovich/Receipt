@@ -1,7 +1,9 @@
 package shiverawe.github.com.receipt.utils
 
 import android.widget.Toast
+import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
 fun Fragment.toast(string: String, isLongDuration: Boolean = true): Toast {
@@ -25,3 +27,5 @@ fun Fragment.toast(@StringRes stringId: Int, isLongDuration: Boolean = true): To
 
     return toast
 }
+
+fun Fragment.color(@ColorRes color: Int) = ContextCompat.getColor(requireContext(), color)
