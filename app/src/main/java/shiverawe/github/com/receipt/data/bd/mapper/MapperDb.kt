@@ -5,18 +5,16 @@ import shiverawe.github.com.receipt.data.bd.room.receipt.ReceiptEntity
 import shiverawe.github.com.receipt.domain.entity.base.*
 
 fun ReceiptEntity.toReceipt(products: List<ProductEntity>): Receipt {
-    val shop = Shop(date, place, sum.toString())
+    val shop = Shop(date, place, merchantAddress, sum.toString())
     val meta = Meta(date, fn, fd, fp, sum)
-    val address = merchantAddress
     val items = products.map { Product(it.text, it.price, it.amount.toDouble()) }
-    return Receipt(ReceiptHeader(remoteId, ReceiptStatus.LOADED, shop, address, meta), items)
+    return Receipt(ReceiptHeader(remoteId, ReceiptStatus.LOADED, shop, meta), items)
 }
 
 fun ReceiptEntity.toReceiptHeader(): ReceiptHeader {
-    val shop = Shop(date, place, sum.toString())
+    val shop = Shop(date, place, merchantAddress, sum.toString())
     val meta = Meta(date, fn, fd, fp, sum)
-    val address = merchantAddress
-    return ReceiptHeader(remoteId, ReceiptStatus.LOADED, shop, address, meta)
+    return ReceiptHeader(remoteId, ReceiptStatus.LOADED, shop, meta)
 }
 
 fun Receipt.toReceiptEntity(): ReceiptEntity = ReceiptEntity(
@@ -27,7 +25,7 @@ fun Receipt.toReceiptEntity(): ReceiptEntity = ReceiptEntity(
         header.meta.fd,
         header.meta.fp,
         header.receiptId,
-        header.address
+        header.shop.address
 )
 
 fun ReceiptHeader.toReceiptEntity(): ReceiptEntity = ReceiptEntity(
@@ -38,7 +36,7 @@ fun ReceiptHeader.toReceiptEntity(): ReceiptEntity = ReceiptEntity(
         meta.fd,
         meta.fp,
         receiptId,
-        address
+        shop.address
 )
 
 fun Product.toProductEntity(receiptId: Long): ProductEntity =

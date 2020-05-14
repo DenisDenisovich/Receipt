@@ -20,11 +20,11 @@ fun ReceiptResponse.toReceiptHeader(): ReceiptHeader? {
     if (date == null || fd == null || fn == null || fp == null || sum == null) return null
 
     val dateLong = formatter.parse(date)?.time ?: 0L
-    val shop = Shop(dateLong, merchantName.orEmpty(), sum.toString())
+    val shop = Shop(dateLong, merchantName.orEmpty(),
+        merchantPlaceAddress.orEmpty(), sum.toString())
     val meta = Meta(dateLong, fn, fd, fp, sum)
     val status = ReceiptStatus.valueOf(status)
-    val address = merchantAddress!!
-    return ReceiptHeader(id, status, shop, address, meta)
+    return ReceiptHeader(id, status, shop, meta)
 }
 
 fun List<ReceiptResponse>.toReceiptHeader(): List<ReceiptHeader> =
@@ -39,7 +39,8 @@ fun List<ReceiptResponse>.toReceiptHeader(): List<ReceiptHeader> =
         .map { response ->
             val dateLong = formatter.parse(response.date!!)?.time ?: 0L
             val sum = response.sum!!
-            val shop = Shop(dateLong, response.merchantName.orEmpty(), sum.toString())
+            val shop = Shop(dateLong, response.merchantName.orEmpty(),
+                response.merchantPlaceAddress.orEmpty(), sum.toString())
             val meta = Meta(
                 dateLong,
                 response.fn!!,
@@ -47,9 +48,8 @@ fun List<ReceiptResponse>.toReceiptHeader(): List<ReceiptHeader> =
                 response.fp!!,
                 sum
             )
-            val address = response.merchantAddress!!
             val status = ReceiptStatus.valueOf(response.status)
-            ReceiptHeader(response.id, status, shop, address, meta)
+            ReceiptHeader(response.id, status, shop, meta)
         }
         .toList()
 

@@ -8,6 +8,6 @@ data class ReceiptResponse(
     val date: String?,
     val sum: Double?,
     val merchantName: String?,
-    val merchantAddress: String?,
+    val merchantPlaceAddress: String?,
     val status: String
 )

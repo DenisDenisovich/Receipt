@@ -3,12 +3,9 @@ package shiverawe.github.com.receipt.ui.receipt.info
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.location.Address
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.appbar.AppBarLayout
@@ -21,6 +18,7 @@ import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.ui.receipt.info.adapter.ProductAdapter
 import shiverawe.github.com.receipt.utils.floorTwo
 import shiverawe.github.com.receipt.utils.gone
+import shiverawe.github.com.receipt.utils.toast
 import shiverawe.github.com.receipt.utils.visible
 import java.text.SimpleDateFormat
 import java.util.*
@@ -162,47 +160,19 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
     }
 
     private fun shopLocation() {
-        viewModel.receiptData.value?.let { receipt -> {
-            val address = receipt.header.address
-            val viewMapIntent = Intent()
-            viewMapIntent.action = Intent.ACTION_VIEW
-            val chooserIntent = Intent.createChooser(viewMapIntent, getString(R.string.shop_location))
+        viewModel.receiptData.value?.let { receipt ->
+            val address = receipt.header.shop.address
+            val locationIntent = Intent()
+            locationIntent.action = Intent.ACTION_VIEW
+            val chooserIntent = Intent.createChooser(locationIntent, getString(R.string.shop_location))
             try {
-                //viewMapIntent.data = Uri.parse("https://www.google.ru/maps/search/197374,+СПб,+ул.+Савушкина,+112,+лит.+А") +++
-                //viewMapIntent.data = Uri.parse("https://www.google.ru/maps/search/197374, СПб, ул. Савушкина, 112, лит. А") +++
-                //viewMapIntent.data = Uri.parse("https://www.google.ru/maps/search/197374, СПб, ул. Савушкина, 112, лит. А------------------") +++
-                viewMapIntent.data = Uri.parse("https://www.google.ru/maps/search/$address")
-                //viewMapIntent.data = Uri.parse("-------197374, СПб, ул. Савушкина, 112, лит. А--------") ---
+                locationIntent.data = Uri.parse("https://www.google.ru/maps/search/$address")
                 startActivity(chooserIntent)
             } catch (e: ActivityNotFoundException) {
-                /*viewMapIntent.data = Uri.parse("geo:0,0?q=$address")
-                startActivity(chooserIntent)*/
+                toast(getString(R.string.shop_location_exception), true)
             }
         }
-            /*when (receipt.header.address) {
-                null, "" -> {}
-                else -> {
-                    val address = receipt.header.address
-                    val viewMapIntent = Intent()
-                    viewMapIntent.action = Intent.ACTION_VIEW
-                    val chooserIntent = Intent.createChooser(viewMapIntent, getString(R.string.shop_location))
-                    try {
-                        //viewMapIntent.data = Uri.parse("https://www.google.ru/maps/search/197374,+СПб,+ул.+Савушкина,+112,+лит.+А") +++
-                        //viewMapIntent.data = Uri.parse("https://www.google.ru/maps/search/197374, СПб, ул. Савушкина, 112, лит. А") +++
-                        //viewMapIntent.data = Uri.parse("https://www.google.ru/maps/search/197374, СПб, ул. Савушкина, 112, лит. А------------------") +++
-                        viewMapIntent.data = Uri.parse("https://www.google.ru/maps/search/$address")
-                        //viewMapIntent.data = Uri.parse("-------197374, СПб, ул. Савушкина, 112, лит. А--------") ---
-                        startActivity(chooserIntent)
-                    } catch (e: ActivityNotFoundException) {
-                        *//*viewMapIntent.data = Uri.parse("geo:0,0?q=$address")
-                        startActivity(chooserIntent)*//*
-                    }
-                }
-            }*/
-
-        }
     }
-
 
     companion object {
 

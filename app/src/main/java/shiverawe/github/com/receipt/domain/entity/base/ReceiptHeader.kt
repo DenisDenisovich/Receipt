@@ -6,6 +6,5 @@ data class ReceiptHeader(
     var receiptId: Long,
     val status: ReceiptStatus,
     val shop: Shop,
-    val address: String,
     val meta: Meta
 ): Serializable
