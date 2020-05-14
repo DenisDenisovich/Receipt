@@ -17,7 +17,7 @@ fun Exception.isOffline() = this is UnknownHostException ||
     this is ConnectException
 
 fun <T> Exception.toBaseResult(): BaseResult<T> =
-    if (this.isCancel()) {
+    if (isCancel()) {
         BaseResult(isCancel = true)
     } else {
         BaseResult(this, if (isOffline()) ErrorType.OFFLINE else ErrorType.ERROR)
