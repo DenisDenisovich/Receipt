@@ -28,8 +28,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
         FragmentPagerAdapter(childFragmentManager)
     }
 
-    private val dateFormatterYear = DateFormat.getDateInstance(SimpleDateFormat.LONG, Locale("ru"))
-    private val dateFormatterMonth = SimpleDateFormat("LLLL", Locale("ru"))
+    private val dateFormatter = SimpleDateFormat("LLLL yyyy", Locale("ru"))
     private var calendar = GregorianCalendar()
     private lateinit var dateDialog: DatePickerDialog
 
@@ -58,7 +57,6 @@ class HistoryFragment : Fragment(), View.OnClickListener {
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
         )
-
         return inflater.inflate(R.layout.fragment_history, container, false)
     }
 
@@ -108,21 +106,17 @@ class HistoryFragment : Fragment(), View.OnClickListener {
     }
 
     fun setSum(sum: String) {
-        TransitionManager.beginDelayedTransition(bottom_menu_history, Fade())
         if (sum.isNotEmpty()) {
-
             tv_sum_history.text = getString(R.string.total_sum, sum)
         } else {
             tv_sum_history.text = getString(R.string.empty_total_sum)
         }
     }
 
-    @SuppressLint("SetTextI18n", "DefaultLocale")
+    @SuppressLint("DefaultLocale")
     private fun updateMonthDate(position: Int) {
-        calendar.time = Date(monthAdapter.dates[position])
-        val month = dateFormatterMonth.format(calendar.time).capitalize()
-        val year = dateFormatterYear.format(calendar.time).split(" ")[2]
-        tv_date_current_history.text = "$month $year"
+        calendar.timeInMillis = monthAdapter.dates[position]
+        tv_date_current_history.text = dateFormatter.format(calendar.time).capitalize()
     }
 
     private fun setMonthPage(date: Date) {
