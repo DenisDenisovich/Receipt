@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import shiverawe.github.com.receipt.domain.entity.ErrorType
-import shiverawe.github.com.receipt.domain.entity.ReceiptResult
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.domain.interactor.month.IMonthInteractor
 import shiverawe.github.com.receipt.utils.floorTwo

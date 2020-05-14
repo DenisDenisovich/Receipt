@@ -1,15 +1,12 @@
 package shiverawe.github.com.receipt.domain.interactor.receipt
 
-import kotlinx.coroutines.CancellationException
-import shiverawe.github.com.receipt.data.network.utils.isOffline
-import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.base.Receipt
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
-import shiverawe.github.com.receipt.domain.entity.ReceiptResult
-import shiverawe.github.com.receipt.domain.entity.ReceiptError
+import shiverawe.github.com.receipt.domain.entity.BaseResult
 import shiverawe.github.com.receipt.domain.entity.base.Product
 import shiverawe.github.com.receipt.domain.interactor.create_receipt.receipt_printer.IReceiptPrinter
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
+import shiverawe.github.com.receipt.utils.toBaseResult
 import java.lang.Exception
 
 class ReceiptInteractor(
@@ -17,36 +14,27 @@ class ReceiptInteractor(
     private val receiptPrinter: IReceiptPrinter
 ) : IReceiptInteractor {
 
-    override suspend fun getReceipt(id: Long): ReceiptResult<Receipt> =
+    override suspend fun getReceipt(id: Long): BaseResult<Receipt> =
         try {
-            ReceiptResult(repository.getReceipt(id))
-        } catch (e: CancellationException) {
-            ReceiptResult(isCancel = true)
+            BaseResult(repository.getReceipt(id))
         } catch (e: Exception) {
-            ReceiptResult(error = getErrorResult(e))
+            e.toBaseResult()
         }
 
-    override suspend fun getProducts(id: Long): ReceiptResult<List<Product>> =
+    override suspend fun getProducts(id: Long): BaseResult<List<Product>> =
         try {
-            ReceiptResult(repository.getProducts(id))
-        } catch (e: CancellationException) {
-            ReceiptResult(isCancel = true)
+            BaseResult(repository.getProducts(id))
         } catch (e: Exception) {
-            ReceiptResult(error = getErrorResult(e))
+            e.toBaseResult()
         }
 
-    override suspend fun getReceiptHeader(id: Long): ReceiptResult<ReceiptHeader> =
+    override suspend fun getReceiptHeader(id: Long): BaseResult<ReceiptHeader> =
         try {
-            ReceiptResult(repository.getReceiptHeader(id))
-        } catch (e: CancellationException) {
-            ReceiptResult(isCancel = true)
+            BaseResult(repository.getReceiptHeader(id))
         } catch (e: Exception) {
-            ReceiptResult(error = ReceiptError(e, ErrorType.ERROR))
+            e.toBaseResult(checkOfflineError = false)
         }
 
     override fun getSharedReceipt(receipt: Receipt): String =
         receiptPrinter.receiptToString(receipt)
-
-    private fun getErrorResult(e: Exception): ReceiptError =
-        ReceiptError(e, if (isOffline()) ErrorType.OFFLINE else ErrorType.ERROR)
 }

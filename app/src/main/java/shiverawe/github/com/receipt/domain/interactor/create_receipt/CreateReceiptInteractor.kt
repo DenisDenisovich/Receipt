@@ -2,39 +2,36 @@ package shiverawe.github.com.receipt.domain.interactor.create_receipt
 
 import shiverawe.github.com.receipt.data.network.utils.isOffline
 import shiverawe.github.com.receipt.domain.entity.ErrorType
-import shiverawe.github.com.receipt.domain.entity.ReceiptResult
-import shiverawe.github.com.receipt.domain.entity.ReceiptError
+import shiverawe.github.com.receipt.domain.entity.BaseResult
 import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
+import shiverawe.github.com.receipt.utils.toBaseResult
 import shiverawe.github.com.receipt.utils.toLongWithSeconds
 import java.lang.Exception
-import java.util.concurrent.CancellationException
 
 class CreateReceiptInteractor(private val repository: IReceiptRepository) : ICreateReceiptInteractor {
 
-    override suspend fun createReceipt(qrRawData: String): ReceiptResult<ReceiptHeader> =
+    override suspend fun createReceipt(qrRawData: String): BaseResult<ReceiptHeader> =
         try {
             val meta = parseQrCode(qrRawData)
             createReceiptNetwork(meta)
         } catch (e: ParseQrException) {
-            ReceiptResult(error = ReceiptError(throwable = e, type = ErrorType.ERROR))
+            e.toBaseResult(checkOfflineError = false)
         }
 
-    override suspend fun createReceipt(meta: Meta): ReceiptResult<ReceiptHeader> = createReceiptNetwork(meta)
+    override suspend fun createReceipt(meta: Meta): BaseResult<ReceiptHeader> = createReceiptNetwork(meta)
 
     // Go to network for creation receipt
-    private suspend fun createReceiptNetwork(meta: Meta): ReceiptResult<ReceiptHeader> {
+    private suspend fun createReceiptNetwork(meta: Meta): BaseResult<ReceiptHeader> {
         if (isOffline()) {
-            return ReceiptResult(error = ReceiptError(type = ErrorType.OFFLINE))
+            return BaseResult(ErrorType.OFFLINE)
         }
 
         return try {
-            ReceiptResult(repository.createReceipt(meta))
-        } catch (e: CancellationException) {
-            ReceiptResult(isCancel = true)
+            BaseResult(repository.createReceipt(meta))
         } catch (e: Exception) {
-            ReceiptResult(error = ReceiptError(throwable = e, type = ErrorType.ERROR))
+            e.toBaseResult()
         }
     }
 

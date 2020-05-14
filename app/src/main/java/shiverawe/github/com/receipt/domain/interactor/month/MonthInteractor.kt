@@ -1,22 +1,22 @@
 package shiverawe.github.com.receipt.domain.interactor.month
 
-import retrofit2.HttpException
 import shiverawe.github.com.receipt.data.network.utils.isOffline
 import shiverawe.github.com.receipt.domain.entity.ErrorType
-import shiverawe.github.com.receipt.domain.entity.ReceiptError
-import shiverawe.github.com.receipt.domain.entity.ReceiptResult
+import shiverawe.github.com.receipt.domain.entity.BaseResult
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptStatus
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
+import shiverawe.github.com.receipt.utils.isCancel
+import shiverawe.github.com.receipt.utils.isNetwork
+import shiverawe.github.com.receipt.utils.toBaseResult
 import java.lang.Exception
 import java.util.*
-import java.util.concurrent.CancellationException
 
 class MonthInteractor(private val repository: IMonthRepository) : IMonthInteractor {
 
-    private val gregorianCalendar = GregorianCalendar()
+    private val calendar = GregorianCalendar()
 
-    override suspend fun getMonthReceipt(dateFrom: Long): ReceiptResult<List<ReceiptHeader>> {
+    override suspend fun getMonthReceipt(dateFrom: Long): BaseResult<List<ReceiptHeader>> {
         val dateTo = getMonthEndTime(dateFrom)
 
         if (isOffline()) {
@@ -24,27 +24,20 @@ class MonthInteractor(private val repository: IMonthRepository) : IMonthInteract
         }
 
         return try {
-            ReceiptResult(getNetworkReceipts(dateFrom, dateTo))
-        } catch (e: CancellationException) {
-            // Coroutine is cancelled, return nothing
-            ReceiptResult(isCancel = true)
+            // Get receipts from network and update db cache
+            val networkReceipts = repository.getNetworkReceipt(dateFrom, dateTo)
+                .filter { it.status == ReceiptStatus.LOADED }
+                .sortedByDescending { it.meta.t }
+
+            repository.updateCache(dateFrom, dateTo, networkReceipts)
+            BaseResult(networkReceipts)
         } catch (e: Exception) {
-            if (e is HttpException || isOffline()) {
-                getDbReceiptsOnError(dateFrom, dateTo, e, ErrorType.OFFLINE)
-            } else {
-                ReceiptResult<List<ReceiptHeader>>(error = ReceiptError(e, ErrorType.ERROR))
+            when {
+                e.isCancel() -> BaseResult(isCancel = true)
+                e.isNetwork() || isOffline() -> getDbReceiptsOnError(dateFrom, dateTo, e, ErrorType.OFFLINE)
+                else -> BaseResult(e, ErrorType.ERROR)
             }
         }
-    }
-
-    private suspend fun getNetworkReceipts(dateFrom: Long, dateTo: Long): List<ReceiptHeader> {
-        // Get receipts from network and update db cache
-        val networkReceipts = repository.getNetworkReceipt(dateFrom, dateTo)
-            .filter { it.status == ReceiptStatus.LOADED }
-
-        repository.updateCache(dateFrom, dateTo, networkReceipts)
-
-        return networkReceipts
     }
 
     private suspend fun getDbReceiptsOnError(
@@ -52,19 +45,18 @@ class MonthInteractor(private val repository: IMonthRepository) : IMonthInteract
         dateTo: Long,
         error: Throwable? = null,
         errorType: ErrorType
-    ): ReceiptResult<List<ReceiptHeader>> {
-        return try {
-            val dbReceipts = repository.getReceiptFromDb(dateFrom, dateTo)
-            ReceiptResult(dbReceipts, ReceiptError(error, errorType))
+    ): BaseResult<List<ReceiptHeader>> =
+        try {
+            BaseResult(repository.getReceiptFromDb(dateFrom, dateTo), error, errorType)
         } catch (e: Exception) {
             // Error while getting data from db. Return error without data
-            ReceiptResult<List<ReceiptHeader>>(error = ReceiptError(e, ErrorType.ERROR))
+            e.toBaseResult(checkOfflineError = false)
         }
-    }
 
-    private fun getMonthEndTime(startDate: Long): Long =
-        gregorianCalendar.apply {
-            timeInMillis = startDate
-            add(Calendar.MONTH, 1)
-        }.timeInMillis
+    private fun getMonthEndTime(startDate: Long): Long {
+        calendar.timeInMillis = startDate
+        calendar.add(Calendar.MONTH, 1)
+
+        return calendar.timeInMillis
+    }
 }
