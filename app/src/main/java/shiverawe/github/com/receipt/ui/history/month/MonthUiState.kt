@@ -5,6 +5,6 @@ import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 data class MonthUiState(
     val receipts: List<ReceiptHeader> = arrayListOf(),
     val sum: String = "",
-    val inProgress: Boolean = false,
-    val message: MessageType? = null
+    val message: MessageType? = null,
+    val inProgress: Boolean = false
 )

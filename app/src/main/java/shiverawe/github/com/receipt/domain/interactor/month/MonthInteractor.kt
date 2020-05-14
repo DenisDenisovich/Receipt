@@ -49,7 +49,6 @@ class MonthInteractor(private val repository: IMonthRepository) : IMonthInteract
         try {
             BaseResult(repository.getReceiptFromDb(dateFrom, dateTo), error, errorType)
         } catch (e: Exception) {
-            // Error while getting data from db. Return error without data
             e.toBaseResult(checkOfflineError = false)
         }
 

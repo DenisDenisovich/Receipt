@@ -28,11 +28,15 @@ class MonthViewModel(private val interactor: IMonthInteractor) : ViewModel() {
             val errorType = receiptResult.error?.type
             val sum = receipts.asSequence().map { it.meta.s }.sum().floorTwo()
             val message = getMessage(receipts, errorType, isRefresh)
-            state.value = MonthUiState(receipts = receipts, sum = sum, message = message)
+            state.value = MonthUiState(receipts, sum, message)
         }
     }
 
-    private fun getMessage(receipts: List<ReceiptHeader>?, errorType: ErrorType?, isRefresh: Boolean): MessageType? {
+    private fun getMessage(
+        receipts: List<ReceiptHeader>?,
+        errorType: ErrorType?,
+        isRefresh: Boolean
+    ): MessageType? {
         if (errorType == null) {
             return if (receipts.isNullOrEmpty()) MessageType.EMPTY_LIST
             else null
