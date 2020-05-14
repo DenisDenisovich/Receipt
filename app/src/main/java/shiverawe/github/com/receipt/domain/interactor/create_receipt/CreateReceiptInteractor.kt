@@ -5,12 +5,14 @@ import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.BaseResult
 import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
+import shiverawe.github.com.receipt.domain.interactor.BaseInteractor
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
-import shiverawe.github.com.receipt.utils.toBaseResult
 import shiverawe.github.com.receipt.utils.toLongWithSeconds
 import java.lang.Exception
 
-class CreateReceiptInteractor(private val repository: IReceiptRepository) : ICreateReceiptInteractor {
+class CreateReceiptInteractor(
+    private val repository: IReceiptRepository
+) : BaseInteractor(), ICreateReceiptInteractor {
 
     override suspend fun createReceipt(qrRawData: String): BaseResult<ReceiptHeader> =
         try {

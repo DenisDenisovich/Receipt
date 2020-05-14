@@ -4,15 +4,15 @@ import shiverawe.github.com.receipt.domain.entity.base.Receipt
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.domain.entity.BaseResult
 import shiverawe.github.com.receipt.domain.entity.base.Product
+import shiverawe.github.com.receipt.domain.interactor.BaseInteractor
 import shiverawe.github.com.receipt.domain.interactor.create_receipt.receipt_printer.IReceiptPrinter
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
-import shiverawe.github.com.receipt.utils.toBaseResult
 import java.lang.Exception
 
 class ReceiptInteractor(
     private val repository: IReceiptRepository,
     private val receiptPrinter: IReceiptPrinter
-) : IReceiptInteractor {
+) : BaseInteractor(), IReceiptInteractor {
 
     override suspend fun getReceipt(id: Long): BaseResult<Receipt> =
         try {
