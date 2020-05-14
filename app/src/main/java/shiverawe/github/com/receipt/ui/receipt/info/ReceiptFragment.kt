@@ -3,6 +3,7 @@ package shiverawe.github.com.receipt.ui.receipt.info
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.Intent.CATEGORY_BROWSABLE
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -164,13 +165,19 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
         viewModel.receiptData.value?.let { receipt ->
             val address = receipt.header.shop.address
             val locationIntent = Intent()
+            locationIntent.addCategory(CATEGORY_BROWSABLE)
             locationIntent.action = Intent.ACTION_VIEW
             val chooserIntent = Intent.createChooser(locationIntent, getString(R.string.shop_location))
             try {
-                locationIntent.data = Uri.parse("https://www.google.ru/maps/search/$address")
+                locationIntent.data = Uri.parse("geo:0,0?q=$address")
                 startActivity(chooserIntent)
             } catch (e: ActivityNotFoundException) {
-                toast(getString(R.string.shop_location_exception), true)
+                try {
+                    locationIntent.data = Uri.parse("https://www.google.ru/maps/search/$address")
+                    startActivity(chooserIntent)
+                } catch (e: ActivityNotFoundException) {
+                    toast(getString(R.string.shop_location_exception), true)
+                }
             }
         }
     }
