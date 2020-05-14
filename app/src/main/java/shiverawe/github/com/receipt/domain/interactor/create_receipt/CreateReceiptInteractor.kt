@@ -17,7 +17,7 @@ class CreateReceiptInteractor(private val repository: IReceiptRepository) : ICre
             val meta = parseQrCode(qrRawData)
             createReceiptNetwork(meta)
         } catch (e: ParseQrException) {
-            e.toBaseResult(checkOfflineError = false)
+            e.toBaseResult()
         }
 
     override suspend fun createReceipt(meta: Meta): BaseResult<ReceiptHeader> = createReceiptNetwork(meta)

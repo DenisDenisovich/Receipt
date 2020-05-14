@@ -19,9 +19,11 @@ class MonthInteractor(private val repository: IMonthRepository) : IMonthInteract
     override suspend fun getMonthReceipt(dateFrom: Long): BaseResult<List<ReceiptHeader>> {
         val dateTo = getMonthEndTime(dateFrom)
 
+/*
         if (isOffline()) {
             return getDbReceiptsOnError(dateFrom, dateTo, errorType = ErrorType.OFFLINE)
         }
+*/
 
         return try {
             // Get receipts from network and update db cache
@@ -49,7 +51,7 @@ class MonthInteractor(private val repository: IMonthRepository) : IMonthInteract
         try {
             BaseResult(repository.getReceiptFromDb(dateFrom, dateTo), error, errorType)
         } catch (e: Exception) {
-            e.toBaseResult(checkOfflineError = false)
+            e.toBaseResult()
         }
 
     private fun getMonthEndTime(startDate: Long): Long {

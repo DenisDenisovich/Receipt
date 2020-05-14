@@ -32,7 +32,7 @@ class ReceiptInteractor(
         try {
             BaseResult(repository.getReceiptHeader(id))
         } catch (e: Exception) {
-            e.toBaseResult(checkOfflineError = false)
+            e.toBaseResult()
         }
 
     override fun getSharedReceipt(receipt: Receipt): String =
