@@ -21,6 +21,9 @@ import shiverawe.github.com.receipt.utils.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+private const val GEO_URI = "geo:0,0?q="
+private const val BROWSER_URI = "https://www.google.ru/maps/search/"
+
 class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListener {
 
     private var adapter = ProductAdapter()
@@ -71,7 +74,7 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
             R.id.btn_toolbar_receipt_back -> activity?.onBackPressed()
             R.id.btn_toolbar_receipt_share -> shareReceipt()
             R.id.btn_repeat -> repeatReceiptLoading()
-            R.id.btn_toolbar_shop_location -> shopLocation()
+            R.id.btn_toolbar_shop_location -> showLocation()
         }
     }
 
@@ -113,7 +116,6 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
         val date = receipt.header.shop.date
 
         if (receipt.header.shop.address.isEmpty()) {
-            btn_toolbar_shop_location.isEnabled = false
             btn_toolbar_shop_location.setColorFilter(color(R.color.colorGray))
         }
 
@@ -161,24 +163,31 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
         }
     }
 
-    private fun shopLocation() {
+    private fun showLocation() {
         viewModel.receiptData.value?.let { receipt ->
-            val address = receipt.header.shop.address
-            val locationIntent = Intent()
-            locationIntent.addCategory(CATEGORY_BROWSABLE)
-            locationIntent.action = Intent.ACTION_VIEW
-            val chooserIntent = Intent.createChooser(locationIntent, getString(R.string.shop_location))
-            try {
-                locationIntent.data = Uri.parse("geo:0,0?q=$address")
-                startActivity(chooserIntent)
-            } catch (e: ActivityNotFoundException) {
-                try {
-                    locationIntent.data = Uri.parse("https://www.google.ru/maps/search/$address")
-                    startActivity(chooserIntent)
-                } catch (e: ActivityNotFoundException) {
-                    toast(getString(R.string.shop_location_exception), true)
+            when (receipt.header.shop.address.isEmpty()) {
+                true -> toast(getString(R.string.shop_location_empty_address), false)
+                else -> {
+                    val address = receipt.header.shop.address
+                    val locationIntent = Intent()
+                    locationIntent.addCategory(CATEGORY_BROWSABLE)
+                    locationIntent.action = Intent.ACTION_VIEW
+                    val chooserIntent = Intent.createChooser(locationIntent, getString(R.string.shop_location))
+                    try {
+                        locationIntent.data = Uri.parse("$GEO_URI$address")
+                        startActivity(chooserIntent)
+                    } catch (e: ActivityNotFoundException) {
+                        try {
+                            locationIntent.data = Uri.parse("$BROWSER_URI$address")
+                            startActivity(chooserIntent)
+                        } catch (e: ActivityNotFoundException) {
+                            toast(getString(R.string.shop_location_exception), true)
+                        }
+                    }
                 }
+
             }
+
         }
     }
 

@@ -56,7 +56,8 @@
 
     <string name="waiting_receipt_text">Загрузка чека</string>
     <string name="shop_placeholder">Магазин</string>
-    <string name="shop_location">Показать магазин на карте</string>
+    <string name="shop_location">Показать магазин на карте:</string>
     <string name="shop_location_exception">Не обнаружено подходящих приложений</string>
+    <string name="shop_location_empty_address">Нет адреса</string>
 
 </resources>
