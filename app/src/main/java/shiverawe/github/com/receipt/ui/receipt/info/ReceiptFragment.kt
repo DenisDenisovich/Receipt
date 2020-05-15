@@ -180,7 +180,7 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
                         locationIntent.data = Uri.parse("$BROWSER_URI$address")
                         startActivity(locationIntent)
                     } catch (e: ActivityNotFoundException) {
-                        toast(getString(R.string.show_location_exception), true)
+                        toast(getString(R.string.no_location_applications), true)
                     }
                 }
             }
