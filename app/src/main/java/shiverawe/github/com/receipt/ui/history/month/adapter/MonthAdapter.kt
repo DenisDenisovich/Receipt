@@ -79,6 +79,6 @@ class MonthAdapter(val shopIsClicked: (receipt: ReceiptHeader) -> Unit) : Recycl
     }
 
     private fun getDateItem(date: Long): ReceiptHeader {
-        return ReceiptHeader(-1L, ReceiptStatus.LOADED, Shop(date, "", ""), Meta(0L, "", "", "", 0.0))
+        return ReceiptHeader(-1L, ReceiptStatus.LOADED, Shop(date, "", "", ""),  Meta(0L, "", "", "", 0.0))
     }
 }

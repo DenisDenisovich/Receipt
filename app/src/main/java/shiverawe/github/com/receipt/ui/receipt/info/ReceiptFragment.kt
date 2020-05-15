@@ -1,35 +1,28 @@
 package shiverawe.github.com.receipt.ui.receipt.info
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.Intent.CATEGORY_BROWSABLE
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.fragment_receipt.appbar
-import kotlinx.android.synthetic.main.fragment_receipt.btn_repeat
-import kotlinx.android.synthetic.main.fragment_receipt.btn_toolbar_receipt_back
-import kotlinx.android.synthetic.main.fragment_receipt.btn_toolbar_receipt_share
-import kotlinx.android.synthetic.main.fragment_receipt.collapsed
-import kotlinx.android.synthetic.main.fragment_receipt.header_collapsed
-import kotlinx.android.synthetic.main.fragment_receipt.header_expanded
-import kotlinx.android.synthetic.main.fragment_receipt.pb_receipt
-import kotlinx.android.synthetic.main.fragment_receipt.rv_receipt
-import kotlinx.android.synthetic.main.fragment_receipt.tv_error
-import kotlinx.android.synthetic.main.fragment_receipt.tv_toolbar_receipt_date
-import kotlinx.android.synthetic.main.fragment_receipt.tv_toolbar_receipt_time
+import kotlinx.android.synthetic.main.fragment_receipt.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.base.Receipt
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.ui.receipt.info.adapter.ProductAdapter
-import shiverawe.github.com.receipt.utils.floorTwo
-import shiverawe.github.com.receipt.utils.gone
-import shiverawe.github.com.receipt.utils.visible
+import shiverawe.github.com.receipt.utils.*
 import java.text.SimpleDateFormat
 import java.util.*
+
+private const val GEO_URI = "geo:0,0?q="
+private const val BROWSER_URI = "https://www.google.ru/maps/search/"
 
 class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListener {
 
@@ -48,15 +41,15 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.receiptData.observe(this, Observer { receipt -> setReceipt(receipt)})
+        viewModel.receiptData.observe(this, Observer { receipt -> setReceipt(receipt) })
         viewModel.errorData.observe(this, Observer { errorType -> setError(errorType) })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         loadReceipt()
-
         btn_toolbar_receipt_back.setOnClickListener(this)
         btn_toolbar_receipt_share.setOnClickListener(this)
+        btn_toolbar_shop_location.setOnClickListener(this)
         btn_repeat.setOnClickListener(this)
     }
 
@@ -80,6 +73,7 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
             R.id.btn_toolbar_receipt_back -> activity?.onBackPressed()
             R.id.btn_toolbar_receipt_share -> shareReceipt()
             R.id.btn_repeat -> repeatReceiptLoading()
+            R.id.btn_toolbar_shop_location -> showLocation()
         }
     }
 
@@ -119,6 +113,10 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
         val shopName = receipt.header.shop.title.ifEmpty { getString(R.string.shop_placeholder) }
         val sum = receipt.header.shop.sum
         val date = receipt.header.shop.date
+
+        if (receipt.header.shop.address.isEmpty()) {
+            btn_toolbar_shop_location.setColorFilter(color(R.color.colorGray))
+        }
 
         header_collapsed.apply {
             titleText = shopName
@@ -161,6 +159,30 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
             sendIntent.putExtra(Intent.EXTRA_TEXT, viewModel.getSharedReceipt(receipt))
             sendIntent.type = "text/plain"
             startActivity(Intent.createChooser(sendIntent, getString(R.string.share_receipt)))
+        }
+    }
+
+    private fun showLocation() {
+        viewModel.receiptData.value?.let { receipt ->
+            if (receipt.header.shop.address.isEmpty()) {
+                toast(getString(R.string.show_location_empty_address), false)
+            } else {
+                val address = receipt.header.shop.address
+                val locationIntent = Intent()
+                locationIntent.addCategory(CATEGORY_BROWSABLE)
+                locationIntent.action = Intent.ACTION_VIEW
+                try {
+                    locationIntent.data = Uri.parse("$GEO_URI$address")
+                    startActivity(locationIntent)
+                } catch (e: ActivityNotFoundException) {
+                    try {
+                        locationIntent.data = Uri.parse("$BROWSER_URI$address")
+                        startActivity(locationIntent)
+                    } catch (e: ActivityNotFoundException) {
+                        toast(getString(R.string.no_location_applications), true)
+                    }
+                }
+            }
         }
     }
 
