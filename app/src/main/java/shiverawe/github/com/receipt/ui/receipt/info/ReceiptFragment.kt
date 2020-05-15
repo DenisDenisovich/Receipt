@@ -53,7 +53,6 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
         btn_repeat.setOnClickListener(this)
     }
 
-
     override fun onResume() {
         super.onResume()
         appbar.addOnOffsetChangedListener(offsetChangedListener)
