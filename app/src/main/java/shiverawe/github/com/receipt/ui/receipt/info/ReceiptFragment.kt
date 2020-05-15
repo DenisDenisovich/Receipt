@@ -165,29 +165,25 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
 
     private fun showLocation() {
         viewModel.receiptData.value?.let { receipt ->
-            when (receipt.header.shop.address.isEmpty()) {
-                true -> toast(getString(R.string.shop_location_empty_address), false)
-                else -> {
-                    val address = receipt.header.shop.address
-                    val locationIntent = Intent()
-                    locationIntent.addCategory(CATEGORY_BROWSABLE)
-                    locationIntent.action = Intent.ACTION_VIEW
-                    val chooserIntent = Intent.createChooser(locationIntent, getString(R.string.shop_location))
+            if (receipt.header.shop.address.isEmpty()) {
+                toast(getString(R.string.show_location_empty_address), false)
+            } else {
+                val address = receipt.header.shop.address
+                val locationIntent = Intent()
+                locationIntent.addCategory(CATEGORY_BROWSABLE)
+                locationIntent.action = Intent.ACTION_VIEW
+                try {
+                    locationIntent.data = Uri.parse("$GEO_URI$address")
+                    startActivity(locationIntent)
+                } catch (e: ActivityNotFoundException) {
                     try {
-                        locationIntent.data = Uri.parse("$GEO_URI$address")
-                        startActivity(chooserIntent)
+                        locationIntent.data = Uri.parse("$BROWSER_URI$address")
+                        startActivity(locationIntent)
                     } catch (e: ActivityNotFoundException) {
-                        try {
-                            locationIntent.data = Uri.parse("$BROWSER_URI$address")
-                            startActivity(chooserIntent)
-                        } catch (e: ActivityNotFoundException) {
-                            toast(getString(R.string.shop_location_exception), true)
-                        }
+                        toast(getString(R.string.show_location_exception), true)
                     }
                 }
-
             }
-
         }
     }
 
