@@ -46,7 +46,8 @@ fun List<ReceiptResponse>.toReceiptHeader(): List<ReceiptHeader> =
                 dateLong,
                 response.merchantName.orEmpty(),
                 response.merchantPlaceAddress.orEmpty(),
-                sum.toString())
+                sum.toString()
+            )
             val meta = Meta(
                 dateLong,
                 response.fn!!,
