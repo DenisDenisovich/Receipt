@@ -77,10 +77,6 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
 
     override fun openQr() {
         getTransaction().apply {
-            setCustomAnimations(
-                R.anim.slide_up,
-                R.anim.fade_out
-            )
             replace(R.id.container, CreateReceiptRootFragment())
             addToBackStack(null)
             commit()
