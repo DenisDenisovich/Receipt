@@ -5,4 +5,5 @@ interface Navigation {
     fun openSettings()
     fun openQr()
     fun openReceipt(receiptId: Long)
+    fun openReceiptLoading()
 }

@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.fragment_history.*
 import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.Navigation
+import shiverawe.github.com.receipt.utils.visible
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -64,6 +65,9 @@ class HistoryFragment : Fragment(), View.OnClickListener {
         btn_calendar_history.setOnClickListener(this)
         btn_next_history.setOnClickListener(this)
         btn_preview_history.setOnClickListener(this)
+        btn_receipt_loading.visible()
+        tv_receipt_loading_count.text = "4"
+        btn_receipt_loading.setOnClickListener(this)
 
         vp_history.adapter = monthAdapter
         vp_history.currentItem = monthAdapter.count - 1
@@ -101,6 +105,9 @@ class HistoryFragment : Fragment(), View.OnClickListener {
                     vp_history.currentItem--
                     updateMonthDate(vp_history.currentItem)
                 }
+            }
+            R.id.btn_receipt_loading -> {
+                navigation.openReceiptLoading()
             }
         }
     }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_item_month"
+    android:layout_width="match_parent"
+    android:layout_height="76dp">
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="16dp"
+        tools:text="Среда, 05.06 20:00" />
+
+    <TextView
+        android:id="@+id/tv_sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="@color/textGray"
+        android:textSize="14sp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        tools:text="300.10 Р" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btn_delete"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:padding="18dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_gravity="end|center_vertical"
+        android:src="@drawable/ic_delete"/>
+</FrameLayout>

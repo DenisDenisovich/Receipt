@@ -30,7 +30,7 @@
                 android:src="@drawable/ic_calendar"/>
 
             <FrameLayout
-                android:id="@+id/btn_receipts_in_progress"
+                android:id="@+id/btn_receipt_loading"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:visibility="gone"
@@ -45,7 +45,7 @@
                     android:src="@drawable/ic_cloud_queue"/>
 
                 <TextView
-                    android:id="@+id/tv_receipt_in_progress_count"
+                    android:id="@+id/tv_receipt_loading_count"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     tools:text="1"

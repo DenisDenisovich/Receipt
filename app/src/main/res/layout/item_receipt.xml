@@ -47,7 +47,7 @@
             android:layout_gravity="bottom"
             android:textSize="14sp"
             android:fontFamily="@font/roboto_regular"
-            android:textColor="#808080"
+            android:textColor="@color/textGray"
             tools:text="20:08"/>
     </LinearLayout>
 

@@ -7,6 +7,7 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
+import shiverawe.github.com.receipt.ui.loading.ReceiptLoadingFragment
 import shiverawe.github.com.receipt.ui.receipt.create.CreateReceiptRootFragment
 import shiverawe.github.com.receipt.ui.receipt.info.ReceiptFragment
 import shiverawe.github.com.receipt.ui.settings.SettingsFragment
@@ -42,7 +43,10 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
                 supportFragmentManager.popBackStack()
                 showBottomAppBar(true)
             }
-
+            is ReceiptLoadingFragment -> {
+                supportFragmentManager.popBackStack()
+                showBottomAppBar(true)
+            }
             is CreateReceiptRootFragment -> {
                 if (topFragment.quitOnBackPressed()) {
                     supportFragmentManager.popBackStack()
@@ -87,6 +91,25 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
                 R.id.container,
                 ReceiptFragment.getNewInstance(receiptId),
                 ReceiptFragment.RECEIPT_TAG
+            )
+            addToBackStack(null)
+            commit()
+        }
+        showBottomAppBar(false)
+    }
+
+    override fun openReceiptLoading() {
+        getTransaction().apply {
+            setCustomAnimations(
+                R.anim.slide_from_left,
+                R.anim.slide_to_right,
+                R.anim.slide_pop_from_right,
+                R.anim.slide_pop_to_left
+            )
+            replace(
+                R.id.container,
+                ReceiptLoadingFragment(),
+                ReceiptLoadingFragment.LOADING_TAG
             )
             addToBackStack(null)
             commit()
