@@ -9,38 +9,24 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_manual.*
-import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.base.Meta
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptStatus
+import shiverawe.github.com.receipt.ui.receipt.create.root.CreateReceiptNavigation
+import shiverawe.github.com.receipt.ui.receipt.create.state.CreateReceiptState
+import shiverawe.github.com.receipt.ui.receipt.create.state.ErrorState
 import shiverawe.github.com.receipt.utils.toLongWithMilliseconds
 import java.lang.Exception
 import java.lang.StringBuilder
 
 class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnFocusChangeListener {
 
-    private val viewMode: CreateReceiptViewModel by lazy {
-        getSharedViewModel<CreateReceiptViewModel>(from = { requireParentFragment() })
+    private val createReceiptNavigation: CreateReceiptNavigation by lazy {
+        requireParentFragment() as CreateReceiptNavigation
     }
-    private val stateObserver = Observer<CreateReceiptUiState> { state ->
-        if (state is ManualState) {
-            when {
-                state.isWaiting -> {
-                    showDialog()
-                }
 
-                !state.isWaiting && state.error == null -> {
-                    dismissDialog()
-                }
-
-                state.error != null -> {
-                    state.error?.let { errorState ->
-                        showError(errorState)
-                        viewMode.onShowError()
-                    }
-                }
-            }
-        }
-    }
+    private val viewMode: CreateReceiptViewModel by viewModel()
 
     private var meta: Meta? = null
     private var textIsValid = false
@@ -92,7 +78,7 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
         }
 
         btn_manual_back?.setOnClickListener {
-            viewMode.goBack()
+            createReceiptNavigation.goBack()
         }
 
         et_manual_fd?.onFocusChangeListener = this
@@ -114,6 +100,7 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
             }
             false
         }
+        viewMode.state.observe(this, Observer { handleState(it) })
     }
 
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
@@ -130,21 +117,35 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
         viewMode.onCancelWaiting()
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewMode.state.observe(this, stateObserver)
-    }
+    private fun handleState(state: CreateReceiptState) {
+        when {
+            state.isWaiting -> {
+                showDialog()
+            }
 
-    override fun onPause() {
-        super.onPause()
-        viewMode.state.removeObserver(stateObserver)
+            state.receiptHeader != null -> {
+                dismissDialog()
+                val header = state.receiptHeader
+                if (header.status == ReceiptStatus.LOADED) {
+                    createReceiptNavigation.openReceipt(header)
+                } else {
+                    createReceiptNavigation.finish()
+                }
+            }
+
+            state.error != null -> {
+                state.error?.getValueFirstTime()?.let { errorState ->
+                    showError(errorState)
+                }
+            }
+        }
     }
 
     private fun createReceipt() {
         if (textIsValid) {
             meta?.let { viewMode.createReceipt(it) }
         } else {
-            viewMode.showError(errorMessage)
+            showError(ErrorState(message = errorMessage))
         }
     }
 

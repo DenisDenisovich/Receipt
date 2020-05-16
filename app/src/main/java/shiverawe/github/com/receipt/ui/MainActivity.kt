@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
 import shiverawe.github.com.receipt.ui.loading.ReceiptLoadingFragment
-import shiverawe.github.com.receipt.ui.receipt.create.CreateReceiptRootFragment
+import shiverawe.github.com.receipt.ui.receipt.create.root.CreateReceiptRootFragment
 import shiverawe.github.com.receipt.ui.receipt.info.ReceiptFragment
 import shiverawe.github.com.receipt.ui.settings.SettingsFragment
 

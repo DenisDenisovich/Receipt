@@ -39,18 +39,14 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
 
     private val viewModel: ReceiptViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.receiptData.observe(this, Observer { receipt -> setReceipt(receipt) })
-        viewModel.errorData.observe(this, Observer { errorType -> setError(errorType) })
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         loadReceipt()
         btn_toolbar_receipt_back.setOnClickListener(this)
         btn_toolbar_receipt_share.setOnClickListener(this)
         btn_toolbar_shop_location.setOnClickListener(this)
         btn_repeat.setOnClickListener(this)
+        viewModel.receiptData.observe(this, Observer { receipt -> setReceipt(receipt) })
+        viewModel.errorData.observe(this, Observer { errorType -> setError(errorType) })
     }
 
     override fun onResume() {
