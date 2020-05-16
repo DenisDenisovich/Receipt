@@ -16,6 +16,8 @@ import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.android.synthetic.main.fragment_qr.*
 import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
 import shiverawe.github.com.receipt.R
+import shiverawe.github.com.receipt.utils.getBottomNavigationBarHeight
+import shiverawe.github.com.receipt.utils.gone
 import shiverawe.github.com.receipt.utils.toPixels
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -58,14 +60,11 @@ class QrFragment : CreateReceiptFragment(R.layout.fragment_qr), View.OnClickList
         btn_flash.setOnClickListener(this)
         btn_manual.setOnClickListener(this)
         createCamera()
+        setupManualButton()
         requireActivity().window.setFlags(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
-        btn_manual.layoutParams = (btn_manual.layoutParams as FrameLayout.LayoutParams).apply {
-            val margin = 16.toPixels()
-            setMargins(margin, margin, margin, margin + getBottomNavigationBarHeight())
-        }
     }
 
     override fun onCancelDialogClick() {
@@ -104,6 +103,7 @@ class QrFragment : CreateReceiptFragment(R.layout.fragment_qr), View.OnClickList
                 cameraControl?.enableTorch(cameraInfo?.torchState?.value != TorchState.ON)
             }
             R.id.btn_manual -> {
+                btn_manual.gone()
                 viewMode.goToManualScreen()
             }
         }
@@ -125,6 +125,20 @@ class QrFragment : CreateReceiptFragment(R.layout.fragment_qr), View.OnClickList
                     viewMode.onShowError()
                 }
             }
+        }
+    }
+
+    private fun setupManualButton() {
+        btn_manual.layoutParams = (btn_manual.layoutParams as FrameLayout.LayoutParams).apply {
+            val margin = 16.toPixels()
+            setMargins(margin, margin, margin, margin + getBottomNavigationBarHeight(requireContext()))
+        }
+        btn_manual.translationY = 150.toPixels().toFloat()
+        btn_manual.animate().apply {
+            translationYBy(-150.toPixels().toFloat())
+            startDelay = 250
+            duration = 250
+            start()
         }
     }
 
@@ -186,16 +200,6 @@ class QrFragment : CreateReceiptFragment(R.layout.fragment_qr), View.OnClickList
         } catch (e: Exception) {
             e.printStackTrace()
         }
-    }
-
-    private fun getBottomNavigationBarHeight(): Int {
-        var statusBarHeight = 0
-        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        if (resourceId > 0) {
-            statusBarHeight = resources.getDimensionPixelSize(resourceId)
-        }
-
-        return statusBarHeight
     }
 
     // get bitmap from preview view
