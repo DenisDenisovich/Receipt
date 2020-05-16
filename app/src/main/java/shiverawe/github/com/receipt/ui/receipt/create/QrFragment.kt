@@ -14,8 +14,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.android.synthetic.main.fragment_qr.*
-import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import shiverawe.github.com.receipt.R
+import shiverawe.github.com.receipt.domain.entity.base.ReceiptStatus
+import shiverawe.github.com.receipt.ui.receipt.create.root.CreateReceiptNavigation
+import shiverawe.github.com.receipt.ui.receipt.create.state.CreateReceiptState
+import shiverawe.github.com.receipt.ui.receipt.create.state.ErrorState
 import shiverawe.github.com.receipt.utils.getBottomNavigationBarHeight
 import shiverawe.github.com.receipt.utils.gone
 import shiverawe.github.com.receipt.utils.toPixels
@@ -24,15 +28,11 @@ import java.util.concurrent.Executors
 
 class QrFragment : CreateReceiptFragment(R.layout.fragment_qr), View.OnClickListener {
 
-    private val viewMode: CreateReceiptViewModel by lazy {
-        getSharedViewModel<CreateReceiptViewModel>(from = { requireParentFragment() })
-    }
-    private val stateObserver = Observer<CreateReceiptUiState> { state ->
-        if (state is QrCodeState) {
-            handleQrState(state)
-        }
+    private val createReceiptNavigation: CreateReceiptNavigation by lazy {
+        requireParentFragment() as CreateReceiptNavigation
     }
 
+    private val viewMode: CreateReceiptViewModel by viewModel()
     private val qrCodeAnalyzer = QrCodeAnalyzer()
 
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
@@ -53,7 +53,7 @@ class QrFragment : CreateReceiptFragment(R.layout.fragment_qr), View.OnClickList
         }
         qrCodeAnalyzer.onQrCodeError = {
             if (!waitingDialog.isAdded) {
-                viewMode.showError()
+                showError(ErrorState())
             }
         }
         btn_qr_back.setOnClickListener(this)
@@ -65,6 +65,7 @@ class QrFragment : CreateReceiptFragment(R.layout.fragment_qr), View.OnClickList
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
+        viewMode.state.observe(viewLifecycleOwner, Observer { handleQrState(it) })
     }
 
     override fun onCancelDialogClick() {
@@ -74,28 +75,24 @@ class QrFragment : CreateReceiptFragment(R.layout.fragment_qr), View.OnClickList
     override fun onResume() {
         super.onResume()
         iv_preview.visibility = View.GONE
-        viewMode.state.observe(this, stateObserver)
     }
 
     override fun onPause() {
         super.onPause()
-        iv_preview.setImageBitmap(getPreview())
+        getPreview()?.let { iv_preview.setImageBitmap(it) }
         iv_preview.visibility = View.VISIBLE
-        viewMode.state.removeObserver(stateObserver)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        imageAnalyzeExecutor.shutdown()
-        cameraProvider?.unbindAll()
-        cameraInfo?.torchState?.removeObserver(torchListener)
+        unbindCamera()
         requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_qr_back -> {
-                viewMode.goBack()
+                createReceiptNavigation.goBack()
             }
             R.id.btn_flash -> {
                 // TODO: Bug - sometimes torch doesn't enable in CameraX (hardware).
@@ -104,15 +101,26 @@ class QrFragment : CreateReceiptFragment(R.layout.fragment_qr), View.OnClickList
             }
             R.id.btn_manual -> {
                 btn_manual.gone()
-                viewMode.goToManualScreen()
+                createReceiptNavigation.openManual()
             }
         }
     }
 
-    private fun handleQrState(state: QrCodeState) {
+    private fun handleQrState(state: CreateReceiptState) {
         when {
             state.isWaiting -> {
                 showDialog()
+            }
+
+            state.receiptHeader != null -> {
+                unbindCamera()
+                dismissDialog()
+                val header = state.receiptHeader
+                if (header.status == ReceiptStatus.LOADED) {
+                    createReceiptNavigation.openReceipt(header)
+                } else {
+                    createReceiptNavigation.receiptIsCreated()
+                }
             }
 
             !state.isWaiting && state.error == null -> {
@@ -120,9 +128,8 @@ class QrFragment : CreateReceiptFragment(R.layout.fragment_qr), View.OnClickList
             }
 
             state.error != null -> {
-                state.error?.let { errorState ->
+                state.error?.getFirstTime()?.let { errorState ->
                     showError(errorState)
-                    viewMode.onShowError()
                 }
             }
         }
@@ -202,23 +209,33 @@ class QrFragment : CreateReceiptFragment(R.layout.fragment_qr), View.OnClickList
         }
     }
 
+    private fun unbindCamera() {
+        imageAnalyzeExecutor.shutdown()
+        cameraProvider?.unbindAll()
+        cameraInfo?.torchState?.removeObserver(torchListener)
+    }
+
     // get bitmap from preview view
-    private fun getPreview(): Bitmap {
-        val bitmap = Bitmap.createBitmap(
-            preview_view?.width ?: 0,
-            preview_view?.height ?: 0,
-            Bitmap.Config.ARGB_8888
-        )
-        preview_view?.let { preview ->
-            val canvas = Canvas(bitmap)
-            val bgDrawable = preview.background
-            if (bgDrawable != null) {
-                bgDrawable.draw(canvas)
-            } else {
-                canvas.drawColor(Color.BLACK)
+    private fun getPreview(): Bitmap? {
+        return try {
+            val bitmap = Bitmap.createBitmap(
+                preview_view?.width ?: 0,
+                preview_view?.height ?: 0,
+                Bitmap.Config.ARGB_8888
+            )
+            preview_view?.let { preview ->
+                val canvas = Canvas(bitmap)
+                val bgDrawable = preview.background
+                if (bgDrawable != null) {
+                    bgDrawable.draw(canvas)
+                } else {
+                    canvas.drawColor(Color.BLACK)
+                }
+                preview.draw(canvas)
             }
-            preview.draw(canvas)
+            return bitmap
+        } catch (e: IllegalArgumentException) {
+            null
         }
-        return bitmap
     }
 }

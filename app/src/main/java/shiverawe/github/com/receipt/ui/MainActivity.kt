@@ -8,7 +8,7 @@ import org.koin.android.ext.android.inject
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
 import shiverawe.github.com.receipt.ui.login.LoginFragment
-import shiverawe.github.com.receipt.ui.receipt.create.CreateReceiptRootFragment
+import shiverawe.github.com.receipt.ui.receipt.create.root.CreateReceiptRootFragment
 import shiverawe.github.com.receipt.ui.receipt.info.ReceiptFragment
 import shiverawe.github.com.receipt.ui.settings.SettingsFragment
 import shiverawe.github.com.receipt.utils.Storage

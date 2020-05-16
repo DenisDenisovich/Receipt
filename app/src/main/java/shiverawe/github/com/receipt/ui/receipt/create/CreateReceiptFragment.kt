@@ -5,6 +5,7 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.ErrorType
+import shiverawe.github.com.receipt.ui.receipt.create.state.ErrorState
 import shiverawe.github.com.receipt.utils.toast
 
 abstract class CreateReceiptFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
