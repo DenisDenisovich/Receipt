@@ -40,7 +40,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
-                android:background="@drawable/bg_qr_circle"
+                android:background="@drawable/bg_circle_blue"
                 android:scaleType="center"
                 android:elevation="4dp"
                 android:src="@drawable/ic_qr_code" />

@@ -28,6 +28,33 @@
                 android:layout_gravity="center_vertical|end"
                 android:padding="16dp"
                 android:src="@drawable/ic_calendar"/>
+
+            <FrameLayout
+                android:id="@+id/btn_receipts_in_progress"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="56dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_cloud_queue"/>
+
+                <TextView
+                    android:id="@+id/tv_receipt_in_progress_count"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    tools:text="1"
+                    android:gravity="center"
+                    android:layout_margin="8dp"
+                    android:layout_gravity="end|bottom"
+                    android:textColor="@color/colorWhite"
+                    android:background="@drawable/bg_circle_blue"/>
+            </FrameLayout>
         </FrameLayout>
 
         <FrameLayout
