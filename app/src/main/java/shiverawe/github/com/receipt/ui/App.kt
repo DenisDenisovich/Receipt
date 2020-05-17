@@ -46,6 +46,7 @@ class App : Application() {
             modules(
                 listOf(
                     monthModule,
+                    loadingModule,
                     receiptModule,
                     dbModule,
                     networkModule

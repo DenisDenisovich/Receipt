@@ -3,17 +3,21 @@ package shiverawe.github.com.receipt.ui.loading
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_receipt_loading.btn_back
+import kotlinx.android.synthetic.main.fragment_receipt_loading.progress
 import kotlinx.android.synthetic.main.fragment_receipt_loading.rv_receipt_loading
+import kotlinx.android.synthetic.main.fragment_receipt_loading.tv_error
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.domain.entity.base.Meta
-import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
-import shiverawe.github.com.receipt.domain.entity.base.ReceiptStatus
-import shiverawe.github.com.receipt.domain.entity.base.Shop
+import shiverawe.github.com.receipt.domain.entity.ErrorType
+import shiverawe.github.com.receipt.utils.gone
 import shiverawe.github.com.receipt.utils.toast
+import shiverawe.github.com.receipt.utils.visible
 
 class ReceiptLoadingFragment : Fragment(R.layout.fragment_receipt_loading) {
 
+    private val viewModel: LoadingReceiptsViewModel by viewModel()
     private val receiptsAdapter = ReceiptLoadingAdapter() {
         toast("Delete: $it")
     }
@@ -21,16 +25,29 @@ class ReceiptLoadingFragment : Fragment(R.layout.fragment_receipt_loading) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_back.setOnClickListener { requireActivity().onBackPressed() }
         rv_receipt_loading.adapter = receiptsAdapter
-        receiptsAdapter.setReceipts(getReceiptData())
+        viewModel.getState().observe(this, Observer { handleState(it) })
+        if (viewModel.getState().value == null) {
+            viewModel.loadedReceipts()
+        }
     }
 
-    private fun getReceiptData() = arrayListOf(
-        ReceiptHeader(0, ReceiptStatus.FAILED, Shop(23432520, "", "", "2435.54"), Meta(23432520, "", "", "")),
-        ReceiptHeader(1, ReceiptStatus.FAILED, Shop(124235523, "", "", "245.54"), Meta(124235523, "", "", "")),
-        ReceiptHeader(2, ReceiptStatus.FAILED, Shop(164367457, "", "", "1135.54"), Meta(4363757, "", "", "")),
-        ReceiptHeader(3, ReceiptStatus.FAILED, Shop(168576823, "", "", "995.54"), Meta(3425425, "", "", "")),
-        ReceiptHeader(4, ReceiptStatus.FAILED, Shop(165374575, "", "", "2345.54"), Meta(23432520, "", "", ""))
-    ).apply { sortByDescending { it.shop.date } }
+    private fun handleState(state: LoadingReceiptUiState) {
+        receiptsAdapter.setReceipts(state.receipts)
+        if (state.inProgress) {
+            rv_receipt_loading.gone()
+            progress.visible()
+        } else {
+            rv_receipt_loading.visible()
+            progress.gone()
+        }
+        state.error?.let { error ->
+            tv_error.text = when(error) {
+                ErrorType.ERROR -> getString(R.string.error)
+                ErrorType.OFFLINE -> getString(R.string.error_network)
+            }
+        }
+    }
+
 
     companion object {
 

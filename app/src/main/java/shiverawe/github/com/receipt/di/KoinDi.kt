@@ -26,6 +26,7 @@ import shiverawe.github.com.receipt.domain.interactor.receipt.ReceiptInteractor
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import shiverawe.github.com.receipt.ui.history.month.MonthViewModel
+import shiverawe.github.com.receipt.ui.loading.LoadingReceiptsViewModel
 import shiverawe.github.com.receipt.ui.receipt.create.CreateReceiptViewModel
 import shiverawe.github.com.receipt.ui.receipt.info.ReceiptViewModel
 
@@ -44,6 +45,10 @@ val receiptModule = module {
     factory<IReceiptInteractor> { ReceiptInteractor(get(), get()) }
     viewModel { CreateReceiptViewModel(get()) }
     viewModel { ReceiptViewModel(get()) }
+}
+
+val loadingModule = module {
+    viewModel { LoadingReceiptsViewModel() }
 }
 
 val dbModule = module {
