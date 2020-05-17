@@ -1,11 +1,10 @@
 package shiverawe.github.com.receipt.data.bd.datasource.month
 
-import io.reactivex.Single
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 interface IMonthDatabase {
 
-    fun updateMonthCache(dateFrom: Long, dateTo: Long, networkReceipts: List<ReceiptHeader>): Single<List<ReceiptHeader>>
+    suspend fun updateMonthCache(dateFrom: Long, dateTo: Long, networkReceipts: List<ReceiptHeader>)
 
-    fun getReceiptHeaders(dataFrom: Long, dataTo: Long): Single<List<ReceiptHeader>>
+    suspend fun getReceiptHeaders(dataFrom: Long, dataTo: Long): List<ReceiptHeader>
 }

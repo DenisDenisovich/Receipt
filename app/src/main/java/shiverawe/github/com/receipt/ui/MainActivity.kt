@@ -66,15 +66,6 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
         getTransaction().replace(R.id.container, SettingsFragment(), SettingsFragment.SETTINGS_TAG).commit()
     }
 
-    override fun updateHistory(date: Long) {
-        supportFragmentManager.popBackStackImmediate()
-        showBottomAppBar(true)
-        val currentFragment = findFragmentByTag(HistoryFragment.HISTORY_TAG)
-        if (currentFragment is HistoryFragment) {
-            currentFragment.updateMonth(date)
-        }
-    }
-
     override fun openQr() {
         getTransaction().apply {
             replace(R.id.container, CreateReceiptRootFragment())

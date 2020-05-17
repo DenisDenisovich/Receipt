@@ -9,5 +9,5 @@ data class ReceiptResponse(
     val sum: Double?,
     val merchantName: String?,
     val merchantPlaceAddress: String?,
-    val status: String
+    val status: String?
 )

@@ -56,7 +56,7 @@ class CreateReceiptViewModel(private val interactor: ICreateReceiptInteractor) :
                 qrCodeState?.let {
                     state.value = QrCodeState(
                         isWaiting = false,
-                        error = ErrorState(receiptError.error, type = receiptError.type)
+                        error = ErrorState(receiptError.throwable, type = receiptError.type)
                     )
                 }
             }
@@ -82,7 +82,7 @@ class CreateReceiptViewModel(private val interactor: ICreateReceiptInteractor) :
                 qrCodeState?.let {
                     state.value = ManualState(
                         isWaiting = false,
-                        error = ErrorState(receiptError.error, type = receiptError.type)
+                        error = ErrorState(receiptError.throwable, type = receiptError.type)
                     )
                 }
             }

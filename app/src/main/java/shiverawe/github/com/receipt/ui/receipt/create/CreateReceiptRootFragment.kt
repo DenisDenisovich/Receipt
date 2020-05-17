@@ -35,11 +35,11 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
 
             is SuccessState -> {
                 toast(R.string.create_receipt_success, isLongDuration = false)
-                navigation?.updateHistory(state.date)
+                requireActivity().onBackPressed()
             }
 
             is ShowReceiptState -> {
-                    openReceiptScreen(state.receiptHeader)
+                openReceiptScreen(state.receiptHeader)
             }
 
             is ExitState -> {
@@ -75,20 +75,18 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
     }
 
     override fun quitOnBackPressed(): Boolean {
-        return when {
-            viewModel.state.value is ExitState -> {
-                true
-            }
-
-            currentScreen == CurrentScreen.RECEIPT -> {
-                true
-            }
-
-            else -> {
-                viewModel.goBack()
-                false
-            }
+        val currentState = viewModel.state.value
+        // Close fragment if current state if Success ot Exit
+        if (currentState is SuccessState || currentState is ExitState) {
+            return true
         }
+        // Close fragment if Receipt screen is visible now
+        if (currentScreen == CurrentScreen.RECEIPT) {
+            return true
+        }
+        // Don't close fragment now. Fragment handles this event himself
+        viewModel.goBack()
+        return false
     }
 
     private fun requestCameraPermission(onGranted: () -> Unit, onDenied: () -> Unit) {

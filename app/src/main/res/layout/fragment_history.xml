@@ -21,7 +21,7 @@
             android:layout_height="56dp"
             app:layout_scrollFlags="scroll|enterAlways">
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/btn_calendar_history"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                 android:textColor="@color/colorAccent"
                 tools:text="Общая сумма: 2218,45 ₽"/>
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/btn_next_history"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -69,7 +69,8 @@
                 android:paddingStart="14dp"
                 android:background="?selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_next_month"/>
-            <ImageView
+
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/btn_preview_history"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
