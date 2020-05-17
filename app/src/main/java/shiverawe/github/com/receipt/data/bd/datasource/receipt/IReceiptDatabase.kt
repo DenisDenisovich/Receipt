@@ -6,9 +6,9 @@ import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
 interface IReceiptDatabase {
 
-    suspend fun saveProductsToCache(remoteReceiptId: Long, products: List<Product>)
+    suspend fun saveProductsToCache(receiptId: Long, products: List<Product>)
 
-    suspend fun getReceiptById(remoteReceiptId: Long): Receipt?
+    suspend fun getReceiptById(receiptId: Long): Receipt?
 
-    suspend fun getReceiptHeaderById(remoteReceiptId: Long): ReceiptHeader?
+    suspend fun getReceiptHeaderById(receiptId: Long): ReceiptHeader?
 }

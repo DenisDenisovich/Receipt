@@ -45,11 +45,12 @@ class App : Application() {
             androidContext(this@App)
             modules(
                 listOf(
-                    monthModule,
-                    loadingModule,
-                    receiptModule,
+                    networkModule,
                     dbModule,
-                    networkModule
+                    repositoryModule,
+                    interactorModule,
+                    otherModule,
+                    viewModelModule
                 )
             )
         }

@@ -8,6 +8,7 @@ import shiverawe.github.com.receipt.data.bd.datasource.month.IMonthDatabase
 import shiverawe.github.com.receipt.data.bd.datasource.month.MonthDatabase
 import shiverawe.github.com.receipt.data.bd.datasource.receipt.IReceiptDatabase
 import shiverawe.github.com.receipt.data.bd.datasource.receipt.ReceiptDatabase
+import shiverawe.github.com.receipt.data.bd.room.ReceiptRoom
 import shiverawe.github.com.receipt.data.network.datasource.month.IMonthNetwork
 import shiverawe.github.com.receipt.data.network.datasource.receipt.IReceiptNetwork
 import shiverawe.github.com.receipt.data.network.datasource.month.MonthNetwork
@@ -30,32 +31,36 @@ import shiverawe.github.com.receipt.ui.loading.LoadingReceiptsViewModel
 import shiverawe.github.com.receipt.ui.receipt.create.CreateReceiptViewModel
 import shiverawe.github.com.receipt.ui.receipt.info.ReceiptViewModel
 
-val monthModule = module {
+val networkModule = module {
+    single { createRetrofit(androidContext().resources.getString(R.string.BASE_URL)) }
     factory<IMonthNetwork> { MonthNetwork(get()) }
-    factory<IMonthInteractor> { MonthInteractor(get()) }
-    factory<IMonthRepository> { MonthRepository(get(), get()) }
-    viewModel { MonthViewModel(get()) }
+    factory<IReceiptNetwork> { ReceiptNetwork(get()) }
 }
 
-val receiptModule = module {
-    factory<IReceiptNetwork> { ReceiptNetwork(get()) }
+val dbModule = module {
+    single { ReceiptRoom.getDb() }
+    factory<IReceiptDatabase> { ReceiptDatabase(get()) }
+    factory<IMonthDatabase> { MonthDatabase(get()) }
+}
+
+val repositoryModule = module {
+    factory<IMonthRepository> { MonthRepository(get(), get()) }
     factory<IReceiptRepository> { ReceiptRepository(get(), get()) }
+}
+
+val interactorModule = module {
+    factory<IMonthInteractor> { MonthInteractor(get()) }
     factory<ICreateReceiptInteractor> { CreateReceiptInteractor(get()) }
-    single<IReceiptPrinter> { ShareReceiptPrinter(androidContext()) }
     factory<IReceiptInteractor> { ReceiptInteractor(get(), get()) }
+}
+
+val viewModelModule = module {
+    viewModel { MonthViewModel(get()) }
+    viewModel { LoadingReceiptsViewModel() }
     viewModel { CreateReceiptViewModel(get()) }
     viewModel { ReceiptViewModel(get()) }
 }
 
-val loadingModule = module {
-    viewModel { LoadingReceiptsViewModel() }
-}
-
-val dbModule = module {
-    factory<IReceiptDatabase> { ReceiptDatabase() }
-    factory<IMonthDatabase> { MonthDatabase() }
-}
-
-val networkModule = module {
-    single { createRetrofit(androidContext().resources.getString(R.string.BASE_URL)) }
+val otherModule = module {
+    single<IReceiptPrinter> { ShareReceiptPrinter(androidContext()) }
 }

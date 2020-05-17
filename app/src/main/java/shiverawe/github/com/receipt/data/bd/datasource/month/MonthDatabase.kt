@@ -6,9 +6,7 @@ import shiverawe.github.com.receipt.data.bd.mapper.toReceiptHeader
 import shiverawe.github.com.receipt.data.bd.room.ReceiptRoom
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 
-class MonthDatabase : IMonthDatabase {
-
-    private val db = ReceiptRoom.getDb()
+class MonthDatabase(private val db: ReceiptRoom) : IMonthDatabase {
 
     override suspend fun updateMonthCache(dateFrom: Long, dateTo: Long, networkReceipts: List<ReceiptHeader>) {
         withContext(Dispatchers.IO) {
