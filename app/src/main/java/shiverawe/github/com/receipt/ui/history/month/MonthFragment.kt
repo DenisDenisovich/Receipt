@@ -40,7 +40,9 @@ class MonthFragment : Fragment(R.layout.fragment_month) {
         swipe_refresh_layout.setOnRefreshListener {
             viewModel.loadReceipts(monthDate, isRefresh = true)
         }
-        viewModel.loadReceipts(monthDate)
+        if (viewModel.state.value == null) {
+            viewModel.loadReceipts(monthDate)
+        }
         viewModel.state.observe(this, Observer { handleMonthState(it)})
     }
 

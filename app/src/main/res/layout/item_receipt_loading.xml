@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_item_month"
     android:layout_width="match_parent"
-    android:layout_height="76dp">
+    android:layout_height="72dp">
 
     <TextView
         android:id="@+id/tv_date"
@@ -11,9 +11,9 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_regular"
         android:textColor="@color/colorBlack"
-        android:textSize="18sp"
-        android:layout_gravity="center_vertical"
+        android:textSize="16sp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         tools:text="Среда, 05.06 20:00" />
 
     <TextView
@@ -25,7 +25,7 @@
         android:textSize="14sp"
         android:layout_gravity="bottom"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         tools:text="300.10 Р" />
 
     <androidx.appcompat.widget.AppCompatImageView

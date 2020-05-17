@@ -1,6 +1,10 @@
 package shiverawe.github.com.receipt.ui.loading
 
 import android.annotation.SuppressLint
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +16,15 @@ import kotlinx.android.synthetic.main.item_receipt_loading.view.tv_date
 import kotlinx.android.synthetic.main.item_receipt_loading.view.tv_sum
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
+import shiverawe.github.com.receipt.utils.color
+import shiverawe.github.com.receipt.utils.toPixels
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 class ReceiptLoadingAdapter(
     private val onDelete: (receiptHeader: ReceiptHeader) -> Unit
-): RecyclerView.Adapter<ReceiptLoadingAdapter.ReceiptLoadingViewHolder>() {
+) : RecyclerView.Adapter<ReceiptLoadingAdapter.ReceiptLoadingViewHolder>() {
 
     private val items: ArrayList<ReceiptHeader> = arrayListOf()
 
@@ -47,7 +53,7 @@ class ReceiptLoadingAdapter(
     class ReceiptLoadingViewHolder(
         view: View,
         val btnDelete: ImageView = view.btn_delete,
-        private val date : TextView = view.tv_date,
+        private val date: TextView = view.tv_date,
         private val sum: TextView = view.tv_sum
     ) : RecyclerView.ViewHolder(view) {
 
@@ -55,8 +61,28 @@ class ReceiptLoadingAdapter(
 
         @SuppressLint("DefaultLocale")
         fun bind(receipt: ReceiptHeader) {
-            date.text = timeFormatter.format(receipt.shop.date).capitalize()
+            date.text = getDateSpannable(receipt.shop.date)
             sum.text = itemView.context.getString(R.string.sum_placeholder, receipt.shop.sum)
+        }
+
+        @SuppressLint("DefaultLocale")
+        private fun getDateSpannable(date: Long): SpannableString {
+            val dateText = timeFormatter.format(date).capitalize()
+            val timeStart = dateText.lastIndexOf(' ')
+
+            return SpannableString(dateText).apply {
+                setSpan(
+                    ForegroundColorSpan(itemView.context.color(R.color.textGray)),
+                    timeStart,
+                    dateText.length,
+                    Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+                )
+                setSpan(AbsoluteSizeSpan(14.toPixels()),
+                    timeStart,
+                    dateText.length,
+                    Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+                )
+            }
         }
     }
 }
