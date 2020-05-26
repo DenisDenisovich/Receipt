@@ -5,6 +5,8 @@
 [Download APK](https://receipt.shefer.space/android/distributions/app-debug.apk)
 
 ## Used technologies
+- Kotlin
+  - Coroutines
 - RxJava
 - [Koin](https://insert-koin.io/) - Dependency Injection
 
