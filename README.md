@@ -1,5 +1,9 @@
 # Receipt
 
+[![TeamcityBuild](https://teamcity.shefer.space/app/rest/builds/strob:(buildType:(project:(id:ReceiptAndroid)))/statusIcon.svg)](https://teamcity.shefer.space/viewType.html?buildTypeId=ReceiptAndroid_Build)
+
+[Download APK](https://receipt.shefer.space/android/distributions/app-debug.apk)
+
 ## Used technologies
 - RxJava
 - [Koin](https://insert-koin.io/) - Dependency Injection
