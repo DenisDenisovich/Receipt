@@ -18,7 +18,9 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportFragmentManager.beginTransaction().replace(R.id.container, LoginFragment()).commit()
-        showBottomAppBar(false)
+        bottom_app_bar.post {
+            showBottomAppBar(false)
+        }
 //        openHistory()
         btn_history.setOnClickListener(this)
         btn_qr.setOnClickListener(this)

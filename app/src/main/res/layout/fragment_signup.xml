@@ -17,7 +17,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/roboto_regular"
-        android:text="Логин"
+        android:text="Регистрация"
         android:textColor="@color/colorBlack"
         android:textSize="20sp" />
 
@@ -27,15 +27,15 @@
         android:layout_marginTop="16dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etLogin"
+            android:id="@+id/etName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:ellipsize="end"
-            android:hint="Введите номер телефона"
+            android:hint="Введите ФИО"
             android:inputType="text"
             android:maxLines="1"
-            android:nextFocusDown="@id/etPassword"
+            android:nextFocusDown="@id/etPhone"
             android:scrollHorizontally="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -44,26 +44,32 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPassword"
+            android:id="@+id/etPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Введите пароль из СМС"
-            android:inputType="numberPassword" />
+            android:ellipsize="end"
+            android:hint="Введите номер телефона"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:nextFocusDown="@id/etEmail"
+            android:scrollHorizontally="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/btnResetPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="?selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="8dp"
-        android:text="Восстановить пароль"
-        android:textColor="@color/colorBlack"
-        android:textSize="12sp" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ellipsize="end"
+            android:hint="Введите email"
+            android:inputType="text"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btnLogin"
@@ -74,23 +80,7 @@
         android:background="@color/colorAccent"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:text="Войти"
-        android:textColor="@color/colorPrimary" />
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <Button
-        android:id="@+id/btnSignUp"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:background="@color/colorAccent"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="Регистрация"
+        android:text="Зарегистрироваться"
         android:textColor="@color/colorPrimary" />
 
 </LinearLayout>
