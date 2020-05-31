@@ -7,6 +7,7 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
+import shiverawe.github.com.receipt.ui.login.LoginFragment
 import shiverawe.github.com.receipt.ui.receipt.create.CreateReceiptRootFragment
 import shiverawe.github.com.receipt.ui.receipt.info.ReceiptFragment
 import shiverawe.github.com.receipt.ui.settings.SettingsFragment
@@ -16,7 +17,9 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        openHistory()
+        supportFragmentManager.beginTransaction().replace(R.id.container, LoginFragment()).commit()
+        showBottomAppBar(false)
+//        openHistory()
         btn_history.setOnClickListener(this)
         btn_qr.setOnClickListener(this)
         btn_settings.setOnClickListener(this)
