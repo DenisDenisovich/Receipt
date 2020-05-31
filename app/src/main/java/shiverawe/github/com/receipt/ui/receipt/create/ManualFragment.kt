@@ -7,6 +7,8 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.PopupWindow
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_manual.*
 import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
@@ -85,11 +87,51 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
         }
     }
 
+    private fun createPopupWindow(btn_info: View) {
+        val window = PopupWindow(activity)
+        val view = layoutInflater.inflate(R.layout.popup_window, null)
+        window.contentView = view
+        window.isFocusable = true
+        val textView = view.findViewById<TextView>(R.id.pp_window_tv)
+        when (btn_info.id) {
+            R.id.btn_info_fn -> {
+                textView.text = getString(R.string.info_pp_fn)
+            }
+            R.id.btn_info_fd -> {
+                textView.text = getString(R.string.info_pp_fd)
+            }
+            R.id.btn_info_fp -> {
+                textView.text = getString(R.string.info_pp_fp)
+            }
+            R.id.btn_info_sum -> {
+                textView.text = getString(R.string.info_pp_sum)
+            }
+            R.id.btn_info_date -> {
+                textView.text = getString(R.string.info_pp_date)
+            }
+            R.id.btn_info_time -> {
+                textView.text = getString(R.string.info_pp_time)
+            }
+        }
+        textView.setOnClickListener {
+            window.dismiss()
+        }
+        window.setBackgroundDrawable(null)
+        window.showAsDropDown(btn_info)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         changeBtnBackground()
         btn_manual?.setOnClickListener {
             createReceipt()
         }
+
+        btn_info_fn.setOnClickListener { createPopupWindow(it) }
+        btn_info_fd.setOnClickListener { createPopupWindow(it) }
+        btn_info_fp.setOnClickListener { createPopupWindow(it) }
+        btn_info_sum.setOnClickListener { createPopupWindow(it) }
+        btn_info_date.setOnClickListener { createPopupWindow(it) }
+        btn_info_time.setOnClickListener { createPopupWindow(it) }
 
         btn_manual_back?.setOnClickListener {
             viewMode.goBack()
