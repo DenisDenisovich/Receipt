@@ -62,11 +62,11 @@
     <string name="no_location_applications">Не обнаружено подходящих приложений</string>
     <string name="show_location_empty_address">Нет адреса</string>
     <string name="info_button">Info Button</string>
-    <string name="info_pp_fn">Заводской номер экземпляра фискального накопителя (кассового аппарата)</string>
-    <string name="info_pp_fd">Порядковый номер фискального документа (чека)</string>
-    <string name="info_pp_fp">Уникальный код, под защитой которого находится информация по операции, передаваемая в ФНС</string>
-    <string name="info_pp_sum">Сумма расчета указанного в чеке товара</string>
-    <string name="info_pp_date">Дата совершения операции</string>
-    <string name="info_pp_time">Время совершения операции</string>
+    <string name="info_pp_fn">Заводской номер кассового аппарата, обычно расположен в нижней части чека</string>
+    <string name="info_pp_fd">Порядковый номер чека, обычно расположен в нижней части чека</string>
+    <string name="info_pp_fp">Код для защиты информации, передаваемой в ФНС, обычно расположен в нижней части чека</string>
+    <string name="info_pp_sum">Суммарная стоимость указанных в чеке товаров</string>
+    <string name="info_pp_date">Дата совершения покупки</string>
+    <string name="info_pp_time">Время совершения покупки</string>
 
 </resources>

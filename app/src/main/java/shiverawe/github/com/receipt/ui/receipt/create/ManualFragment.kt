@@ -15,8 +15,6 @@ import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.utils.toLongWithMilliseconds
-import java.lang.Exception
-import java.lang.StringBuilder
 
 class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnFocusChangeListener {
 
@@ -117,7 +115,7 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
             window.dismiss()
         }
         window.setBackgroundDrawable(null)
-        window.showAsDropDown(btn_info)
+        window.showAsDropDown(btn_info, (-0.5 * btn_info.width).toInt(), 0)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -214,11 +212,11 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
         val date = et_manual_date?.text.toString().trim()
         val time = et_manual_time?.text.toString().trim()
         if (checkFd(fd) &&
-            checkFn(fn) &&
-            checkFp(fp) &&
-            checkSum(s) &&
-            checkDate(date) &&
-            checkTime(time)
+                checkFn(fn) &&
+                checkFp(fp) &&
+                checkSum(s) &&
+                checkDate(date) &&
+                checkTime(time)
         ) {
             val t = getDateString(date, time)
             meta = Meta(t.toLongWithMilliseconds(), fn, fd, fp, s.toDouble())
@@ -324,10 +322,10 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
     }
 
     private fun changeDateTimeText(
-        s: CharSequence?,
-        separator: Char,
-        maxLength: Int,
-        changeCount: Int
+            s: CharSequence?,
+            separator: Char,
+            maxLength: Int,
+            changeCount: Int
     ): String? {
         val changedText = StringBuilder()
         if (s == null) return null
