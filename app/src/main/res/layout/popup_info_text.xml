@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_popup"
+    android:background="@drawable/bg_popup_info"
     android:orientation="horizontal"
     android:paddingHorizontal="10dp"
     android:paddingTop="6dp"
     android:paddingBottom="8dp">
 
     <TextView
-        android:id="@+id/pp_window_tv"
+        android:id="@+id/pp_info_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#000000" />

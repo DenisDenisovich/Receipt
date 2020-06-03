@@ -4,11 +4,10 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.PopupWindow
-import android.widget.TextView
+import android.widget.*
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_manual.*
 import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
@@ -87,10 +86,10 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
 
     private fun createPopupWindow(btn_info: View) {
         val window = PopupWindow(activity)
-        val view = layoutInflater.inflate(R.layout.popup_window, null)
+        val view = layoutInflater.inflate(R.layout.popup_info_text, null)
         window.contentView = view
         window.isFocusable = true
-        val textView = view.findViewById<TextView>(R.id.pp_window_tv)
+        val textView = view.findViewById<TextView>(R.id.pp_info_tv)
         when (btn_info.id) {
             R.id.btn_info_fn -> {
                 textView.text = getString(R.string.info_pp_fn)
@@ -101,21 +100,38 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
             R.id.btn_info_fp -> {
                 textView.text = getString(R.string.info_pp_fp)
             }
-            R.id.btn_info_sum -> {
-                textView.text = getString(R.string.info_pp_sum)
-            }
-            R.id.btn_info_date -> {
-                textView.text = getString(R.string.info_pp_date)
-            }
-            R.id.btn_info_time -> {
-                textView.text = getString(R.string.info_pp_time)
-            }
         }
         textView.setOnClickListener {
             window.dismiss()
         }
         window.setBackgroundDrawable(null)
         window.showAsDropDown(btn_info, (-0.5 * btn_info.width).toInt(), 0)
+    }
+
+    private fun createImagePopupWindow(btn_info: View):Boolean {
+        val window = PopupWindow(activity)
+        val view = layoutInflater.inflate(R.layout.popup_info_image, null)
+        window.contentView = view
+        window.isFocusable = true
+        val imageView = view.findViewById<ImageView>(R.id.info_image)
+        when (btn_info.id) {
+            R.id.btn_info_fn -> {
+                imageView.setImageResource(R.drawable.fn_info_img)
+            }
+            R.id.btn_info_fd -> {
+                imageView.setImageResource(R.drawable.fd_info_img)
+            }
+            R.id.btn_info_fp -> {
+                imageView.setImageResource(R.drawable.fp_info_img)
+            }
+        }
+        val windowView = view.findViewById<LinearLayout>(R.id.popup_image)
+        windowView.setOnClickListener {
+            window.dismiss()
+        }
+        window.setBackgroundDrawable(null)
+        window.showAtLocation(btn_info, Gravity.CENTER_HORIZONTAL, 0, 0)
+        return true
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -125,11 +141,14 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
         }
 
         btn_info_fn.setOnClickListener { createPopupWindow(it) }
+        btn_info_fn.setOnLongClickListener { createImagePopupWindow(it) }
+
         btn_info_fd.setOnClickListener { createPopupWindow(it) }
+        btn_info_fd.setOnLongClickListener { createImagePopupWindow(it) }
+
         btn_info_fp.setOnClickListener { createPopupWindow(it) }
-        btn_info_sum.setOnClickListener { createPopupWindow(it) }
-        btn_info_date.setOnClickListener { createPopupWindow(it) }
-        btn_info_time.setOnClickListener { createPopupWindow(it) }
+        btn_info_fp.setOnLongClickListener { createImagePopupWindow(it) }
+
 
         btn_manual_back?.setOnClickListener {
             viewMode.goBack()
