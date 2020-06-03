@@ -10,7 +10,7 @@ class LoginFragment: Fragment(R.layout.fragment_login) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btnSignUp.setOnClickListener {
-            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.container, SignupFragment())?.commit()
+            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.container, SignUpFragment())?.commit()
         }
     }
 }
