@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_manual.*
+import kotlinx.android.synthetic.main.popup_manual_text.view.pp_info_tv
 import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.base.Meta
@@ -89,19 +90,18 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
         val view = layoutInflater.inflate(R.layout.popup_manual_text, null)
         window.contentView = view
         window.isFocusable = true
-        val textView = view.findViewById<TextView>(R.id.pp_info_tv)
         when (btn_info.id) {
             R.id.btn_info_fn -> {
-                textView.text = getString(R.string.info_pp_fn)
+                view.pp_info_tv.text = getString(R.string.info_pp_fn)
             }
             R.id.btn_info_fd -> {
-                textView.text = getString(R.string.info_pp_fd)
+                view.pp_info_tv.text = getString(R.string.info_pp_fd)
             }
             R.id.btn_info_fp -> {
-                textView.text = getString(R.string.info_pp_fp)
+                view.pp_info_tv.text = getString(R.string.info_pp_fp)
             }
         }
-        textView.setOnClickListener {
+        view.pp_info_tv.setOnClickListener {
             window.dismiss()
         }
         window.setBackgroundDrawable(null)
