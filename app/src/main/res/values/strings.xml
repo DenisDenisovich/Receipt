@@ -65,6 +65,5 @@
     <string name="info_pp_fn">Заводской номер кассового аппарата, обычно расположен в нижней части чека</string>
     <string name="info_pp_fd">Порядковый номер чека, обычно расположен в нижней части чека</string>
     <string name="info_pp_fp">Код для защиты информации, передаваемой в ФНС, обычно расположен в нижней части чека</string>
-    <string name="info_pp_image">Info Image</string>
 
 </resources>

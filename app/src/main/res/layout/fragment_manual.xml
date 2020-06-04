@@ -51,12 +51,12 @@
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:text="@string/fn_manual"
-                    android:textColor="#000000" />
+                    android:textColor="@color/colorBlack" />
 
                 <ImageButton
                     android:id="@+id/btn_info_fn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_gravity="center_vertical"
                     android:backgroundTint="@color/colorWhite"
                     android:contentDescription="@string/info_button"
@@ -93,12 +93,12 @@
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:text="@string/fd_manual"
-                    android:textColor="#000000" />
+                    android:textColor="@color/colorBlack" />
 
                 <ImageButton
                     android:id="@+id/btn_info_fd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_gravity="center_vertical"
                     android:backgroundTint="@color/colorWhite"
                     android:contentDescription="@string/info_button"
@@ -134,12 +134,12 @@
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:text="@string/fp_manual"
-                    android:textColor="#000000" />
+                    android:textColor="@color/colorBlack" />
 
                 <ImageButton
                     android:id="@+id/btn_info_fp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_gravity="center_vertical"
                     android:backgroundTint="@color/colorWhite"
                     android:contentDescription="@string/info_button"
@@ -171,8 +171,8 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:text="@string/sum_manual"
-                android:textColor="#000000" />
-            
+                android:textColor="@color/colorBlack" />
+
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_manual_sum"
                 android:layout_width="match_parent"
@@ -209,7 +209,7 @@
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
                         android:text="@string/date_manual"
-                        android:textColor="#000000" />
+                        android:textColor="@color/colorBlack" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/et_manual_date"
@@ -241,7 +241,7 @@
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
                         android:text="@string/time_manual"
-                        android:textColor="#000000" />
+                        android:textColor="@color/colorBlack" />
 
 
                     <androidx.appcompat.widget.AppCompatEditText

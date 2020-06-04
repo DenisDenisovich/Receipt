@@ -86,7 +86,7 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
 
     private fun createPopupWindow(btn_info: View) {
         val window = PopupWindow(activity)
-        val view = layoutInflater.inflate(R.layout.popup_info_text, null)
+        val view = layoutInflater.inflate(R.layout.popup_manual_text, null)
         window.contentView = view
         window.isFocusable = true
         val textView = view.findViewById<TextView>(R.id.pp_info_tv)
@@ -108,31 +108,6 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
         window.showAsDropDown(btn_info, (-0.5 * btn_info.width).toInt(), 0)
     }
 
-    private fun createImagePopupWindow(btn_info: View):Boolean {
-        val window = PopupWindow(activity)
-        val view = layoutInflater.inflate(R.layout.popup_info_image, null)
-        window.contentView = view
-        window.isFocusable = true
-        val imageView = view.findViewById<ImageView>(R.id.info_image)
-        when (btn_info.id) {
-            R.id.btn_info_fn -> {
-                imageView.setImageResource(R.drawable.fn_info_img)
-            }
-            R.id.btn_info_fd -> {
-                imageView.setImageResource(R.drawable.fd_info_img)
-            }
-            R.id.btn_info_fp -> {
-                imageView.setImageResource(R.drawable.fp_info_img)
-            }
-        }
-        val windowView = view.findViewById<LinearLayout>(R.id.popup_image)
-        windowView.setOnClickListener {
-            window.dismiss()
-        }
-        window.setBackgroundDrawable(null)
-        window.showAtLocation(btn_info, Gravity.CENTER_HORIZONTAL, 0, 0)
-        return true
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         changeBtnBackground()
@@ -141,13 +116,8 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
         }
 
         btn_info_fn.setOnClickListener { createPopupWindow(it) }
-        btn_info_fn.setOnLongClickListener { createImagePopupWindow(it) }
-
         btn_info_fd.setOnClickListener { createPopupWindow(it) }
-        btn_info_fd.setOnLongClickListener { createImagePopupWindow(it) }
-
         btn_info_fp.setOnClickListener { createPopupWindow(it) }
-        btn_info_fp.setOnLongClickListener { createImagePopupWindow(it) }
 
 
         btn_manual_back?.setOnClickListener {
@@ -231,11 +201,11 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
         val date = et_manual_date?.text.toString().trim()
         val time = et_manual_time?.text.toString().trim()
         if (checkFd(fd) &&
-                checkFn(fn) &&
-                checkFp(fp) &&
-                checkSum(s) &&
-                checkDate(date) &&
-                checkTime(time)
+            checkFn(fn) &&
+            checkFp(fp) &&
+            checkSum(s) &&
+            checkDate(date) &&
+            checkTime(time)
         ) {
             val t = getDateString(date, time)
             meta = Meta(t.toLongWithMilliseconds(), fn, fd, fp, s.toDouble())
@@ -341,10 +311,10 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
     }
 
     private fun changeDateTimeText(
-            s: CharSequence?,
-            separator: Char,
-            maxLength: Int,
-            changeCount: Int
+        s: CharSequence?,
+        separator: Char,
+        maxLength: Int,
+        changeCount: Int
     ): String? {
         val changedText = StringBuilder()
         if (s == null) return null
