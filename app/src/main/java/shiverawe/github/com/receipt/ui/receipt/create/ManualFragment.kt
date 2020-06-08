@@ -90,22 +90,17 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
         val view = layoutInflater.inflate(R.layout.popup_manual_text, null)
         window.contentView = view
         window.isFocusable = true
-        when (btn_info.id) {
-            R.id.btn_info_fn -> {
-                view.pp_info_tv.text = getString(R.string.info_pp_fn)
-            }
-            R.id.btn_info_fd -> {
-                view.pp_info_tv.text = getString(R.string.info_pp_fd)
-            }
-            R.id.btn_info_fp -> {
-                view.pp_info_tv.text = getString(R.string.info_pp_fp)
-            }
+        view.pp_info_tv.text = when (btn_info.id) {
+            R.id.btn_info_fn -> getString(R.string.info_pp_fn)
+            R.id.btn_info_fd -> getString(R.string.info_pp_fd)
+            R.id.btn_info_fp -> getString(R.string.info_pp_fp)
+            else -> getString(R.string.info_pp_error)
         }
         view.pp_info_tv.setOnClickListener {
             window.dismiss()
         }
         window.setBackgroundDrawable(null)
-        window.showAsDropDown(btn_info, (-0.5 * btn_info.width).toInt(), 0)
+        window.showAsDropDown(btn_info)
     }
 
 
