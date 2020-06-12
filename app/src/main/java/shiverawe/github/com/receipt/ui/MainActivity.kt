@@ -1,7 +1,6 @@
 package shiverawe.github.com.receipt.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,10 +23,7 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
         if (Storage.isLogin) {
             openHistory()
         } else {
-            supportFragmentManager.beginTransaction().replace(R.id.container, LoginFragment()).commit()
-            bottom_app_bar.post {
-                showBottomAppBar(false)
-            }
+            openLogin()
         }
 
         btn_history.setOnClickListener(this)
@@ -74,9 +70,22 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
         Storage.detach()
     }
 
+    override fun openLogin() {
+        supportFragmentManager.beginTransaction().replace(R.id.container, LoginFragment()).commit()
+
+        if (bottom_app_bar.height == 0) {
+            bottom_app_bar.post { showBottomAppBar(false) }
+        } else {
+            showBottomAppBar(false)
+        }
+    }
+
     override fun openHistory() {
         cleanBackStack()
         getTransaction().replace(R.id.container, HistoryFragment(), HistoryFragment.HISTORY_TAG).commit()
+        if (bottom_app_bar.translationY != 0F) {
+            showBottomAppBar(true)
+        }
     }
 
     override fun openSettings() {

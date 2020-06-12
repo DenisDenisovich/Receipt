@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_login.progressResend
 import kotlinx.android.synthetic.main.fragment_login.rootLogin
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import shiverawe.github.com.receipt.R
+import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.login.states.AccountState
 import shiverawe.github.com.receipt.ui.login.states.LoginState
 import shiverawe.github.com.receipt.utils.Storage
@@ -84,6 +85,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun handleLoginState(loginState: AccountState<LoginState>) {
+        if (loginState.success.getFirstTime() == true) {
+            Storage.isLogin = true
+            Storage.userPhone = loginState.state.phone
+            Storage.userPassword = loginState.state.password
+            (requireActivity() as Navigation).openHistory()
+            return
+        }
+
         if (loginState.state.fromSignUp.getFirstTime() == true) {
             val phoneNumber = loginState.state.phone
             etPhone.setText(phoneNumber)
@@ -105,12 +114,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             changeIncorrectDataVisibility(true)
         }
 
-        if (loginState.success.getFirstTime() == true) {
-            Storage.isLogin = true
-            Storage.userPhone = loginState.state.phone
-            Storage.userPassword = loginState.state.password
-            toast("Success")
-        }
         if (loginState.error.getFirstTime() == true) {
             toast(R.string.error)
         }
