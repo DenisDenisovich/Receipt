@@ -33,13 +33,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        etPhone.addTextListener {
-            changeIncorrectDataVisibility(false)
-        }
-
-        etPassword.addTextListener {
-            changeIncorrectDataVisibility(false)
-        }
+        etPhone.addTextListener { changeIncorrectDataVisibility(false) }
+        etPassword.addTextListener { changeIncorrectDataVisibility(false) }
 
         etPassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {

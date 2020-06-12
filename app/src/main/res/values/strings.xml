@@ -62,11 +62,16 @@
     <string name="no_location_applications">Не обнаружено подходящих приложений</string>
     <string name="show_location_empty_address">Нет адреса</string>
     <string name="login_title">Логин</string>
-    <string name="input_phone_placeholder">Введите номер телефона</string>
+    <string name="login_phone_placeholder">Введите номер телефона</string>
     <string name="input_password_placeholder">Введите пароль из СМС</string>
-    <string name="invalid_login">Номер телефона или пароль неверный</string>
+    <string name="invalid_login">Номер телефона или пароль неверные</string>
     <string name="reset_password">Восстановить пароль</string>
     <string name="login">Войти</string>
     <string name="signup">Регистрация</string>
+    <string name="sing_up_title">Регистрация</string>
+    <string name="sing_up_name_placeholder">Введите ФИО</string>
+    <string name="sig_nup_email_placeholder">Введите email</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="invalid_sign_up">Имя, номер телефона или email неверные</string>
 
 </resources>

@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:hint="@string/input_phone_placeholder"
+            android:hint="@string/login_phone_placeholder"
             android:inputType="text"
             android:maxLines="1"
             android:nextFocusDown="@id/etPassword"
@@ -129,7 +129,7 @@
         android:background="@color/colorAccent"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:text="@string/signup"
+        android:text="@string/sing_up_title"
         android:textColor="@color/colorPrimary" />
 
 </LinearLayout>

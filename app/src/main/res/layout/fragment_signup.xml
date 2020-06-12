@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/rootSignUp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -17,7 +19,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/roboto_regular"
-        android:text="Регистрация"
+        android:text="@string/sing_up_title"
         android:textColor="@color/colorBlack"
         android:textSize="20sp" />
 
@@ -32,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:ellipsize="end"
-            android:hint="Введите ФИО"
+            android:hint="@string/sing_up_name_placeholder"
             android:inputType="text"
             android:maxLines="1"
             android:nextFocusDown="@id/etPhone"
@@ -49,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:ellipsize="end"
-            android:hint="Введите номер телефона"
+            android:hint="@string/login_phone_placeholder"
             android:inputType="phone"
             android:maxLines="1"
             android:nextFocusDown="@id/etEmail"
@@ -66,21 +68,44 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:ellipsize="end"
-            android:hint="Введите email"
+            android:hint="@string/sig_nup_email_placeholder"
+            android:imeOptions="actionDone"
             android:inputType="text"
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
+    <TextView
+        android:id="@+id/errorSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@color/colorAccent"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="Зарегистрироваться"
-        android:textColor="@color/colorPrimary" />
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:textColor="@android:color/holo_red_light"
+        android:text="@string/invalid_sign_up"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp">
+
+        <ProgressBar
+            android:id="@+id/progressSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnSingUp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:layout_gravity="center"
+            android:text="@string/sign_up"
+            android:textColor="@color/colorPrimary" />
+    </FrameLayout>
 
 </LinearLayout>

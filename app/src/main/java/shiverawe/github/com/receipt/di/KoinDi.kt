@@ -27,6 +27,7 @@ import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import shiverawe.github.com.receipt.ui.history.month.MonthViewModel
 import shiverawe.github.com.receipt.ui.login.LoginViewModel
+import shiverawe.github.com.receipt.ui.login.SignUpViewModel
 import shiverawe.github.com.receipt.ui.receipt.create.CreateReceiptViewModel
 import shiverawe.github.com.receipt.ui.receipt.info.ReceiptViewModel
 
@@ -46,6 +47,7 @@ val receiptModule = module {
     viewModel { CreateReceiptViewModel(get()) }
     viewModel { ReceiptViewModel(get()) }
     viewModel { LoginViewModel() }
+    viewModel { SignUpViewModel() }
 }
 
 val dbModule = module {
