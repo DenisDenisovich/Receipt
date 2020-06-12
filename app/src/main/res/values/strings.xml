@@ -75,5 +75,11 @@
     <string name="invalid_sign_up">Имя, номер телефона или email неверные</string>
     <string name="input_password_from_sms">Введите пароль из SMS</string>
     <string name="input_new_password_from_sms">Введите новый пароль из SMS</string>
+    <string name="user_name">Имя</string>
+    <string name="user_phone">Мобильный номер</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="logout">Выйти из аккаунта</string>
+    <string name="account">Аккаунт</string>
 
 </resources>

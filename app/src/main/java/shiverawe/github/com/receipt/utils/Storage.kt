@@ -62,6 +62,10 @@ object Storage {
         storage = null
     }
 
+    fun reset() {
+        editStorage { clear() }
+    }
+
     private fun editStorage(action: SharedPreferences.Editor.() -> Unit) {
         val editor = storage?.edit() ?: return
         action(editor)
