@@ -152,7 +152,7 @@
         android:background="@drawable/btn_blue"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:text="@string/logout"
+        android:text="@string/go_out_from_account"
         android:textColor="@color/colorPrimary" />
 
 </LinearLayout>

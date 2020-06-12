@@ -79,7 +79,9 @@
     <string name="user_phone">Мобильный номер</string>
     <string name="email">Email</string>
     <string name="password">Пароль</string>
-    <string name="logout">Выйти из аккаунта</string>
+    <string name="go_out_from_account">Выйти из аккаунта</string>
     <string name="account">Аккаунт</string>
+    <string name="logout_dialog_title">Выйти из аккаунта?</string>
+    <string name="logout">Выйти</string>
 
 </resources>

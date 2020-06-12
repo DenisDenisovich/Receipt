@@ -56,9 +56,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun showLogoutDialog() {
         AlertDialog.Builder(requireContext())
-            .setTitle("Выйти из аккаунта?")
-            .setPositiveButton("Выйти") { _, _ -> logout() }
-            .setNegativeButton("Отмена") { _, _ ->  }
+            .setTitle(R.string.logout_dialog_title)
+            .setPositiveButton(R.string.logout) { _, _ -> logout() }
+            .setNegativeButton(R.string.cancel) { _, _ -> }
             .show()
     }
 
