@@ -20,6 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.login.states.AccountState
 import shiverawe.github.com.receipt.ui.login.states.LoginState
+import shiverawe.github.com.receipt.utils.Storage
 import shiverawe.github.com.receipt.utils.addTextListener
 import shiverawe.github.com.receipt.utils.gone
 import shiverawe.github.com.receipt.utils.hideKeyboard
@@ -105,6 +106,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         if (loginState.success.getFirstTime() == true) {
+            Storage.isLogin = true
+            Storage.userPhone = loginState.state.phone
+            Storage.userPassword = loginState.state.password
             toast("Success")
         }
         if (loginState.error.getFirstTime() == true) {

@@ -11,17 +11,25 @@ import shiverawe.github.com.receipt.ui.login.LoginFragment
 import shiverawe.github.com.receipt.ui.receipt.create.CreateReceiptRootFragment
 import shiverawe.github.com.receipt.ui.receipt.info.ReceiptFragment
 import shiverawe.github.com.receipt.ui.settings.SettingsFragment
+import shiverawe.github.com.receipt.utils.Storage
 
 class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        supportFragmentManager.beginTransaction().replace(R.id.container, LoginFragment()).commit()
-        bottom_app_bar.post {
-            showBottomAppBar(false)
+
+        Storage.attach(this)
+
+        if (Storage.isLogin) {
+            openHistory()
+        } else {
+            supportFragmentManager.beginTransaction().replace(R.id.container, LoginFragment()).commit()
+            bottom_app_bar.post {
+                showBottomAppBar(false)
+            }
         }
-//        openHistory()
+
         btn_history.setOnClickListener(this)
         btn_qr.setOnClickListener(this)
         btn_settings.setOnClickListener(this)
@@ -59,6 +67,11 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
                 super.onBackPressed()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Storage.detach()
     }
 
     override fun openHistory() {
@@ -113,11 +126,6 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
                 start()
             }
         }
-    }
-
-    private fun findFragmentByTag(tag: String): Fragment? {
-        val fragment = supportFragmentManager.findFragmentByTag(tag)
-        return if (fragment?.isVisible == true) fragment else null
     }
 
     private fun getTopFragment() = supportFragmentManager.findFragmentById(R.id.container)

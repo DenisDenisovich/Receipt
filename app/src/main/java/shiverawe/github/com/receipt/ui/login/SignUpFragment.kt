@@ -19,6 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.login.states.AccountState
 import shiverawe.github.com.receipt.ui.login.states.SignUpState
+import shiverawe.github.com.receipt.utils.Storage
 import shiverawe.github.com.receipt.utils.addTextListener
 import shiverawe.github.com.receipt.utils.gone
 import shiverawe.github.com.receipt.utils.hideKeyboard
@@ -64,11 +65,16 @@ class SignUpFragment : Fragment(R.layout.fragment_signup) {
         }
 
         if (signUpState.success.getFirstTime() == true) {
+            Storage.userName = etName.text.toString()
+            Storage.userPhone = etPhone.text.toString()
+            Storage.userEmail = etEmail.text.toString()
+
             targetFragment?.onActivityResult(
                 targetRequestCode,
                 Activity.RESULT_OK,
                 Intent().apply { putExtra(PHONE_NUMBER_EXTRA, etPhone.text.toString()) }
             )
+
             activity?.onBackPressed()
         }
         if (signUpState.error.getFirstTime() == true) {

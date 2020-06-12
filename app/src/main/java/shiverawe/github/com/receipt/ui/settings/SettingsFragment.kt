@@ -5,10 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.fragment_settings.*
 import shiverawe.github.com.receipt.R
-import shiverawe.github.com.receipt.ui.Navigation
-import shiverawe.github.com.receipt.utils.Settings
 
 class SettingsFragment : Fragment() {
     companion object {
@@ -20,9 +17,5 @@ class SettingsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        chb_settings_developer.isChecked = Settings.getDevelopMod(requireContext())
-        chb_settings_developer.setOnClickListener {
-            Settings.setDevelopMod(requireContext(), chb_settings_developer.isChecked)
-        }
     }
 }
