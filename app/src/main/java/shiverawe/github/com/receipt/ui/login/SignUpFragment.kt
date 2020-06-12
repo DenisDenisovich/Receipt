@@ -1,5 +1,7 @@
 package shiverawe.github.com.receipt.ui.login
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -19,6 +21,7 @@ import shiverawe.github.com.receipt.ui.login.states.AccountState
 import shiverawe.github.com.receipt.ui.login.states.SignUpState
 import shiverawe.github.com.receipt.utils.addTextListener
 import shiverawe.github.com.receipt.utils.gone
+import shiverawe.github.com.receipt.utils.hideKeyboard
 import shiverawe.github.com.receipt.utils.toast
 import shiverawe.github.com.receipt.utils.visible
 
@@ -61,14 +64,22 @@ class SignUpFragment : Fragment(R.layout.fragment_signup) {
         }
 
         if (signUpState.success.getFirstTime() == true) {
-            toast("Success")
+            targetFragment?.onActivityResult(
+                targetRequestCode,
+                Activity.RESULT_OK,
+                Intent().apply { putExtra(PHONE_NUMBER_EXTRA, etPhone.text.toString()) }
+            )
+            activity?.onBackPressed()
         }
         if (signUpState.error.getFirstTime() == true) {
-            toast("base error")
+            toast(R.string.error)
         }
     }
 
     private fun singUp() {
+        etName.hideKeyboard()
+        etPhone.hideKeyboard()
+        etEmail.hideKeyboard()
         viewModel.signUp(etName.text.toString(), etPhone.text.toString(), etEmail.text.toString())
     }
 
@@ -86,5 +97,9 @@ class SignUpFragment : Fragment(R.layout.fragment_signup) {
                 errorSignUp.gone()
             }
         }
+    }
+
+    companion object {
+        const val PHONE_NUMBER_EXTRA = "phoneNumberExtra"
     }
 }

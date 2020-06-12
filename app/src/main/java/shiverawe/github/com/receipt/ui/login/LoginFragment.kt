@@ -1,5 +1,6 @@
 package shiverawe.github.com.receipt.ui.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -21,7 +22,9 @@ import shiverawe.github.com.receipt.ui.login.states.AccountState
 import shiverawe.github.com.receipt.ui.login.states.LoginState
 import shiverawe.github.com.receipt.utils.addTextListener
 import shiverawe.github.com.receipt.utils.gone
+import shiverawe.github.com.receipt.utils.hideKeyboard
 import shiverawe.github.com.receipt.utils.invisible
+import shiverawe.github.com.receipt.utils.showKeyboard
 import shiverawe.github.com.receipt.utils.toast
 import shiverawe.github.com.receipt.utils.visible
 
@@ -52,18 +55,43 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         btnSignUp.setOnClickListener {
-            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.container, SignUpFragment())?.commit()
+            val signUpScreen = SignUpFragment()
+            signUpScreen.setTargetFragment(this, LOGIN_REQUEST_CODE)
+            activity?.supportFragmentManager
+                ?.beginTransaction()
+                ?.replace(R.id.container, signUpScreen)
+                ?.addToBackStack(null)
+                ?.commit()
         }
 
         viewModel.getLoginState().observe(viewLifecycleOwner, Observer { handleLoginState(it) })
         viewModel.getResendState().observe(viewLifecycleOwner, Observer { handleResendState(it) })
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == LOGIN_REQUEST_CODE) {
+            val phoneNumber = data?.getStringExtra(SignUpFragment.PHONE_NUMBER_EXTRA) ?: ""
+            viewModel.setSignUpResult(phoneNumber)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
     private fun login() {
+        etPhone.hideKeyboard()
+        etPassword.hideKeyboard()
         viewModel.login(etPhone.text.toString(), etPassword.text.toString())
     }
 
     private fun handleLoginState(loginState: AccountState<LoginState>) {
+        if (loginState.state.fromSignUp.getFirstTime() == true) {
+            val phoneNumber = loginState.state.phone
+            etPhone.setText(phoneNumber)
+            etPhone.setSelection(phoneNumber.length)
+            etPassword.setText("")
+            toast(getString(R.string.input_password_from_sms))
+            etPassword?.showKeyboard()
+        }
+
         if (loginState.progress) {
             progressLogin.visible()
             btnLogin.gone()
@@ -80,7 +108,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             toast("Success")
         }
         if (loginState.error.getFirstTime() == true) {
-            toast("base error")
+            toast(R.string.error)
         }
     }
 
@@ -93,10 +121,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             progressResend.gone()
         }
         if (resendState.error.getFirstTime() == true) {
-            toast("resend error")
+            toast(R.string.error)
         }
         if (resendState.success.getFirstTime() == true) {
-            toast("resend success")
+            toast(R.string.input_new_password_from_sms)
         }
     }
 
@@ -114,5 +142,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 errorLogin.gone()
             }
         }
+    }
+
+    companion object {
+        private const val LOGIN_REQUEST_CODE = 123
     }
 }

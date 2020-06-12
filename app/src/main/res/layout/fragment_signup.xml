@@ -100,7 +100,7 @@
             android:id="@+id/btnSingUp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@color/colorAccent"
+            android:background="@drawable/btn_blue"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:layout_gravity="center"

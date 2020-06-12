@@ -21,6 +21,10 @@ class LoginViewModel : ViewModel() {
 
     fun getResendState(): LiveData<AccountState<Unit>> = resendState
 
+    fun setSignUpResult(phone: String) {
+        loginState.value = AccountState(LoginState(phone, "", fromSignUp = SingleEvent(true)))
+    }
+
     fun login(phone: String, password: String) {
         if (loginState.value?.progress == true || resendState.value?.progress == true) return
         currentJob?.cancel()
@@ -47,7 +51,7 @@ class LoginViewModel : ViewModel() {
 
         currentJob = viewModelScope.launch {
             delay(1000)
-            resendState.value = AccountState(Unit)
+            resendState.value = AccountState(Unit, success = SingleEvent(true))
         }
     }
 
