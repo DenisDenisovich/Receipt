@@ -61,5 +61,12 @@
     <string name="empty_total_sum">Общая сумма: …</string>
     <string name="no_location_applications">Не обнаружено подходящих приложений</string>
     <string name="show_location_empty_address">Нет адреса</string>
+    <string name="login_title">Логин</string>
+    <string name="input_phone_placeholder">Введите номер телефона</string>
+    <string name="input_password_placeholder">Введите пароль из СМС</string>
+    <string name="invalid_login">Номер телефона или пароль неверный</string>
+    <string name="reset_password">Восстановить пароль</string>
+    <string name="login">Войти</string>
+    <string name="signup">Регистрация</string>
 
 </resources>

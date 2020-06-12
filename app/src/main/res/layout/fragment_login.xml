@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLogin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -17,22 +19,22 @@
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/roboto_regular"
-        android:text="Логин"
+        android:text="@string/login_title"
         android:textColor="@color/colorBlack"
         android:textSize="20sp" />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etLogin"
+            android:id="@+id/etPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:ellipsize="end"
-            android:hint="Введите номер телефона"
+            android:hint="@string/input_phone_placeholder"
             android:inputType="text"
             android:maxLines="1"
             android:nextFocusDown="@id/etPassword"
@@ -47,35 +49,72 @@
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="Введите пароль из СМС"
+            android:hint="@string/input_password_placeholder"
+            android:imeOptions="actionDone"
             android:inputType="numberPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/btnResetPassword"
-        android:layout_width="wrap_content"
+        android:id="@+id/errorLogin"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="?selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="8dp"
-        android:text="Восстановить пароль"
-        android:textColor="@color/colorBlack"
-        android:textSize="12sp" />
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:textColor="@android:color/holo_red_light"
+        android:text="@string/invalid_login"/>
 
-    <Button
-        android:id="@+id/btnLogin"
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="8dp"
-        android:background="@color/colorAccent"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:text="Войти"
-        android:textColor="@color/colorPrimary" />
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/btnResetPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
+            android:layout_gravity="center"
+            android:text="@string/reset_password"
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp" />
+
+        <ProgressBar
+            android:id="@+id/progressResend"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp">
+
+        <ProgressBar
+            android:id="@+id/progressLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:layout_gravity="center"
+            android:text="@string/login"
+            android:textColor="@color/colorPrimary" />
+    </FrameLayout>
 
     <View
         android:layout_width="0dp"
@@ -90,7 +129,7 @@
         android:background="@color/colorAccent"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:text="Регистрация"
+        android:text="@string/signup"
         android:textColor="@color/colorPrimary" />
 
 </LinearLayout>
