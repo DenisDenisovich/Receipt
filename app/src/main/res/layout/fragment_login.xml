@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:hint="@string/login_phone_placeholder"
-            android:inputType="text"
+            android:inputType="phone"
             android:maxLines="1"
             android:nextFocusDown="@id/etPassword"
             android:scrollHorizontally="true" />
