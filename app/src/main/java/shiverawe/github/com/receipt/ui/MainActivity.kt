@@ -11,6 +11,8 @@ import shiverawe.github.com.receipt.ui.receipt.create.CreateReceiptRootFragment
 import shiverawe.github.com.receipt.ui.receipt.info.ReceiptFragment
 import shiverawe.github.com.receipt.ui.settings.SettingsFragment
 import shiverawe.github.com.receipt.utils.Storage
+import shiverawe.github.com.receipt.utils.gone
+import shiverawe.github.com.receipt.utils.visible
 
 class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,20 +74,13 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
 
     override fun openLogin() {
         supportFragmentManager.beginTransaction().replace(R.id.container, LoginFragment()).commit()
-
-        if (bottom_app_bar.height == 0) {
-            bottom_app_bar.post { showBottomAppBar(false) }
-        } else {
-            showBottomAppBar(false)
-        }
+        bottom_app_bar.gone()
     }
 
     override fun openHistory() {
         cleanBackStack()
         getTransaction().replace(R.id.container, HistoryFragment(), HistoryFragment.HISTORY_TAG).commit()
-        if (bottom_app_bar.translationY != 0F) {
-            showBottomAppBar(true)
-        }
+        bottom_app_bar.visible()
     }
 
     override fun openSettings() {
