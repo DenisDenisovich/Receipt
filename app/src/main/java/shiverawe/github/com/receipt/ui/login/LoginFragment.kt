@@ -38,7 +38,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        etPhone.addTextListener { changeIncorrectDataVisibility(false) }
+        etPhone.addTextChangedListener(PhoneNumberListener { formattedNumber ->
+            etPhone.setText(formattedNumber)
+            etPhone.setSelection(formattedNumber.length)
+            changeIncorrectDataVisibility(false)
+        })
+
         etPassword.addTextListener { changeIncorrectDataVisibility(false) }
 
         etPassword.setOnEditorActionListener { _, actionId, _ ->
@@ -47,7 +52,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
             false
         }
-
+        etPhone.setText("+7")
         btnResetPassword.setOnClickListener {
             viewModel.resend()
         }

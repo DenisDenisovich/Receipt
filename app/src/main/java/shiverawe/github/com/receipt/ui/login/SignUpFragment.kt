@@ -34,7 +34,14 @@ class SignUpFragment : Fragment(R.layout.fragment_signup) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         etName.addTextListener { changeIncorrectDataVisibility(false) }
-        etPhone.addTextListener { changeIncorrectDataVisibility(false) }
+
+        etPhone.addTextChangedListener(PhoneNumberListener { formattedNumber ->
+            etPhone.setText(formattedNumber)
+            etPhone.setSelection(formattedNumber.length)
+            changeIncorrectDataVisibility(false)
+        })
+        etPhone.setText("+7")
+
         etEmail.addTextListener { changeIncorrectDataVisibility(false) }
 
         etEmail.setOnEditorActionListener { _, actionId, _ ->
