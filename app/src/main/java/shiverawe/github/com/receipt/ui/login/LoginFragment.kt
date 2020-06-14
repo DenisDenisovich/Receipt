@@ -2,6 +2,7 @@ package shiverawe.github.com.receipt.ui.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.transition.TransitionManager
 import kotlinx.android.synthetic.main.fragment_login.btnLogin
 import kotlinx.android.synthetic.main.fragment_login.btnResetPassword
+import kotlinx.android.synthetic.main.fragment_login.btnShowPassword
 import kotlinx.android.synthetic.main.fragment_login.btnSignUp
 import kotlinx.android.synthetic.main.fragment_login.errorLogin
 import kotlinx.android.synthetic.main.fragment_login.etPassword
@@ -36,6 +38,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private val viewModel: LoginViewModel by viewModel()
 
     private var incorrectDataVisibility = false
+    private var passwordIsVisible = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -44,6 +47,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             etPhone.setSelection(formattedNumber.length)
             changeIncorrectDataVisibility(false)
         })
+        etPhone.setText("+7")
 
         etPassword.addTextListener { changeIncorrectDataVisibility(false) }
 
@@ -53,7 +57,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
             false
         }
-        etPhone.setText("+7")
+
+        btnShowPassword.setOnClickListener {
+            passwordIsVisible = !passwordIsVisible
+            if (passwordIsVisible) showPassword()
+            else hidePassword()
+        }
+
         btnResetPassword.setOnClickListener {
             viewModel.resend(etPhone.text.toString())
         }
@@ -161,6 +171,20 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 errorLogin.gone()
             }
         }
+    }
+
+    private fun hidePassword() {
+        passwordIsVisible = false
+        etPassword.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
+        etPassword.setSelection(etPassword.text?.length ?: 0)
+        btnShowPassword.setImageResource(R.drawable.ic_show_password)
+    }
+
+    private fun showPassword() {
+        passwordIsVisible = true
+        etPassword.inputType = EditorInfo.TYPE_CLASS_NUMBER
+        etPassword.setSelection(etPassword.text?.length ?: 0)
+        btnShowPassword.setImageResource(R.drawable.ic_hide_password)
     }
 
     companion object {
