@@ -40,7 +40,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private var passwordIsVisible = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         etPhone.addTextChangedListener(PhoneNumberListener { formattedNumber ->
             etPhone.setText(formattedNumber)
             etPhone.setSelection(formattedNumber.length)
@@ -87,7 +86,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == LOGIN_REQUEST_CODE) {
-            val phoneNumber = data?.getStringExtra(SignUpFragment.PHONE_NUMBER_EXTRA) ?: ""
+            val phoneNumber = data?.getStringExtra(SignUpFragment.PHONE_NUMBER_EXTRA).orEmpty()
             viewModel.setSignUpResult(phoneNumber)
         }
         super.onActivityResult(requestCode, resultCode, data)

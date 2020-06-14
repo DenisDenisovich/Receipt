@@ -24,20 +24,20 @@ class SignUpViewModel(private val interactor: ISignUpInteractor) : ViewModel() {
         if (signUpState.value?.progress == true) return
         currentJob?.cancel()
 
-        signUpState.value = AccountState(
-            state = SignUpState(name, phone, email),
-            progress = true
-        )
+        // set progress to state
+        signUpState.value = AccountState(state = SignUpState(name, phone, email), progress = true)
 
         currentJob = viewModelScope.launch {
-
+            // sign up
             val signUpResult = interactor.signUp(name, phone.replace("-", ""), email)
+            // handle success result
             signUpResult.result?.let { success ->
                 signUpState.value = AccountState(
                     state = SignUpState(name, phone, email),
                     success = SingleEvent(success)
                 )
             }
+            // handle error result
             signUpResult.error?.let { error ->
                 signUpState.value = AccountState(
                     state = SignUpState(name, phone, email),
