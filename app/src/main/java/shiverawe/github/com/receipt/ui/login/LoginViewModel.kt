@@ -38,12 +38,14 @@ class LoginViewModel(private val interactor: ILoginInteractor) : ViewModel() {
 
         currentJob = viewModelScope.launch {
             val loginResult = interactor.login(phone.replace("-", ""), password)
+
             loginResult.result?.let { success ->
                 loginState.value = AccountState(
                     state = LoginState(phone, password, error = SingleEvent(!success)),
                     success = SingleEvent(success)
                 )
             }
+
             loginResult.error?.let { error ->
                 loginState.value = AccountState(
                     state = LoginState(phone, password),
@@ -60,13 +62,14 @@ class LoginViewModel(private val interactor: ILoginInteractor) : ViewModel() {
 
         currentJob = viewModelScope.launch {
             val resetResult = interactor.resetPassword(phone.replace("-", ""))
+
             resetResult.result?.let { success ->
                 resendState.value = AccountState(Unit, success = SingleEvent(success))
             }
+
             resetResult.error?.let { error ->
                 resendState.value = AccountState(Unit, error = SingleEvent<ErrorType?>(error.type))
             }
         }
     }
-
 }

@@ -7,11 +7,13 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.SingleEvent
+import shiverawe.github.com.receipt.domain.interactor.signup.ISignUpInteractor
 import shiverawe.github.com.receipt.ui.login.states.AccountState
 import shiverawe.github.com.receipt.ui.login.states.SignUpState
 
-class SignUpViewModel : ViewModel() {
+class SignUpViewModel(private val interactor: ISignUpInteractor) : ViewModel() {
 
     private var currentJob: Job? = null
 
@@ -29,12 +31,20 @@ class SignUpViewModel : ViewModel() {
         )
 
         currentJob = viewModelScope.launch {
-            delay(1000)
 
-            signUpState.value = AccountState(
-                state = SignUpState(name, phone, email, error = SingleEvent(true)),
-                success = SingleEvent(true)
-            )
+            val signUpResult = interactor.signUp(name, phone.replace("-", ""), email)
+            signUpResult.result?.let { success ->
+                signUpState.value = AccountState(
+                    state = SignUpState(name, phone, email),
+                    success = SingleEvent(success)
+                )
+            }
+            signUpResult.error?.let { error ->
+                signUpState.value = AccountState(
+                    state = SignUpState(name, phone, email),
+                    error = SingleEvent<ErrorType?>(error.type)
+                )
+            }
         }
     }
 }

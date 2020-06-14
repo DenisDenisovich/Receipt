@@ -60,7 +60,7 @@ val accountModule = module {
     factory<ISignUpInteractor> { SignUpInteractor(get()) }
     factory<IAccountRepository> { AccountRepository(get()) }
     viewModel { LoginViewModel(get()) }
-    viewModel { SignUpViewModel() }
+    viewModel { SignUpViewModel(get()) }
 }
 
 val dbModule = module {

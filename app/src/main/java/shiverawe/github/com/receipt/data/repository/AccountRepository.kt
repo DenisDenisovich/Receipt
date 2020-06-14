@@ -4,6 +4,7 @@ import retrofit2.HttpException
 import shiverawe.github.com.receipt.data.network.api.Api
 import shiverawe.github.com.receipt.data.network.entity.account.LoginRequest
 import shiverawe.github.com.receipt.data.network.entity.account.PasswordResetRequest
+import shiverawe.github.com.receipt.data.network.entity.account.SignUpRequest
 import shiverawe.github.com.receipt.domain.repository.IAccountRepository
 
 class AccountRepository(private val api: Api) : IAccountRepository {
@@ -21,6 +22,11 @@ class AccountRepository(private val api: Api) : IAccountRepository {
     }
 
     override suspend fun signUp(name: String, phone: String, email: String): Boolean {
-        TODO("Not yet implemented")
+        val response = api.signUp(SignUpRequest(name, email, phone))
+        if (response.code() == 200) {
+            return true
+        } else {
+            throw HttpException(response)
+        }
     }
 }
