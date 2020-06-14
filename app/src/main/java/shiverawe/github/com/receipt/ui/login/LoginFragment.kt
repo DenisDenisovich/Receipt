@@ -46,7 +46,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             changeIncorrectDataVisibility(false)
         })
 
-        etPhone.setText("+7")
+        etPhone.setText("")
 
         etPassword.addTextListener { changeIncorrectDataVisibility(false) }
 

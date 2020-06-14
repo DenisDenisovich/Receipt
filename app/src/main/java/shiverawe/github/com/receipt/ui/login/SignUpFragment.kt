@@ -42,7 +42,7 @@ class SignUpFragment : Fragment(R.layout.fragment_signup) {
             changeIncorrectDataVisibility(false)
         })
 
-        etPhone.setText("+7")
+        etPhone.setText("")
 
         etEmail.addTextListener { changeIncorrectDataVisibility(false) }
 
