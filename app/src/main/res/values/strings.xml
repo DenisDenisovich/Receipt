@@ -61,6 +61,11 @@
     <string name="empty_total_sum">Общая сумма: …</string>
     <string name="no_location_applications">Не обнаружено подходящих приложений</string>
     <string name="show_location_empty_address">Нет адреса</string>
+    <string name="info_button">Info Button</string>
+    <string name="info_pp_fn">Заводской номер кассового аппарата, обычно расположен в нижней части чека</string>
+    <string name="info_pp_fd">Порядковый номер чека, обычно расположен в нижней части чека</string>
+    <string name="info_pp_fp">Код для защиты информации, передаваемой в ФНС, обычно расположен в нижней части чека</string>
+    <string name="info_pp_error">Информация отсутствует</string>
     <string name="login_title">Логин</string>
     <string name="login_phone_placeholder">Введите номер телефона</string>
     <string name="input_password_placeholder">Введите пароль из СМС</string>

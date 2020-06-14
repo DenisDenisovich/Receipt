@@ -4,17 +4,17 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
+import android.widget.*
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_manual.*
+import kotlinx.android.synthetic.main.popup_manual_text.view.pp_info_tv
 import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.utils.toLongWithMilliseconds
-import java.lang.Exception
-import java.lang.StringBuilder
 
 class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnFocusChangeListener {
 
@@ -85,11 +85,35 @@ class ManualFragment : CreateReceiptFragment(R.layout.fragment_manual), View.OnF
         }
     }
 
+    private fun createPopupWindow(btn_info: View) {
+        val window = PopupWindow(activity)
+        val view = layoutInflater.inflate(R.layout.popup_manual_text, null)
+        window.contentView = view
+        window.isFocusable = true
+        view.pp_info_tv.text = when (btn_info.id) {
+            R.id.btn_info_fn -> getString(R.string.info_pp_fn)
+            R.id.btn_info_fd -> getString(R.string.info_pp_fd)
+            R.id.btn_info_fp -> getString(R.string.info_pp_fp)
+            else -> getString(R.string.info_pp_error)
+        }
+        view.pp_info_tv.setOnClickListener {
+            window.dismiss()
+        }
+        window.setBackgroundDrawable(null)
+        window.showAsDropDown(btn_info)
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         changeBtnBackground()
         btn_manual?.setOnClickListener {
             createReceipt()
         }
+
+        btn_info_fn.setOnClickListener { createPopupWindow(it) }
+        btn_info_fd.setOnClickListener { createPopupWindow(it) }
+        btn_info_fp.setOnClickListener { createPopupWindow(it) }
+
 
         btn_manual_back?.setOnClickListener {
             viewMode.goBack()

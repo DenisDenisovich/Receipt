@@ -1,6 +1,7 @@
 # Receipt
 
 [![TeamcityBuild](https://teamcity.shefer.space/app/rest/builds/strob:(buildType:(project:(id:ReceiptAndroid)))/statusIcon.svg)](https://teamcity.shefer.space/viewType.html?buildTypeId=ReceiptAndroid_Build)
+[![Gitter](https://badges.gitter.im/receipt-project/receipt-android.svg)](https://gitter.im/receipt-project/receipt-android?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 [Download APK](https://receipt.shefer.space/android/distributions/app-debug.apk)
 
