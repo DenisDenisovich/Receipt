@@ -24,7 +24,6 @@ import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.login.states.AccountState
 import shiverawe.github.com.receipt.ui.login.states.LoginState
-import shiverawe.github.com.receipt.utils.Storage
 import shiverawe.github.com.receipt.utils.addTextListener
 import shiverawe.github.com.receipt.utils.gone
 import shiverawe.github.com.receipt.utils.hideKeyboard
@@ -102,9 +101,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun handleLoginState(loginState: AccountState<LoginState>) {
         if (loginState.success.getFirstTime() == true) {
-            Storage.isLogin = true
-            Storage.userPhone = loginState.state.phone
-            Storage.userPassword = loginState.state.password
             (requireActivity() as Navigation).openHistory()
             return
         }

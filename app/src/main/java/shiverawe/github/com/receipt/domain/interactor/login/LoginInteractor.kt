@@ -12,6 +12,9 @@ class LoginInteractor(private val repository: IAccountRepository) : BaseInteract
     override suspend fun login(phone: String, password: String): BaseResult<Boolean> {
         return try {
             Storage.token = repository.login(phone, password)
+            Storage.userPhone = phone
+            Storage.userPassword = password
+            Storage.isLogin = true
             BaseResult(true)
         } catch (e: Exception) {
             if (e is HttpException && e.code() == 403) {

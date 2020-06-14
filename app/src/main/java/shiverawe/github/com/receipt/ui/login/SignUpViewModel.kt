@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.SingleEvent

@@ -73,10 +73,6 @@ class SignUpFragment : Fragment(R.layout.fragment_signup) {
         }
 
         if (signUpState.success.getFirstTime() == true) {
-            Storage.userName = etName.text.toString()
-            Storage.userPhone = etPhone.text.toString()
-            Storage.userEmail = etEmail.text.toString()
-
             targetFragment?.onActivityResult(
                 targetRequestCode,
                 Activity.RESULT_OK,
