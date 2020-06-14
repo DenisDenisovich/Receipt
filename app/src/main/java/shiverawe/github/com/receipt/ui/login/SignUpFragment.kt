@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_signup.progressSignUp
 import kotlinx.android.synthetic.main.fragment_signup.rootSignUp
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import shiverawe.github.com.receipt.R
+import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.ui.login.states.AccountState
 import shiverawe.github.com.receipt.ui.login.states.SignUpState
 import shiverawe.github.com.receipt.utils.Storage
@@ -84,8 +85,11 @@ class SignUpFragment : Fragment(R.layout.fragment_signup) {
 
             activity?.onBackPressed()
         }
-        if (signUpState.error.getFirstTime() == true) {
+        val errorType = signUpState.error.getFirstTime()
+        if (errorType == ErrorType.ERROR) {
             toast(R.string.error)
+        } else if (errorType == ErrorType.OFFLINE) {
+            toast(R.string.error_network)
         }
     }
 

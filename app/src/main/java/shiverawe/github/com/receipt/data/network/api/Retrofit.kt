@@ -1,5 +1,6 @@
 package shiverawe.github.com.receipt.data.network.api
 
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,10 +12,12 @@ fun createRetrofit(baseUrl: String): Api {
         .connectTimeout(180, TimeUnit.SECONDS)
         .build()
 
+    val gson = GsonBuilder().setLenient().create()
+
     val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
     return retrofit.create(Api::class.java)

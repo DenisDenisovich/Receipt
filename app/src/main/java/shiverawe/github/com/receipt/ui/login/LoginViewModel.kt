@@ -7,11 +7,13 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.domain.entity.SingleEvent
+import shiverawe.github.com.receipt.domain.interactor.login.ILoginInteractor
 import shiverawe.github.com.receipt.ui.login.states.AccountState
 import shiverawe.github.com.receipt.ui.login.states.LoginState
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(private val interactor: ILoginInteractor) : ViewModel() {
 
     private val loginState: MutableLiveData<AccountState<LoginState>> = MutableLiveData()
     private val resendState: MutableLiveData<AccountState<Unit>> = MutableLiveData()
@@ -35,12 +37,19 @@ class LoginViewModel : ViewModel() {
         )
 
         currentJob = viewModelScope.launch {
-            delay(1000)
-
-            loginState.value = AccountState(
-                state = LoginState(phone, password, error = SingleEvent(true)),
-                success = SingleEvent(true)
-            )
+            val loginResult = interactor.login(phone.replace("-", ""), password)
+            loginResult.result?.let { success ->
+                loginState.value = AccountState(
+                    state = LoginState(phone, password, error = SingleEvent(!success)),
+                    success = SingleEvent(success)
+                )
+            }
+            loginResult.error?.let { error ->
+                loginState.value = AccountState(
+                    state = LoginState(phone, password),
+                    error = SingleEvent<ErrorType?>(error.type)
+                )
+            }
         }
     }
 

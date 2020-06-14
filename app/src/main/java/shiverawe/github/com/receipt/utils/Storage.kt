@@ -11,6 +11,7 @@ object Storage {
     private const val USER_PHONE = "user_phone"
     private const val USER_EMAIL = "user_email"
     private const val USER_PASSWORD = "user_password"
+    private const val USER_TOKEN = "user_token"
 
     var isLogin: Boolean
         set(value) {
@@ -51,6 +52,14 @@ object Storage {
             }
         }
         get() = storage?.getString(USER_PASSWORD, "").orEmpty()
+
+    var token: String
+        set(value) {
+            editStorage {
+                putString(USER_TOKEN, value)
+            }
+        }
+        get() = storage?.getString(USER_TOKEN, "").orEmpty()
 
     private var storage: SharedPreferences? = null
 

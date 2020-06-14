@@ -13,16 +13,22 @@ import shiverawe.github.com.receipt.data.network.datasource.receipt.IReceiptNetw
 import shiverawe.github.com.receipt.data.network.datasource.month.MonthNetwork
 import shiverawe.github.com.receipt.data.network.datasource.receipt.ReceiptNetwork
 import shiverawe.github.com.receipt.data.network.api.createRetrofit
+import shiverawe.github.com.receipt.data.repository.AccountRepository
 import shiverawe.github.com.receipt.data.repository.MonthRepository
 import shiverawe.github.com.receipt.data.repository.ReceiptRepository
 import shiverawe.github.com.receipt.domain.interactor.create_receipt.CreateReceiptInteractor
 import shiverawe.github.com.receipt.domain.interactor.create_receipt.ICreateReceiptInteractor
 import shiverawe.github.com.receipt.domain.interactor.create_receipt.receipt_printer.IReceiptPrinter
 import shiverawe.github.com.receipt.domain.interactor.create_receipt.receipt_printer.ShareReceiptPrinter
+import shiverawe.github.com.receipt.domain.interactor.login.ILoginInteractor
+import shiverawe.github.com.receipt.domain.interactor.login.LoginInteractor
 import shiverawe.github.com.receipt.domain.interactor.month.IMonthInteractor
 import shiverawe.github.com.receipt.domain.interactor.month.MonthInteractor
 import shiverawe.github.com.receipt.domain.interactor.receipt.IReceiptInteractor
 import shiverawe.github.com.receipt.domain.interactor.receipt.ReceiptInteractor
+import shiverawe.github.com.receipt.domain.interactor.signup.ISignUpInteractor
+import shiverawe.github.com.receipt.domain.interactor.signup.SignUpInteractor
+import shiverawe.github.com.receipt.domain.repository.IAccountRepository
 import shiverawe.github.com.receipt.domain.repository.IMonthRepository
 import shiverawe.github.com.receipt.domain.repository.IReceiptRepository
 import shiverawe.github.com.receipt.ui.history.month.MonthViewModel
@@ -46,7 +52,14 @@ val receiptModule = module {
     factory<IReceiptInteractor> { ReceiptInteractor(get(), get()) }
     viewModel { CreateReceiptViewModel(get()) }
     viewModel { ReceiptViewModel(get()) }
-    viewModel { LoginViewModel() }
+
+}
+
+val accountModule = module {
+    factory<ILoginInteractor> { LoginInteractor(get()) }
+    factory<ISignUpInteractor> { SignUpInteractor(get()) }
+    factory<IAccountRepository> { AccountRepository(get()) }
+    viewModel { LoginViewModel(get()) }
     viewModel { SignUpViewModel() }
 }
 

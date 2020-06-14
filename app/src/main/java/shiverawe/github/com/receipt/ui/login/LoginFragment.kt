@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_login.progressResend
 import kotlinx.android.synthetic.main.fragment_login.rootLogin
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import shiverawe.github.com.receipt.R
+import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.ui.login.states.AccountState
 import shiverawe.github.com.receipt.ui.login.states.LoginState
@@ -119,8 +120,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             changeIncorrectDataVisibility(true)
         }
 
-        if (loginState.error.getFirstTime() == true) {
+        val errorType = loginState.error.getFirstTime()
+        if (errorType == ErrorType.ERROR) {
             toast(R.string.error)
+        } else if (errorType == ErrorType.OFFLINE) {
+            toast(R.string.error_network)
         }
     }
 
@@ -132,11 +136,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             btnResetPassword.visible()
             progressResend.gone()
         }
-        if (resendState.error.getFirstTime() == true) {
-            toast(R.string.error)
-        }
         if (resendState.success.getFirstTime() == true) {
             toast(R.string.input_new_password_from_sms)
+        }
+        val errorType = resendState.error.getFirstTime()
+        if (errorType == ErrorType.ERROR) {
+            toast(R.string.error)
+        } else if (errorType == ErrorType.OFFLINE) {
+            toast(R.string.error_network)
         }
     }
 
