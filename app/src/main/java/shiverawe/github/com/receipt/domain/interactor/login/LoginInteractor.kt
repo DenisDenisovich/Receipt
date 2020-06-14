@@ -23,6 +23,10 @@ class LoginInteractor(private val repository: IAccountRepository) : BaseInteract
     }
 
     override suspend fun resetPassword(phone: String): BaseResult<Boolean> {
-        TODO("Not yet implemented")
+        return try {
+            BaseResult(repository.resetPassword(phone))
+        } catch (e: Exception) {
+            e.toBaseResult()
+        }
     }
 }

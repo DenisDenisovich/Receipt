@@ -53,14 +53,19 @@ class LoginViewModel(private val interactor: ILoginInteractor) : ViewModel() {
         }
     }
 
-    fun resend() {
+    fun resend(phone: String) {
         if (loginState.value?.progress == true || resendState.value?.progress == true) return
         currentJob?.cancel()
         resendState.value = AccountState(Unit, progress = true)
 
         currentJob = viewModelScope.launch {
-            delay(1000)
-            resendState.value = AccountState(Unit, success = SingleEvent(true))
+            val resetResult = interactor.resetPassword(phone.replace("-", ""))
+            resetResult.result?.let { success ->
+                resendState.value = AccountState(Unit, success = SingleEvent(success))
+            }
+            resetResult.error?.let { error ->
+                resendState.value = AccountState(Unit, error = SingleEvent<ErrorType?>(error.type))
+            }
         }
     }
 

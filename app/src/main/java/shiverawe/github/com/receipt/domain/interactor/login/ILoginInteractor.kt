@@ -1,7 +1,6 @@
 package shiverawe.github.com.receipt.domain.interactor.login
 
 import shiverawe.github.com.receipt.domain.entity.BaseResult
-import shiverawe.github.com.receipt.domain.entity.account.LoginResult
 
 interface ILoginInteractor {
 

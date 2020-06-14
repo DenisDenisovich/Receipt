@@ -55,7 +55,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
         etPhone.setText("+7")
         btnResetPassword.setOnClickListener {
-            viewModel.resend()
+            viewModel.resend(etPhone.text.toString())
         }
 
         btnLogin.setOnClickListener {
