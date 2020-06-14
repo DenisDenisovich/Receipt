@@ -63,6 +63,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         btnResetPassword.setOnClickListener {
+            etPhone.hideKeyboard()
+            etPassword.hideKeyboard()
             viewModel.onResendClicked(etPhone.text.toString())
         }
 
