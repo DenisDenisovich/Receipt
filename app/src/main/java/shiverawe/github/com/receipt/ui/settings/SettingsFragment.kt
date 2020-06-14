@@ -27,6 +27,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         btnShowPassword.setOnClickListener {
             passwordIsVisible = !passwordIsVisible
+
             if (passwordIsVisible) {
                 showPassword()
             } else {

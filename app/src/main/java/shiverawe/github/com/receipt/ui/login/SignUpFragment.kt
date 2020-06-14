@@ -41,6 +41,7 @@ class SignUpFragment : Fragment(R.layout.fragment_signup) {
             etPhone.setSelection(formattedNumber.length)
             changeIncorrectDataVisibility(false)
         })
+
         etPhone.setText("+7")
 
         etEmail.addTextListener { changeIncorrectDataVisibility(false) }
@@ -85,7 +86,9 @@ class SignUpFragment : Fragment(R.layout.fragment_signup) {
 
             activity?.onBackPressed()
         }
+
         val errorType = signUpState.error.getFirstTime()
+
         if (errorType == ErrorType.ERROR) {
             toast(R.string.error)
         } else if (errorType == ErrorType.OFFLINE) {

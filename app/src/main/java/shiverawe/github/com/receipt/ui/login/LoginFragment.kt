@@ -45,6 +45,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             etPhone.setSelection(formattedNumber.length)
             changeIncorrectDataVisibility(false)
         })
+
         etPhone.setText("+7")
 
         etPassword.addTextListener { changeIncorrectDataVisibility(false) }
@@ -91,6 +92,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             val phoneNumber = data?.getStringExtra(SignUpFragment.PHONE_NUMBER_EXTRA).orEmpty()
             viewModel.setSignUpResult(phoneNumber)
         }
+
         super.onActivityResult(requestCode, resultCode, data)
     }
 
@@ -128,6 +130,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         val errorType = loginState.error.getFirstTime()
+
         if (errorType == ErrorType.ERROR) {
             toast(R.string.error)
         } else if (errorType == ErrorType.OFFLINE) {
@@ -143,10 +146,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             btnResetPassword.visible()
             progressResend.gone()
         }
+
         if (resendState.success.getFirstTime() == true) {
             toast(R.string.input_new_password_from_sms)
         }
+
         val errorType = resendState.error.getFirstTime()
+
         if (errorType == ErrorType.ERROR) {
             toast(R.string.error)
         } else if (errorType == ErrorType.OFFLINE) {
