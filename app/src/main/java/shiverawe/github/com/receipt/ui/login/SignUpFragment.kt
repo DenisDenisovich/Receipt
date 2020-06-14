@@ -97,7 +97,12 @@ class SignUpFragment : Fragment(R.layout.fragment_signup) {
         etName.hideKeyboard()
         etPhone.hideKeyboard()
         etEmail.hideKeyboard()
-        viewModel.signUp(etName.text.toString(), etPhone.text.toString(), etEmail.text.toString())
+
+        viewModel.onSignUpClicked(
+            etName.text.toString(),
+            etPhone.text.toString(),
+            etEmail.text.toString()
+        )
     }
 
     private fun changeIncorrectDataVisibility(visible: Boolean) {

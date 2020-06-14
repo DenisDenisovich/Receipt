@@ -20,7 +20,7 @@ class SignUpViewModel(private val interactor: ISignUpInteractor) : ViewModel() {
 
     fun getSignUpState(): LiveData<AccountState<SignUpState>> = signUpState
 
-    fun signUp(name: String, phone: String, email: String) {
+    fun onSignUpClicked(name: String, phone: String, email: String) {
         if (signUpState.value?.progress == true) return
         currentJob?.cancel()
 
@@ -28,22 +28,26 @@ class SignUpViewModel(private val interactor: ISignUpInteractor) : ViewModel() {
         signUpState.value = AccountState(state = SignUpState(name, phone, email), progress = true)
 
         currentJob = viewModelScope.launch {
-            // sign up
-            val signUpResult = interactor.signUp(name, phone.replace("-", ""), email)
-            // handle success result
-            signUpResult.result?.let { success ->
-                signUpState.value = AccountState(
-                    state = SignUpState(name, phone, email),
-                    success = SingleEvent(success)
-                )
-            }
-            // handle error result
-            signUpResult.error?.let { error ->
-                signUpState.value = AccountState(
-                    state = SignUpState(name, phone, email),
-                    error = SingleEvent<ErrorType?>(error.type)
-                )
-            }
+            signUp(name, phone.replace("-", ""), email)
+        }
+    }
+
+    private suspend fun signUp(name: String, phone: String, email: String) {
+        // sign up
+        val signUpResult = interactor.signUp(name, phone, email)
+        // handle success result
+        signUpResult.result?.let { success ->
+            signUpState.value = AccountState(
+                state = SignUpState(name, phone, email),
+                success = SingleEvent(success)
+            )
+        }
+        // handle error result
+        signUpResult.error?.let { error ->
+            signUpState.value = AccountState(
+                state = SignUpState(name, phone, email),
+                error = SingleEvent<ErrorType?>(error.type)
+            )
         }
     }
 }
