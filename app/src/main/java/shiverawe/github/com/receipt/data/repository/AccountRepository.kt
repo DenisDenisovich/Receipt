@@ -7,7 +7,7 @@ import shiverawe.github.com.receipt.domain.repository.IAccountRepository
 
 class AccountRepository(private val api: Api) : IAccountRepository {
 
-    override suspend fun login(phone: String, password: String): Response<String> =
+    override suspend fun login(phone: String, password: String): String =
         api.login(LoginRequest(phone, password))
 
     override suspend fun resetPassword(phone: String): Response<Unit> {

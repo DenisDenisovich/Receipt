@@ -24,7 +24,7 @@ interface Api {
     suspend fun createReceipt(@Body createRequest: CreateRequest): ReceiptResponse
 
     @POST("api/login")
-    suspend fun login(@Body loginRequest: LoginRequest): Response<String>
+    suspend fun login(@Body loginRequest: LoginRequest): String
 
     @POST("api/passwordRestore")
     suspend fun reset(@Body passwordResetRequest: PasswordResetRequest): Response<Unit>
