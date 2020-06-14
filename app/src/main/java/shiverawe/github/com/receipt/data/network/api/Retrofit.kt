@@ -4,12 +4,21 @@ import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import shiverawe.github.com.receipt.utils.Storage
 import java.util.concurrent.TimeUnit
 
 fun createRetrofit(baseUrl: String): Api {
     val okHttpClient = OkHttpClient.Builder()
         .readTimeout(180, TimeUnit.SECONDS)
         .connectTimeout(180, TimeUnit.SECONDS)
+        .addInterceptor {
+            val request = it.request()
+                .newBuilder()
+                .header("Authorization", "Bearer ${Storage.token}")
+                .build()
+
+            return@addInterceptor it.proceed(request)
+        }
         .build()
 
     val gson = GsonBuilder().setLenient().create()
