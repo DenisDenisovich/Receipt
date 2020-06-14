@@ -27,49 +27,51 @@ class LoginViewModel(private val interactor: ILoginInteractor) : ViewModel() {
         loginState.value = AccountState(LoginState(phone, "", fromSignUp = SingleEvent(true)))
     }
 
-    fun login(phone: String, password: String) {
+    fun onLoginClicked(phone: String, password: String) {
         if (loginState.value?.progress == true || resendState.value?.progress == true) return
         currentJob?.cancel()
 
-        loginState.value = AccountState(
-            state = LoginState(phone, password),
-            progress = true
-        )
+        loginState.value = AccountState(state = LoginState(phone, password), progress = true)
 
-        currentJob = viewModelScope.launch {
-            val loginResult = interactor.login(phone.replace("-", ""), password)
+        currentJob = viewModelScope.launch { login(phone.replace("-", ""), password) }
+    }
 
-            loginResult.result?.let { success ->
-                loginState.value = AccountState(
-                    state = LoginState(phone, password, error = SingleEvent(!success)),
-                    success = SingleEvent(success)
-                )
-            }
+    fun onResendClicked(phone: String) {
+        if (loginState.value?.progress == true || resendState.value?.progress == true) return
+        currentJob?.cancel()
 
-            loginResult.error?.let { error ->
-                loginState.value = AccountState(
-                    state = LoginState(phone, password),
-                    error = SingleEvent<ErrorType?>(error.type)
-                )
-            }
+        resendState.value = AccountState(Unit, progress = true)
+
+        currentJob = viewModelScope.launch { resend(phone.replace("-", "")) }
+    }
+
+    private suspend fun login(phone: String, password: String) {
+        val loginResult = interactor.login(phone, password)
+
+        loginResult.result?.let { success ->
+            loginState.value = AccountState(
+                state = LoginState(phone, password, error = SingleEvent(!success)),
+                success = SingleEvent(success)
+            )
+        }
+
+        loginResult.error?.let { error ->
+            loginState.value = AccountState(
+                state = LoginState(phone, password),
+                error = SingleEvent<ErrorType?>(error.type)
+            )
         }
     }
 
-    fun resend(phone: String) {
-        if (loginState.value?.progress == true || resendState.value?.progress == true) return
-        currentJob?.cancel()
-        resendState.value = AccountState(Unit, progress = true)
+    private suspend fun resend(phone: String) {
+        val resetResult = interactor.resetPassword(phone)
 
-        currentJob = viewModelScope.launch {
-            val resetResult = interactor.resetPassword(phone.replace("-", ""))
+        resetResult.result?.let { success ->
+            resendState.value = AccountState(Unit, success = SingleEvent(success))
+        }
 
-            resetResult.result?.let { success ->
-                resendState.value = AccountState(Unit, success = SingleEvent(success))
-            }
-
-            resetResult.error?.let { error ->
-                resendState.value = AccountState(Unit, error = SingleEvent<ErrorType?>(error.type))
-            }
+        resetResult.error?.let { error ->
+            resendState.value = AccountState(Unit, error = SingleEvent<ErrorType?>(error.type))
         }
     }
 }

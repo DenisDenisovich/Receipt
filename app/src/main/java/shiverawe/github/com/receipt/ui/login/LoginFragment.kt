@@ -63,7 +63,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         btnResetPassword.setOnClickListener {
-            viewModel.resend(etPhone.text.toString())
+            viewModel.onResendClicked(etPhone.text.toString())
         }
 
         btnLogin.setOnClickListener {
@@ -95,7 +95,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun login() {
         etPhone.hideKeyboard()
         etPassword.hideKeyboard()
-        viewModel.login(etPhone.text.toString(), etPassword.text.toString())
+        viewModel.onLoginClicked(etPhone.text.toString(), etPassword.text.toString())
     }
 
     private fun handleLoginState(loginState: AccountState<LoginState>) {
