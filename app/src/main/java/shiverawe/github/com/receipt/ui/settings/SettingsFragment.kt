@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.fragment_settings.tvEmail
 import kotlinx.android.synthetic.main.fragment_settings.tvPassword
 import kotlinx.android.synthetic.main.fragment_settings.tvPhone
 import kotlinx.android.synthetic.main.fragment_settings.tvUserName
+import org.koin.android.ext.android.inject
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.Navigation
 import shiverawe.github.com.receipt.utils.Storage
@@ -17,11 +18,12 @@ import shiverawe.github.com.receipt.utils.Storage
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private var passwordIsVisible = false
+    private val storage: Storage by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        tvUserName.text = Storage.userName
-        tvPhone.text = Storage.userPhone
-        tvEmail.text = Storage.userEmail
+        tvUserName.text = storage.userName
+        tvPhone.text = storage.userPhone
+        tvEmail.text = storage.userEmail
 
         btnShowPassword.setOnClickListener {
             passwordIsVisible = !passwordIsVisible
@@ -41,7 +43,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun hidePassword() {
         passwordIsVisible = false
-        val password = Storage.userPassword
+        val password = storage.userPassword
         val placeholder = StringBuilder()
         repeat(password.length) { placeholder.append("* ") }
         tvPassword.text = placeholder
@@ -50,7 +52,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun showPassword() {
         passwordIsVisible = true
-        tvPassword.text = Storage.userPassword
+        tvPassword.text = storage.userPassword
         btnShowPassword.setImageResource(R.drawable.ic_hide_password)
     }
 
@@ -63,7 +65,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun logout() {
-        Storage.reset()
+        storage.reset()
         (activity as Navigation).openLogin()
     }
 

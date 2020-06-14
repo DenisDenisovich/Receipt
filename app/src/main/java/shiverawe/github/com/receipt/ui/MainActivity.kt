@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.ext.android.inject
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
 import shiverawe.github.com.receipt.ui.login.LoginFragment
@@ -15,14 +16,15 @@ import shiverawe.github.com.receipt.utils.gone
 import shiverawe.github.com.receipt.utils.visible
 
 class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
+
+    private val storage: Storage by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Storage.attach(this)
-
-        if (Storage.isLogin) {
+        if (storage.isLogin) {
             openHistory()
         } else {
             openLogin()
@@ -65,11 +67,6 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
                 super.onBackPressed()
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Storage.detach()
     }
 
     override fun openLogin() {

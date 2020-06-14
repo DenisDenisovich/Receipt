@@ -7,14 +7,17 @@ import shiverawe.github.com.receipt.domain.repository.IAccountRepository
 import shiverawe.github.com.receipt.utils.Storage
 import java.lang.Exception
 
-class LoginInteractor(private val repository: IAccountRepository) : BaseInteractor(), ILoginInteractor {
+class LoginInteractor(
+    private val repository: IAccountRepository,
+    private val storage: Storage
+) : BaseInteractor(), ILoginInteractor {
 
     override suspend fun login(phone: String, password: String): BaseResult<Boolean> {
         return try {
-            Storage.token = repository.login(phone, password)
-            Storage.userPhone = phone
-            Storage.userPassword = password
-            Storage.isLogin = true
+            storage.token = repository.login(phone, password)
+            storage.userPhone = phone
+            storage.userPassword = password
+            storage.isLogin = true
             BaseResult(true)
         } catch (e: Exception) {
             if (e is HttpException && e.code() == 403) {

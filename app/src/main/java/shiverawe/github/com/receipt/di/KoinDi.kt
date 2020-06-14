@@ -1,5 +1,6 @@
 package shiverawe.github.com.receipt.di
 
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -8,11 +9,11 @@ import shiverawe.github.com.receipt.data.bd.datasource.month.IMonthDatabase
 import shiverawe.github.com.receipt.data.bd.datasource.month.MonthDatabase
 import shiverawe.github.com.receipt.data.bd.datasource.receipt.IReceiptDatabase
 import shiverawe.github.com.receipt.data.bd.datasource.receipt.ReceiptDatabase
+import shiverawe.github.com.receipt.data.network.api.RetrofitBuilder
 import shiverawe.github.com.receipt.data.network.datasource.month.IMonthNetwork
 import shiverawe.github.com.receipt.data.network.datasource.receipt.IReceiptNetwork
 import shiverawe.github.com.receipt.data.network.datasource.month.MonthNetwork
 import shiverawe.github.com.receipt.data.network.datasource.receipt.ReceiptNetwork
-import shiverawe.github.com.receipt.data.network.api.createRetrofit
 import shiverawe.github.com.receipt.data.repository.AccountRepository
 import shiverawe.github.com.receipt.data.repository.MonthRepository
 import shiverawe.github.com.receipt.data.repository.ReceiptRepository
@@ -36,6 +37,7 @@ import shiverawe.github.com.receipt.ui.login.LoginViewModel
 import shiverawe.github.com.receipt.ui.login.SignUpViewModel
 import shiverawe.github.com.receipt.ui.receipt.create.CreateReceiptViewModel
 import shiverawe.github.com.receipt.ui.receipt.info.ReceiptViewModel
+import shiverawe.github.com.receipt.utils.Storage
 
 val monthModule = module {
     factory<IMonthNetwork> { MonthNetwork(get()) }
@@ -56,18 +58,19 @@ val receiptModule = module {
 }
 
 val accountModule = module {
-    factory<ILoginInteractor> { LoginInteractor(get()) }
-    factory<ISignUpInteractor> { SignUpInteractor(get()) }
+    factory<ILoginInteractor> { LoginInteractor(get(), get()) }
+    factory<ISignUpInteractor> { SignUpInteractor(get(), get()) }
     factory<IAccountRepository> { AccountRepository(get()) }
     viewModel { LoginViewModel(get()) }
     viewModel { SignUpViewModel(get()) }
 }
 
 val dbModule = module {
+    single { Storage(androidApplication()) }
     factory<IReceiptDatabase> { ReceiptDatabase() }
     factory<IMonthDatabase> { MonthDatabase() }
 }
 
 val networkModule = module {
-    single { createRetrofit(androidContext().resources.getString(R.string.BASE_URL)) }
+    single { RetrofitBuilder(androidContext().resources.getString(R.string.BASE_URL), get()).api }
 }
