@@ -66,5 +66,27 @@
     <string name="info_pp_fd">Порядковый номер чека, обычно расположен в нижней части чека</string>
     <string name="info_pp_fp">Код для защиты информации, передаваемой в ФНС, обычно расположен в нижней части чека</string>
     <string name="info_pp_error">Информация отсутствует</string>
+    <string name="login_title">Логин</string>
+    <string name="login_phone_placeholder">Введите номер телефона</string>
+    <string name="input_password_placeholder">Введите пароль из СМС</string>
+    <string name="invalid_login">Номер телефона или пароль неверные</string>
+    <string name="reset_password">Восстановить пароль</string>
+    <string name="login">Войти</string>
+    <string name="signup">Регистрация</string>
+    <string name="sing_up_title">Регистрация</string>
+    <string name="sing_up_name_placeholder">Введите ФИО</string>
+    <string name="sig_nup_email_placeholder">Введите email</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="invalid_sign_up">Имя, номер телефона или email неверные</string>
+    <string name="input_password_from_sms">Введите пароль из SMS</string>
+    <string name="input_new_password_from_sms">Введите новый пароль из SMS</string>
+    <string name="user_name">Имя</string>
+    <string name="user_phone">Мобильный номер</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="go_out_from_account">Выйти из аккаунта</string>
+    <string name="account">Аккаунт</string>
+    <string name="logout_dialog_title">Выйти из аккаунта?</string>
+    <string name="logout">Выйти</string>
 
 </resources>

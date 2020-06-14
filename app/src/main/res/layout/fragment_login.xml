@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLogin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorWhite"
+    android:padding="16dp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:src="@drawable/img_splash" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/roboto_regular"
+        android:text="@string/login_title"
+        android:textColor="@color/colorBlack"
+        android:textSize="20sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:hint="@string/login_phone_placeholder"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:nextFocusDown="@id/etPassword"
+            android:scrollHorizontally="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/input_password_placeholder"
+                android:imeOptions="actionDone"
+                android:inputType="numberPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnShowPassword"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="center"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_show_password" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/errorLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/invalid_login"
+        android:textColor="@android:color/holo_red_light"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/btnResetPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
+            android:text="@string/reset_password"
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp" />
+
+        <ProgressBar
+            android:id="@+id/progressResend"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp">
+
+        <ProgressBar
+            android:id="@+id/progressLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/btn_blue"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="@string/login"
+            android:textColor="@color/colorPrimary" />
+    </FrameLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btnSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/btn_blue"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="@string/sing_up_title"
+        android:textColor="@color/colorPrimary" />
+
+</LinearLayout>

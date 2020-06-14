@@ -1,22 +1,35 @@
 package shiverawe.github.com.receipt.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.ext.android.inject
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.history.HistoryFragment
+import shiverawe.github.com.receipt.ui.login.LoginFragment
 import shiverawe.github.com.receipt.ui.receipt.create.CreateReceiptRootFragment
 import shiverawe.github.com.receipt.ui.receipt.info.ReceiptFragment
 import shiverawe.github.com.receipt.ui.settings.SettingsFragment
+import shiverawe.github.com.receipt.utils.Storage
+import shiverawe.github.com.receipt.utils.gone
+import shiverawe.github.com.receipt.utils.visible
 
 class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
+
+    private val storage: Storage by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        openHistory()
+
+        if (storage.isLogin) {
+            openHistory()
+        } else {
+            openLogin()
+        }
+
         btn_history.setOnClickListener(this)
         btn_qr.setOnClickListener(this)
         btn_settings.setOnClickListener(this)
@@ -56,9 +69,15 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
         }
     }
 
+    override fun openLogin() {
+        supportFragmentManager.beginTransaction().replace(R.id.container, LoginFragment()).commit()
+        bottom_app_bar.gone()
+    }
+
     override fun openHistory() {
         cleanBackStack()
         getTransaction().replace(R.id.container, HistoryFragment(), HistoryFragment.HISTORY_TAG).commit()
+        bottom_app_bar.visible()
     }
 
     override fun openSettings() {
@@ -108,11 +127,6 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
                 start()
             }
         }
-    }
-
-    private fun findFragmentByTag(tag: String): Fragment? {
-        val fragment = supportFragmentManager.findFragmentByTag(tag)
-        return if (fragment?.isVisible == true) fragment else null
     }
 
     private fun getTopFragment() = supportFragmentManager.findFragmentById(R.id.container)
