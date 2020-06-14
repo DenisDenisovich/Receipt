@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.transition.TransitionManager
+import kotlinx.android.synthetic.main.fragment_signup.btnBack
 import kotlinx.android.synthetic.main.fragment_signup.btnSingUp
 import kotlinx.android.synthetic.main.fragment_signup.errorSignUp
 import kotlinx.android.synthetic.main.fragment_signup.etEmail
@@ -20,7 +21,6 @@ import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.ErrorType
 import shiverawe.github.com.receipt.ui.login.states.AccountState
 import shiverawe.github.com.receipt.ui.login.states.SignUpState
-import shiverawe.github.com.receipt.utils.Storage
 import shiverawe.github.com.receipt.utils.addTextListener
 import shiverawe.github.com.receipt.utils.gone
 import shiverawe.github.com.receipt.utils.hideKeyboard
@@ -54,6 +54,10 @@ class SignUpFragment : Fragment(R.layout.fragment_signup) {
 
         btnSingUp.setOnClickListener {
             singUp()
+        }
+
+        btnBack.setOnClickListener {
+            activity?.onBackPressed()
         }
 
         viewModel.getSignUpState().observe(viewLifecycleOwner, Observer { handleSignUpState(it) })
