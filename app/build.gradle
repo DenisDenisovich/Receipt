@@ -47,30 +47,38 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation 'com.squareup.okhttp3:okhttp:3.14.7'
-    implementation 'androidx.room:room-runtime:2.1.0'
-    kapt 'androidx.room:room-compiler:2.1.0'
     implementation "io.reactivex.rxjava2:rxjava:2.2.8"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
     implementation 'com.yandex.android:mobmetricalib:3.6.0'
     implementation 'com.google.firebase:firebase-core:17.4.0'
     implementation 'com.android.support:multidex:1.0.3'
+
+    // room
+    def room_version = "2.2.5"
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
     // coroutine
     def coroutine_version = "1.3.5"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+
     // koin
     def koin_version = "2.0.1"
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
     implementation "org.koin:koin-core:$koin_version"
+
     // CameraX core library using the camera2 implementation
     def camerax_version = "1.0.0-beta03"
     implementation "androidx.camera:camera-camera2:${camerax_version}"
     implementation "androidx.camera:camera-lifecycle:${camerax_version}"
     implementation "androidx.camera:camera-view:1.0.0-alpha10"
     implementation "androidx.camera:camera-extensions:1.0.0-alpha10"
+
     // qrCode
     implementation 'com.google.firebase:firebase-ml-vision:24.0.3'
     implementation 'com.google.firebase:firebase-ml-vision-barcode-model:16.1.1'

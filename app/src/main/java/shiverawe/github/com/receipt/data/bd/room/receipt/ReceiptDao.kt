@@ -6,26 +6,26 @@ import androidx.room.*
 interface ReceiptDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addReceipts(receipts: List<ReceiptEntity>): List<Long>
+    suspend fun addReceipts(receipts: List<ReceiptEntity>): List<Long>
 
     @Update
-    fun updateReceipt(receipt: ReceiptEntity): Int
+    suspend fun updateReceipt(receipt: ReceiptEntity): Int
 
     @Delete
-    fun deleteReceipt(receipt: ReceiptEntity): Int
+    suspend fun deleteReceipt(receipt: ReceiptEntity): Int
 
     @Query("SELECT *FROM receipt_table WHERE date >= :dateFrom AND date <= :dateTo")
-    fun getReceiptHeaders(dateFrom: Long, dateTo: Long): List<ReceiptEntity>
+    suspend fun getReceiptHeaders(dateFrom: Long, dateTo: Long): List<ReceiptEntity>
 
     @Query("SELECT id FROM receipt_table WHERE date >= :dateFrom AND date <= :dateTo ORDER BY date DESC")
-    fun getMonthReceiptsId(dateFrom: Long, dateTo: Long): List<Long>
+    suspend fun getMonthReceiptsId(dateFrom: Long, dateTo: Long): List<Long>
 
     @Query("SELECT * FROM receipt_table WHERE id=:receiptId")
-    fun getReceiptById(receiptId: Long): ReceiptEntity?
+    suspend fun getReceiptById(receiptId: Long): ReceiptEntity?
 
     @Query("DELETE FROM receipt_table WHERE date >= :dateFrom AND date <= :dateTo")
-    fun removeMonthReceipts(dateFrom: Long, dateTo: Long): Int
+    suspend fun removeMonthReceipts(dateFrom: Long, dateTo: Long): Int
 
     @Query("DELETE FROM receipt_table WHERE id IN(:removeIds)")
-    fun removeReceiptHeadersByIds(removeIds: Array<Long>): Int
+    suspend fun removeReceiptHeadersByIds(removeIds: Array<Long>): Int
 }
