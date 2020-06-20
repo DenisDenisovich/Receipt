@@ -5,6 +5,7 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.ErrorType
+import shiverawe.github.com.receipt.ui.receipt.create.state.ErrorState
 import shiverawe.github.com.receipt.utils.toast
 
 abstract class CreateReceiptFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
@@ -13,7 +14,9 @@ abstract class CreateReceiptFragment(@LayoutRes layoutId: Int) : Fragment(layout
     protected var errorToast: Toast? = null
 
     protected fun showDialog() {
-        waitingDialog.showNow(childFragmentManager, null)
+        if (!waitingDialog.isAdded) {
+            waitingDialog.showNow(childFragmentManager, null)
+        }
     }
 
     // hide waiting dialog if he is showed
