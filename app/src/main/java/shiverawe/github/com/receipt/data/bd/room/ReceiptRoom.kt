@@ -22,15 +22,15 @@ abstract class ReceiptRoom : RoomDatabase() {
     abstract fun productDao(): ProductDao
 
     @Transaction
-    fun saveProducts(receiptId: Long, products: List<Product>): List<Long> =
+    suspend fun saveProducts(receiptId: Long, products: List<Product>): List<Long> =
         productDao().addProducts(products.map { it.toProductEntity(receiptId) })
 
-    fun saveReceiptHeaders(receipts: List<ReceiptHeader>): List<Long> {
+    suspend fun saveReceiptHeaders(receipts: List<ReceiptHeader>): List<Long> {
         val receiptsDb = receipts.map { it.toReceiptEntity() }
         return receiptDao().addReceipts(receiptsDb)
     }
 
-    fun getReceiptHeaders(dateFrom: Long, dateTo: Long): List<ReceiptHeader> = receiptDao()
+    suspend fun getReceiptHeaders(dateFrom: Long, dateTo: Long): List<ReceiptHeader> = receiptDao()
         .getReceiptHeaders(dateFrom, dateTo)
         .map { it.toReceiptHeader() }
 

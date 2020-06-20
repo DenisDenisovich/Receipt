@@ -10,28 +10,31 @@ class MonthDatabase : IMonthDatabase {
 
     private val db = ReceiptRoom.getDb()
 
-    override suspend fun updateMonthCache(dateFrom: Long, dateTo: Long, networkReceipts: List<ReceiptHeader>) {
-        withContext(Dispatchers.IO) {
-            val localReceipts = db.getReceiptHeaders(dateFrom, dateTo)
+    override suspend fun updateMonthCache(
+        dateFrom: Long,
+        dateTo: Long,
+        networkReceipts: List<ReceiptHeader>
+    ) {
+        val localReceipts = db.getReceiptHeaders(dateFrom, dateTo)
 
-            if (localReceipts.isEmpty()) {
-                // DB doesn't contain receipts for this period. Save new data
-                db.saveReceiptHeaders(networkReceipts)
-            } else {
-                // DB already contain data for this period. Update DB
-                db.receiptDao().removeMonthReceipts(dateFrom, dateTo)
-                db.saveReceiptHeaders(networkReceipts)
-            }
+        if (localReceipts.isEmpty()) {
+            // DB doesn't contain receipts for this period. Save new data
+            db.saveReceiptHeaders(networkReceipts)
+        } else {
+            // DB already contain data for this period. Update DB
+            db.receiptDao().removeMonthReceipts(dateFrom, dateTo)
+            db.saveReceiptHeaders(networkReceipts)
         }
     }
 
-    override suspend fun getReceiptHeaders(dataFrom: Long, dataTo: Long): List<ReceiptHeader> =
-        withContext(Dispatchers.IO) {
-            db.receiptDao()
-                .getReceiptHeaders(dataFrom, dataTo)
-                .asSequence()
+    override suspend fun getReceiptHeaders(dataFrom: Long, dataTo: Long): List<ReceiptHeader> {
+        val receipts = db.receiptDao().getReceiptHeaders(dataFrom, dataTo)
+
+        return withContext(Dispatchers.Default) {
+            receipts.asSequence()
                 .sortedByDescending { it.date }
                 .map { it.toReceiptHeader() }
                 .toList()
         }
+    }
 }
