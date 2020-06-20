@@ -17,7 +17,8 @@ import shiverawe.github.com.receipt.utils.toast
 class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root),
     BackPressedHandle, CreateReceiptNavigation {
 
-    private var flowIsClosed = false
+    private var receiptIsCreated = false
+
     private val currentScreen: CurrentScreen
         get() = when (childFragmentManager.findFragmentById(R.id.root_create_receipt)) {
             is QrFragment -> CurrentScreen.QR
@@ -30,7 +31,7 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
     private var cameraPermissionDisposable: Disposable? = null
 
     override fun quitOnBackPressed(): Boolean {
-        if (flowIsClosed) return true
+        if (receiptIsCreated) return true
 
         if (childFragmentManager.backStackEntryCount > 1) {
             childFragmentManager.popBackStack()
@@ -41,7 +42,7 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        flowIsClosed = false
+        receiptIsCreated = false
         openQr()
     }
 
@@ -97,7 +98,7 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
     }
 
     override fun receiptIsCreated() {
-        flowIsClosed = true
+        receiptIsCreated = true
         toast(R.string.create_receipt_success, isLongDuration = false)
         activity?.onBackPressed()
     }
