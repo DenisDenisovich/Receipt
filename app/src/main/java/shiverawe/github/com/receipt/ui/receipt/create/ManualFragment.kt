@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
@@ -12,7 +11,6 @@ import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_manual.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlinx.android.synthetic.main.popup_manual_text.view.pp_info_tv
-import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.base.Meta
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptStatus

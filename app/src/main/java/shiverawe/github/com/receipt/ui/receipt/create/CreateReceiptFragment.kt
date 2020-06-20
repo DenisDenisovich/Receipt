@@ -14,7 +14,9 @@ abstract class CreateReceiptFragment(@LayoutRes layoutId: Int) : Fragment(layout
     protected var errorToast: Toast? = null
 
     protected fun showDialog() {
-        waitingDialog.showNow(childFragmentManager, null)
+        if (!waitingDialog.isAdded) {
+            waitingDialog.showNow(childFragmentManager, null)
+        }
     }
 
     // hide waiting dialog if he is showed
