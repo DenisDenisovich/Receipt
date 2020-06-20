@@ -6,14 +6,13 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "receipt_table", indices = [Index(value = ["date"])])
 data class ReceiptEntity(
+    @PrimaryKey
+    var id: Long,
     var date: Long = 0L,
     var place: String = "",
     var sum: Double = 0.0,
     var fn: String = "",
     var fd: String = "",
     var fp: String = "",
-    var remoteId: Long = 0,
-    var address: String = "",
-    @PrimaryKey(autoGenerate = true)
-    var id: Long? = null
+    var address: String = ""
 )

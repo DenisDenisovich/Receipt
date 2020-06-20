@@ -15,10 +15,8 @@ class ReceiptDatabase : IReceiptDatabase {
     private val db = ReceiptRoom.getDb()
 
     @Transaction
-    override suspend fun saveProductsToCache(remoteReceiptId: Long, products: List<Product>) =
+    override suspend fun saveProductsToCache(receiptId: Long, products: List<Product>) =
         withContext(Dispatchers.IO) {
-            val receiptDb = db.receiptDao().getReceiptByRemoteId(remoteReceiptId)
-            val receiptId = receiptDb?.id ?: 0
             val localProductsDb = db.productDao().getProductsForReceiptIds(arrayOf(receiptId))
             if (localProductsDb.isEmpty()) {
                 // DB doesn't contain products for this period. Save new data
@@ -27,16 +25,16 @@ class ReceiptDatabase : IReceiptDatabase {
         }
 
     @Transaction
-    override suspend fun getReceiptById(remoteReceiptId: Long): Receipt? = withContext(Dispatchers.IO) {
-        val receiptDb = db.receiptDao().getReceiptByRemoteId(remoteReceiptId)
+    override suspend fun getReceiptById(receiptId: Long): Receipt? = withContext(Dispatchers.IO) {
+        val receiptDb = db.receiptDao().getReceiptById(receiptId)
         receiptDb?.id?.let { receiptDbId ->
             val productsDb = db.productDao().getProductsForReceiptIds(arrayOf(receiptDbId))
             receiptDb.toReceipt(productsDb)
         }
     }
 
-    override suspend fun getReceiptHeaderById(remoteReceiptId: Long): ReceiptHeader? =
+    override suspend fun getReceiptHeaderById(receiptId: Long): ReceiptHeader? =
         withContext(Dispatchers.IO) {
-            db.receiptDao().getReceiptByRemoteId(remoteReceiptId)?.toReceiptHeader()
+            db.receiptDao().getReceiptById(receiptId)?.toReceiptHeader()
         }
 }
