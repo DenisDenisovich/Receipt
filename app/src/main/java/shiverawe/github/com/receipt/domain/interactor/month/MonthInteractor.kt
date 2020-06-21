@@ -31,9 +31,13 @@ class MonthInteractor(private val repository: IMonthRepository) : BaseInteractor
             BaseResult(networkReceipts)
         } catch (e: Exception) {
             when {
-                isCancel(e) -> BaseResult(isCancel = true)
-                isNetwork(e) || isOffline() -> getDbReceiptsOnError(dateFrom, dateTo, e, ErrorType.OFFLINE)
-                else -> BaseResult(e, ErrorType.ERROR)
+                isCancel(e) -> {
+                    BaseResult(isCancel = true)
+                }
+                else -> {
+                    val errorType = if (isOffline(e)) ErrorType.OFFLINE else ErrorType.ERROR
+                    getDbReceiptsOnError(dateFrom, dateTo, e, errorType)
+                }
             }
         }
     }
