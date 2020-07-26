@@ -3,15 +3,10 @@ package shiverawe.github.com.receipt.ui
 import android.app.Application
 import android.content.Context
 import androidx.multidex.MultiDex
-import shiverawe.github.com.receipt.R
-import java.lang.Exception
-import com.yandex.metrica.YandexMetrica
-import com.yandex.metrica.YandexMetricaConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import shiverawe.github.com.receipt.di.*
-
 
 class App : Application() {
     companion object {
@@ -26,17 +21,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
-        initYandexMetric()
         initKoin()
-    }
-
-    private fun initYandexMetric() {
-        try {
-            val config = YandexMetricaConfig.newConfigBuilder(getString(R.string.yandex_key)).build()
-            YandexMetrica.activate(applicationContext, config)
-            YandexMetrica.enableActivityAutoTracking(this)
-        } catch (e: Exception) {
-        }
     }
 
     fun initKoin() {

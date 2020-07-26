@@ -1,7 +1,6 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Receipt</string>
     <string name="BASE_URL">https://receipt.shefer.space/</string>
-    <string name="yandex_key" tools:ignore="TypographyDashes">44fd539d-4d62-4c40-b620-1d33f4070334</string>
     <string name="nav_header_title">Receipt</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="action_search">Поиск</string>
@@ -27,7 +26,6 @@
     <string name="tv_toolbar_settings">Настройки</string>
     <string name="tv_developer_settings">Я разработчик</string>
     <string name="tv_http_settings">Использовать http</string>
-    <string name="app_center_id" tools:ignore="TypographyDashes">5cd51172-48a5-49fd-9a97-ea6b59b8867e</string>
     <string name="create_receipt_success">Чек успешно загружен</string>
     <string name="create_receipt_waiting">Загрузка чека</string>
     <string name="fn_hint">9282000100036317</string>
@@ -88,5 +86,4 @@
     <string name="account">Аккаунт</string>
     <string name="logout_dialog_title">Выйти из аккаунта?</string>
     <string name="logout">Выйти</string>
-
 </resources>
