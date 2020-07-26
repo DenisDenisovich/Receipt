@@ -11,10 +11,11 @@
 ## Used technologies
 - Kotlin
   - Coroutines
-- Android Jetpack
+- [Android Jetpack](https://developer.android.com/jetpack)
   - MVVM
   - LiveData
   - Room
+  - CameraX
 - [Koin](https://insert-koin.io/) - Service Locator
 
 ## Application UI. Экраны приложения.
