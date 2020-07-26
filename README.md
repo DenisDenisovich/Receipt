@@ -5,9 +5,16 @@
 
 [Download APK](https://receipt.shefer.space/android/distributions/app-debug.apk)
 
+## Application architecture
+- Clean Architecture
+- MVVM
 ## Used technologies
 - Kotlin
   - Coroutines
+- Android Jetpack
+  - MVVM
+  - LiveData
+  - Room
 - [Koin](https://insert-koin.io/) - Service Locator
 
 ## Application UI. Экраны приложения.
