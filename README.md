@@ -12,7 +12,7 @@
 - Kotlin
   - Coroutines
 - [Android Jetpack](https://developer.android.com/jetpack)
-  - MVVM
+  - ViewModel
   - LiveData
   - Room
   - CameraX
