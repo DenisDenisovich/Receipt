@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
     }
 
     override fun openLogin() {
-        replaceScreen {
+        changeCurrentScreen {
             setCustomAnimations(R.anim.slide_up_alpha, R.anim.fade_out)
             replace(R.id.container, LoginFragment())
         }
@@ -81,17 +81,17 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
 
     override fun openHistory() {
         cleanBackStack()
-        replaceScreen { replace(R.id.container, HistoryFragment(), HistoryFragment.HISTORY_TAG) }
+        changeCurrentScreen { replace(R.id.container, HistoryFragment(), HistoryFragment.HISTORY_TAG) }
         bottom_app_bar.visible()
     }
 
     override fun openSettings() {
         cleanBackStack()
-        replaceScreen { replace(R.id.container, SettingsFragment(), SettingsFragment.SETTINGS_TAG) }
+        changeCurrentScreen { replace(R.id.container, SettingsFragment(), SettingsFragment.SETTINGS_TAG) }
     }
 
     override fun openQr() {
-        replaceScreen {
+        changeCurrentScreen {
             replace(R.id.container, CreateReceiptRootFragment())
             addToBackStack(null)
         }
@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
     }
 
     override fun openReceipt(receiptId: Long) {
-        replaceScreen {
+        changeCurrentScreen {
             setCustomAnimations(R.anim.slide_up_alpha, R.anim.fade_out)
 
             replace(
@@ -131,15 +131,13 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
         }
     }
 
-    private fun replaceScreen(actions: FragmentTransaction.() -> Unit) {
-        val transaction = getTransaction()
+    private fun changeCurrentScreen(actions: FragmentTransaction.() -> Unit) {
+        val transaction = supportFragmentManager.beginTransaction()
         actions(transaction)
         transaction.commit()
     }
 
     private fun getTopFragment() = supportFragmentManager.findFragmentById(R.id.container)
-
-    private fun getTransaction() = supportFragmentManager.beginTransaction()
 
     private fun cleanBackStack() {
         for (i in 0 until supportFragmentManager.backStackEntryCount) {
