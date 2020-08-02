@@ -101,7 +101,12 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
 
     override fun openReceipt(receiptId: Long) {
         changeCurrentScreen {
-            setCustomAnimations(R.anim.slide_up_alpha, R.anim.fade_out)
+            setCustomAnimations(
+                R.anim.slide_up_alpha,
+                R.anim.fade_out,
+                R.anim.fade_in,
+                R.anim.slide_down_alpha
+            )
 
             replace(
                 R.id.container,
