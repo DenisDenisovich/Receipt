@@ -3,6 +3,7 @@ package shiverawe.github.com.receipt.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
+import androidx.fragment.app.FragmentTransaction
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 import shiverawe.github.com.receipt.R
@@ -70,41 +71,47 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
     }
 
     override fun openLogin() {
-        supportFragmentManager.beginTransaction().replace(R.id.container, LoginFragment()).commit()
+        replaceScreen {
+            setCustomAnimations(R.anim.slide_up_alpha, R.anim.fade_out)
+            replace(R.id.container, LoginFragment())
+        }
+
         bottom_app_bar.gone()
     }
 
     override fun openHistory() {
         cleanBackStack()
-        getTransaction().replace(R.id.container, HistoryFragment(), HistoryFragment.HISTORY_TAG).commit()
+        replaceScreen { replace(R.id.container, HistoryFragment(), HistoryFragment.HISTORY_TAG) }
         bottom_app_bar.visible()
     }
 
     override fun openSettings() {
         cleanBackStack()
-        getTransaction().replace(R.id.container, SettingsFragment(), SettingsFragment.SETTINGS_TAG).commit()
+        replaceScreen { replace(R.id.container, SettingsFragment(), SettingsFragment.SETTINGS_TAG) }
     }
 
     override fun openQr() {
-        getTransaction().apply {
+        replaceScreen {
             replace(R.id.container, CreateReceiptRootFragment())
             addToBackStack(null)
-            commit()
         }
+
         showBottomAppBar(false)
     }
 
     override fun openReceipt(receiptId: Long) {
-        getTransaction().apply {
+        replaceScreen {
             setCustomAnimations(R.anim.slide_up_alpha, R.anim.fade_out)
+
             replace(
                 R.id.container,
                 ReceiptFragment.getNewInstance(receiptId),
                 ReceiptFragment.RECEIPT_TAG
             )
+
             addToBackStack(null)
-            commit()
         }
+
         showBottomAppBar(false)
     }
 
@@ -122,6 +129,12 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
                 start()
             }
         }
+    }
+
+    private fun replaceScreen(actions: FragmentTransaction.() -> Unit) {
+        val transaction = getTransaction()
+        actions(transaction)
+        transaction.commit()
     }
 
     private fun getTopFragment() = supportFragmentManager.findFragmentById(R.id.container)

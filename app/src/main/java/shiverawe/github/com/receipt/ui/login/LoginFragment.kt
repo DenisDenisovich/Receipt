@@ -76,11 +76,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         btnSignUp.setOnClickListener {
             val signUpScreen = SignUpFragment()
             signUpScreen.setTargetFragment(this, LOGIN_REQUEST_CODE)
-            activity?.supportFragmentManager
-                ?.beginTransaction()
-                ?.replace(R.id.container, signUpScreen)
-                ?.addToBackStack(null)
-                ?.commit()
+
+            activity?.supportFragmentManager?.beginTransaction()?.apply {
+                setCustomAnimations(R.anim.slide_up_alpha, R.anim.fade_out)
+                replace(R.id.container, signUpScreen)
+                addToBackStack(null)
+                commit()
+            }
         }
 
         viewModel.getLoginState().observe(viewLifecycleOwner, Observer { handleLoginState(it) })
