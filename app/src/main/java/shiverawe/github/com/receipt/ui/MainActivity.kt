@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity(), Navigation, View.OnClickListener {
 
     override fun openReceipt(receiptId: Long) {
         getTransaction().apply {
-            setCustomAnimations(R.anim.slide_up_scale, R.anim.fade_out)
+            setCustomAnimations(R.anim.slide_up_alpha, R.anim.fade_out)
             replace(
                 R.id.container,
                 ReceiptFragment.getNewInstance(receiptId),

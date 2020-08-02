@@ -7,6 +7,7 @@
         android:toYDelta="0%"
         android:fromXDelta="10%"
         android:toXDelta="0%"/>
+
     <scale
         android:fromXScale="0.8"
         android:fromYScale="0.8"

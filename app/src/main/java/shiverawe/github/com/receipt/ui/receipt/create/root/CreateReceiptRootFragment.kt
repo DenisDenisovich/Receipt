@@ -20,7 +20,7 @@ class CreateReceiptRootFragment : BaseFragment(R.layout.fragment_create_receipt_
     private var receiptIsCreated = false
 
     private val currentScreen: CurrentScreen
-        get() = when (childFragmentManager.findFragmentById(R.id.root_create_receipt)) {
+        get() = when (childFragmentManager.findFragmentById(R.id.rootCreateReceipt)) {
             is QrFragment -> CurrentScreen.QR
             is ManualFragment -> CurrentScreen.MANUAL
             is ReceiptFragment -> CurrentScreen.RECEIPT
@@ -54,7 +54,7 @@ class CreateReceiptRootFragment : BaseFragment(R.layout.fragment_create_receipt_
                 childFragmentManager.beginTransaction().apply {
                     addToBackStack(CurrentScreen.QR.name)
                     setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                    replace(R.id.root_create_receipt, QrFragment(), CurrentScreen.QR.name)
+                    replace(R.id.rootCreateReceipt, QrFragment(), CurrentScreen.QR.name)
                     commit()
                 }
             },
@@ -74,7 +74,7 @@ class CreateReceiptRootFragment : BaseFragment(R.layout.fragment_create_receipt_
                 //setCustomAnimations(R.anim.slide_up, R.anim.fade_out, R.anim.fade_in, R.anim.slide_down)
             }
             addToBackStack(CurrentScreen.MANUAL.name)
-            replace(R.id.root_create_receipt, ManualFragment(), CurrentScreen.MANUAL.name)
+            replace(R.id.rootCreateReceipt, ManualFragment(), CurrentScreen.MANUAL.name)
             commit()
         }
     }
@@ -91,7 +91,7 @@ class CreateReceiptRootFragment : BaseFragment(R.layout.fragment_create_receipt_
         childFragmentManager.beginTransaction().apply {
             addToBackStack(CurrentScreen.QR.name)
             replace(
-                R.id.root_create_receipt,
+                R.id.rootCreateReceipt,
                 ReceiptFragment.getNewInstance(receiptHeader),
                 CurrentScreen.RECEIPT.name
             )
