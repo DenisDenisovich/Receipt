@@ -70,7 +70,7 @@ class CreateReceiptRootFragment : BaseFragment(R.layout.fragment_create_receipt_
         childFragmentManager.beginTransaction().apply {
             if (currentScreen == CurrentScreen.QR) {
                 // ManualFragment isn't first screen. Open with animation
-                setCustomAnimations(R.anim.slide_up_2, R.anim.fade_out)
+                setCustomAnimations(R.anim.slide_up_alpha, R.anim.fade_out)
                 //setCustomAnimations(R.anim.slide_up, R.anim.fade_out, R.anim.fade_in, R.anim.slide_down)
             }
             addToBackStack(CurrentScreen.MANUAL.name)
