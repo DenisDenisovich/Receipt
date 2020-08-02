@@ -12,6 +12,7 @@ open class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentLayou
     override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
         if (nextAnim == 0) {
             animationIsEnd = true
+            onEndAnimation(enter)
             return null
         }
 
@@ -22,7 +23,7 @@ open class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentLayou
 
                 override fun onAnimationEnd(animation: Animation?) {
                     animationIsEnd = true
-                    onEndAnimation()
+                    onEndAnimation(enter)
                 }
 
                 override fun onAnimationStart(animation: Animation?) {
@@ -32,5 +33,5 @@ open class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentLayou
         }
     }
 
-    open fun onEndAnimation() {}
+    open fun onEndAnimation(enter: Boolean) {}
 }

@@ -2,13 +2,13 @@ package shiverawe.github.com.receipt.ui.receipt.create
 
 import android.widget.Toast
 import androidx.annotation.LayoutRes
-import androidx.fragment.app.Fragment
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.ErrorType
+import shiverawe.github.com.receipt.ui.base.BaseFragment
 import shiverawe.github.com.receipt.ui.receipt.create.state.ErrorState
 import shiverawe.github.com.receipt.utils.toast
 
-abstract class CreateReceiptFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
+abstract class CreateReceiptFragment(@LayoutRes layoutId: Int) : BaseFragment(layoutId) {
 
     protected val waitingDialog = CreateReceiptDialog(onCancel = ::onCancelDialogClick)
     protected var errorToast: Toast? = null

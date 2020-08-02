@@ -45,6 +45,12 @@ class QrFragment : CreateReceiptFragment(R.layout.fragment_qr), View.OnClickList
         btn_flash.setImageResource(flashIcon)
     }
 
+    override fun onEndAnimation(enter: Boolean) {
+        if (enter) {
+            createCamera()
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         qrCodeAnalyzer.onQrCodeDataFound = {
             if (!waitingDialog.isAdded) {
@@ -59,7 +65,6 @@ class QrFragment : CreateReceiptFragment(R.layout.fragment_qr), View.OnClickList
         btn_qr_back.setOnClickListener(this)
         btn_flash.setOnClickListener(this)
         btn_manual.setOnClickListener(this)
-        createCamera()
         setupManualButton()
         requireActivity().window.setFlags(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
@@ -150,7 +155,7 @@ class QrFragment : CreateReceiptFragment(R.layout.fragment_qr), View.OnClickList
     }
 
     private fun createCamera() {
-        preview_view.post {
+        preview_view?.post {
             cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
             cameraProviderFuture.addListener(Runnable {
                 cameraProvider = cameraProviderFuture.get()

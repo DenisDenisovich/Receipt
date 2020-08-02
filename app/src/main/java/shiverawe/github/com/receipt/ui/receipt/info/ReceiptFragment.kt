@@ -51,7 +51,9 @@ class ReceiptFragment : BaseFragment(R.layout.fragment_receipt), View.OnClickLis
         viewModel.errorData.observe(viewLifecycleOwner, Observer { errorType -> setError(errorType) })
     }
 
-    override fun onEndAnimation() {
+    override fun onEndAnimation(enter: Boolean) {
+        if (!enter) return
+
         viewModel.receiptData.value?.items?.let { products ->
             // Load products, if animation is end and data is ready
             setProducts(products)
