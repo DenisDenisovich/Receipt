@@ -7,15 +7,16 @@ import android.content.Intent.CATEGORY_BROWSABLE
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_receipt.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.ErrorType
+import shiverawe.github.com.receipt.domain.entity.base.Product
 import shiverawe.github.com.receipt.domain.entity.base.Receipt
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
+import shiverawe.github.com.receipt.ui.base.BaseFragment
 import shiverawe.github.com.receipt.ui.receipt.info.adapter.ProductAdapter
 import shiverawe.github.com.receipt.utils.*
 import java.text.SimpleDateFormat
@@ -24,7 +25,7 @@ import java.util.*
 private const val GEO_URI = "geo:0,0?q="
 private const val BROWSER_URI = "https://www.google.ru/maps/search/"
 
-class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListener {
+class ReceiptFragment : BaseFragment(R.layout.fragment_receipt), View.OnClickListener {
 
     private var adapter = ProductAdapter()
 
@@ -45,8 +46,18 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
         btn_toolbar_receipt_share.setOnClickListener(this)
         btn_toolbar_shop_location.setOnClickListener(this)
         btn_repeat.setOnClickListener(this)
-        viewModel.receiptData.observe(this, Observer { receipt -> setReceipt(receipt) })
-        viewModel.errorData.observe(this, Observer { errorType -> setError(errorType) })
+
+        viewModel.receiptData.observe(viewLifecycleOwner, Observer { receipt -> setReceipt(receipt) })
+        viewModel.errorData.observe(viewLifecycleOwner, Observer { errorType -> setError(errorType) })
+    }
+
+    override fun onEndAnimation(enter: Boolean) {
+        if (!enter) return
+
+        viewModel.receiptData.value?.items?.let { products ->
+            // Load products, if animation is end and data is ready
+            setProducts(products)
+        }
     }
 
     override fun onResume() {
@@ -85,8 +96,6 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
         val receiptId = arguments?.getLong(RECEIPT_ID_KEY) ?: 0L
         val receiptHeader = arguments?.getSerializable(RECEIPT_HEADER_KEY) as? ReceiptHeader
         if (receiptId != 0L) {
-            header_collapsed.titleText = getString(R.string.waiting_receipt_text)
-            header_expanded.titleText = getString(R.string.waiting_receipt_text)
             viewModel.loadReceipt(receiptId)
         } else if (receiptHeader != null) {
             viewModel.loadReceipt(receiptHeader)
@@ -96,12 +105,6 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
     @SuppressLint("DefaultLocale", "SetTextI18n")
     private fun setReceipt(receipt: Receipt) {
         rv_receipt.visible()
-
-        if (receipt.items.isEmpty()) {
-            pb_receipt.visible()
-        } else {
-            pb_receipt.gone()
-        }
 
         tv_error.gone()
         btn_repeat.gone()
@@ -126,12 +129,11 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
         tv_toolbar_receipt_date.text = dateFormatter.format(date).capitalize()
         tv_toolbar_receipt_time.text = timeFormatter.format(date)
 
-        if (receipt.items.isNotEmpty()) {
-            pb_receipt.visibility = View.GONE
-            adapter.setProducts(receipt.items)
+        if (animationIsEnd) {
+            setProducts(receipt.items)
+        } else {
+            pb_receipt?.gone()
         }
-
-        rv_receipt.adapter = adapter
     }
 
     private fun setError(errorType: ErrorType) {
@@ -146,6 +148,16 @@ class ReceiptFragment : Fragment(R.layout.fragment_receipt), View.OnClickListene
 
         btn_repeat.visible()
         tv_error.visible()
+    }
+
+    private fun setProducts(products: List<Product>) {
+        if (products.isEmpty()) {
+            pb_receipt?.visible()
+        } else {
+            pb_receipt?.gone()
+            adapter.setProducts(products)
+            rv_receipt?.adapter = adapter
+        }
     }
 
     private fun shareReceipt() {

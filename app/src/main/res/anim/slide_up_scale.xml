@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="250">
+
+    <translate
+        android:fromYDelta="20%"
+        android:toYDelta="0%"
+        android:fromXDelta="10%"
+        android:toXDelta="0%"/>
+
+    <scale
+        android:fromXScale="0.8"
+        android:fromYScale="0.8"
+        android:toXScale="1"
+        android:toYScale="1" />
+</set>

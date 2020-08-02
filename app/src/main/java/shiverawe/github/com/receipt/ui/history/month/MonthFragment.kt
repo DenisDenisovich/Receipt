@@ -23,7 +23,6 @@ import shiverawe.github.com.receipt.utils.visible
 class MonthFragment : Fragment(R.layout.fragment_month) {
 
     private val viewModel: MonthViewModel by viewModel()
-    private val stateObserver = Observer<MonthUiState> { handleMonthState(it)}
 
     private lateinit var navigation: Navigation
     private lateinit var adapter: MonthAdapter
@@ -41,17 +40,13 @@ class MonthFragment : Fragment(R.layout.fragment_month) {
         swipe_refresh_layout.setOnRefreshListener {
             viewModel.loadReceipts(monthDate, isRefresh = true)
         }
+        viewModel.state.observe(viewLifecycleOwner, Observer { handleMonthState(it)})
         viewModel.loadReceipts(monthDate)
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.state.observe(this, stateObserver)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.state.removeObserver(stateObserver)
+    override fun onDestroyView() {
+        viewModel.listVerticalOffset = rv_month.computeVerticalScrollOffset()
+        super.onDestroyView()
     }
 
     private fun handleMonthState(state: MonthUiState) {
@@ -69,6 +64,7 @@ class MonthFragment : Fragment(R.layout.fragment_month) {
 
     private fun setReceipts(items: ArrayList<ReceiptHeader>) {
         adapter.setItems(items)
+        rv_month.scrollBy(0, viewModel.listVerticalOffset)
         rv_month.visible()
 
         if (items.isEmpty()) {

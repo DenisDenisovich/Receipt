@@ -14,6 +14,7 @@ class MonthViewModel(private val interactor: IMonthInteractor) : ViewModel() {
 
     val state: MutableLiveData<MonthUiState> = MutableLiveData()
     private var currentWork: Job? = null
+    var listVerticalOffset: Int = 0
 
     fun loadReceipts(date: Long, isRefresh: Boolean = false) {
         state.value = MonthUiState(inProgress = true)

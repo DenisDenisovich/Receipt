@@ -26,6 +26,7 @@ class ProductAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun setProducts(products: List<Product>) {
+        items.clear()
         items.addAll(products)
         notifyDataSetChanged()
     }

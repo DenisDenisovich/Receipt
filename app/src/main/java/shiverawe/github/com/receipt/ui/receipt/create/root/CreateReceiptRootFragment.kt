@@ -3,24 +3,24 @@ package shiverawe.github.com.receipt.ui.receipt.create.root
 import android.Manifest
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.Disposable
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.domain.entity.base.ReceiptHeader
 import shiverawe.github.com.receipt.ui.BackPressedHandle
+import shiverawe.github.com.receipt.ui.base.BaseFragment
 import shiverawe.github.com.receipt.ui.receipt.create.ManualFragment
 import shiverawe.github.com.receipt.ui.receipt.create.QrFragment
 import shiverawe.github.com.receipt.ui.receipt.info.ReceiptFragment
 import shiverawe.github.com.receipt.utils.toast
 
-class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root),
+class CreateReceiptRootFragment : BaseFragment(R.layout.fragment_create_receipt_root),
     BackPressedHandle, CreateReceiptNavigation {
 
     private var receiptIsCreated = false
 
     private val currentScreen: CurrentScreen
-        get() = when (childFragmentManager.findFragmentById(R.id.root_create_receipt)) {
+        get() = when (childFragmentManager.findFragmentById(R.id.rootCreateReceipt)) {
             is QrFragment -> CurrentScreen.QR
             is ManualFragment -> CurrentScreen.MANUAL
             is ReceiptFragment -> CurrentScreen.RECEIPT
@@ -53,7 +53,8 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
             onGranted = {
                 childFragmentManager.beginTransaction().apply {
                     addToBackStack(CurrentScreen.QR.name)
-                    replace(R.id.root_create_receipt, QrFragment(), CurrentScreen.QR.name)
+                    setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+                    replace(R.id.rootCreateReceipt, QrFragment(), CurrentScreen.QR.name)
                     commit()
                 }
             },
@@ -69,10 +70,11 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
         childFragmentManager.beginTransaction().apply {
             if (currentScreen == CurrentScreen.QR) {
                 // ManualFragment isn't first screen. Open with animation
-                setCustomAnimations(R.anim.slide_up, R.anim.fade_out, R.anim.fade_in, R.anim.slide_down)
+                setCustomAnimations(R.anim.slide_up_alpha, R.anim.fade_out)
+                //setCustomAnimations(R.anim.slide_up, R.anim.fade_out, R.anim.fade_in, R.anim.slide_down)
             }
             addToBackStack(CurrentScreen.MANUAL.name)
-            replace(R.id.root_create_receipt, ManualFragment(), CurrentScreen.MANUAL.name)
+            replace(R.id.rootCreateReceipt, ManualFragment(), CurrentScreen.MANUAL.name)
             commit()
         }
     }
@@ -89,7 +91,7 @@ class CreateReceiptRootFragment : Fragment(R.layout.fragment_create_receipt_root
         childFragmentManager.beginTransaction().apply {
             addToBackStack(CurrentScreen.QR.name)
             replace(
-                R.id.root_create_receipt,
+                R.id.rootCreateReceipt,
                 ReceiptFragment.getNewInstance(receiptHeader),
                 CurrentScreen.RECEIPT.name
             )

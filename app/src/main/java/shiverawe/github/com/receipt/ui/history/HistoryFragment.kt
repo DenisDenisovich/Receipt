@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
-import android.transition.Fade
-import android.transition.TransitionManager
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import android.view.LayoutInflater
@@ -16,7 +14,6 @@ import kotlinx.android.synthetic.main.fragment_history.*
 import shiverawe.github.com.receipt.ui.MainActivity
 import shiverawe.github.com.receipt.R
 import shiverawe.github.com.receipt.ui.Navigation
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -31,6 +28,7 @@ class HistoryFragment : Fragment(), View.OnClickListener {
     private val dateFormatter = SimpleDateFormat("LLLL yyyy", Locale("ru"))
     private var calendar = GregorianCalendar()
     private lateinit var dateDialog: DatePickerDialog
+    private var coordinatorVerticalScroll = 0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -78,8 +76,14 @@ class HistoryFragment : Fragment(), View.OnClickListener {
             }
         })
 
+        root_history.scrollBy(0, - coordinatorVerticalScroll)
         updateMonthDate(vp_history.currentItem)
         setSum("")
+    }
+
+    override fun onDestroyView() {
+        coordinatorVerticalScroll = root_history.scrollY
+        super.onDestroyView()
     }
 
     override fun onClick(v: View?) {
