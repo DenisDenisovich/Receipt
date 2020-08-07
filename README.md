@@ -22,21 +22,21 @@
 
 ### Purchases info. Информация о покупках
 #### Purchases list for a month. Список покупок за месяц.
-<img src="https://psv4.userapi.com/c856320/u58821353/docs/d6/d0f97cefe870/photo_2020-07-26_15-28-30.jpg?extra=opiL64FpocC_qndXrgNNPAC_MPyz2CBFdlKQZNqhe0pk1H3OtBEVQder-QRMH5gB71N0WJ9buzfXVz81e9DcsBLBWeMaQdmHyt1A2aOJwlvCE2-NbgAtdsdGF0wLT1xHlH2iL4PzigqSoN-qPONL" alt="drawing" width="400"/>
+<img src="https://psv4.userapi.com/c856320/u58821353/docs/d6/45210765ab46/photo_2020-07-26_15-28-30.jpg?extra=VKZGU0Y8przUYSh2IAZP41-9cdczfnQQsvVEE5B3BfYwZqe54mF_zD3vTRs4PA59ZitVmEJSS9lowJjUnqp8xyc1bJupefa0aZpUoTOM9NufI1f14az5Cf0RUeGFFLXnqhN_iqgL8SmnL_euTi8d77w" alt="drawing" width="400"/>
 
 #### Receipt. Чек.
-<img src="https://psv4.userapi.com/c856320/u58821353/docs/d14/dee332688e7f/photo_2020-07-26_15-28-29_2.jpg?extra=lkTsbit8Ii0oks-rmwijtn7R95Vo4D28TJoLN1Ggnwki5NMShBQi37q4FWtcYu0_kvWm_Yp8lBMTgSdCSQgYqGnL51iAeVvxqhFVrm4J5qwlPs9XeEBWtijLkuQGGa1IK9YLjS_WMdVXfzdJ2dVF" alt="drawing" width="400"/>
+<img src="https://psv4.userapi.com/c856320/u58821353/docs/d14/4f11592f2fac/photo_2020-07-26_15-28-29_2.jpg?extra=aKg2J5QcAAjptS0YRbfyRsmlYK-gs35DXMVOlu-HtA2eB0OI5LdEE2VCjCgY8-oKvny1t9UBi36l6hAA9XGJznPEEYJMD7e27CCVEde81dthlmBWFkr1hkFvko_AwHTDBseqdiHId5D3yX919nd31zg" alt="drawing" width="400"/>
 
 ### Add new receipt to history. Добавить новый чек в историю
 #### Receipt scanning. Сканирование чека.
-<img src="https://psv4.userapi.com/c856320/u58821353/docs/d16/28938548aba2/photo_2020-07-26_17-20-25.jpg?extra=jyQMplcoIY4G7uG-76WrMeu5jDPLMgrVSn2cJtBxVjDqDYt1SEfZJa1U9Rs__wsJ5T5r2yPJMoSwBstKYlBrT35XUXVPFyJpjchTdrbrn7z-aUKJqbbRar2FJoJUlAcjFQvvp0xOqaZVeDk68w6V" alt="drawing" width="400"/>
+<img src="https://psv4.userapi.com/c856320/u58821353/docs/d16/e3f6bff14bbe/photo_2020-07-26_17-20-25.jpg?extra=dGqSyGIwzzxnA71gcn7szYAT5cY0vjMLpWdojxHRF2Mk2MWgyE_sJfc2D569btNBzqblb4u7Qd9b3n_RnyELQT7qSYGq4VbpSoNISQNhnetVNCWc2W6oF0gDTAh1S7XAQiG-0OWFJegdSUHN06f5IGc" alt="drawing" width="400"/>
 
 #### Manual entry of a receipt. Ручной ввод чека
-<img src="https://psv4.userapi.com/c856320/u58821353/docs/d10/5b1058d84ffc/photo_2020-07-26_17-24-21.jpg?extra=dwjaQZa4M6FxvmRri-lvAKK6b95BeweI2aMWh41DbePZPrwN6RcRPITQCWKkNEgL3xmCAuIaKHogPi0aB1c12zus0h39-7yDwFhyv3qVKZ9Y4l6SIT1q_IeVGHYkvgmIC49qLnRm8BqEtShzeeLA" alt="drawing" width="400"/>
+<img src="https://psv4.userapi.com/c856320/u58821353/docs/d10/95f34cf22563/photo_2020-07-26_17-24-21.jpg?extra=A0-Wb8IGbBmzmWTxId0lKhNV8-3IN_20U7oB5N1S-4vvy9wg_dYjMvbsxwwZnbU-Q86tXsvvxEhXZFMrB919h_swFj_LOGRgQiivCQ6_N5cW-7swx3cBcO5SZDtb8TPADKwwz_dmhrqK4q33NbAGPyU" alt="drawing" width="400"/>
 
 ### Login/SignUp. Логин/Регистрация
 #### Login. Логин
-<img src="https://psv4.userapi.com/c856320/u58821353/docs/d18/142af6821ea6/photo_2020-07-26_15-28-38.jpg?extra=91gWPYnUfV1fFPSonN9k2RjGt1fFQtToUwN-K9wRoECSlzC7ryt8Q9XuywEY3GfLH_rkz-pZrs8XgMkcnXLiszrzmFkSjlra9kA5PSuRMt-1A_zy3k99Xoyd-hD71bUuh2Hrcrkg1E6ZTrUSyoeW" alt="drawing" width="400"/>
+<img src="https://psv4.userapi.com/c856320/u58821353/docs/d18/ba64df8501c1/photo_2020-07-26_15-28-38.jpg?extra=dtA6N0s9A8rMkAjlnk4nw8JWQWWP2oUji3XCSKiACvrxyeZhlSkVzqE66RbnoxR8EIgQKDUUyH4wMUKk0cCRgxgcA6rtp_HEJIj2VaS-9TIi78yVPA3wqEFB18zwsTS9yxMZlWgtQlWo0Vp0WoB1MDQ" alt="drawing" width="400"/>
 
 #### SignUp. Регистрация
-<img src="https://psv4.userapi.com/c856320/u58821353/docs/d16/6ecbe7de0db7/photo_2020-07-26_15-28-29.jpg?extra=egg7jUD-1i3Tu7qGw_ZImgVNkCY3nIOJlb7kyAUyQ8-CPM99TcP_H5LcR4yrVJDCsMfzywBHO2mYN3tqW4EAGbd6pkWBTQRM7wqByUZ2wuMUPidixp4IFDwhVgFVXO7CWGX6w-nDnRL6rYI0XULa" alt="drawing" width="400"/>
+<img src="https://psv4.userapi.com/c856320/u58821353/docs/d16/8c972643e35c/photo_2020-07-26_15-28-29.jpg?extra=dpViW6zb_JLoL0QMWdfugHye54g3PIcjxhqiIZVVpPuA9wYHQNz_JJ4Ce8onp7ILVwZZLG0VzSPeW3wQyskNohTntim_pPKY6iz69UmbpmLxhC4w_jIGhX0IaOG4MT7tWoNJRo6uMNPLSlDM0E4cKl0" alt="drawing" width="400"/>
