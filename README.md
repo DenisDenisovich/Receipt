@@ -32,7 +32,7 @@
 <img src="https://psv4.userapi.com/c856320/u58821353/docs/d16/e3f6bff14bbe/photo_2020-07-26_17-20-25.jpg?extra=dGqSyGIwzzxnA71gcn7szYAT5cY0vjMLpWdojxHRF2Mk2MWgyE_sJfc2D569btNBzqblb4u7Qd9b3n_RnyELQT7qSYGq4VbpSoNISQNhnetVNCWc2W6oF0gDTAh1S7XAQiG-0OWFJegdSUHN06f5IGc" alt="drawing" width="400"/>
 
 #### Manual entry of a receipt. Ручной ввод чека
-<img src="https://psv4.userapi.com/c856320/u58821353/docs/d10/95f34cf22563/photo_2020-07-26_17-24-21.jpg?extra=A0-Wb8IGbBmzmWTxId0lKhNV8-3IN_20U7oB5N1S-4vvy9wg_dYjMvbsxwwZnbU-Q86tXsvvxEhXZFMrB919h_swFj_LOGRgQiivCQ6_N5cW-7swx3cBcO5SZDtb8TPADKwwz_dmhrqK4q33NbAGPyU" alt="drawing" width="400"/>
+<img src="https://ibb.co/dcgDJ72" alt="drawing" width="400"/>
 
 ### Login/SignUp. Логин/Регистрация
 #### Login. Логин
