@@ -25,7 +25,7 @@
 <img src="https://i.ibb.co/mvFdWw5/photo-2020-07-26-15-28-30.jpg" alt="drawing" width="400"/>
 
 #### Receipt. Чек.
-<img src="https://psv4.userapi.com/c856320/u58821353/docs/d14/4f11592f2fac/photo_2020-07-26_15-28-29_2.jpg?extra=aKg2J5QcAAjptS0YRbfyRsmlYK-gs35DXMVOlu-HtA2eB0OI5LdEE2VCjCgY8-oKvny1t9UBi36l6hAA9XGJznPEEYJMD7e27CCVEde81dthlmBWFkr1hkFvko_AwHTDBseqdiHId5D3yX919nd31zg" alt="drawing" width="400"/>
+<img src="https://i.ibb.co/qjKNkP4/photo-2020-07-26-15-28-29-2.jpg" alt="drawing" width="400"/>
 
 ### Add new receipt to history. Добавить новый чек в историю
 #### Receipt scanning. Сканирование чека.
