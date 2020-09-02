@@ -22,7 +22,7 @@
 
 ### Purchases info. Информация о покупках
 #### Purchases list for a month. Список покупок за месяц.
-<img src="https://psv4.userapi.com/c856320/u58821353/docs/d6/45210765ab46/photo_2020-07-26_15-28-30.jpg?extra=VKZGU0Y8przUYSh2IAZP41-9cdczfnQQsvVEE5B3BfYwZqe54mF_zD3vTRs4PA59ZitVmEJSS9lowJjUnqp8xyc1bJupefa0aZpUoTOM9NufI1f14az5Cf0RUeGFFLXnqhN_iqgL8SmnL_euTi8d77w" alt="drawing" width="400"/>
+<img src="https://i.ibb.co/mvFdWw5/photo-2020-07-26-15-28-30.jpg" alt="drawing" width="400"/>
 
 #### Receipt. Чек.
 <img src="https://psv4.userapi.com/c856320/u58821353/docs/d14/4f11592f2fac/photo_2020-07-26_15-28-29_2.jpg?extra=aKg2J5QcAAjptS0YRbfyRsmlYK-gs35DXMVOlu-HtA2eB0OI5LdEE2VCjCgY8-oKvny1t9UBi36l6hAA9XGJznPEEYJMD7e27CCVEde81dthlmBWFkr1hkFvko_AwHTDBseqdiHId5D3yX919nd31zg" alt="drawing" width="400"/>
