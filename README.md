@@ -39,4 +39,4 @@
 <img src="https://i.ibb.co/rp7zH1F/photo-2020-07-26-15-28-38.jpg" alt="drawing" width="400"/>
 
 #### SignUp. Регистрация
-<img src="https://psv4.userapi.com/c856320/u58821353/docs/d16/8c972643e35c/photo_2020-07-26_15-28-29.jpg?extra=dpViW6zb_JLoL0QMWdfugHye54g3PIcjxhqiIZVVpPuA9wYHQNz_JJ4Ce8onp7ILVwZZLG0VzSPeW3wQyskNohTntim_pPKY6iz69UmbpmLxhC4w_jIGhX0IaOG4MT7tWoNJRo6uMNPLSlDM0E4cKl0" alt="drawing" width="400"/>
+<img src="https://i.ibb.co/G0SmSFJ/photo-2020-07-26-15-28-29.jpg" alt="drawing" width="400"/>
