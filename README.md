@@ -16,7 +16,7 @@
   - LiveData
   - Room
   - CameraX
-- [Koin](https://insert-koin.io/) - Service Locator
+- [Koin](https://insert-koin.io/) - DI
 
 ## Application UI. Экраны приложения.
 
